@@ -1,17 +1,19 @@
 package com.cesar.superstats.model.entities;// HQ.java
-import jakarta.persistence.*;
+import lombok.Data;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-@Entity
+@Data
 public class HQ {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
+    private Integer id;
     private String edicao;
     private String editora;
     private String titulo;
     private Date dataLancamento;
 
-    // getters e setters
+    List<Personagem> participantes = new ArrayList<Personagem>();
+
 }

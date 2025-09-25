@@ -1,13 +1,12 @@
 package com.cesar.superstats.model.entities;// Evento.java
-import jakarta.persistence.*;
+import lombok.Data;
+
 import java.util.Date;
 
-@Entity
+@Data
 public class Evento {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
+    private Integer id;
     private String nome;
     private Date data;
     private String rua;
@@ -15,6 +14,4 @@ public class Evento {
     private String bairro;
     private String cidade;
 
-    // Relações N:N com Fa em ParticipaEvento
-    // getters e setters
 }

@@ -1,17 +1,19 @@
 package com.cesar.superstats.model.entities;// Filme.java
-import jakarta.persistence.*;
+import lombok.Data;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-@Entity
+@Data
 public class Filme {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
+    private Integer id;
     private String titulo;
     private String produtora;
     private String diretor;
     private Date dataLancamento;
 
-    // getters e setters
+    List<Personagem> participantes = new ArrayList<Personagem>();
+
 }
