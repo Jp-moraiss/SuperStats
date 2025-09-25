@@ -1,13 +1,9 @@
 package com.cesar.superstats.model.entities;// Personagem.java
-import jakarta.persistence.*;
-import java.util.List;
+import lombok.Data;
 
-@Entity
+@Data
 public class Personagem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String nome;
     private String genero;
     private Double altura;
@@ -26,12 +22,4 @@ public class Personagem {
     private Integer poder;
     private Integer combate;
 
-    @OneToMany(mappedBy = "personagem", cascade = CascadeType.ALL)
-    private List<Base> bases;
-
-    @OneToMany(mappedBy = "personagem", cascade = CascadeType.ALL)
-    private List<AlterEgo> alterEgos;
-
-    // Conexões e participações ficam em tabelas próprias
-    // getters e setters
 }
