@@ -30,8 +30,9 @@ public class FilmeController {
         return ResponseEntity.ok(filme);
     }
 
-    @GetMapping("/titulo/{titulo}")
-    public ResponseEntity<List<Filme>> getByTitle(@PathVariable String titulo) {
+    // Altere de @PathVariable para @RequestParam
+    @GetMapping("/titulo") // Remova o {titulo} daqui
+    public ResponseEntity<List<Filme>> getByTitle(@RequestParam String titulo) { // Adicione @RequestParam
         return ResponseEntity.ok(service.findByTitle(titulo));
     }
 
@@ -58,6 +59,12 @@ public class FilmeController {
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/produtoras") // Novo endpoint
+    public ResponseEntity<List<String>> getAllProdutoras() {
+        List<String> produtoras = service.findAllProdutoras();
+        return ResponseEntity.ok(produtoras);
     }
 }
 
