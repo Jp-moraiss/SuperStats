@@ -6,27 +6,29 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { padding: 20px; }
-        .section { margin-bottom: 30px; }
+        .section { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
         table { margin-top: 10px; }
+        pre { background-color: #f8f9fa; padding: 10px; border-radius: 5px; }
     </style>
 </head>
 <body>
 <div class="container">
     <h1 class="mb-4">SuperStats - Gestão de Fãs</h1>
 
-    <!-- LISTAGEM -->
     <div class="section">
         <h3>Todos os Fãs</h3>
         <button class="btn btn-primary mb-2" onclick="getAll()">Atualizar Lista</button>
         <table class="table table-striped" id="faTable">
             <thead>
             <tr>
+                <th>ID</th>
+                <th>Username</th>
                 <th>Email</th>
                 <th>Nome</th>
                 <th>Gênero</th>
                 <th>Idade</th>
                 <th>Universo Favorito</th>
-                <th>Tempo Geek</th>
+                <th>Tempo Geek (anos)</th>
                 <th>Ocupação</th>
             </tr>
             </thead>
@@ -34,69 +36,71 @@
         </table>
     </div>
 
-    <!-- BUSCA -->
     <div class="section">
-        <h3>Buscar Fã por Email</h3>
+        <h3>Buscar Fã</h3>
         <div class="input-group mb-2">
-            <input type="text" id="emailGet" class="form-control" placeholder="Email do fã">
+            <input type="number" id="idGet" class="form-control" placeholder="Buscar por ID">
+            <button class="btn btn-info" onclick="getById()">Buscar</button>
+        </div>
+        <div class="input-group mb-2">
+            <input type="text" id="usernameGet" class="form-control" placeholder="Buscar por Username">
+            <button class="btn btn-info" onclick="getByUsername()">Buscar</button>
+        </div>
+        <div class="input-group mb-2">
+            <input type="email" id="emailGet" class="form-control" placeholder="Buscar por Email">
             <button class="btn btn-info" onclick="getByEmail()">Buscar</button>
         </div>
-        <pre id="outputEmail"></pre>
+        <pre id="outputSearch"></pre>
     </div>
 
-    <!-- CRIAÇÃO -->
     <div class="section">
         <h3>Criar Fã</h3>
         <form id="formCreate" onsubmit="createFa(event)">
             <div class="row mb-2">
+                <div class="col"><input type="text" id="usernamePost" class="form-control" placeholder="Username" required></div>
                 <div class="col"><input type="email" id="emailPost" class="form-control" placeholder="Email" required></div>
-                <div class="col"><input type="text" id="nomePost" class="form-control" placeholder="Nome" required></div>
+                <div class="col"><input type="text" id="nomePost" class="form-control" placeholder="Nome Completo" required></div>
             </div>
             <div class="row mb-2">
                 <div class="col"><input type="text" id="generoPost" class="form-control" placeholder="Gênero"></div>
                 <div class="col"><input type="number" id="idadePost" class="form-control" placeholder="Idade"></div>
-            </div>
-            <div class="row mb-2">
                 <div class="col"><input type="text" id="univPost" class="form-control" placeholder="Universo Favorito"></div>
-                <div class="col"><input type="number" id="tempoPost" class="form-control" placeholder="Tempo Geek"></div>
             </div>
             <div class="row mb-2">
+                <div class="col"><input type="number" id="tempoPost" class="form-control" placeholder="Tempo Geek (anos)"></div>
                 <div class="col"><input type="text" id="ocupacaoPost" class="form-control" placeholder="Ocupação"></div>
-                <div class="col"><button class="btn btn-success w-100" type="submit">Criar</button></div>
             </div>
+            <button class="btn btn-success w-100" type="submit">Criar</button>
         </form>
         <pre id="outputPost"></pre>
     </div>
 
-    <!-- ATUALIZAÇÃO -->
     <div class="section">
         <h3>Atualizar Fã</h3>
         <form id="formUpdate" onsubmit="updateFa(event)">
             <div class="row mb-2">
-                <div class="col"><input type="email" id="emailPut" class="form-control" placeholder="Email do fã" required></div>
-                <div class="col"><input type="text" id="nomePut" class="form-control" placeholder="Nome"></div>
+                <div class="col-md-3"><input type="number" id="idPut" class="form-control" placeholder="ID do Fã para Atualizar" required></div>
+                <div class="col"><input type="text" id="usernamePut" class="form-control" placeholder="Novo Username"></div>
+                <div class="col"><input type="text" id="nomePut" class="form-control" placeholder="Novo Nome"></div>
             </div>
             <div class="row mb-2">
-                <div class="col"><input type="text" id="generoPut" class="form-control" placeholder="Gênero"></div>
-                <div class="col"><input type="number" id="idadePut" class="form-control" placeholder="Idade"></div>
+                <div class="col"><input type="text" id="generoPut" class="form-control" placeholder="Novo Gênero"></div>
+                <div class="col"><input type="number" id="idadePut" class="form-control" placeholder="Nova Idade"></div>
+                <div class="col"><input type="text" id="univPut" class="form-control" placeholder="Novo Universo Favorito"></div>
             </div>
             <div class="row mb-2">
-                <div class="col"><input type="text" id="univPut" class="form-control" placeholder="Universo Favorito"></div>
-                <div class="col"><input type="number" id="tempoPut" class="form-control" placeholder="Tempo Geek"></div>
+                <div class="col"><input type="number" id="tempoPut" class="form-control" placeholder="Novo Tempo Geek (anos)"></div>
+                <div class="col"><input type="text" id="ocupacaoPut" class="form-control" placeholder="Nova Ocupação"></div>
             </div>
-            <div class="row mb-2">
-                <div class="col"><input type="text" id="ocupacaoPut" class="form-control" placeholder="Ocupação"></div>
-                <div class="col"><button class="btn btn-warning w-100" type="submit">Atualizar</button></div>
-            </div>
+            <button class="btn btn-warning w-100" type="submit">Atualizar</button>
         </form>
         <pre id="outputPut"></pre>
     </div>
 
-    <!-- DELEÇÃO -->
     <div class="section">
         <h3>Deletar Fã</h3>
         <div class="input-group mb-2">
-            <input type="email" id="emailDel" class="form-control" placeholder="Email do fã">
+            <input type="number" id="idDel" class="form-control" placeholder="ID do fã para deletar">
             <button class="btn btn-danger" onclick="deleteFa()">Deletar</button>
         </div>
         <pre id="outputDel"></pre>
@@ -106,88 +110,149 @@
 <script>
     const baseUrl = 'http://localhost:8080/fa';
 
+    // Limpa os campos de valor numérico se estiverem vazios, para não enviar 'NaN'
+    const parseOptionalInt = (value) => value ? parseInt(value, 10) : null;
+
     // GET ALL
     async function getAll() {
-        const res = await fetch(baseUrl);
-        const data = await res.json();
-        const tbody = document.querySelector("#faTable tbody");
-        tbody.innerHTML = "";
-        data.forEach(fa => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td>${fa.email}</td>
-                <td>${fa.nome}</td>
-                <td>${fa.genero || ''}</td>
-                <td>${fa.idade || ''}</td>
-                <td>${fa.univ_fav || ''}</td>
-                <td>${fa.tempo_geek != null ? fa.tempo_geek + ' anos' : ''}</td>
-                <td>${fa.ocupacao || ''}</td>
-            `;
-            tbody.appendChild(tr);
-        });
+        try {
+            const res = await fetch(baseUrl);
+            if (res.status === 204) { // No Content
+                document.querySelector("#faTable tbody").innerHTML = '<tr><td colspan="9" class="text-center">Nenhum fã cadastrado.</td></tr>';
+                return;
+            }
+            const data = await res.json();
+            const tbody = document.querySelector("#faTable tbody");
+            tbody.innerHTML = "";
+            data.forEach(fa => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${fa.id}</td>
+                    <td>${fa.username}</td>
+                    <td>${fa.email}</td>
+                    <td>${fa.nome}</td>
+                    <td>${fa.genero || ''}</td>
+                    <td>${fa.idade || ''}</td>
+                    <td>${fa.univ_fav || ''}</td>
+                    <td>${fa.tempo_geek != null ? fa.tempo_geek : ''}</td>
+                    <td>${fa.ocupacao || ''}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (error) {
+            console.error('Erro ao buscar fãs:', error);
+        }
     }
 
-    // GET by email
-    async function getByEmail() {
-        const email = document.getElementById('emailGet').value;
-        const res = await fetch(`${baseUrl}/${email}`);
-        const output = document.getElementById('outputEmail');
-        if (res.status === 404) {
-            output.textContent = "Fã não encontrado";
-            return;
+    // Funções de busca genéricas para exibir no mesmo campo de output
+    async function handleSearch(url, outputElement) {
+        try {
+            const res = await fetch(url);
+            if (res.status === 404) {
+                outputElement.textContent = "Fã não encontrado.";
+                return;
+            }
+            const data = await res.json();
+            outputElement.textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+            outputElement.textContent = "Erro na busca.";
+            console.error('Erro na busca:', error);
         }
-        const data = await res.json();
-        output.textContent = JSON.stringify(data, null, 2);
+    }
+
+    function getById() {
+        const id = document.getElementById('idGet').value;
+        if (!id) return;
+        handleSearch(`${baseUrl}/${id}`, document.getElementById('outputSearch'));
+    }
+
+    function getByUsername() {
+        const username = document.getElementById('usernameGet').value;
+        if (!username) return;
+        handleSearch(`${baseUrl}/username/${encodeURIComponent(username)}`, document.getElementById('outputSearch'));
+    }
+
+    function getByEmail() {
+        const email = document.getElementById('emailGet').value;
+        if (!email) return;
+        handleSearch(`${baseUrl}/email/${encodeURIComponent(email)}`, document.getElementById('outputSearch'));
     }
 
     // POST
     async function createFa(event) {
         event.preventDefault();
         const fa = {
+            username: document.getElementById('usernamePost').value,
             email: document.getElementById('emailPost').value,
             nome: document.getElementById('nomePost').value,
-            genero: document.getElementById('generoPost').value,
-            idade: parseInt(document.getElementById('idadePost').value),
-            univ_fav: document.getElementById('univPost').value,
-            tempo_geek: parseInt(document.getElementById('tempoPost').value),
-            ocupacao: document.getElementById('ocupacaoPost').value
+            genero: document.getElementById('generoPost').value || null,
+            idade: parseOptionalInt(document.getElementById('idadePost').value),
+            univ_fav: document.getElementById('univPost').value || null,
+            tempoGeek: parseOptionalInt(document.getElementById('tempoPost').value), // Corrigido para camelCase
+            ocupacao: document.getElementById('ocupacaoPost').value || null
         };
+
         const res = await fetch(baseUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(fa)
         });
         document.getElementById('outputPost').textContent = await res.text();
-        getAll();
+        if (res.ok) {
+            document.getElementById('formCreate').reset();
+            getAll();
+        }
     }
 
     // PUT
     async function updateFa(event) {
         event.preventDefault();
-        const email = document.getElementById('emailPut').value;
+        const id = document.getElementById('idPut').value;
+        if (!id) {
+            document.getElementById('outputPut').textContent = "Por favor, insira um ID.";
+            return;
+        }
+
         const fa = {
+            username: document.getElementById('usernamePut').value,
             nome: document.getElementById('nomePut').value,
             genero: document.getElementById('generoPut').value,
-            idade: parseInt(document.getElementById('idadePut').value),
+            idade: parseOptionalInt(document.getElementById('idadePut').value),
             univ_fav: document.getElementById('univPut').value,
-            tempo_geek: parseInt(document.getElementById('tempoPut').value),
+            tempoGeek: parseOptionalInt(document.getElementById('tempoPut').value), // Corrigido para camelCase
             ocupacao: document.getElementById('ocupacaoPut').value
         };
-        const res = await fetch(`${baseUrl}/${email}`, {
+
+        const res = await fetch(`${baseUrl}/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(fa)
         });
         document.getElementById('outputPut').textContent = await res.text();
-        getAll();
+        if (res.ok) {
+            document.getElementById('formUpdate').reset();
+            getAll();
+        }
     }
 
     // DELETE
     async function deleteFa() {
-        const email = document.getElementById('emailDel').value;
-        const res = await fetch(`${baseUrl}/${email}`, { method: 'DELETE' });
-        document.getElementById('outputDel').textContent = await res.text() || "Fã deletado";
-        getAll();
+        const id = document.getElementById('idDel').value;
+        if (!id) {
+            document.getElementById('outputDel').textContent = "Por favor, insira um ID.";
+            return;
+        }
+
+        if (!confirm(`Tem certeza que deseja deletar o fã com ID ${id}?`)) return;
+
+        const res = await fetch(`${baseUrl}/${id}`, { method: 'DELETE' });
+
+        if (res.ok) {
+            document.getElementById('outputDel').textContent = "Fã deletado com sucesso!";
+            getAll();
+        } else {
+            document.getElementById('outputDel').textContent = await res.text();
+        }
     }
 
     // Inicializa tabela
