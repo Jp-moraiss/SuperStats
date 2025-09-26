@@ -18,11 +18,25 @@ public class FaService {
         this.repository = repository;
     }
 
+    public Optional<Fa> findById(Integer id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
+        return repository.findById(id);
+    }
+
     public Optional<Fa> findByEmail(String email) {
         if (email == null || email.isEmpty()) {
-            throw new ResourceNotFoundException("Email cannot be null or empty");
+            throw new IllegalArgumentException("Email cannot be null or empty");
         }
         return repository.findByEmail(email);
+    }
+
+    public Optional<Fa> findByUsername(String username) {
+        if (username == null || username.isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be null or empty");
+        }
+        return repository.findByUsername(username);
     }
 
     public List<Fa> findAll() {
@@ -30,6 +44,9 @@ public class FaService {
     }
 
     public void save(FaDTO fa) {
+        if (fa.getUsername() == null || fa.getUsername().trim().isEmpty()) {
+            throw new IllegalArgumentException("O username do fã não pode ser nulo ou vazio.");
+        }
         if (fa.getEmail() == null || fa.getEmail().trim().isEmpty()) {
             throw new IllegalArgumentException("O email do fã não pode ser nulo ou vazio.");
         }
@@ -39,17 +56,18 @@ public class FaService {
         repository.save(fa);
     }
 
-    public void update(String email, FaDTO fa) {
-        if (repository.findByEmail(email).isEmpty()) {
-            throw new RuntimeException("Fã não encontrado com o email: " + email);
+    public void update(Integer id, FaDTO fa) {
+        if (repository.findById(id).isEmpty()) {
+            throw new RuntimeException("Fã não encontrado com o id: " + id);
         }
-        repository.update(email, fa);
+        repository.update(id, fa);
     }
 
-    public void deleteByEmail(String email) {
-        if (repository.findByEmail(email).isEmpty()) {
-            throw new RuntimeException("Fã não encontrado com o email: " + email);
+    public void deleteById(Integer id) {
+        if (repository.findById(id).isEmpty()) {
+            throw new RuntimeException("Fã não encontrado com o id: " + id);
         }
-        repository.deleteByEmail(email);
+        repository.deleteById(id);
     }
 }
+

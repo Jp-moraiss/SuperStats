@@ -21,6 +21,16 @@ public class FaRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public Optional<Fa> findById(Integer id) {
+        String sql = "SELECT * FROM Fa WHERE id = ?";
+        try {
+            Fa result = jdbcTemplate.queryForObject(sql, new FaRowMapper(), id);
+            return Optional.ofNullable(result);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
     public Optional<Fa> findByEmail(String email) {
         String sql = "SELECT * FROM Fa WHERE email = ?";
         try {
@@ -31,14 +41,26 @@ public class FaRepository {
         }
     }
 
+    public Optional<Fa> findByUsername(String username) {
+        String sql = "SELECT * FROM Fa WHERE username = ?";
+        try {
+            Fa result = jdbcTemplate.queryForObject(sql, new FaRowMapper(), username);
+            return Optional.ofNullable(result);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
     public List<Fa> findAll() {
-        String sql = "SELECT * FROM Fa ORDER BY email";
+        String sql = "SELECT * FROM Fa ORDER BY id";
         return jdbcTemplate.query(sql, new FaRowMapper());
     }
 
     public void save(FaDTO fa) {
-        String sql = "INSERT INTO Fa (email, nome, genero, idade, univ_fav, tempo_geek, ocupacao) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Fa (username, email, nome, genero, idade, univ_fav, tempo_geek, ocupacao) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
+                fa.getUsername(),
                 fa.getEmail(),
                 fa.getNome(),
                 fa.getGenero(),
@@ -48,27 +70,30 @@ public class FaRepository {
                 fa.getOcupacao());
     }
 
-    public void update(String email, FaDTO fa) {
-        String sql = "UPDATE Fa SET nome = ?, genero = ?, idade = ?, univ_fav = ?, tempo_geek = ?, ocupacao = ? WHERE email = ?";
+    public void update(Integer id, FaDTO fa) {
+        String sql = "UPDATE Fa SET username = ?, nome = ?, genero = ?, idade = ?, univ_fav = ?, tempo_geek = ?, ocupacao = ? WHERE id = ?";
         jdbcTemplate.update(sql,
+                fa.getUsername(),
                 fa.getNome(),
                 fa.getGenero(),
                 fa.getIdade(),
                 fa.getUniv_fav(),
                 fa.getTempoGeek(),
                 fa.getOcupacao(),
-                email);
+                id);
     }
 
-    public void deleteByEmail(String email) {
-        String sql = "DELETE FROM Fa WHERE email = ?";
-        jdbcTemplate.update(sql, email);
+    public void deleteById(Integer id) {
+        String sql = "DELETE FROM Fa WHERE id = ?";
+        jdbcTemplate.update(sql, id);
     }
 
     private static class FaRowMapper implements RowMapper<Fa> {
         @Override
         public Fa mapRow(ResultSet rs, int rowNum) throws SQLException {
             Fa fa = new Fa();
+            fa.setId(rs.getInt("id"));
+            fa.setUsername(rs.getString("username"));
             fa.setEmail(rs.getString("email"));
             fa.setNome(rs.getString("nome"));
             fa.setGenero(rs.getString("genero"));
@@ -80,3 +105,4 @@ public class FaRepository {
         }
     }
 }
+
