@@ -2,16 +2,23 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>SuperStats - Filmes</title>
+    <title>SuperStats - Gestão de Filmes (Protegido)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { padding: 20px; }
         .section { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        pre { background-color: #f8f9fa; padding: 10px; border-radius: 5px; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1 class="mb-4">SuperStats - Gestão de Filmes</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">SuperStats - Gestão de Filmes</h1>
+        <div>
+            <a href="login.html" class="btn btn-secondary">Ir para a Home</a>
+            <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
+        </div>
+    </div>
 
     <div class="section">
         <h3>Todos os Filmes</h3>
@@ -103,113 +110,120 @@
 
 <script>
     const baseUrl = 'http://localhost:8080/filmes';
+    const apiUrl = 'http://localhost:8080';
+
+    // --- LÓGICA DE SEGURANÇA E AUTENTICAÇÃO ---
+
+    // O "GUARDA" DE ACESSO: Roda assim que a página carrega
+    document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            alert("Acesso negado. Por favor, faça o login.");
+            window.location.href = 'login.html';
+        } else {
+            getAll();
+            populateProdutorasSelect();
+        }
+    });
+
+    function handleLogout() {
+        localStorage.removeItem('jwtToken');
+        window.location.href = 'login.html';
+    }
+
+    async function fetchWithAuth(url, options = {}) {
+        const token = localStorage.getItem('jwtToken');
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            ...options.headers,
+        };
+
+        const response = await fetch(url, { ...options, headers });
+
+        if (response.status === 401 || response.status === 403) {
+            handleLogout();
+            throw new Error('Sessão inválida ou expirada.');
+        }
+
+        return response;
+    }
+
+    // --- FUNÇÕES DO CRUD (Agora usando fetchWithAuth) ---
 
     async function getAll() {
         try {
-            const res = await fetch(baseUrl);
-            if (!res.ok) {
-                throw new Error(`Erro ao buscar filmes: ${res.statusText}`);
+            const res = await fetchWithAuth(baseUrl);
+            if (!res.ok) throw new Error("Falha ao carregar filmes");
+
+            const tbody = document.querySelector("#filmeTable tbody");
+            if (res.status === 204) { // No Content
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum filme cadastrado.</td></tr>';
+                return;
             }
 
             const data = await res.json();
-            const tbody = document.querySelector("#filmeTable tbody");
-
             tbody.innerHTML = "";
 
             data.forEach(filme => {
                 const tr = document.createElement("tr");
-
                 let dataFormatada = '';
                 if (filme.dataLancamento) {
                     const partesData = filme.dataLancamento.split('-');
                     dataFormatada = `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
                 }
-
                 tr.innerHTML = `
-                <td>${filme.id}</td>
-                <td>${filme.titulo}</td>
-                <td>${filme.produtora}</td>
-                <td>${filme.diretor || ''}</td>
-                <td>${dataFormatada}</td>
-            `;
-
+                    <td>${filme.id}</td>
+                    <td>${filme.titulo}</td>
+                    <td>${filme.produtora}</td>
+                    <td>${filme.diretor || ''}</td>
+                    <td>${dataFormatada}</td>
+                `;
                 tbody.appendChild(tr);
             });
         } catch (error) {
             console.error("Falha na função getAll:", error);
-            const tbody = document.querySelector("#filmeTable tbody");
-            tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Não foi possível carregar os filmes. Verifique a conexão com a API.</td></tr>`;
         }
     }
 
     async function getById() {
         const id = document.getElementById('idGet').value;
         if (!id) return;
-        const res = await fetch(`${baseUrl}/${id}`);
+        const res = await fetchWithAuth(`${baseUrl}/${id}`);
         const output = document.getElementById('outputId');
-        if (res.status === 404) {
-            output.textContent = "Filme não encontrado";
-            return;
-        }
-        const data = await res.json();
-        output.textContent = JSON.stringify(data, null, 2);
+        output.textContent = res.ok ? JSON.stringify(await res.json(), null, 2) : "Filme não encontrado";
     }
 
     async function getByTitle() {
         const title = document.getElementById('titleGet').value;
         if (!title) return;
-        const res = await fetch(`${baseUrl}/titulo?titulo=${encodeURIComponent(title)}`);
+        const res = await fetchWithAuth(`${baseUrl}/titulo?titulo=${encodeURIComponent(title)}`);
         const output = document.getElementById('outputTitle');
-        if (res.status === 404) {
-            output.textContent = "Filme não encontrado";
-            return;
-        }
-        const data = await res.json();
-        output.textContent = JSON.stringify(data, null, 2);
+        output.textContent = res.ok ? JSON.stringify(await res.json(), null, 2) : "Nenhum filme encontrado com esse título.";
     }
 
     async function populateProdutorasSelect() {
         try {
-            const res = await fetch(`${baseUrl}/produtoras`);
+            const res = await fetchWithAuth(`${apiUrl}/filmes/produtoras`);
             const produtoras = await res.json();
             const select = document.getElementById('produtoraSelect');
-
             select.innerHTML = '<option selected disabled>Selecione uma produtora...</option>';
-
             produtoras.forEach(produtora => {
                 const option = document.createElement('option');
                 option.value = produtora;
                 option.textContent = produtora;
                 select.appendChild(option);
             });
-
         } catch (error) {
             console.error("Falha ao carregar produtoras:", error);
-            const select = document.getElementById('produtoraSelect');
-            select.innerHTML = '<option selected disabled>Erro ao carregar</option>';
         }
     }
 
-    // 2. Busca filmes quando uma nova produtora é selecionada no selectbox
     async function getBySelectedProdutora() {
-        const select = document.getElementById('produtoraSelect');
-        const produtora = select.value;
-
-        if (!produtora || select.selectedIndex === 0) {
-            document.getElementById('outputProdutora').textContent = '';
-            return;
-        }
-
-        const res = await fetch(`${baseUrl}/produtora?produtora=${encodeURIComponent(produtora)}`);
+        const produtora = document.getElementById('produtoraSelect').value;
+        const res = await fetchWithAuth(`${baseUrl}/produtora?produtora=${encodeURIComponent(produtora)}`);
         const output = document.getElementById('outputProdutora');
-
-        if (res.status === 404 || res.headers.get("content-length") === "0") {
-            output.textContent = "Nenhum filme encontrado para esta produtora.";
-            return;
-        }
-
-        const data = await res.json();
-        output.textContent = JSON.stringify(data, null, 2);
+        output.textContent = res.ok ? JSON.stringify(await res.json(), null, 2) : "Nenhum filme encontrado para esta produtora.";
     }
 
     async function createFilme(event) {
@@ -220,12 +234,11 @@
             diretor: document.getElementById('diretorPost').value || null,
             dataLancamento: document.getElementById('dataPost').value || null
         };
-        const res = await fetch(baseUrl, {
+        const res = await fetchWithAuth(baseUrl, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(filme)
         });
-        document.getElementById('outputPost').textContent = res.ok ? "Filme criado com sucesso!" : `Erro: ${await res.text()}`;
+        document.getElementById('outputPost').textContent = await res.text();
         if (res.ok) {
             document.getElementById('formCreate').reset();
             getAll();
@@ -239,20 +252,20 @@
         if (!id) return;
 
         const filme = {
-            titulo: document.getElementById('tituloPut').value || null,
-            produtora: document.getElementById('produtoraPut').value || null,
-            diretor: document.getElementById('diretorPut').value || null,
-            dataLancamento: document.getElementById('dataPut').value || null
+            titulo: document.getElementById('tituloPut').value,
+            produtora: document.getElementById('produtoraPut').value,
+            diretor: document.getElementById('diretorPut').value,
+            dataLancamento: document.getElementById('dataPut').value
         };
 
-        Object.keys(filme).forEach(key => filme[key] === null && delete filme[key]);
+        // Remove campos vazios para não sobrescrever dados existentes com nada
+        Object.keys(filme).forEach(key => filme[key] === '' && delete filme[key]);
 
-        const res = await fetch(`${baseUrl}/${id}`, {
+        const res = await fetchWithAuth(`${baseUrl}/${id}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(filme)
         });
-        document.getElementById('outputPut').textContent = res.ok ? "Filme atualizado com sucesso!" : `Erro: ${await res.text()}`;
+        document.getElementById('outputPut').textContent = await res.text();
         if (res.ok) {
             document.getElementById('formUpdate').reset();
             getAll();
@@ -265,16 +278,17 @@
         if (!id) return;
         if (!confirm(`Tem certeza que deseja deletar o filme com ID ${id}?`)) return;
 
-        const res = await fetch(`${baseUrl}/${id}`, { method: 'DELETE' });
-        document.getElementById('outputDel').textContent = res.ok ? "Filme deletado com sucesso!" : `Erro: ${await res.text()}`;
+        const res = await fetchWithAuth(`${baseUrl}/${id}`, { method: 'DELETE' });
+
         if (res.ok) {
+            document.getElementById('outputDel').textContent = "Filme deletado com sucesso.";
             document.getElementById('idDel').value = '';
             getAll();
             populateProdutorasSelect();
+        } else {
+            document.getElementById('outputDel').textContent = await res.text();
         }
     }
-    getAll();
-    populateProdutorasSelect();
 </script>
 </body>
 </html>
