@@ -4,7 +4,9 @@ CREATE TABLE Pesquisa (
 );
 
 CREATE TABLE Fa (
-    email VARCHAR(100) PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
     nome VARCHAR(100) NOT NULL,
     genero VARCHAR(30),
     idade INT,
@@ -42,9 +44,9 @@ CREATE TABLE Personagem_Novo (
     peso DOUBLE,
     poder VARCHAR(100),
     genero VARCHAR(30),
-    fa_criador VARCHAR(100) NULL,
-    CONSTRAINT fk_fa_criador FOREIGN KEY (fa_criador)
-     REFERENCES Fa(email) ON DELETE SET NULL
+    fa_criador_id INT NULL,
+    CONSTRAINT fk_fa_criador_id FOREIGN KEY (fa_criador_id)
+     REFERENCES Fa(id) ON DELETE SET NULL
 );
 
 CREATE TABLE Evento (
@@ -84,13 +86,13 @@ CREATE TABLE Pergunta (
 CREATE TABLE Resposta (
     id INT PRIMARY KEY AUTO_INCREMENT,
     fk_Personagem_id INT NULL,
-    fk_Fa_email VARCHAR(100) NULL,
+    fk_Fa_id INT NULL,
     fk_Pergunta_id INT NOT NULL,
     data_resposta DATE,
     CONSTRAINT fk_resposta_personagem FOREIGN KEY (fk_Personagem_id)
       REFERENCES Personagem(id) ON DELETE SET NULL,
-    CONSTRAINT fk_resposta_fa FOREIGN KEY (fk_Fa_email)
-      REFERENCES Fa(email) ON DELETE CASCADE,
+    CONSTRAINT fk_resposta_fa_id FOREIGN KEY (fk_Fa_id)
+      REFERENCES Fa(id) ON DELETE CASCADE,
     CONSTRAINT fk_resposta_pergunta FOREIGN KEY (fk_Pergunta_id)
       REFERENCES Pergunta(id) ON DELETE CASCADE
 );
