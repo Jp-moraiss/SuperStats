@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SuperStats - Filmes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding: 20px; }
+        .section { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="mb-4">SuperStats - Gestão de Filmes</h1>
+
+    <div class="section">
+        <h3>Todos os Filmes</h3>
+        <button class="btn btn-primary mb-2" onclick="getAll()">Atualizar Lista</button>
+        <table class="table table-striped" id="filmeTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Produtora</th>
+                <th>Diretor</th>
+                <th>Data de Lançamento</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>Buscar Filme por ID</h3>
+        <div class="input-group mb-2">
+            <input type="number" id="idGet" class="form-control" placeholder="ID do filme">
+            <button class="btn btn-info" onclick="getById()">Buscar</button>
+        </div>
+        <pre id="outputId"></pre>
+    </div>
+
+    <div class="section">
+        <h3>Buscar Filme por Título</h3>
+        <div class="input-group mb-2">
+            <input type="text" id="titleGet" class="form-control" placeholder="Título do filme">
+            <button class="btn btn-info" onclick="getByTitle()">Buscar</button>
+        </div>
+        <pre id="outputTitle"></pre>
+    </div>
+
+    <div class="section">
+        <h3>Buscar Filmes por Produtora</h3>
+        <select id="produtoraSelect" class="form-select" onchange="getBySelectedProdutora()">
+            <option selected disabled>Carregando produtoras...</option>
+        </select>
+        <pre id="outputProdutora" class="mt-2"></pre>
+    </div>
+
+    <div class="section">
+        <h3>Criar Filme</h3>
+        <form id="formCreate" onsubmit="createFilme(event)">
+            <div class="row mb-2">
+                <div class="col"><input type="text" id="tituloPost" class="form-control" placeholder="Título" required></div>
+                <div class="col"><input type="text" id="produtoraPost" class="form-control" placeholder="Produtora" required></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col"><input type="text" id="diretorPost" class="form-control" placeholder="Diretor"></div>
+                <div class="col"><input type="date" id="dataPost" class="form-control" placeholder="Data de Lançamento"></div>
+            </div>
+            <button class="btn btn-success w-100" type="submit">Criar</button>
+        </form>
+        <pre id="outputPost"></pre>
+    </div>
+
+    <div class="section">
+        <h3>Atualizar Filme</h3>
+        <form id="formUpdate" onsubmit="updateFilme(event)">
+            <div class="row mb-2">
+                <div class="col"><input type="number" id="idPut" class="form-control" placeholder="ID do filme" required></div>
+                <div class="col"><input type="text" id="tituloPut" class="form-control" placeholder="Título"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col"><input type="text" id="produtoraPut" class="form-control" placeholder="Produtora"></div>
+                <div class="col"><input type="text" id="diretorPut" class="form-control" placeholder="Diretor"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col"><input type="date" id="dataPut" class="form-control" placeholder="Data de Lançamento"></div>
+            </div>
+            <button class="btn btn-warning w-100" type="submit">Atualizar</button>
+        </form>
+        <pre id="outputPut"></pre>
+    </div>
+
+    <div class="section">
+        <h3>Deletar Filme</h3>
+        <div class="input-group mb-2">
+            <input type="number" id="idDel" class="form-control" placeholder="ID do filme">
+            <button class="btn btn-danger" onclick="deleteFilme()">Deletar</button>
+        </div>
+        <pre id="outputDel"></pre>
+    </div>
+</div>
+
+<script>
+    const baseUrl = 'http://localhost:8080/filmes';
+
+    async function getAll() {
+        try {
+            const res = await fetch(baseUrl);
+            if (!res.ok) {
+                throw new Error(`Erro ao buscar filmes: ${res.statusText}`);
+            }
+
+            const data = await res.json();
+            const tbody = document.querySelector("#filmeTable tbody");
+
+            tbody.innerHTML = "";
+
+            data.forEach(filme => {
+                const tr = document.createElement("tr");
+
+                let dataFormatada = '';
+                if (filme.dataLancamento) {
+                    const partesData = filme.dataLancamento.split('-');
+                    dataFormatada = `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+                }
+
+                tr.innerHTML = `
+                <td>${filme.id}</td>
+                <td>${filme.titulo}</td>
+                <td>${filme.produtora}</td>
+                <td>${filme.diretor || ''}</td>
+                <td>${dataFormatada}</td>
+            `;
+
+                tbody.appendChild(tr);
+            });
+        } catch (error) {
+            console.error("Falha na função getAll:", error);
+            const tbody = document.querySelector("#filmeTable tbody");
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Não foi possível carregar os filmes. Verifique a conexão com a API.</td></tr>`;
+        }
+    }
+
+    async function getById() {
+        const id = document.getElementById('idGet').value;
+        if (!id) return;
+        const res = await fetch(`${baseUrl}/${id}`);
+        const output = document.getElementById('outputId');
+        if (res.status === 404) {
+            output.textContent = "Filme não encontrado";
+            return;
+        }
+        const data = await res.json();
+        output.textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function getByTitle() {
+        const title = document.getElementById('titleGet').value;
+        if (!title) return;
+        const res = await fetch(`${baseUrl}/titulo?titulo=${encodeURIComponent(title)}`);
+        const output = document.getElementById('outputTitle');
+        if (res.status === 404) {
+            output.textContent = "Filme não encontrado";
+            return;
+        }
+        const data = await res.json();
+        output.textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function populateProdutorasSelect() {
+        try {
+            const res = await fetch(`${baseUrl}/produtoras`);
+            const produtoras = await res.json();
+            const select = document.getElementById('produtoraSelect');
+
+            select.innerHTML = '<option selected disabled>Selecione uma produtora...</option>';
+
+            produtoras.forEach(produtora => {
+                const option = document.createElement('option');
+                option.value = produtora;
+                option.textContent = produtora;
+                select.appendChild(option);
+            });
+
+        } catch (error) {
+            console.error("Falha ao carregar produtoras:", error);
+            const select = document.getElementById('produtoraSelect');
+            select.innerHTML = '<option selected disabled>Erro ao carregar</option>';
+        }
+    }
+
+    // 2. Busca filmes quando uma nova produtora é selecionada no selectbox
+    async function getBySelectedProdutora() {
+        const select = document.getElementById('produtoraSelect');
+        const produtora = select.value;
+
+        if (!produtora || select.selectedIndex === 0) {
+            document.getElementById('outputProdutora').textContent = '';
+            return;
+        }
+
+        const res = await fetch(`${baseUrl}/produtora?produtora=${encodeURIComponent(produtora)}`);
+        const output = document.getElementById('outputProdutora');
+
+        if (res.status === 404 || res.headers.get("content-length") === "0") {
+            output.textContent = "Nenhum filme encontrado para esta produtora.";
+            return;
+        }
+
+        const data = await res.json();
+        output.textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function createFilme(event) {
+        event.preventDefault();
+        const filme = {
+            titulo: document.getElementById('tituloPost').value,
+            produtora: document.getElementById('produtoraPost').value,
+            diretor: document.getElementById('diretorPost').value || null,
+            dataLancamento: document.getElementById('dataPost').value || null
+        };
+        const res = await fetch(baseUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(filme)
+        });
+        document.getElementById('outputPost').textContent = res.ok ? "Filme criado com sucesso!" : `Erro: ${await res.text()}`;
+        if (res.ok) {
+            document.getElementById('formCreate').reset();
+            getAll();
+            populateProdutorasSelect();
+        }
+    }
+
+    async function updateFilme(event) {
+        event.preventDefault();
+        const id = document.getElementById('idPut').value;
+        if (!id) return;
+
+        const filme = {
+            titulo: document.getElementById('tituloPut').value || null,
+            produtora: document.getElementById('produtoraPut').value || null,
+            diretor: document.getElementById('diretorPut').value || null,
+            dataLancamento: document.getElementById('dataPut').value || null
+        };
+
+        Object.keys(filme).forEach(key => filme[key] === null && delete filme[key]);
+
+        const res = await fetch(`${baseUrl}/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(filme)
+        });
+        document.getElementById('outputPut').textContent = res.ok ? "Filme atualizado com sucesso!" : `Erro: ${await res.text()}`;
+        if (res.ok) {
+            document.getElementById('formUpdate').reset();
+            getAll();
+            populateProdutorasSelect();
+        }
+    }
+
+    async function deleteFilme() {
+        const id = document.getElementById('idDel').value;
+        if (!id) return;
+        if (!confirm(`Tem certeza que deseja deletar o filme com ID ${id}?`)) return;
+
+        const res = await fetch(`${baseUrl}/${id}`, { method: 'DELETE' });
+        document.getElementById('outputDel').textContent = res.ok ? "Filme deletado com sucesso!" : `Erro: ${await res.text()}`;
+        if (res.ok) {
+            document.getElementById('idDel').value = '';
+            getAll();
+            populateProdutorasSelect();
+        }
+    }
+    getAll();
+    populateProdutorasSelect();
+</script>
+</body>
+</html>
