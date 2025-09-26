@@ -1,6 +1,7 @@
 package com.cesar.superstats.service;
 
 import com.cesar.superstats.dto.FaDTO;
+import com.cesar.superstats.exceptions.ResourceNotFoundException;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.repository.FaRepository;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class FaService {
     }
 
     public Optional<Fa> findByEmail(String email) {
+        if (email == null || email.isEmpty()) {
+            throw new ResourceNotFoundException("Email cannot be null or empty");
+        }
         return repository.findByEmail(email);
     }
 

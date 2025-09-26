@@ -1,4 +1,4 @@
-package com.cesar.superstats.model.entities;// Fa.java
+package com.cesar.superstats.model.entities;
 import lombok.Data;
 
 import java.util.List;

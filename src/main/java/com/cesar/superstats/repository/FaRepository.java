@@ -76,7 +76,6 @@ public class FaRepository {
             fa.setUniv_fav(rs.getString("univ_fav"));
             fa.setTempo_geek(rs.getInt("tempo_geek"));
             fa.setOcupacao(rs.getString("ocupacao"));
-            // a lista de respostas pode ser preenchida em outro repository
             return fa;
         }
     }

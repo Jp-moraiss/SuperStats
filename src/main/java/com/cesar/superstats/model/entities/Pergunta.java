@@ -1,4 +1,4 @@
-package com.cesar.superstats.model.entities;// Pergunta.java
+package com.cesar.superstats.model.entities;
 import lombok.Data;
 
 @Data
