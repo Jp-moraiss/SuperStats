@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SuperStats - Bem-vindo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: #f8f9fa; }
+        .container { max-width: 800px; }
+        .form-container { max-width: 400px; margin: auto; }
+        .hidden { display: none; }
+        .nav-link { font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div id="authSection">
+        <div id="loginView" class="form-container">
+            <h2 class="text-center mb-4">Login</h2>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="loginUsername" placeholder="Username" required>
+                    <label for="loginUsername">Username</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="loginPassword" placeholder="Senha" required>
+                    <label for="loginPassword">Senha</label>
+                </div>
+                <button type="submit" class="w-100 btn btn-lg btn-primary">Entrar</button>
+                <p class="mt-3 text-center">Não tem uma conta? <a href="#" onclick="showRegisterView()">Cadastre-se</a></p>
+            </form>
+            <div id="loginError" class="alert alert-danger mt-3 hidden"></div>
+        </div>
+
+        <div id="registerView" class="form-container hidden">
+            <h2 class="text-center mb-4">Cadastro</h2>
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-floating mb-2"><input type="text" id="regUsername" class="form-control" placeholder="Username" required><label for="regUsername">Username</label></div>
+                <div class="form-floating mb-2"><input type="email" id="regEmail" class="form-control" placeholder="Email" required><label for="regEmail">Email</label></div>
+                <div class="form-floating mb-2"><input type="text" id="regNome" class="form-control" placeholder="Nome Completo" required><label for="regNome">Nome Completo</label></div>
+                <div class="form-floating mb-2"><input type="password" id="regPassword" class="form-control" placeholder="Senha" required><label for="regPassword">Senha</label></div>
+                <button type="submit" class="w-100 btn btn-lg btn-success">Cadastrar</button>
+                <p class="mt-3 text-center">Já tem uma conta? <a href="#" onclick="showLoginView()">Faça o login</a></p>
+            </form>
+            <div id="registerMessage" class="alert mt-3 hidden"></div>
+        </div>
+    </div>
+
+    <div id="contentSection" class="hidden text-center">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">Bem-vindo!</h2>
+            <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
+        </div>
+
+        <div class="card p-4">
+            <div class="card-body">
+                <h3 class="card-title">Explore nosso site!</h3>
+                <p class="card-text">Escolha uma das opções abaixo para continuar.</p>
+                <div class="list-group">
+                    <a href="filmes.html" class="list-group-item list-group-item-action">
+                        Adicione filmes ao catálogo &rarr;
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action disabled" tabindex="-1" aria-disabled="true">
+                        Crie seu personagem! (Em breve)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const apiUrl = 'http://localhost:8080';
+
+    // --- GERENCIAMENTO DE VISUALIZAÇÃO ---
+    const authSection = document.getElementById('authSection');
+    const contentSection = document.getElementById('contentSection');
+    const loginView = document.getElementById('loginView');
+    const registerView = document.getElementById('registerView');
+
+    function showLoginView() {
+        authSection.classList.remove('hidden');
+        contentSection.classList.add('hidden');
+        loginView.classList.remove('hidden');
+        registerView.classList.add('hidden');
+    }
+
+    function showRegisterView() {
+        loginView.classList.add('hidden');
+        registerView.classList.remove('hidden');
+    }
+
+    function showContentView() {
+        authSection.classList.add('hidden');
+        contentSection.classList.remove('hidden');
+    }
+
+    // --- LÓGICA DE AUTENTICAÇÃO ---
+
+    async function handleRegister(event) {
+        event.preventDefault();
+        const msgDiv = document.getElementById('registerMessage');
+
+        const fa = {
+            username: document.getElementById('regUsername').value,
+            email: document.getElementById('regEmail').value,
+            nome: document.getElementById('regNome').value,
+            password: document.getElementById('regPassword').value
+        };
+
+        try {
+            const res = await fetch(`${apiUrl}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(fa)
+            });
+
+            if (res.ok) {
+                msgDiv.textContent = "Cadastro realizado com sucesso! Faça o login.";
+                msgDiv.className = 'alert alert-success';
+                setTimeout(showLoginView, 2000);
+            } else {
+                const errorText = await res.text();
+                throw new Error(errorText);
+            }
+        } catch (error) {
+            msgDiv.textContent = `Erro no cadastro: ${error.message}`;
+            msgDiv.className = 'alert alert-danger';
+        } finally {
+            msgDiv.classList.remove('hidden');
+        }
+    }
+
+    async function handleLogin(event) {
+        event.preventDefault();
+        const errorDiv = document.getElementById('loginError');
+
+        const loginData = {
+            username: document.getElementById('loginUsername').value,
+            password: document.getElementById('loginPassword').value
+        };
+
+        try {
+            const res = await fetch(`${apiUrl}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(loginData)
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                localStorage.setItem('jwtToken', data.token);
+                showContentView();
+            } else {
+                throw new Error("Usuário ou senha inválidos.");
+            }
+        } catch (error) {
+            errorDiv.textContent = error.message;
+            errorDiv.classList.remove('hidden');
+        }
+    }
+
+    function handleLogout() {
+        localStorage.removeItem('jwtToken');
+        showLoginView();
+    }
+
+    // --- INICIALIZAÇÃO DA PÁGINA ---
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('jwtToken');
+        if (token) {
+            showContentView();
+        } else {
+            showLoginView();
+        }
+    });
+
+</script>
+</body>
+</html>

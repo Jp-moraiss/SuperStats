@@ -56,17 +56,18 @@ public class FaRepository {
         return jdbcTemplate.query(sql, new FaRowMapper());
     }
 
-    public void save(FaDTO fa) {
-        String sql = "INSERT INTO Fa (username, email, nome, genero, idade, univ_fav, tempo_geek, ocupacao) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    public void save(Fa fa) {
+        String sql = "INSERT INTO Fa (username, email, nome, password, genero, idade, univ_fav, tempo_geek, ocupacao) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
                 fa.getUsername(),
                 fa.getEmail(),
                 fa.getNome(),
+                fa.getPassword(),
                 fa.getGenero(),
                 fa.getIdade(),
                 fa.getUniv_fav(),
-                fa.getTempoGeek(),
+                fa.getTempo_geek(),
                 fa.getOcupacao());
     }
 
@@ -96,6 +97,7 @@ public class FaRepository {
             fa.setUsername(rs.getString("username"));
             fa.setEmail(rs.getString("email"));
             fa.setNome(rs.getString("nome"));
+            fa.setPassword(rs.getString("password"));
             fa.setGenero(rs.getString("genero"));
             fa.setIdade(rs.getInt("idade"));
             fa.setUniv_fav(rs.getString("univ_fav"));

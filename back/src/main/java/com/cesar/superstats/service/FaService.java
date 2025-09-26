@@ -4,6 +4,7 @@ import com.cesar.superstats.dto.FaDTO;
 import com.cesar.superstats.exceptions.ResourceNotFoundException;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.repository.FaRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +15,11 @@ public class FaService {
 
     private final FaRepository repository;
 
-    public FaService(FaRepository repository) {
+    private final PasswordEncoder encoder;
+
+    public FaService(FaRepository repository, PasswordEncoder encoder) {
         this.repository = repository;
+        this.encoder = encoder;
     }
 
     public Optional<Fa> findById(Integer id) {
@@ -43,17 +47,34 @@ public class FaService {
         return repository.findAll();
     }
 
-    public void save(FaDTO fa) {
-        if (fa.getUsername() == null || fa.getUsername().trim().isEmpty()) {
+    public void save(FaDTO faDto) {
+        if (faDto.getUsername() == null || faDto.getUsername().trim().isEmpty()) {
             throw new IllegalArgumentException("O username do fã não pode ser nulo ou vazio.");
         }
-        if (fa.getEmail() == null || fa.getEmail().trim().isEmpty()) {
+        if (faDto.getEmail() == null || faDto.getEmail().trim().isEmpty()) {
             throw new IllegalArgumentException("O email do fã não pode ser nulo ou vazio.");
         }
-        if (fa.getNome() == null || fa.getNome().trim().isEmpty()) {
+        if (faDto.getNome() == null || faDto.getNome().trim().isEmpty()) {
             throw new IllegalArgumentException("O nome do fã não pode ser nulo ou vazio.");
         }
-        repository.save(fa);
+        if (faDto.getPassword() == null || faDto.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("A senha não pode ser nula ou vazia.");
+        }
+
+        Fa novoFa = new Fa();
+        novoFa.setUsername(faDto.getUsername());
+        novoFa.setEmail(faDto.getEmail());
+        novoFa.setNome(faDto.getNome());
+        novoFa.setGenero(faDto.getGenero());
+        novoFa.setIdade(faDto.getIdade());
+        novoFa.setUniv_fav(faDto.getUniv_fav());
+        novoFa.setTempo_geek(faDto.getTempoGeek());
+        novoFa.setOcupacao(faDto.getOcupacao());
+
+        String senhaHasheada = encoder.encode(faDto.getPassword());
+        novoFa.setPassword(senhaHasheada);
+
+        repository.save(novoFa);
     }
 
     public void update(Integer id, FaDTO fa) {
