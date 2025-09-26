@@ -22,16 +22,29 @@ public class FaController {
 
     @GetMapping
     public ResponseEntity<List<Fa>> findAll() {
-        List<Fa> faList = service.findAll(); // supondo que você tenha um método findAll no service
+        List<Fa> faList = service.findAll();
         return faList.isEmpty()
                 ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
                 : new ResponseEntity<>(faList, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Fa> findById(@PathVariable Integer id) {
+        Optional<Fa> fa = service.findById(id);
+        return fa.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
-    @GetMapping("/{email}")
+    @GetMapping("/email/{email}")
     public ResponseEntity<Fa> findByEmail(@PathVariable String email) {
         Optional<Fa> fa = service.findByEmail(email);
+        return fa.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<Fa> findByUsername(@PathVariable String username) {
+        Optional<Fa> fa = service.findByUsername(username);
         return fa.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -46,23 +59,24 @@ public class FaController {
         }
     }
 
-    @PutMapping("/{email}")
-    public ResponseEntity<String> update(@PathVariable String email, @RequestBody FaDTO faDTO) {
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update(@PathVariable Integer id, @RequestBody FaDTO faDTO) {
         try {
-            service.update(email, faDTO);
+            service.update(id, faDTO);
             return ResponseEntity.ok("Fã atualizado com sucesso!");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-    @DeleteMapping("/{email}")
-    public ResponseEntity<String> deleteByEmail(@PathVariable String email) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable Integer id) {
         try {
-            service.deleteByEmail(email);
+            service.deleteById(id);
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }
+
