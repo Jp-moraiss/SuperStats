@@ -1,8 +1,9 @@
 package com.cesar.superstats.model.entities;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -12,7 +13,9 @@ public class Filme {
     private String titulo;
     private String produtora;
     private String diretor;
-    private Date dataLancamento;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dataLancamento;
 
     List<Personagem> participantes = new ArrayList<Personagem>();
 

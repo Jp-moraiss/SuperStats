@@ -82,5 +82,9 @@ public class FilmeService {
         }
         repository.deleteById(id);
     }
+
+    public List<String> findAllProdutoras() {
+        return repository.findAllProdutoras();
+    }
 }
 

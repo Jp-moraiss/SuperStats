@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate; // Importe LocalDate
 import java.util.List;
 import java.util.Optional;
 
@@ -56,17 +57,19 @@ public class FilmeRepository {
                 filme.getTitulo(),
                 filme.getProdutora(),
                 filme.getDiretor(),
-                filme.getDataLancamento() != null ? new java.sql.Date(filme.getDataLancamento().getTime()) : null
+                filme.getDataLancamento() // Passa o LocalDate diretamente
         );
     }
 
     public void update(Integer id, FilmeDTO filme) {
+        // Lógica de update precisa ser ajustada para construir a query dinamicamente
+        // Esta implementação simples sobrescreve todos os campos.
         String sql = "UPDATE filme SET titulo = ?, produtora = ?, diretor = ?, data_lancamento = ? WHERE id = ?";
         jdbcTemplate.update(sql,
                 filme.getTitulo(),
                 filme.getProdutora(),
                 filme.getDiretor(),
-                filme.getDataLancamento() != null ? new java.sql.Date(filme.getDataLancamento().getTime()) : null,
+                filme.getDataLancamento(), // Passa o LocalDate diretamente
                 id
         );
     }
@@ -82,6 +85,11 @@ public class FilmeRepository {
         return count != null && count > 0;
     }
 
+    public List<String> findAllProdutoras() {
+        String sql = "SELECT DISTINCT produtora FROM filme WHERE produtora IS NOT NULL AND produtora != '' ORDER BY produtora ASC";
+        return jdbcTemplate.queryForList(sql, String.class);
+    }
+
     private static class FilmeRowMapper implements RowMapper<Filme> {
         @Override
         public Filme mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -90,9 +98,9 @@ public class FilmeRepository {
             filme.setTitulo(rs.getString("titulo"));
             filme.setProdutora(rs.getString("produtora"));
             filme.setDiretor(rs.getString("diretor"));
-            filme.setDataLancamento(rs.getDate("data_lancamento")); // corrigido
+            // Forma correta de ler a data
+            filme.setDataLancamento(rs.getObject("data_lancamento", LocalDate.class));
             return filme;
         }
     }
 }
-
