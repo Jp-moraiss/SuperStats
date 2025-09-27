@@ -86,5 +86,20 @@ public class FilmeService {
     public List<String> findAllProdutoras() {
         return repository.findAllProdutoras();
     }
+
+    public void marcarComoAssistido(Integer filmeId, Fa faLogado) {
+        if (!repository.existsById(filmeId)) {
+            throw new RuntimeException("Filme com ID " + filmeId + " não encontrado.");
+        }
+        repository.marcarComoAssistido(faLogado.getId(), filmeId);
+    }
+
+    public void removerDosAssistidos(Integer filmeId, Fa faLogado) {
+        repository.removerDosAssistidos(faLogado.getId(), filmeId);
+    }
+
+    public List<Filme> findAssistidosPeloFa(Fa faLogado) {
+        return repository.findAssistidosByFaId(faLogado.getId());
+    }
 }
 

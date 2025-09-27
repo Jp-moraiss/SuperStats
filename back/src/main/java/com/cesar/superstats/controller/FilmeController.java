@@ -1,10 +1,12 @@
 package com.cesar.superstats.controller;
 
 import com.cesar.superstats.dto.FilmeDTO;
+import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.Filme;
 import com.cesar.superstats.service.FilmeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +22,8 @@ public class FilmeController {
     }
 
     @GetMapping
-    public List<Filme> getAll() {
-        return service.findAll();
+    public ResponseEntity<List<Filme>> findAll(@AuthenticationPrincipal Fa faLogado) { // <-- MUDANÇA
+        return ResponseEntity.ok(service.findAll(faLogado)); // <-- MUDANÇA
     }
 
     @GetMapping("/{id}")
@@ -65,6 +67,28 @@ public class FilmeController {
     public ResponseEntity<List<String>> getAllProdutoras() {
         List<String> produtoras = service.findAllProdutoras();
         return ResponseEntity.ok(produtoras);
+    }
+
+    @PostMapping("/{filmeId}/assistir")
+    public ResponseEntity<Void> marcarComoAssistido(
+            @PathVariable Integer filmeId,
+            @AuthenticationPrincipal Fa faLogado) {
+        service.marcarComoAssistido(filmeId, faLogado);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{filmeId}/assistir") // <-- NOVO ENDPOINT
+    public ResponseEntity<Void> removerDosAssistidos(
+            @PathVariable Integer filmeId,
+            @AuthenticationPrincipal Fa faLogado) {
+        service.removerDosAssistidos(filmeId, faLogado);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/assistidos")
+    public ResponseEntity<List<Filme>> getFilmesAssistidos(@AuthenticationPrincipal Fa faLogado) {
+        List<Filme> filmes = service.findAssistidosPeloFa(faLogado);
+        return ResponseEntity.ok(filmes);
     }
 }
 

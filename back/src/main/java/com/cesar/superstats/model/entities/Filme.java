@@ -13,6 +13,7 @@ public class Filme {
     private String titulo;
     private String produtora;
     private String diretor;
+    private boolean assistido;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataLancamento;

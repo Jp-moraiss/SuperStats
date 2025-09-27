@@ -22,9 +22,12 @@ public class FilmeRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Filme> findAll() {
-        String sql = "SELECT * FROM filme";
-        return jdbcTemplate.query(sql, new FilmeRowMapper());
+    public List<Filme> findAll(Integer faId) {
+        String sql = "SELECT f.*, (cf.fk_Fa_id IS NOT NULL) AS assistido " +
+                "FROM Filme f " +
+                "LEFT JOIN Consome_Filme cf ON f.id = cf.fk_Filme_id AND cf.fk_Fa_id = ? " +
+                "ORDER BY f.id";
+        return jdbcTemplate.query(sql, new FilmeRowMapper(), faId);
     }
 
     public Optional<Filme> findById(Integer id) {
@@ -57,19 +60,17 @@ public class FilmeRepository {
                 filme.getTitulo(),
                 filme.getProdutora(),
                 filme.getDiretor(),
-                filme.getDataLancamento() // Passa o LocalDate diretamente
+                filme.getDataLancamento()
         );
     }
 
     public void update(Integer id, FilmeDTO filme) {
-        // Lógica de update precisa ser ajustada para construir a query dinamicamente
-        // Esta implementação simples sobrescreve todos os campos.
         String sql = "UPDATE filme SET titulo = ?, produtora = ?, diretor = ?, data_lancamento = ? WHERE id = ?";
         jdbcTemplate.update(sql,
                 filme.getTitulo(),
                 filme.getProdutora(),
                 filme.getDiretor(),
-                filme.getDataLancamento(), // Passa o LocalDate diretamente
+                filme.getDataLancamento(),
                 id
         );
     }
@@ -90,6 +91,30 @@ public class FilmeRepository {
         return jdbcTemplate.queryForList(sql, String.class);
     }
 
+    public void marcarComoAssistido(Integer faId, Integer filmeId) {
+        String checkSql = "SELECT COUNT(*) FROM Consome_Filme WHERE fk_Fa_id = ? AND fk_Filme_id = ?";
+        Integer count = jdbcTemplate.queryForObject(checkSql, Integer.class, faId, filmeId);
+        if (count != null && count > 0) {
+            System.out.println("Relação já existe. Nenhuma ação tomada.");
+            return;
+        }
+
+        String insertSql = "INSERT INTO Consome_Filme (fk_Fa_id, fk_Filme_id) VALUES (?, ?)";
+        jdbcTemplate.update(insertSql, faId, filmeId);
+    }
+
+    public void removerDosAssistidos(Integer faId, Integer filmeId) {
+        String sql = "DELETE FROM Consome_Filme WHERE fk_Fa_id = ? AND fk_Filme_id = ?";
+        jdbcTemplate.update(sql, faId, filmeId);
+    }
+
+    public List<Filme> findAssistidosByFaId(Integer faId) {
+        String sql = "SELECT f.* FROM Filme f " +
+                "JOIN Consome_Filme cf ON f.id = cf.fk_Filme_id " +
+                "WHERE cf.fk_Fa_id = ?";
+        return jdbcTemplate.query(sql, new FilmeRowMapper(), faId);
+    }
+
     private static class FilmeRowMapper implements RowMapper<Filme> {
         @Override
         public Filme mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -98,8 +123,12 @@ public class FilmeRepository {
             filme.setTitulo(rs.getString("titulo"));
             filme.setProdutora(rs.getString("produtora"));
             filme.setDiretor(rs.getString("diretor"));
-            // Forma correta de ler a data
             filme.setDataLancamento(rs.getObject("data_lancamento", LocalDate.class));
+
+            if (rs.getMetaData().getColumnCount() > 5) {
+                filme.setAssistido(rs.getBoolean("assistido"));
+            }
+
             return filme;
         }
     }
