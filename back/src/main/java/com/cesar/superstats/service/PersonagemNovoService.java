@@ -1,6 +1,8 @@
 package com.cesar.superstats.service;
 
 import com.cesar.superstats.dto.PersonagemNovoDTO;
+import com.cesar.superstats.dto.ContagemAlinhamentoDTO;
+import com.cesar.superstats.dto.PersonagemNovoResponseDTO;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.PersonagemNovo;
 import com.cesar.superstats.repository.PersonagemNovoRepository;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,15 +20,34 @@ public class PersonagemNovoService {
 
     private final PersonagemNovoRepository repository;
 
-    public List<PersonagemNovo> findAll() {
-        return repository.findAll();
+    public List<PersonagemNovoResponseDTO> findAll() {
+        return repository.findAll().stream()
+                .map(PersonagemNovoResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
-    public List<PersonagemNovo> findByCreator(Fa criador) {
+    public Optional<PersonagemNovoResponseDTO> findById(Integer id) {
+        return repository.findById(id)
+                .map(PersonagemNovoResponseDTO::new);
+    }
+
+    public List<PersonagemNovoResponseDTO> findByCreator(Fa criador) {
         if (criador == null || criador.getId() == null) {
             throw new IllegalArgumentException("Criador inválido.");
         }
-        return repository.findByCreatorId(criador.getId());
+        return repository.findByCreatorId(criador.getId()).stream()
+                .map(PersonagemNovoResponseDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<PersonagemNovoResponseDTO> findByAlinhamento(String alinhamento) {
+        return repository.findByAlinhamento(alinhamento).stream()
+                .map(PersonagemNovoResponseDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<ContagemAlinhamentoDTO> getContagemPorAlinhamento() {
+        return repository.countByAlinhamento();
     }
 
     public void create(PersonagemNovoDTO dto, Fa criador) {
