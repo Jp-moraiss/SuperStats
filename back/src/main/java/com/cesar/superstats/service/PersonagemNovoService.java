@@ -3,13 +3,14 @@ package com.cesar.superstats.service;
 import com.cesar.superstats.dto.PersonagemNovoDTO;
 import com.cesar.superstats.dto.ContagemAlinhamentoDTO;
 import com.cesar.superstats.dto.PersonagemNovoResponseDTO;
+import com.cesar.superstats.exceptions.ResourceNotFoundException;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.PersonagemNovo;
 import com.cesar.superstats.repository.PersonagemNovoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.AccessDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,9 +27,13 @@ public class PersonagemNovoService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<PersonagemNovoResponseDTO> findById(Integer id) {
-        return repository.findById(id)
-                .map(PersonagemNovoResponseDTO::new);
+    public PersonagemNovoResponseDTO findById(Integer id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("O ID do personagem é inválido.");
+        }
+        PersonagemNovo personagem = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Personagem com ID " + id + " não encontrado."));
+        return new PersonagemNovoResponseDTO(personagem);
     }
 
     public List<PersonagemNovoResponseDTO> findByCreator(Fa criador) {
@@ -65,11 +70,10 @@ public class PersonagemNovoService {
         repository.save(personagem);
     }
 
-    public void deleteById(Integer id, Fa faLogado) throws AccessDeniedException {
+    public void deleteById(Integer id, Fa faLogado) {
         PersonagemNovo personagem = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Personagem com ID " + id + " não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Personagem com ID " + id + " não encontrado."));
 
-        // Regra de negócio: Apenas o criador do personagem pode deletá-lo.
         if (!personagem.getFaCriador().getId().equals(faLogado.getId())) {
             throw new AccessDeniedException("Acesso negado. Apenas o criador pode deletar este personagem.");
         }
