@@ -35,10 +35,8 @@ public class PersonagemNovoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PersonagemNovoResponseDTO> findById(@PathVariable Integer id) { // <-- MUDOU O TIPO
-        return service.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<PersonagemNovoResponseDTO> findById(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.findById(id));
     }
 
     @GetMapping("/alinhamento/{alinhamento}")
@@ -63,13 +61,7 @@ public class PersonagemNovoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id, @AuthenticationPrincipal Fa faLogado) {
-        try {
-            service.deleteById(id, faLogado);
-            return ResponseEntity.noContent().build();
-        } catch (AccessDeniedException e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
+        service.deleteById(id, faLogado);
+        return ResponseEntity.noContent().build();
     }
 }
