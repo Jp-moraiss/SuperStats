@@ -7,7 +7,7 @@
     <style>
         body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: #f8f9fa; }
         .container { max-width: 800px; }
-        .form-container { max-width: 400px; margin: auto; }
+        .form-container { max-width: 500px; margin: auto; } /* Aumentado para caber mais campos */
         .hidden { display: none; }
         .nav-link { font-size: 1.2rem; }
     </style>
@@ -35,13 +35,39 @@
         </div>
 
         <div id="registerView" class="form-container hidden">
-            <h2 class="text-center mb-4">Cadastro</h2>
+            <h2 class="text-center mb-4">Cadastro de Novo Fã</h2>
             <form id="registerForm" onsubmit="handleRegister(event)">
-                <div class="form-floating mb-2"><input type="text" id="regUsername" class="form-control" placeholder="Username" required><label for="regUsername">Username</label></div>
-                <div class="form-floating mb-2"><input type="email" id="regEmail" class="form-control" placeholder="Email" required><label for="regEmail">Email</label></div>
-                <div class="form-floating mb-2"><input type="text" id="regNome" class="form-control" placeholder="Nome Completo" required><label for="regNome">Nome Completo</label></div>
-                <div class="form-floating mb-2"><input type="password" id="regPassword" class="form-control" placeholder="Senha" required><label for="regPassword">Senha</label></div>
-                <button type="submit" class="w-100 btn btn-lg btn-success">Cadastrar</button>
+                <div class="row g-2 mb-2">
+                    <div class="col-md"><div class="form-floating"><input type="text" id="regUsername" class="form-control" placeholder="Username*" required><label for="regUsername">Username*</label></div></div>
+                    <div class="col-md"><div class="form-floating"><input type="text" id="regNome" class="form-control" placeholder="Nome Completo*" required><label for="regNome">Nome Completo*</label></div></div>
+                </div>
+                <div class="form-floating mb-2"><input type="email" id="regEmail" class="form-control" placeholder="Email*" required><label for="regEmail">Email*</label></div>
+                <div class="form-floating mb-3"><input type="password" id="regPassword" class="form-control" placeholder="Senha*" required><label for="regPassword">Senha*</label></div>
+
+                <hr>
+                <p class="text-muted text-center">Informações Adicionais (Opcional)</p>
+
+                <div class="row g-2 mb-2">
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <select class="form-select" id="regGenero">
+                                <option selected disabled value="">Selecione o Gênero...</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Feminino">Feminino</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                            <label for="regGenero">Gênero</label>
+                        </div>
+                    </div>
+                    <div class="col-md"><div class="form-floating"><input type="number" id="regIdade" class="form-control" placeholder="Idade"><label for="regIdade">Idade</label></div></div>
+                </div>
+                <div class="form-floating mb-2"><input type="text" id="regUnivFav" class="form-control" placeholder="Universo Favorito"><label for="regUnivFav">Universo Favorito (Marvel/DC)</label></div>
+                <div class="row g-2 mb-2">
+                    <div class="col-md"><div class="form-floating"><input type="number" id="regTempoGeek" class="form-control" placeholder="Tempo Geek (anos)"><label for="regTempoGeek">Tempo Geek (anos)</label></div></div>
+                    <div class="col-md"><div class="form-floating"><input type="text" id="regOcupacao" class="form-control" placeholder="Ocupação"><label for="regOcupacao">Ocupação</label></div></div>
+                </div>
+
+                <button type="submit" class="w-100 btn btn-lg btn-success mt-3">Cadastrar</button>
                 <p class="mt-3 text-center">Já tem uma conta? <a href="#" onclick="showLoginView()">Faça o login</a></p>
             </form>
             <div id="registerMessage" class="alert mt-3 hidden"></div>
@@ -53,18 +79,13 @@
             <h2 class="mb-0">Bem-vindo!</h2>
             <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
         </div>
-
         <div class="card p-4">
             <div class="card-body">
                 <h3 class="card-title">Explore nosso site!</h3>
                 <p class="card-text">Escolha uma das opções abaixo para continuar.</p>
                 <div class="list-group">
-                    <a href="filmes.html" class="list-group-item list-group-item-action">
-                        Adicione filmes ao catálogo &rarr;
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action disabled" tabindex="-1" aria-disabled="true">
-                        Crie seu personagem! (Em breve)
-                    </a>
+                    <a href="filmes.html" class="list-group-item list-group-item-action">Adicione filmes ao catálogo &rarr;</a>
+                    <a href="meus-personagens.html" class="list-group-item list-group-item-action">Crie seu personagem! &rarr;</a>
                 </div>
             </div>
         </div>
@@ -80,34 +101,26 @@
     const loginView = document.getElementById('loginView');
     const registerView = document.getElementById('registerView');
 
-    function showLoginView() {
-        authSection.classList.remove('hidden');
-        contentSection.classList.add('hidden');
-        loginView.classList.remove('hidden');
-        registerView.classList.add('hidden');
-    }
-
-    function showRegisterView() {
-        loginView.classList.add('hidden');
-        registerView.classList.remove('hidden');
-    }
-
-    function showContentView() {
-        authSection.classList.add('hidden');
-        contentSection.classList.remove('hidden');
-    }
+    function showLoginView() { /* ... (código abaixo) ... */ }
+    function showRegisterView() { /* ... (código abaixo) ... */ }
+    function showContentView() { /* ... (código abaixo) ... */ }
 
     // --- LÓGICA DE AUTENTICAÇÃO ---
-
     async function handleRegister(event) {
         event.preventDefault();
         const msgDiv = document.getElementById('registerMessage');
 
+        // --- MUDANÇA AQUI: Coletando todos os campos do novo formulário ---
         const fa = {
             username: document.getElementById('regUsername').value,
             email: document.getElementById('regEmail').value,
             nome: document.getElementById('regNome').value,
-            password: document.getElementById('regPassword').value
+            password: document.getElementById('regPassword').value,
+            genero: document.getElementById('regGenero').value || null,
+            idade: parseInt(document.getElementById('regIdade').value) || null,
+            univ_fav: document.getElementById('regUnivFav').value || null,
+            tempoGeek: parseInt(document.getElementById('regTempoGeek').value) || null,
+            ocupacao: document.getElementById('regOcupacao').value || null
         };
 
         try {
@@ -133,22 +146,40 @@
         }
     }
 
+    async function handleLogin(event) { /* ... (código abaixo) ... */ }
+    function handleLogout() { /* ... (código abaixo) ... */ }
+
+    // --- INICIALIZAÇÃO DA PÁGINA ---
+    document.addEventListener('DOMContentLoaded', () => { /* ... (código abaixo) ... */ });
+
+    // --- Funções que não mudaram ---
+    function showLoginView() {
+        authSection.classList.remove('hidden');
+        contentSection.classList.add('hidden');
+        loginView.classList.remove('hidden');
+        registerView.classList.add('hidden');
+    }
+    function showRegisterView() {
+        loginView.classList.add('hidden');
+        registerView.classList.remove('hidden');
+    }
+    function showContentView() {
+        authSection.classList.add('hidden');
+        contentSection.classList.remove('hidden');
+    }
     async function handleLogin(event) {
         event.preventDefault();
         const errorDiv = document.getElementById('loginError');
-
         const loginData = {
             username: document.getElementById('loginUsername').value,
             password: document.getElementById('loginPassword').value
         };
-
         try {
             const res = await fetch(`${apiUrl}/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(loginData)
             });
-
             if (res.ok) {
                 const data = await res.json();
                 localStorage.setItem('jwtToken', data.token);
@@ -161,14 +192,10 @@
             errorDiv.classList.remove('hidden');
         }
     }
-
     function handleLogout() {
         localStorage.removeItem('jwtToken');
         showLoginView();
     }
-
-    // --- INICIALIZAÇÃO DA PÁGINA ---
-
     document.addEventListener('DOMContentLoaded', () => {
         const token = localStorage.getItem('jwtToken');
         if (token) {
@@ -177,7 +204,6 @@
             showLoginView();
         }
     });
-
 </script>
 </body>
 </html>
