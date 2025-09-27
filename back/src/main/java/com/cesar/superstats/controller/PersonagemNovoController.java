@@ -1,6 +1,8 @@
 package com.cesar.superstats.controller;
 
+import com.cesar.superstats.dto.ContagemAlinhamentoDTO;
 import com.cesar.superstats.dto.PersonagemNovoDTO;
+import com.cesar.superstats.dto.PersonagemNovoResponseDTO;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.PersonagemNovo;
 import com.cesar.superstats.service.PersonagemNovoService;
@@ -13,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/personagens-novos")
@@ -22,14 +25,30 @@ public class PersonagemNovoController {
     private final PersonagemNovoService service;
 
     @GetMapping
-    public ResponseEntity<List<PersonagemNovo>> findAll() {
+    public ResponseEntity<List<PersonagemNovoResponseDTO>> findAll() { // <-- MUDOU O TIPO
         return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/meus")
-    public ResponseEntity<List<PersonagemNovo>> findMine(@AuthenticationPrincipal Fa faLogado) {
-        List<PersonagemNovo> meusPersonagens = service.findByCreator(faLogado);
-        return ResponseEntity.ok(meusPersonagens);
+    public ResponseEntity<List<PersonagemNovoResponseDTO>> findMine(@AuthenticationPrincipal Fa faLogado) { // <-- MUDOU O TIPO
+        return ResponseEntity.ok(service.findByCreator(faLogado));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PersonagemNovoResponseDTO> findById(@PathVariable Integer id) { // <-- MUDOU O TIPO
+        return service.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/alinhamento/{alinhamento}")
+    public ResponseEntity<List<PersonagemNovoResponseDTO>> findByAlinhamento(@PathVariable String alinhamento) { // <-- MUDOU O TIPO
+        return ResponseEntity.ok(service.findByAlinhamento(alinhamento));
+    }
+
+    @GetMapping("/estatisticas/contagem-por-alinhamento")
+    public ResponseEntity<List<ContagemAlinhamentoDTO>> getContagemPorAlinhamento() {
+        return ResponseEntity.ok(service.getContagemPorAlinhamento());
     }
 
     @PostMapping

@@ -1,5 +1,6 @@
 package com.cesar.superstats.repository;
 
+import com.cesar.superstats.dto.ContagemAlinhamentoDTO;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.PersonagemNovo;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -66,6 +67,26 @@ public class PersonagemNovoRepository {
     public List<PersonagemNovo> findByCreatorId(Integer creatorId) {
         String sql = BASE_SQL + "WHERE pn.fa_criador_id = ? ORDER BY pn.id";
         return jdbcTemplate.query(sql, new PersonagemNovoRowMapper(), creatorId);
+    }
+
+    public List<PersonagemNovo> findByAlinhamento(String alinhamento) {
+        String sql = BASE_SQL + "WHERE LOWER(pn.alinhamento) = LOWER(?)";
+        return jdbcTemplate.query(sql, new PersonagemNovoRowMapper(), alinhamento);
+    }
+
+    public List<ContagemAlinhamentoDTO> countByAlinhamento() {
+        String sql = "SELECT alinhamento, COUNT(*) as total " +
+                "FROM Personagem_Novo " +
+                "WHERE alinhamento IS NOT NULL AND alinhamento != '' " +
+                "GROUP BY alinhamento " +
+                "ORDER BY total DESC";
+
+        RowMapper<ContagemAlinhamentoDTO> rowMapper = (rs, rowNum) -> new ContagemAlinhamentoDTO(
+                rs.getString("alinhamento"),
+                rs.getLong("total")
+        );
+
+        return jdbcTemplate.query(sql, rowMapper);
     }
 
     public void save(PersonagemNovo personagem) {

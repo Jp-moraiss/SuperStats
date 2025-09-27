@@ -7,6 +7,7 @@
     <style>
         body { padding: 20px; }
         .card { margin-bottom: 2rem; }
+        pre { background-color: #f8f9fa; padding: 10px; border-radius: 5px; margin-top: 1rem; white-space: pre-wrap; }
     </style>
 </head>
 <body>
@@ -26,14 +27,44 @@
                 <div class="row g-3">
                     <div class="col-md-6"><input type="text" id="nomePost" class="form-control" placeholder="Nome do Personagem" required></div>
                     <div class="col-md-6"><input type="text" id="poderPost" class="form-control" placeholder="Poder Principal"></div>
-                    <div class="col-md-3"><input type="text" id="alinhamentoPost" class="form-control" placeholder="Alinhamento (Ex: Herói)"></div>
-                    <div class="col-md-3"><input type="text" id="generoPost" class="form-control" placeholder="Gênero"></div>
+                    <div class="col-md-3">
+                        <div class="form-floating">
+                            <select class="form-select" id="alinhamentoPost">
+                                <option value="" selected>Sem Alinhamento</option>
+                                <option value="Herói">Herói</option>
+                                <option value="Anti-Herói">Anti-Herói</option>
+                                <option value="Vilão">Vilão</option>
+                            </select>
+                            <label for="alinhamentoPost">Alinhamento</label>
+                        </div>
+                    </div>                    <div class="col-md-3"><input type="text" id="generoPost" class="form-control" placeholder="Gênero"></div>
                     <div class="col-md-3"><input type="number" step="0.01" id="alturaPost" class="form-control" placeholder="Altura (metros)"></div>
                     <div class="col-md-3"><input type="number" step="0.01" id="pesoPost" class="form-control" placeholder="Peso (kg)"></div>
                 </div>
                 <button class="btn btn-success w-100 mt-3" type="submit">Criar Personagem</button>
             </form>
             <pre id="outputPost" class="mt-3"></pre>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><h4>Buscas Específicas e Estatísticas</h4></div>
+        <div class="card-body">
+            <div class="input-group mb-3">
+                <input type="number" id="idGet" class="form-control" placeholder="Buscar Personagem por ID">
+                <button class="btn btn-outline-secondary" onclick="getPersonagemById()">Buscar</button>
+            </div>
+            <div class="input-group mb-3">
+                <select class="form-select" id="alinhamentoGet" onchange="getPersonagensByAlinhamento()">
+                    <option value="" selected>Filtrar por Alinhamento (Todos)</option>
+                    <option value="Herói">Herói</option>
+                    <option value="Anti-Herói">Anti-Herói</option>
+                    <option value="Vilão">Vilão</option>
+                </select>
+            </div>
+            <button class="btn btn-info" onclick="getEstatisticas()">Ver Contagem por Alinhamento</button>
+
+            <pre id="outputBuscas"></pre>
         </div>
     </div>
 
@@ -62,16 +93,18 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const baseUrl = 'http://localhost:8080/personagens-novos';
 
-    // --- LÓGICA DE SEGURANÇA (Igual) ---
+    // --- LÓGICA DE SEGURANÇA ---
     document.addEventListener('DOMContentLoaded', () => {
         if (!localStorage.getItem('jwtToken')) {
+            alert("Acesso negado. Por favor, faça o login.");
             window.location.href = 'login.html';
         } else {
-            fetchAllPersonagens(); // Carrega a primeira aba por padrão
-            fetchMyPersonagens();  // Carrega a segunda aba
+            fetchAllPersonagens();
+            fetchMyPersonagens();
         }
     });
 
@@ -90,9 +123,72 @@
         return response;
     }
 
-    // --- FUNÇÕES DO CRUD (Refatoradas para abas) ---
+    // --- NOVAS FUNÇÕES DE CONSULTA ---
+    async function getPersonagemById() {
+        const id = document.getElementById('idGet').value;
+        const output = document.getElementById('outputBuscas');
+        if (!id) {
+            output.textContent = 'Por favor, insira um ID.';
+            return;
+        }
+        try {
+            const res = await fetchWithAuth(`${baseUrl}/${id}`);
+            if (res.ok) {
+                const data = await res.json();
+                output.textContent = JSON.stringify(data, null, 2);
+            } else {
+                output.textContent = `Personagem com ID ${id} não encontrado.`;
+            }
+        } catch(e) {
+            output.textContent = 'Erro ao buscar personagem.';
+            console.error(e);
+        }
+    }
 
-    // Função genérica para renderizar dados em uma tabela
+    async function getPersonagensByAlinhamento() {
+        const alinhamento = document.getElementById('alinhamentoGet').value;
+        const output = document.getElementById('outputBuscas');
+        if (!alinhamento) {
+            output.textContent = 'Por favor, insira um alinhamento.';
+            return;
+        }
+        try {
+            const res = await fetchWithAuth(`${baseUrl}/alinhamento/${encodeURIComponent(alinhamento)}`);
+            if(res.ok) {
+                const data = await res.json();
+                output.textContent = JSON.stringify(data, null, 2);
+            } else {
+                output.textContent = `Nenhum personagem encontrado para o alinhamento "${alinhamento}".`;
+            }
+        } catch(e) {
+            output.textContent = 'Erro ao buscar personagens.';
+            console.error(e);
+        }
+    }
+
+    async function getEstatisticas() {
+        const output = document.getElementById('outputBuscas');
+        output.textContent = 'Buscando estatísticas...';
+        try {
+            const res = await fetchWithAuth(`${baseUrl}/estatisticas/contagem-por-alinhamento`);
+            if(res.ok) {
+                const data = await res.json();
+                let formattedText = "Contagem de Personagens por Alinhamento:\n\n";
+                data.forEach(item => {
+                    formattedText += `- ${item.alinhamento}: ${item.total} personagem(ns)\n`;
+                });
+                output.textContent = formattedText;
+            } else {
+                output.textContent = "Não foi possível carregar as estatísticas.";
+            }
+        } catch(e) {
+            output.textContent = 'Erro ao buscar estatísticas.';
+            console.error(e);
+        }
+    }
+
+
+    // --- FUNÇÕES DO CRUD E DE LISTAGEM ---
     function renderTable(data, tbodyId) {
         const tbody = document.getElementById(tbodyId);
         tbody.innerHTML = "";
@@ -101,38 +197,37 @@
             return;
         }
         data.forEach(p => {
-            const criador = p.faCriador ? p.faCriador.username : 'Desconhecido';
+            const criador = p.criador ? p.criador.username : 'Desconhecido';
             tbody.innerHTML += `
-                <tr>
-                    <td>${p.id}</td>
-                    <td>${p.nome}</td>
-                    <td>${p.poder || ''}</td>
-                    <td>${criador}</td>
-                    <td><button class="btn btn-danger btn-sm" onclick="deletePersonagem(${p.id})">Deletar</button></td>
-                </tr>
-            `;
+            <tr>
+                <td>${p.id}</td>
+                <td>${p.nome}</td>
+                <td>${p.poder || ''}</td>
+                <td>${criador}</td>
+                <td><button class="btn btn-danger btn-sm" onclick="deletePersonagem(${p.id})">Deletar</button></td>
+            </tr>
+        `;
         });
     }
 
-    // Busca TODOS os personagens
     async function fetchAllPersonagens() {
         try {
             const res = await fetchWithAuth(baseUrl);
+            if (!res.ok) return;
             const data = await res.json();
             renderTable(data, 'todosPersonagensTbody');
         } catch(e) { console.error(e) }
     }
 
-    // Busca apenas MEUS personagens
     async function fetchMyPersonagens() {
         try {
-            const res = await fetchWithAuth(`${baseUrl}/meus`); // Novo endpoint
+            const res = await fetchWithAuth(`${baseUrl}/meus`);
+            if (!res.ok) return;
             const data = await res.json();
             renderTable(data, 'meusPersonagensTbody');
         } catch(e) { console.error(e) }
     }
 
-    // Atualiza ambas as listas
     function refreshAllTables() {
         fetchAllPersonagens();
         fetchMyPersonagens();
@@ -154,7 +249,7 @@
         output.textContent = await res.text();
         if (res.ok) {
             document.getElementById('formCreate').reset();
-            refreshAllTables(); // Atualiza as duas tabelas
+            refreshAllTables();
         }
     }
 
@@ -164,13 +259,12 @@
         const res = await fetchWithAuth(`${baseUrl}/${id}`, { method: 'DELETE' });
         if (res.ok) {
             alert('Personagem deletado com sucesso!');
-            refreshAllTables(); // Atualiza as duas tabelas
+            refreshAllTables();
         } else {
             const errorMsg = await res.text();
             alert(`Erro: ${errorMsg}`);
         }
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
