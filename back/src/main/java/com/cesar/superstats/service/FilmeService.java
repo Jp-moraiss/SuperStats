@@ -2,6 +2,7 @@ package com.cesar.superstats.service;
 
 import com.cesar.superstats.dto.FilmeDTO;
 import com.cesar.superstats.exceptions.ResourceNotFoundException;
+import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.Filme;
 import com.cesar.superstats.repository.FilmeRepository;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,13 @@ public class FilmeService {
         this.repository = repository;
     }
 
-    public List<Filme> findAll() {
-        return repository.findAll();
+    public List<Filme> findAll(Fa faLogado) {
+        return repository.findAll(faLogado.getId());
     }
 
     public Filme findById(Integer id) {
-        if (id == null) {
-            throw new ResourceNotFoundException("Id não pode ser nulo");
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Id de filme inválido: " + id);
         }
 
         return repository.findById(id)
@@ -37,7 +38,6 @@ public class FilmeService {
         }
         return filmes;
     }
-
 
     public List<Filme> findByProdutora(String produtora) {
         if (produtora == null || produtora.isBlank()) {
