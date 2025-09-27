@@ -117,13 +117,15 @@
         const token = localStorage.getItem('jwtToken');
         const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers };
         const response = await fetch(url, { ...options, headers });
-        if (response.status === 401 || response.status === 403) {
+
+        // CORRIGIDO: Só desloga em caso de 401 (token inválido/expirado)
+        if (response.status === 401) {
             handleLogout();
         }
         return response;
     }
 
-    // --- NOVAS FUNÇÕES DE CONSULTA ---
+    // --- FUNÇÕES DE CONSULTA ---
     async function getPersonagemById() {
         const id = document.getElementById('idGet').value;
         const output = document.getElementById('outputBuscas');
@@ -149,14 +151,18 @@
         const alinhamento = document.getElementById('alinhamentoGet').value;
         const output = document.getElementById('outputBuscas');
         if (!alinhamento) {
-            output.textContent = 'Por favor, insira um alinhamento.';
+            output.textContent = 'Filtro de alinhamento removido.';
             return;
         }
         try {
             const res = await fetchWithAuth(`${baseUrl}/alinhamento/${encodeURIComponent(alinhamento)}`);
             if(res.ok) {
                 const data = await res.json();
-                output.textContent = JSON.stringify(data, null, 2);
+                if (data.length === 0) {
+                    output.textContent = `Nenhum personagem encontrado para o alinhamento "${alinhamento}".`;
+                } else {
+                    output.textContent = JSON.stringify(data, null, 2);
+                }
             } else {
                 output.textContent = `Nenhum personagem encontrado para o alinhamento "${alinhamento}".`;
             }
@@ -174,9 +180,13 @@
             if(res.ok) {
                 const data = await res.json();
                 let formattedText = "Contagem de Personagens por Alinhamento:\n\n";
-                data.forEach(item => {
-                    formattedText += `- ${item.alinhamento}: ${item.total} personagem(ns)\n`;
-                });
+                if (data.length === 0) {
+                    formattedText = "Nenhum personagem com alinhamento definido para gerar estatísticas.";
+                } else {
+                    data.forEach(item => {
+                        formattedText += `- ${item.alinhamento}: ${item.total} personagem(ns)\n`;
+                    });
+                }
                 output.textContent = formattedText;
             } else {
                 output.textContent = "Não foi possível carregar as estatísticas.";
@@ -187,9 +197,8 @@
         }
     }
 
-
-    // --- FUNÇÕES DO CRUD E DE LISTAGEM ---
-    function renderTable(data, tbodyId) {
+    // --- FUNÇÕES DE RENDERIZAÇÃO E CRUD ---
+    function renderTable(data, tbodyId, showDeleteButton) {
         const tbody = document.getElementById(tbodyId);
         tbody.innerHTML = "";
         if (!data || data.length === 0) {
@@ -198,15 +207,21 @@
         }
         data.forEach(p => {
             const criador = p.criador ? p.criador.username : 'Desconhecido';
+
+            // Lógica condicional para o botão de deletar
+            const acoesHtml = showDeleteButton
+                ? `<td><button class="btn btn-danger btn-sm" onclick="deletePersonagem(${p.id})">Deletar</button></td>`
+                : '<td>-</td>';
+
             tbody.innerHTML += `
-            <tr>
-                <td>${p.id}</td>
-                <td>${p.nome}</td>
-                <td>${p.poder || ''}</td>
-                <td>${criador}</td>
-                <td><button class="btn btn-danger btn-sm" onclick="deletePersonagem(${p.id})">Deletar</button></td>
-            </tr>
-        `;
+                <tr>
+                    <td>${p.id}</td>
+                    <td>${p.nome}</td>
+                    <td>${p.poder || ''}</td>
+                    <td>${criador}</td>
+                    ${acoesHtml}
+                </tr>
+            `;
         });
     }
 
@@ -215,7 +230,8 @@
             const res = await fetchWithAuth(baseUrl);
             if (!res.ok) return;
             const data = await res.json();
-            renderTable(data, 'todosPersonagensTbody');
+            // A tabela de "Todos" NÃO mostra o botão de deletar
+            renderTable(data, 'todosPersonagensTbody', false);
         } catch(e) { console.error(e) }
     }
 
@@ -224,7 +240,8 @@
             const res = await fetchWithAuth(`${baseUrl}/meus`);
             if (!res.ok) return;
             const data = await res.json();
-            renderTable(data, 'meusPersonagensTbody');
+            // A tabela de "Meus Personagens" MOSTRA o botão de deletar
+            renderTable(data, 'meusPersonagensTbody', true);
         } catch(e) { console.error(e) }
     }
 
