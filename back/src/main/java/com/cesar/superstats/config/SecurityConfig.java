@@ -26,7 +26,18 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/login.html", "/filmes.html", "/meus-personagens.html", "/graficos.html", "/", "/error").permitAll()
+                        .requestMatchers(
+                                "/auth/**",
+                                "/login.html",
+                                "/filmes.html",
+                                "/meus-personagens.html",
+                                "/graficos.html",
+                                "/",
+                                "/error",
+                                "/images/**",   // 👈 libera imagens
+                                "/css/**",      // 👈 se usar CSS
+                                "/js/**"        // 👈 se usar JS
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -35,4 +46,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }
