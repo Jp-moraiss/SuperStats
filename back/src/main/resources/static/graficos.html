@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SuperStats - Gráficos das Pesquisas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding: 20px; }
+        .card-img-top {
+            width: 100%;
+            height: 300px; /* Altura fixa para as imagens */
+            object-fit: contain; /* Garante que a imagem caiba sem distorcer */
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Gráficos das Pesquisas</h1>
+        <div>
+            <a href="login.html" class="btn btn-secondary">Ir para a Home</a>
+            <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
+        </div>
+    </div>
+
+    <p class="lead">Esta página exibe os resultados consolidados das pesquisas de feedback realizadas com os fãs.</p>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_universo.png" class="card-img-top" alt="Gráfico de preferência de universo">
+                <div class="card-body">
+                    <h5 class="card-title">Preferência de Universo (Marvel vs. DC)</h5>
+                    <p class="card-text">Análise da preferência dos fãs entre os dois maiores universos dos quadrinhos.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="/images/grafico_alinhamento.png" class="card-img-top" alt="Gráfico de personagens por alinhamento">
+                <div class="card-body">
+                    <h5 class="card-title">Personagens por Alinhamento</h5>
+                    <p class="card-text">Distribuição de personagens criados pelos fãs entre as categorias de Herói, Vilão e Anti-Herói.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // --- LÓGICA DE SEGURANÇA ---
+    // Este "guarda" garante que apenas usuários logados vejam esta página.
+    document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            alert("Acesso negado. Por favor, faça o login.");
+            window.location.href = 'login.html';
+        }
+    });
+
+    function handleLogout() {
+        localStorage.removeItem('jwtToken');
+        window.location.href = 'login.html';
+    }
+</script>
+</body>
+</html>
