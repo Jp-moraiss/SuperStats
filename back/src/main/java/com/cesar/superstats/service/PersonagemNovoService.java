@@ -70,6 +70,24 @@ public class PersonagemNovoService {
         repository.save(personagem);
     }
 
+    public void update(Integer id, PersonagemNovoDTO dto, Fa faLogado) {
+        PersonagemNovo personagem = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Personagem com ID " + id + " não encontrado."));
+
+        if (!personagem.getFaCriador().getId().equals(faLogado.getId())) {
+            throw new AccessDeniedException("Acesso negado. Apenas o criador pode editar este personagem.");
+        }
+
+        personagem.setNome(dto.getNome());
+        personagem.setAlinhamento(dto.getAlinhamento());
+        personagem.setAltura(dto.getAltura());
+        personagem.setPeso(dto.getPeso());
+        personagem.setPoder(dto.getPoder());
+        personagem.setGenero(dto.getGenero());
+
+        repository.update(id, dto);
+    }
+
     public void deleteById(Integer id, Fa faLogado) {
         PersonagemNovo personagem = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Personagem com ID " + id + " não encontrado."));

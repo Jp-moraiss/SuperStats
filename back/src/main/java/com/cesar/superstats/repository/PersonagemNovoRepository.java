@@ -1,6 +1,7 @@
 package com.cesar.superstats.repository;
 
 import com.cesar.superstats.dto.ContagemAlinhamentoDTO;
+import com.cesar.superstats.dto.PersonagemNovoDTO;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.PersonagemNovo;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -100,6 +101,19 @@ public class PersonagemNovoRepository {
                 personagem.getPoder(),
                 personagem.getGenero(),
                 personagem.getFaCriador().getId());
+    }
+
+    public void update(Integer id, PersonagemNovoDTO dto) {
+        String sql = "UPDATE Personagem_Novo SET nome = ?, alinhamento = ?, altura = ?, peso = ?, poder = ?, genero = ? " +
+                "WHERE id = ?";
+        jdbcTemplate.update(sql,
+                dto.getNome(),
+                dto.getAlinhamento(),
+                dto.getAltura(),
+                dto.getPeso(),
+                dto.getPoder(),
+                dto.getGenero(),
+                id);
     }
 
     public int deleteById(Integer id) {
