@@ -44,6 +44,8 @@ export default function RegisterPage() {
       });
 
       if (!res.ok) throw new Error(await res.text());
+      
+      localStorage.setItem("username", form.username);
 
       setMessage({ type: "success", text: "Cadastro realizado com sucesso! Faça o login." });
       setTimeout(() => router.push("/login"), 2000);

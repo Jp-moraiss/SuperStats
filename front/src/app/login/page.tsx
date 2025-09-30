@@ -7,24 +7,14 @@ import { API_URL } from "@/lib/api";
 export default function LoginPage() {
   const router = useRouter();
   const [form, setForm] = useState({ username: "", password: "" });
-  const [error, setError] = useState<string | null>(null);
-  const [showPlaceholder, setShowPlaceholder] = useState(true);
+  const [error, setError] = useState<string | null>(null); 
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
     if (token) {
       router.push("/");
     }
-  }, [router]);
-
-  // Efeito para ocultar a animação após ela completar
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowPlaceholder(false);
-    }, 1500); // Ajuste este valor para o tempo total da animação + delay
-
-    return () => clearTimeout(timer);
-  }, []);
+  }, [router]); 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,7 +34,8 @@ export default function LoginPage() {
       if (!res.ok) throw new Error("Usuário ou senha inválidos");
 
       const data = await res.json();
-      localStorage.setItem("jwtToken", data.token);
+      localStorage.setItem("jwtToken", data.token); 
+      localStorage.setItem("username", form.username);
       router.push("/dashboard");
     } catch (err: any) {
       setError(err.message);
