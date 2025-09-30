@@ -35,6 +35,8 @@ export default function RootLayout({
             </aside>
 
             <main className="main page-transition">
+              
+            <div class="halftone-background"></div>
                
                 <SpeechBubble type="speech">
                   Someone say <em>chimichangas?</em>
