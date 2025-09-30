@@ -61,10 +61,8 @@ export default function RegisterPage() {
       }`}
     >
       <h2 className="auth-title">Cadastro de Novo Fã</h2>
-      <form className="auth-form" onSubmit={handleSubmit}>
-        {/* Usuário estilo TAG */}
-        <label>Usuário*</label>
-        <div className="auth-tag-input">
+      <form className="auth-form" onSubmit={handleSubmit}> 
+        <label>Usuário*</label> 
           <input
             type="text"
             name="username"
@@ -72,9 +70,7 @@ export default function RegisterPage() {
             onChange={handleChange}
             placeholder="Digite seu usuário"
             required
-          />
-          <div className="username-preview">{form.username || ""}</div>
-        </div>
+          /> 
 
         {/* Nome + Email */}
         <div className="form-grid">
