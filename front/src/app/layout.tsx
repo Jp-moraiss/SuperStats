@@ -34,19 +34,8 @@ export default function RootLayout({
               </ul>
             </aside>
 
-            <main className="main page-transition">
-              
-            <div class="halftone-background"></div>
-               
-                <SpeechBubble type="speech">
-                  Someone say <em>chimichangas?</em>
-                </SpeechBubble> 
-
-                <SpeechBubble type="whisper">That’s the sound of my brain</SpeechBubble>
-   
-                <SpeechBubble type="electric">
-                  Autobots,<span>Attack!</span>
-                </SpeechBubble> 
+            <main className="main page-transition"> 
+            <div className="halftone-background"></div>
               {children}
             </main>
           </div>
