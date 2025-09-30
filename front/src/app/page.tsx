@@ -106,6 +106,10 @@ export default function HomePage() {
         <audio ref={avengersAudio} src="/audio/avengers-theme.mp3" />
       </div>
 
+      <SpeechBubble type="speech">
+        Someone say chimichangas?
+      </SpeechBubble> 
+
       {/* CTA Final */}
       <section className="cta-section">
         <h2>Participe da Pesquisa!</h2>
