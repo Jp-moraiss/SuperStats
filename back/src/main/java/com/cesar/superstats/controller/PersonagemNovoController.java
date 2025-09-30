@@ -59,6 +59,16 @@ public class PersonagemNovoController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update(
+            @PathVariable Integer id,
+            @RequestBody PersonagemNovoDTO dto,
+            @AuthenticationPrincipal Fa faLogado) {
+
+        service.update(id, dto, faLogado);
+        return ResponseEntity.ok("Personagem atualizado com sucesso!");
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id, @AuthenticationPrincipal Fa faLogado) {
         service.deleteById(id, faLogado);
