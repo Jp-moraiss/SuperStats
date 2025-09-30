@@ -37,13 +37,46 @@
                             </select>
                             <label for="alinhamentoPost">Alinhamento</label>
                         </div>
-                    </div>                    <div class="col-md-3"><input type="text" id="generoPost" class="form-control" placeholder="Gênero"></div>
+                    </div>
+                    <div class="col-md-3"><input type="text" id="generoPost" class="form-control" placeholder="Gênero"></div>
                     <div class="col-md-3"><input type="number" step="0.01" id="alturaPost" class="form-control" placeholder="Altura (metros)"></div>
                     <div class="col-md-3"><input type="number" step="0.01" id="pesoPost" class="form-control" placeholder="Peso (kg)"></div>
                 </div>
                 <button class="btn btn-success w-100 mt-3" type="submit">Criar Personagem</button>
             </form>
             <pre id="outputPost" class="mt-3"></pre>
+        </div>
+    </div>
+
+    <div id="updateCard" class="card" style="display: none;">
+        <div class="card-header"><h4>Atualizar Personagem</h4></div>
+        <div class="card-body">
+            <form id="formUpdate" onsubmit="updatePersonagem(event)">
+                <input type="hidden" id="idPut">
+                <div class="row g-3">
+                    <div class="col-md-6"><input type="text" id="nomePut" class="form-control" placeholder="Nome do Personagem" required></div>
+                    <div class="col-md-6"><input type="text" id="poderPut" class="form-control" placeholder="Poder Principal"></div>
+                    <div class="col-md-3">
+                        <div class="form-floating">
+                            <select class="form-select" id="alinhamentoPut">
+                                <option value="" selected>Sem Alinhamento</option>
+                                <option value="Herói">Herói</option>
+                                <option value="Anti-Herói">Anti-Herói</option>
+                                <option value="Vilão">Vilão</option>
+                            </select>
+                            <label for="alinhamentoPut">Alinhamento</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3"><input type="text" id="generoPut" class="form-control" placeholder="Gênero"></div>
+                    <div class="col-md-3"><input type="number" step="0.01" id="alturaPut" class="form-control" placeholder="Altura (metros)"></div>
+                    <div class="col-md-3"><input type="number" step="0.01" id="pesoPut" class="form-control" placeholder="Peso (kg)"></div>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                    <button class="btn btn-warning w-100" type="submit">Salvar Alterações</button>
+                    <button class="btn btn-secondary" type="button" onclick="hideUpdateForm()">Cancelar</button>
+                </div>
+            </form>
+            <pre id="outputPut" class="mt-3"></pre>
         </div>
     </div>
 
@@ -63,7 +96,6 @@
                 </select>
             </div>
             <button class="btn btn-info" onclick="getEstatisticas()">Ver Contagem por Alinhamento</button>
-
             <pre id="outputBuscas"></pre>
         </div>
     </div>
@@ -79,13 +111,13 @@
 
     <div class="tab-content" id="personagemTabContent">
         <div class="tab-pane fade show active" id="todos-pane" role="tabpanel">
-            <table class="table table-striped mt-3">
+            <table class="table table-striped table-hover mt-3">
                 <thead><tr><th>ID</th><th>Nome</th><th>Poder</th><th>Criador</th><th>Ações</th></tr></thead>
                 <tbody id="todosPersonagensTbody"></tbody>
             </table>
         </div>
         <div class="tab-pane fade" id="meus-pane" role="tabpanel">
-            <table class="table table-striped mt-3">
+            <table class="table table-striped table-hover mt-3">
                 <thead><tr><th>ID</th><th>Nome</th><th>Poder</th><th>Criador</th><th>Ações</th></tr></thead>
                 <tbody id="meusPersonagensTbody"></tbody>
             </table>
@@ -97,7 +129,7 @@
 <script>
     const baseUrl = 'http://localhost:8080/personagens-novos';
 
-    // --- LÓGICA DE SEGURANÇA ---
+    // --- LÓGICA DE SEGURANÇA E INICIALIZAÇÃO ---
     document.addEventListener('DOMContentLoaded', () => {
         if (!localStorage.getItem('jwtToken')) {
             alert("Acesso negado. Por favor, faça o login.");
@@ -117,9 +149,7 @@
         const token = localStorage.getItem('jwtToken');
         const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers };
         const response = await fetch(url, { ...options, headers });
-
-        // CORRIGIDO: Só desloga em caso de 401 (token inválido/expirado)
-        if (response.status === 401) {
+        if (response.status === 401) { // Apenas 401 desloga
             handleLogout();
         }
         return response;
@@ -198,7 +228,7 @@
     }
 
     // --- FUNÇÕES DE RENDERIZAÇÃO E CRUD ---
-    function renderTable(data, tbodyId, showDeleteButton) {
+    function renderTable(data, tbodyId, showActions) {
         const tbody = document.getElementById(tbodyId);
         tbody.innerHTML = "";
         if (!data || data.length === 0) {
@@ -207,12 +237,14 @@
         }
         data.forEach(p => {
             const criador = p.criador ? p.criador.username : 'Desconhecido';
-
-            // Lógica condicional para o botão de deletar
-            const acoesHtml = showDeleteButton
-                ? `<td><button class="btn btn-danger btn-sm" onclick="deletePersonagem(${p.id})">Deletar</button></td>`
-                : '<td>-</td>';
-
+            let acoesHtml = '<td>-</td>';
+            if (showActions) {
+                acoesHtml = `
+                    <td>
+                        <button class="btn btn-warning btn-sm me-1" onclick="showUpdateForm(${p.id})">Editar</button>
+                        <button class="btn btn-danger btn-sm" onclick="deletePersonagem(${p.id})">Deletar</button>
+                    </td>`;
+            }
             tbody.innerHTML += `
                 <tr>
                     <td>${p.id}</td>
@@ -230,7 +262,6 @@
             const res = await fetchWithAuth(baseUrl);
             if (!res.ok) return;
             const data = await res.json();
-            // A tabela de "Todos" NÃO mostra o botão de deletar
             renderTable(data, 'todosPersonagensTbody', false);
         } catch(e) { console.error(e) }
     }
@@ -240,7 +271,6 @@
             const res = await fetchWithAuth(`${baseUrl}/meus`);
             if (!res.ok) return;
             const data = await res.json();
-            // A tabela de "Meus Personagens" MOSTRA o botão de deletar
             renderTable(data, 'meusPersonagensTbody', true);
         } catch(e) { console.error(e) }
     }
@@ -280,6 +310,62 @@
         } else {
             const errorMsg = await res.text();
             alert(`Erro: ${errorMsg}`);
+        }
+    }
+
+    // --- FUNÇÕES PARA O UPDATE ---
+    function hideUpdateForm() {
+        document.getElementById('updateCard').style.display = 'none';
+        document.getElementById('formUpdate').reset();
+        document.getElementById('outputPut').textContent = '';
+    }
+
+    async function showUpdateForm(id) {
+        const res = await fetchWithAuth(`${baseUrl}/${id}`);
+        if (!res.ok) {
+            alert("Não foi possível carregar os dados do personagem para edição.");
+            return;
+        }
+        const personagem = await res.json();
+
+        document.getElementById('idPut').value = personagem.id;
+        document.getElementById('nomePut').value = personagem.nome;
+        document.getElementById('poderPut').value = personagem.poder;
+        document.getElementById('alinhamentoPut').value = personagem.alinhamento;
+        document.getElementById('generoPut').value = personagem.genero;
+        document.getElementById('alturaPut').value = personagem.altura;
+        document.getElementById('pesoPut').value = personagem.peso;
+
+        const updateCard = document.getElementById('updateCard');
+        updateCard.style.display = 'block';
+        updateCard.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function updatePersonagem(event) {
+        event.preventDefault();
+        const id = document.getElementById('idPut').value;
+        const output = document.getElementById('outputPut');
+        const dto = {
+            nome: document.getElementById('nomePut').value,
+            poder: document.getElementById('poderPut').value || null,
+            alinhamento: document.getElementById('alinhamentoPut').value || null,
+            genero: document.getElementById('generoPut').value || null,
+            altura: parseFloat(document.getElementById('alturaPut').value) || null,
+            peso: parseFloat(document.getElementById('pesoPut').value) || null
+        };
+
+        output.textContent = "Atualizando...";
+        const res = await fetchWithAuth(`${baseUrl}/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(dto)
+        });
+
+        output.textContent = await res.text();
+        if (res.ok) {
+            setTimeout(() => {
+                hideUpdateForm();
+                refreshAllTables();
+            }, 1500);
         }
     }
 </script>
