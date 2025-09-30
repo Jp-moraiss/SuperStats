@@ -495,3 +495,158 @@ html, body {
 .hero-horizontal .hero-label {
   font-size: 2rem;
 }
+
+/* ===== LOGIN / REGISTER PAGE ===== */
+.auth-container {
+  max-width: 420px;
+  margin: 5vh auto;
+  background: #fff;
+  border: 5px solid var(--color-secondary);
+  box-shadow: 10px 10px 0 var(--color-primary);
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  animation: fadeInComic 0.6s ease;
+  transition: background 0.3s ease;
+}
+
+.auth-title {
+  font-family: 'Bangers', cursive;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 var(--color-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.auth-form label {
+  font-family: "Permanent Marker", cursive;
+  font-size: 1.1rem;
+  text-align: left;
+  color: var(--color-secondary);
+}
+
+.auth-form input,
+.auth-form select {
+  padding: 0.8rem 1rem;
+  border: 3px solid var(--color-secondary);
+  outline: none;
+  font-size: 1rem;
+  font-family: "Comic Neue", cursive;
+  background: var(--color-background);
+  box-shadow: 3px 3px 0 var(--color-secondary);
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
+  border-color: var(--color-primary);
+  background: #fff;
+  box-shadow: 5px 5px 0 var(--color-primary);
+}
+
+.auth-form button {
+  margin-top: 1rem;
+}
+
+/* Mensagem de alerta */
+.alert {
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  border: 3px solid var(--color-secondary);
+  box-shadow: 4px 4px 0 var(--color-secondary);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+/* Link abaixo do form */
+.auth-link {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+}
+
+.auth-link a {
+  color: var(--color-primary);
+  font-weight: bold;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.auth-link a:hover {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+
+/* ===== Estilos extras usados só no Register ===== */
+
+/* Organização em grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Universo Favorito */
+.universe-choice {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  justify-content: center;
+}
+
+.universe-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 12px;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+}
+
+.universe-btn img {
+  width: 80px;
+  height: auto;
+}
+
+.universe-btn.active {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(0,0,0,0.4);
+}
+
+.universe-btn.marvel.active {
+  background: #e62429;
+}
+
+.universe-btn.dc.active {
+  background: #ffffff;
+}
+
+/* Fundo dinâmico só para escolha do universo */
+.auth-container.universe-marvel {
+  background: #ffe5e8;
+}
+
+.auth-container.universe-dc {
+  background: #e6f0ff;
+}
