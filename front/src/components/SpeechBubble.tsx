@@ -16,4 +16,16 @@ export default function SpeechBubble({ type, children }: SpeechBubbleProps) {
       {children}
     </blockquote>
   );
-}
+} 
+               
+                {/* 
+                <SpeechBubble type="speech">
+                  Someone say <em>chimichangas?</em>
+                </SpeechBubble> 
+
+                <SpeechBubble type="whisper">That’s the sound of my brain</SpeechBubble>
+           
+                <SpeechBubble type="electric">
+                  Autobots,<span>Attack!</span>
+                </SpeechBubble>
+                */} 
