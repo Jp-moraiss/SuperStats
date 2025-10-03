@@ -32,6 +32,7 @@ public class SecurityConfig {
                                 "/filmes.html",
                                 "/meus-personagens.html",
                                 "/graficos.html",
+                                "/hqs.html",
                                 "/",
                                 "/error",
                                 "/images/**",   // 👈 libera imagens

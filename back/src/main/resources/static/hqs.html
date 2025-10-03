@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SuperStats - Gestão de HQs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding: 20px; }
+        .section { margin-bottom: 2rem; }
+        pre { background-color: #f8f9fa; padding: 10px; border-radius: 5px; margin-top: 1rem; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">SuperStats - Gestão de HQs</h1>
+        <div>
+            <a href="login.html" class="btn btn-secondary">Ir para a Home</a>
+            <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs" id="hqsTab" role="tablist">
+        <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#todas-hqs-pane" type="button" role="tab">Todas as HQs</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#lidas-pane" type="button" role="tab">HQs Lidas</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#gerenciar-pane" type="button" role="tab">Gerenciar Catálogo</button></li>
+    </ul>
+
+    <div class="tab-content" id="hqsTabContent">
+        <div class="tab-pane fade show active p-3 border border-top-0" id="todas-hqs-pane" role="tabpanel">
+            <h3>Catálogo Completo de HQs</h3>
+            <button class="btn btn-primary btn-sm mb-2" onclick="getAll()">Atualizar Lista</button>
+            <table class="table table-striped table-hover">
+                <thead><tr><th>ID</th><th>Título</th><th>Editora</th><th>Ações</th></tr></thead>
+                <tbody id="hqTableBody"></tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade p-3 border border-top-0" id="lidas-pane" role="tabpanel">
+            <h3>Minha Lista de Leitura</h3>
+            <button class="btn btn-primary btn-sm mb-2" onclick="fetchLidos()">Atualizar Lista</button>
+            <table class="table table-striped">
+                <thead><tr><th>ID</th><th>Título</th><th>Editora</th><th>Edição</th></tr></thead>
+                <tbody id="lidosTableBody"></tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade p-3 border border-top-0" id="gerenciar-pane" role="tabpanel">
+            <h3>Gerenciar Catálogo de HQs</h3>
+
+            <div class="section">
+                <h4>Buscas Específicas</h4>
+                <div class="input-group mb-2"><input type="number" id="idGet" class="form-control" placeholder="Buscar por ID"><button class="btn btn-info" onclick="getById()">Buscar</button></div>
+                <div class="input-group mb-2"><input type="text" id="titleGet" class="form-control" placeholder="Buscar por Título"><button class="btn btn-info" onclick="getByTitle()">Buscar</button></div>
+                <select id="editoraSelect" class="form-select" onchange="getBySelectedEditora()"><option selected disabled>Buscar por Editora...</option></select>
+                <pre id="outputSearch" class="mt-2"></pre>
+            </div>
+
+            <div class="section">
+                <h4>Criar HQ</h4>
+                <form id="formCreate" onsubmit="createHq(event)">
+                    <div class="row mb-2"><div class="col"><input type="text" id="tituloPost" class="form-control" placeholder="Título" required></div><div class="col"><input type="text" id="editoraPost" class="form-control" placeholder="Editora" required></div></div>
+                    <div class="row mb-2"><div class="col"><input type="text" id="edicaoPost" class="form-control" placeholder="Edição"></div><div class="col"><input type="date" id="dataPost" class="form-control" placeholder="Data de Lançamento"></div></div>
+                    <button class="btn btn-success w-100" type="submit">Criar</button>
+                </form>
+                <pre id="outputPost"></pre>
+            </div>
+
+            <div class="section">
+                <h4>Atualizar HQ</h4>
+                <form id="formUpdate" onsubmit="updateHq(event)">
+                    <div class="row mb-2">
+                        <div class="col-md-4"><input type="number" id="idPut" class="form-control" placeholder="ID da HQ para atualizar" required></div>
+                        <div class="col-md-8"><input type="text" id="tituloPut" class="form-control" placeholder="Novo Título"></div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col"><input type="text" id="editoraPut" class="form-control" placeholder="Nova Editora"></div>
+                        <div class="col"><input type="text" id="edicaoPut" class="form-control" placeholder="Nova Edição"></div>
+                        <div class="col"><input type="date" id="dataPut" class="form-control" placeholder="Nova Data"></div>
+                    </div>
+                    <button class="btn btn-warning w-100" type="submit">Atualizar HQ</button>
+                </form>
+                <pre id="outputPut"></pre>
+            </div>
+
+            <div class="section">
+                <h4>Deletar HQ</h4>
+                <div class="input-group">
+                    <input type="number" id="idDel" class="form-control" placeholder="ID da HQ para deletar">
+                    <button class="btn btn-danger" onclick="deleteHq()">Deletar</button>
+                </div>
+                <pre id="outputDel"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const baseUrl = 'http://localhost:8080/hqs';
+
+    // --- LÓGICA DE SEGURANÇA E INICIALIZAÇÃO ---
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!localStorage.getItem('jwtToken')) {
+            window.location.href = 'login.html';
+        } else {
+            getAll();
+            fetchLidos();
+            populateEditorasSelect();
+        }
+    });
+
+    function handleLogout() {
+        localStorage.removeItem('jwtToken');
+        window.location.href = 'login.html';
+    }
+
+    async function fetchWithAuth(url, options = {}) {
+        const token = localStorage.getItem('jwtToken');
+        const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers };
+        const response = await fetch(url, { ...options, headers });
+        if (response.status === 401) { handleLogout(); }
+        return response;
+    }
+
+    // --- FUNÇÕES DE LISTAGEM E AÇÃO ---
+    async function getAll() {
+        try {
+            const res = await fetchWithAuth(baseUrl);
+            if (!res.ok) throw new Error("Falha ao carregar HQs");
+
+            const tbody = document.getElementById('hqTableBody');
+            if (res.status === 204) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhuma HQ cadastrada.</td></tr>';
+                return;
+            }
+            const data = await res.json();
+            tbody.innerHTML = "";
+            data.forEach(hq => {
+                const botao = hq.lido
+                    ? `<button class="btn btn-outline-secondary btn-sm" onclick="removerDosLidos(${hq.id})">Remover ✖</button>`
+                    : `<button class="btn btn-success btn-sm" onclick="marcarComoLido(${hq.id})">Lido ✓</button>`;
+                tbody.innerHTML += `<tr><td>${hq.id}</td><td>${hq.titulo}</td><td>${hq.editora}</td><td>${botao}</td></tr>`;
+            });
+        } catch(e) { console.error(e) }
+    }
+
+    async function fetchLidos() {
+        const tbody = document.getElementById('lidosTableBody');
+        try {
+            const res = await fetchWithAuth(`${baseUrl}/lidos`);
+            if (!res.ok) throw new Error("Falha ao carregar HQs lidas");
+
+            const data = await res.json();
+            tbody.innerHTML = "";
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center">Você ainda não marcou nenhuma HQ como lida.</td></tr>';
+            } else {
+                data.forEach(hq => {
+                    tbody.innerHTML += `<tr><td>${hq.id}</td><td>${hq.titulo}</td><td>${hq.editora}</td><td>${hq.edicao || ''}</td></tr>`;
+                });
+            }
+        } catch(e) { console.error(e) }
+    }
+
+    function refreshAll() {
+        getAll();
+        fetchLidos();
+        populateEditorasSelect();
+    }
+
+    async function marcarComoLido(hqId) {
+        try {
+            const res = await fetchWithAuth(`${baseUrl}/${hqId}/ler`, { method: 'POST' });
+            if (res.ok) { refreshAll(); }
+            else { throw new Error(await res.text()); }
+        } catch (error) { alert(`Erro: ${error.message}`); }
+    }
+
+    async function removerDosLidos(hqId) {
+        try {
+            const res = await fetchWithAuth(`${baseUrl}/${hqId}/ler`, { method: 'DELETE' });
+            if (res.ok) { refreshAll(); }
+            else { throw new Error(await res.text()); }
+        } catch (error) { alert(`Erro: ${error.message}`); }
+    }
+
+    // --- FUNÇÕES DO CRUD (GERENCIAR) ---
+    async function getById() {
+        const id = document.getElementById('idGet').value;
+        if (!id) return;
+        const res = await fetchWithAuth(`${baseUrl}/${id}`);
+        document.getElementById('outputSearch').textContent = res.ok ? JSON.stringify(await res.json(), null, 2) : "HQ não encontrada.";
+    }
+
+    async function getByTitle() {
+        const title = document.getElementById('titleGet').value;
+        if (!title) return;
+        const res = await fetchWithAuth(`${baseUrl}/titulo?titulo=${encodeURIComponent(title)}`);
+        document.getElementById('outputSearch').textContent = res.ok ? JSON.stringify(await res.json(), null, 2) : "Nenhuma HQ encontrada.";
+    }
+
+    async function populateEditorasSelect() {
+        try {
+            const res = await fetchWithAuth(`${baseUrl}/editoras`);
+            const editoras = await res.json();
+            const select = document.getElementById('editoraSelect');
+            select.innerHTML = '<option selected value="">Buscar por Editora...</option>';
+            editoras.forEach(editora => {
+                const option = document.createElement('option');
+                option.value = editora;
+                option.textContent = editora;
+                select.appendChild(option);
+            });
+        } catch (error) { console.error("Falha ao carregar editoras:", error); }
+    }
+
+    async function getBySelectedEditora() {
+        const editora = document.getElementById('editoraSelect').value;
+        const output = document.getElementById('outputSearch');
+        if (!editora) { output.textContent = ''; return; }
+        const res = await fetchWithAuth(`${baseUrl}/editora?editora=${encodeURIComponent(editora)}`);
+        output.textContent = res.ok ? JSON.stringify(await res.json(), null, 2) : "Nenhuma HQ encontrada.";
+    }
+
+    async function createHq(event) {
+        event.preventDefault();
+        const hq = {
+            titulo: document.getElementById('tituloPost').value,
+            editora: document.getElementById('editoraPost').value,
+            edicao: document.getElementById('edicaoPost').value || null,
+            dataLancamento: document.getElementById('dataPost').value || null
+        };
+        const res = await fetchWithAuth(baseUrl, { method: 'POST', body: JSON.stringify(hq) });
+        document.getElementById('outputPost').textContent = await res.text();
+        if (res.ok) {
+            document.getElementById('formCreate').reset();
+            refreshAll();
+        }
+    }
+
+    async function updateHq(event) {
+        event.preventDefault();
+        const id = document.getElementById('idPut').value;
+        if (!id) {
+            alert('Por favor, insira o ID da HQ que deseja atualizar.');
+            return;
+        }
+
+        const hqDto = {
+            titulo: document.getElementById('tituloPut').value,
+            editora: document.getElementById('editoraPut').value,
+            edicao: document.getElementById('edicaoPut').value,
+            dataLancamento: document.getElementById('dataPut').value
+        };
+
+        Object.keys(hqDto).forEach(key => hqDto[key] === '' && delete hqDto[key]);
+
+        const res = await fetchWithAuth(`${baseUrl}/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(hqDto)
+        });
+
+        document.getElementById('outputPut').textContent = await res.text();
+        if (res.ok) {
+            document.getElementById('formUpdate').reset();
+            refreshAll();
+        }
+    }
+
+    async function deleteHq() {
+        const id = document.getElementById('idDel').value;
+        if (!id) {
+            alert('Por favor, insira o ID da HQ que deseja deletar.');
+            return;
+        }
+
+        if (!confirm(`Tem certeza que deseja deletar a HQ com ID ${id}?`)) return;
+
+        const res = await fetchWithAuth(`${baseUrl}/${id}`, { method: 'DELETE' });
+
+        if (res.ok) {
+            document.getElementById('outputDel').textContent = 'HQ deletada com sucesso!';
+            document.getElementById('idDel').value = '';
+            refreshAll();
+        } else {
+            document.getElementById('outputDel').textContent = await res.text();
+        }
+    }
+</script>
+</body>
+</html>
