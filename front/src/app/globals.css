@@ -1,0 +1,652 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Comic+Neue:wght@400;700&display=swap');
+
+/* 🎨 VARIÁVEIS */
+:root {
+  --color-primary: #E30000;
+  --color-secondary: #1A1A1A;
+  --color-accent: #FFD700;
+  --color-text: #2c2c2c;
+  --color-background: #fafafa;
+}
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Comic Neue', cursive;
+  color: var(--color-text);
+  overflow-x: hidden;
+}
+
+/* CONTAINER */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* HEADER */
+.header {
+  background: var(--color-primary);
+  color: #fff;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 6px solid var(--color-secondary); 
+  z-index: 20;
+}
+
+.logo {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(2rem, 5vw, 3rem);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 3px 3px 1px #000;
+  transition: all 0.3s ease-in-out;
+}
+
+.animated-pop:hover {
+  animation: logo-bounce 0.8s ease-in-out;
+  filter: brightness(1.2);
+}
+
+@keyframes logo-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15) rotate(-5deg); }
+}
+
+/* NAV LINKS */
+.nav a {
+  margin-left: 1.5rem;
+  color: #fff;
+  text-decoration: none;
+  font-family: 'Permanent Marker', cursive;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-shadow: 3px 3px 1px #000;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.animated-link::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-accent);
+  transition: transform 0.3s ease-in-out;
+}
+
+.animated-link:hover::before {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.animated-link:hover {
+  transform: scale(1.1) rotate(2deg);
+  color: var(--color-accent); 
+}
+
+/* CONTENT */
+.content {
+  display: flex;
+  flex: 1;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px;
+  background: var(--color-accent);
+  padding: 2rem 1.5rem;
+  border-right: 6px solid var(--color-secondary);
+  box-shadow: 4px 0 0 var(--color-secondary);
+  display: flex;
+  flex-direction: column;
+} 
+
+.sidebar-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  border: 3px solid var(--color-secondary);
+  background: #fff;
+  color: var(--color-text);
+  font-weight: bold;
+  text-decoration: none;
+  transition: transform 0.2s, background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 3px 3px 0 var(--color-secondary);
+}
+
+.sidebar a:hover {
+  transform: translate(-3px, -3px);
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: 6px 6px 0 var(--color-secondary);
+}
+
+/* MAIN */
+.main {
+  flex: 1;
+  padding: 2rem; 
+  position: relative;
+  overflow: hidden; 
+}
+
+/* Componente: fundo de pontinhos */
+.halftone-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+
+  /* Padrão Pop Art (halftone) */
+  background-image: radial-gradient(circle, #c4c4c4 2px, transparent 3px);
+  background-size: 18px 18px;
+  background-repeat: repeat;
+
+  /* Animação mais rápida e fluida */
+  animation: halftoneMoveTransform 8s linear infinite;
+}
+
+/* Animação com Transform */
+@keyframes halftoneMoveTransform {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(18px, 18px);
+  }
+}
+
+.page-transition {
+  animation: fadeInComic 0.5s ease;
+}
+
+@keyframes fadeInComic {
+  0% { opacity: 0; transform: scale(0.985); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* FOOTER */
+.footer {
+  background: var(--color-secondary);
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+  border-top: 6px solid var(--color-primary);
+  font-size: 0.9rem;
+  font-family: 'Comic Neue', cursive;
+  box-shadow: 0 -4px 0px var(--color-primary);
+}
+
+/* RESPONSIVO */
+@media (max-width: 900px) {
+  .content {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 6px solid var(--color-secondary);
+    box-shadow: 0 4px 0 var(--color-secondary);
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+  .nav {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .nav a {
+    margin: 0.5rem 0.8rem;
+    font-size: 1rem;
+  }
+  .main {
+    padding: 1rem;
+  }
+}
+
+/* Página inicial - Container */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding: 2rem;
+}
+
+/* Seção Principal */
+.hero-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  position: relative;
+  background-color: var(--color-background);
+  padding: 3rem 2rem;
+  border: 4px solid var(--color-secondary);
+  box-shadow: 10px 10px 0px var(--color-secondary);
+}
+
+.hero-content {
+  flex: 1;
+  min-width: 280px;
+}
+
+.hero-title {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  text-transform: uppercase;
+  color: var(--color-primary);
+  text-shadow: 3px 3px 1px var(--color-secondary);
+}
+
+.hero-title span {
+  color: var(--color-accent);
+  text-shadow: 3px 3px 1px var(--color-secondary);
+}
+
+.hero-subtitle {
+  margin-top: 1rem;
+  font-size: 1.3rem;
+  line-height: 1.5;
+}
+
+.hero-buttons {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+/* Estilo do botão principal */
+.btn-cta, .btn-secondary, .btn-cta-final {
+    padding: 0.8rem 1.5rem;
+    font-family: 'Permanent Marker', cursive;
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+    box-shadow: 4px 4px 0 var(--color-secondary);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 3px solid var(--color-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-cta {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.btn-cta:hover {
+  transform: translate(-4px, -4px);
+  background: var(--color-accent);
+  color: var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+}
+
+.btn-secondary {
+  background: #fff;
+  color: var(--color-secondary);
+}
+
+.btn-secondary:hover {
+  transform: translate(-4px, -4px);
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: 8px 8px 0 var(--color-secondary);
+}
+
+.hero-bubbles {
+  flex: 1;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Seção de Destaques */
+.features-section {
+  text-align: center;
+}
+  
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+}
+
+.feature-card {
+  background: #fff;
+  border: 4px solid var(--color-secondary);
+  padding: 2rem;
+  box-shadow: 6px 6px 0 var(--color-secondary);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feature-card h3 {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    color: var(--color-primary);
+    text-shadow: 1.5px 1.5px 1px var(--color-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+    min-height: 4rem; /* Garante que os cards tenham a mesma altura */
+}
+
+.feature-card:hover {
+  transform: translate(-6px, -6px);
+  background: var(--color-accent);
+  color: var(--color-secondary);
+  box-shadow: 10px 10px 0 var(--color-secondary);
+}
+
+.btn-link {
+  margin-top: 1rem;
+  display: inline-block;
+  font-weight: bold;
+  color: var(--color-primary);
+  text-decoration: none;
+  border-bottom: 2px solid var(--color-primary);
+  transition: color 0.2s, border-bottom-color 0.2s;
+}
+
+.btn-link:hover {
+  color: var(--color-secondary);
+  border-bottom-color: var(--color-secondary);
+}
+
+/* Seção de Chamada para Ação Final */
+.cta-section {
+  text-align: center;
+  background: var(--color-primary);
+  color: #fff;
+  padding: 3rem 2rem;
+  border: 6px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+}
+
+.cta-section h2 {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(2rem, 5vw, 3rem);
+  text-shadow: 3px 3px 1px var(--color-secondary);
+  margin-bottom: 1rem;
+}
+
+.cta-section p {
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+}
+
+.btn-cta-final {
+    background: var(--color-accent);
+    color: var(--color-secondary);
+    font-size: 1.2rem;
+}
+
+.btn-cta-final:hover {
+    transform: translate(-6px, -6px);
+    box-shadow: 10px 10px 0 var(--color-secondary);
+    background: #fff;
+}
+ 
+/* Hero Gallery */
+.hero-gallery {
+  margin: auto 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1200px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+.hero-card,
+.hero-horizontal {
+  position: relative;
+  border: 5px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  padding: 1rem;
+  background: #fff;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-card img {
+  max-width: 100%;
+  height: auto;
+  pointer-events: none;
+  transition: transform 0.4s ease;
+}
+
+.hero-card:hover,
+.hero-horizontal:hover {
+  transform: translateY(-12px) scale(1.05);
+  box-shadow: 12px 12px 0 var(--color-accent);
+}
+
+.hero-card:hover img,
+.hero-horizontal:hover img {
+  transform: scale(1.1) rotate(1deg);
+}
+
+.hero-label {
+  margin-top: 0.5rem;
+  font-family: "Bangers", cursive;
+  font-size: 1.6rem;
+  text-shadow: 2px 2px 0 var(--color-secondary);
+  color: var(--color-primary);
+  transition: color 0.3s ease;
+}
+
+.hero-card:hover .hero-label,
+.hero-horizontal:hover .hero-label {
+  color: var(--color-accent);
+}
+
+/* Card Horizontal (Avengers) */
+.hero-horizontal {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.hero-horizontal img {
+  max-height: 200px;
+  margin-right: 1.5rem;
+}
+
+.hero-horizontal .hero-label {
+  font-size: 2rem;
+}
+
+/* ===== LOGIN / REGISTER PAGE ===== */
+.auth-container {
+  max-width: 420px;
+  margin: 5vh auto;
+  background: #fff;
+  border: 5px solid var(--color-secondary);
+  box-shadow: 10px 10px 0 var(--color-primary);
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  animation: fadeInComic 0.6s ease;
+  transition: background 0.3s ease;
+}
+
+.auth-title {
+  font-family: 'Bangers', cursive;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 var(--color-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.auth-form label {
+  font-family: "Permanent Marker", cursive;
+  font-size: 1.1rem;
+  text-align: left;
+  color: var(--color-secondary);
+}
+
+.auth-form input,
+.auth-form select {
+  padding: 0.8rem 1rem;
+  border: 3px solid var(--color-secondary);
+  outline: none;
+  font-size: 1rem;
+  font-family: "Comic Neue", cursive;
+  background: var(--color-background);
+  box-shadow: 3px 3px 0 var(--color-secondary);
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
+  border-color: var(--color-primary);
+  background: #fff;
+  box-shadow: 5px 5px 0 var(--color-primary);
+}
+
+.auth-form button {
+  margin-top: 1rem;
+}
+
+/* Mensagem de alerta */
+.alert {
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  border: 3px solid var(--color-secondary);
+  box-shadow: 4px 4px 0 var(--color-secondary);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+/* Link abaixo do form */
+.auth-link {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+}
+
+.auth-link a {
+  color: var(--color-primary);
+  font-weight: bold;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.auth-link a:hover {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+
+/* ===== Estilos extras usados só no Register ===== */
+
+/* Organização em grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Universo Favorito */
+.universe-choice {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  justify-content: center;
+}
+
+.universe-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 12px;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+}
+
+.universe-btn img {
+  width: 80px;
+  height: auto;
+}
+
+.universe-btn.active {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(0,0,0,0.4);
+}
+
+.universe-btn.marvel.active {
+  background: #e62429;
+}
+
+.universe-btn.dc.active {
+  background: #ffffff;
+}
+
+/* Fundo dinâmico só para escolha do universo */
+.auth-container.universe-marvel {
+  background: #ffe5e8;
+}
+
+.auth-container.universe-dc {
+  background: #e6f0ff;
+}
