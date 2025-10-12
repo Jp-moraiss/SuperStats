@@ -1,6 +1,7 @@
 "use client";
 
 import "./globals.css";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react"; 
 
@@ -39,10 +40,10 @@ export default function RootLayout({
             <header className="header">
               <h1 className="logo animated-pop">SuperStats!</h1>
               <nav className="nav">
-                <a href="" className="animated-link">Início</a>
-                <a href="/graficos" className="animated-link">Dashboard</a>
-                <a href="/filmes" className="animated-link">Filmes</a>
-                <a href="/pesquisa" className="animated-link">Pesquisa</a>
+                <Link href="/" className="animated-link">Início</Link>
+                <Link href="/graficos" className="animated-link">Pesquisa</Link>
+                <Link href="/filmes" className="animated-link">Filmes</Link>
+                <Link href="/quadrinhos" className="animated-link">HQs</Link> 
 
                 {username ? (
                   <span className="user-label">Olá, {username}!</span>
@@ -56,13 +57,13 @@ export default function RootLayout({
             <div className="content">
               <aside className="sidebar">
                 <ul className="sidebar-list">
-                  <li><a href="/todos">Todos Personagens</a></li>
-                  <li><a href="/herois">Heróis</a></li>
-                  <li><a href="/viloes">Vilões</a></li>
-                  <li><a href="/antiherois">Anti-Heróis</a></li>
-                  <li><a href="/dc">DC</a></li>
-                  <li><a href="/marvel">Marvel</a></li>
-                  <li><a href="/comparar">Comparar Stats</a></li>
+                  <li><Link href="/todos">Todos Personagens</Link></li>
+                  <li><Link href="/herois">Heróis</Link></li>
+                  <li><Link href="/viloes">Vilões</Link></li>
+                  <li><Link href="/antiherois">Anti-Heróis</Link></li>
+                  <li><Link href="/dc">DC</Link></li>
+                  <li><Link href="/marvel">Marvel</Link></li>
+                  <li><Link href="/comparar">Comparar Stats</Link></li>
                 </ul>
               </aside>
 

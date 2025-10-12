@@ -1,30 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import "./graficos.css";
 
 export default function GraficosPage() {
-  const router = useRouter();
-
-  // Proteção: só acessa se tiver token
-  useEffect(() => {
-    const token = localStorage.getItem("jwtToken");
-    if (!token) {
-      alert("Acesso negado. Por favor, faça o login.");
-      router.push("/login");
-    }
-  }, [router]);
-
   return (
     <div className="graficos-container">
-
-      <p className="graficos-subtitle">
-        Esta página exibe os resultados consolidados das pesquisas de feedback
-        realizadas com os fãs.
-      </p>
-
       {/* Grid dos gráficos */}
       <div className="graficos-grid">
         {graficos.map((grafico, idx) => (
