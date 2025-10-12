@@ -21,10 +21,10 @@ export default function HeroVideoOverlay({ hero, onClose }: HeroVideoOverlayProp
 
   // Mapear vídeos dos heróis
   const videoSrcMap: Record<string, string> = {
-    batman: "/videos/batman.mp4",
-    spiderman: "/videos/spiderman.mp4",
-    superman: "/videos/superman.mp4",
-    avengers: "/videos/avengers.mp4",
+    batman: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/batman.mp4",
+    spiderman: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/spiderman.mp4",
+    superman: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/superman.mp4",
+    avengers: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/avengers.mp4",
   };
 
   const videoSrc = videoSrcMap[hero];
