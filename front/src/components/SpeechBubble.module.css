@@ -28,10 +28,10 @@
 /* === Types === */
 .speech {
   background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/speech-bubble.svg");
-  width: 25%;
+  width: 28%;
   font-size: 2vw;
-  padding-top: 3%;
-  padding-bottom: 15%;
+  padding-top: 4%;
+  padding-bottom: 20%;
 }
 
 .whisper {

@@ -39,7 +39,7 @@ export default function RootLayout({
             <header className="header">
               <h1 className="logo animated-pop">SuperStats!</h1>
               <nav className="nav">
-                <a href="/" className="animated-link">Início</a>
+                <a href="" className="animated-link">Início</a>
                 <a href="/graficos" className="animated-link">Dashboard</a>
                 <a href="/filmes" className="animated-link">Filmes</a>
                 <a href="/pesquisa" className="animated-link">Pesquisa</a>

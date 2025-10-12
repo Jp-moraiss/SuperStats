@@ -1,13 +1,16 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import SpeechBubble from "../components/SpeechBubble";
+import HeroVideoOverlay from "../components/HeroVideoOverlay";
 
 export default function HomePage() {
   const spidermanAudio = useRef<HTMLAudioElement>(null);
   const supermanAudio = useRef<HTMLAudioElement>(null);
   const batmanAudio = useRef<HTMLAudioElement>(null);
   const avengersAudio = useRef<HTMLAudioElement>(null);
+
+  const [activeHero, setActiveHero] = useState<string | null>(null);
 
   const playTheme = (hero: "spiderman" | "superman" | "batman" | "avengers") => {
     [spidermanAudio, supermanAudio, batmanAudio, avengersAudio].forEach((ref) => {
@@ -21,10 +24,14 @@ export default function HomePage() {
     if (hero === "superman" && supermanAudio.current) supermanAudio.current.play();
     if (hero === "batman" && batmanAudio.current) batmanAudio.current.play();
     if (hero === "avengers" && avengersAudio.current) avengersAudio.current.play();
+    
+    // Ativar vídeo
+    setActiveHero(hero);
   };
 
   return (
     <div className="home-container page-transition">
+      <HeroVideoOverlay hero={activeHero} onClose={() => setActiveHero(null)} />
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
@@ -52,28 +59,11 @@ export default function HomePage() {
         </SpeechBubble>
       </section>
 
-      {/* Features */}
-      <section className="features-section">
-        <div className="features-grid">
-          <div className="feature-card">
-            <h3>Herói em Alta</h3>
-            <p>Descubra quem está dominando as batalhas e os corações dos fãs esta semana.</p>
-            <a href="/herois" className="btn-link">Ver Heróis</a>
-          </div>
-          <div className="feature-card">
-            <h3>Vilão Mais Temido</h3>
-            <p>Qual vilão espalhou mais caos no universo? Confira o ranking!</p>
-            <a href="/viloes" className="btn-link">Ver Vilões</a>
-          </div>
-          <div className="feature-card">
-            <h3>Duelo Épico</h3>
-            <p>Compare dois personagens, analise seus poderes e veja quem sai vencedor.</p>
-            <a href="/comparar" className="btn-link">Comparar</a>
-          </div>
-        </div>
-      </section>
 
-      <SpeechBubble type="whisper">Clique nos herois e tenha uma experiência única!</SpeechBubble>
+  <SpeechBubble type="speech">
+    Clique nos heróis e tenha uma experiência única!
+  </SpeechBubble>
+
 
       {/* Hero Gallery */}
       <div className="hero-gallery">
@@ -105,10 +95,6 @@ export default function HomePage() {
         <audio ref={supermanAudio} src="/audio/superman-theme.mp3" />
         <audio ref={avengersAudio} src="/audio/avengers-theme.mp3" />
       </div>
-
-      <SpeechBubble type="speech">
-        Someone say chimichangas?
-      </SpeechBubble> 
 
       {/* CTA Final */}
       <section className="cta-section">
