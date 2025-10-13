@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 import SpeechBubble from "../components/SpeechBubble";
 import HeroVideoOverlay from "../components/HeroVideoOverlay";
 
@@ -45,12 +46,12 @@ export default function HomePage() {
           </p>
 
           <div className="hero-buttons">
-            <a href="/dashboard" className="btn-cta">
+            <Link href="/todos" className="btn-cta">
               <i className="fas fa-chart-line"></i> Explorar Agora
-            </a>
-            <a href="/comparar" className="btn-secondary">
+            </Link>
+            <Link href="/comparar" className="btn-secondary">
               <i className="fas fa-fist-raised"></i> Comparar Stats
-            </a>
+            </Link>
           </div>
         </div>
 

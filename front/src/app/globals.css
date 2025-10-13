@@ -187,7 +187,8 @@ a {
   box-shadow: 3px 3px 0 var(--color-secondary);
 }
 
-.sidebar a:hover {
+.sidebar a:hover,
+.sidebar a.active {
   transform: translate(-3px, -3px);
   background: var(--color-primary);
   color: #fff;
@@ -618,159 +619,210 @@ a {
   }
 }
 
-/* ===== LOGIN / REGISTER PAGE ===== */
+/* =======================================
+💥 AUTH PAGES - COMIC REFRESH (SUTIL) 💥
+======================================= */
+
+/* --- Main Auth Container (The "Speech Bubble") --- */
 .auth-container {
-  max-width: 420px;
+  max-width: 500px;
   margin: 5vh auto;
-  background: #fff;
-  border: 5px solid var(--color-secondary);
-  box-shadow: 10px 10px 0 var(--color-primary);
-  padding: 2rem;
+  background: var(--color-surface);
+  border: 6px solid var(--color-secondary);
+  box-shadow: 12px 12px 0 var(--color-secondary); /* Sombra mais controlada */
+  padding: clamp(2rem, 5vw, 3rem);
   text-align: center;
   position: relative;
-  z-index: 2;
-  animation: fadeInComic 0.6s ease;
-  transition: background 0.3s ease;
+  z-index: 5;
+  transform: rotate(-1deg) scale(1); /* Inclinação leve, sem escala inicial */
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease; /* Transição mais suave */
+} 
+/* Hover no Container */
+.auth-container:hover {
+  transform: rotate(-0.5deg) scale(1.005); /* Escala e rotação muito sutis */
+  box-shadow: 15px 15px 0 var(--color-primary); /* Sombra ainda visível, mas não explosiva */
 }
 
+/* --- Dynamic Halftone Background for Auth Pages --- */
+.auth-page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background-size: 22px 22px; /* Pontos um pouco menores */
+  opacity: 0.7; /* Mais suave */
+  filter: saturate(120%); /* Menos saturação */
+}
+
+/* Reutiliza as classes Marvel/DC/Default */
+.auth-page-bg.marvel { background-image: radial-gradient(circle, #e62429 2px, transparent 3px); }
+.auth-page-bg.dc { background-image: radial-gradient(circle, #0476f2 2px, transparent 3px); }
+.auth-page-bg.default { background-image: radial-gradient(circle, #c4c4c4 2px, transparent 3px); }
+
+
+/* --- Auth Title (Explosive Text) --- */
 .auth-title {
   font-family: 'Bangers', cursive;
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
+  font-size: clamp(2.5rem, 8vw, 4rem); /* Um pouco menor, mas ainda grande */
+  margin-bottom: 2rem;
   color: var(--color-primary);
-  text-shadow: 2px 2px 0 var(--color-secondary);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 2px; /* Menos espaçamento */
+  line-height: 1.1;
+  text-shadow:
+    -3px -3px 0 var(--color-secondary),
+     3px -3px 0 var(--color-secondary),
+    -3px  3px 0 var(--color-secondary),
+     3px  3px 0 var(--color-secondary),
+     6px  6px 0 rgba(0,0,0,0.7); /* Sombra mais moderada */
+  transform: skewX(-2deg); /* Inclinação mais sutil */
+  transition: transform 0.2s ease-out;
 }
 
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
+.auth-title:hover {
+  transform: skewX(0deg) scale(1.02); /* Menor crescimento */
 }
 
+/* --- Form Fields (Hand-drawn look, subtle focus) --- */
 .auth-form label {
   font-family: "Permanent Marker", cursive;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   text-align: left;
   color: var(--color-secondary);
+  margin-bottom: 0.4rem;
+  display: block;
+  text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
 }
 
 .auth-form input,
 .auth-form select {
-  padding: 0.8rem 1rem;
-  border: 3px solid var(--color-secondary);
+  padding: 0.9rem 1.1rem; /* Padding ligeiramente menor */
+  border: 3px solid var(--color-secondary); /* Borda um pouco mais fina */
   outline: none;
   font-size: 1rem;
   font-family: "Comic Neue", cursive;
-  background: var(--color-background);
-  box-shadow: 3px 3px 0 var(--color-secondary);
-  transition: all 0.2s ease-in-out;
+  background: #fff;
+  box-shadow: 4px 4px 0 var(--color-secondary); /* Sombra mais suave */
+  transition: all 0.2s ease-out; /* Transição mais rápida e suave */
   width: 100%;
+  transform: rotate(0.2deg); /* Inclinação ainda mais sutil */
 }
 
 .auth-form input:focus,
 .auth-form select:focus {
-  border-color: var(--color-primary);
   background: #fff;
-  box-shadow: 5px 5px 0 var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 8px 8px 0 var(--color-primary); /* Sombra de foco ainda presente */
+  transform: translate(-3px, -3px) rotate(-0.5deg) scale(1.005); /* Movimento de foco bem sutil */
 }
 
-.auth-form button {
-  margin-top: 1rem;
-}
-
-/* Mensagem de alerta */
-.alert {
-  margin-top: 1rem;
-  padding: 0.8rem 1rem;
-  border: 3px solid var(--color-secondary);
-  box-shadow: 4px 4px 0 var(--color-secondary);
-  background: var(--color-primary);
-  color: #fff;
-  font-weight: bold;
-  text-align: center;
-  animation: shake 0.3s ease;
-}
-
-@keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  50% { transform: translateX(4px); }
-  75% { transform: translateX(-4px); }
-  100% { transform: translateX(0); }
-}
-
-/* Link abaixo do form */
-.auth-link {
-  margin-top: 1.5rem;
-  font-size: 1rem;
-}
-
-.auth-link a {
-  color: var(--color-primary);
-  font-weight: bold;
-  text-decoration: none;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
-}
-
-.auth-link a:hover {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
-}
-
-/* ===== Estilos extras usados só no Register ===== */
-
-/* Organização em grid */
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-/* Universo Favorito */
+/* --- Universe Choice (Register Page - Refined) --- */
 .universe-choice {
   display: flex;
-  gap: 1rem;
-  margin: 1rem 0;
+  gap: 1.5rem; /* Espaçamento moderado */
+  margin: 1.8rem 0;
   justify-content: center;
 }
 
 .universe-btn {
-  border: none;
-  background: transparent;
+  border: 3px solid var(--color-secondary); /* Borda mais fina */
+  background: rgba(255, 255, 255, 0.7); /* Um pouco mais opaco quando inativo */
   cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 12px;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+  padding: 0.6rem; /* Padding ligeiramente menor */
+  border-radius: 50%;
+  transition: all 0.25s ease-out; /* Transição mais rápida */
+  filter: grayscale(70%) brightness(0.95); /* Menos "cinzento" */
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.15); /* Sombra mais suave */
 }
 
 .universe-btn img {
-  width: 80px;
+  width: 80px; /* Logos no tamanho original */
   height: auto;
 }
 
+.universe-btn:hover {
+  filter: grayscale(20%) brightness(1.05); /* Hover um pouco mais visível */
+  transform: scale(1.05) rotate(1deg); /* Rotação e escala bem leves */
+  box-shadow: 5px 5px 0 var(--color-secondary);
+}
+
 .universe-btn.active {
-  transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(0,0,0,0.4);
+  filter: grayscale(0%) brightness(1.1);
+  transform: scale(1.1) rotate(-1deg); /* Crescimento e rotação discretos */
+  border-color: var(--color-accent);
+  box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.6), 6px 6px 0 var(--color-secondary); /* Brilho suave e sombra controlada */
 }
 
-.universe-btn.marvel.active {
-  background: #e62429;
+/* Fundo dinâmico da página inteira para contraste (mantido) */
+body.auth-marvel-bg { background-color: #ffe5e8; }
+body.auth-dc-bg { background-color: #e0f2fe; }
+
+/* --- Buttons (Heroic CTA, refined) --- */
+.auth-form .btn-cta {
+  margin-top: 1.8rem;
+  padding: 0.9rem 1.8rem; /* Botões um pouco menores */
+  font-size: 1.25rem;
+  letter-spacing: 1.5px;
+  box-shadow: 6px 6px 0 var(--color-secondary);
+  border: 3px solid var(--color-secondary); /* Borda mais fina */
+  background: var(--color-primary);
+  color: #fff;
+  transform: rotate(0.5deg); /* Leve inclinação */
+  transition: all 0.2s ease-out; /* Transição mais rápida e suave */
 }
 
-.universe-btn.dc.active {
-  background: #ffffff;
+.auth-form .btn-cta:hover {
+  transform: translate(-4px, -4px) rotate(-1deg); /* Salto e rotação menores */
+  box-shadow: 10px 10px 0 var(--color-accent); /* Sombra ainda notável, mas não massiva */
+  background: var(--color-accent);
+  color: var(--color-secondary);
 }
 
-/* Fundo dinâmico só para escolha do universo */
-.auth-container.universe-marvel {
-  background: #ffe5e8;
+/* --- Alert Messages (POW! Bubble, subtle animation) --- */
+.alert {
+  margin-top: 1.5rem;
+  padding: 1rem 1.2rem;
+  border: 3px solid var(--color-secondary);
+  box-shadow: 6px 6px 0 var(--color-secondary);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: bold;
+  font-family: "Permanent Marker", cursive;
+  font-size: 1.1rem;
+  text-align: center;
+  animation: fadeInPop 0.4s ease-out; /* Nova animação mais suave */
+  position: relative;
+  border-radius: 10px 40px 10px 40px; /* Bordas menos pronunciadas */
+  transform: rotate(-0.5deg);
 }
 
-.auth-container.universe-dc {
-  background: #e6f0ff;
+/* Cauda da bolha para o alerta */
+.alert::before {
+  content: '';
+  position: absolute;
+  top: -12px; /* Posição da cauda */
+  left: 50%;
+  width: 25px; /* Tamanho menor */
+  height: 25px;
+  background: var(--color-primary);
+  border: 3px solid var(--color-secondary);
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+  transform: translateX(-50%) rotate(45deg) skewY(10deg);
+  z-index: -1;
+}
+
+@keyframes fadeInPop {
+  0% { transform: scale(0.8) rotate(5deg); opacity: 0; }
+  80% { transform: scale(1.05) rotate(-1deg); opacity: 1; }
+  100% { transform: scale(1) rotate(-0.5deg); }
+}
+
+.auth-link {
+  margin-top: 1.2rem;
+  display: block;
+  font-family: "Comic Neue", cursive;
+  color: var(--color-secondary);
+  transition: color 0.2s ease-out;
 }
 
 .hero-video-overlay {
@@ -1108,3 +1160,138 @@ a {
   margin-top: 1.5rem;
 }
 
+/* --- Estilos para a Página de Comparação --- */
+
+.comparison-inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem; 
+}
+
+@media (min-width: 768px) {
+  .comparison-inputs-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.comparison-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .comparison-cards-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.character-select-input-container {
+  position: relative;
+}
+
+.character-select-input-container label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.suggestions-list {
+  position: absolute;
+  top: 100%; /* Abaixo do input */
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 3px solid var(--color-secondary);
+  box-shadow: 6px 6px 0 rgba(0,0,0,0.1);
+  max-height: 250px;
+  overflow-y: auto;
+  list-style: none;
+  z-index: 10;
+}
+
+.suggestions-list li {
+  padding: 0.8rem 1.2rem;
+  cursor: pointer;
+  border-bottom: 1px dashed var(--border-color);
+  font-family: "Comic Neue", cursive;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.suggestions-list li:last-child {
+  border-bottom: none;
+}
+
+.suggestions-list li:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Estilos para o ComparisonCard */
+.comparison-card {
+  height: 100%; /* Para que ambos os cards tenham altura igual */
+}
+
+.comparison-placeholder {
+  text-align: center;
+  padding: 3rem 1rem;
+  background-color: #f0f0f0;
+  border-style: dashed; /* Bordas tracejadas para indicar vazio */
+  color: var(--text-secondary-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.comparison-placeholder .cardTitle {
+  color: var(--text-secondary-color);
+  border-bottom-color: var(--border-color);
+}
+
+.comparison-placeholder p {
+  font-family: "Comic Neue", cursive;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  margin-top: 1rem;
+}
+
+/* Botão de limpar personagem */
+.clear-button {
+  background: var(--color-primary);
+  color: #fff;
+  border: 2px solid var(--color-secondary);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+  box-shadow: 2px 2px 0 var(--color-secondary);
+  position: absolute; /* Posição absoluta dentro do card */
+  top: 1rem;
+  right: 1rem;
+}
+
+.clear-button:hover {
+  background: var(--color-accent);
+  color: var(--color-secondary);
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Pequeno ajuste para o heroHeader no comparison-card */
+.comparison-card .heroHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Alinha o botão de fechar ao topo */
+    position: relative; /* Para o posicionamento do clear-button */
+    padding-right: 40px; /* Espaço para o botão de fechar */
+}
+
+.comparison-card .heroHeader .heroName {
+    margin-bottom: 0.25rem;
+}

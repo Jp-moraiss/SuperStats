@@ -1,7 +1,8 @@
-import { useEffect, useState, useMemo } from 'react';
+// hooks/useSuperheroes.ts
+import { useEffect, useState, useMemo, useCallback } from 'react'; // Adicionado useCallback
 import Papa from 'papaparse';
 
-// Definimos a interface e o tipo de filtro aqui para serem reutilizáveis
+// ... (sua interface Character e DashboardFilter permanecem as mesmas)
 export interface Character {
   Name: string; Intelligence: number; Strength: number; Speed: number;
   Durability: number; Power: number; Combat: number; Publisher: string;
@@ -9,12 +10,11 @@ export interface Character {
   'Alter Egos': string; Height: number; Weight: number;
 }
 
-export type DashboardFilter = 
+export type DashboardFilter =
   | { type: 'alignment'; value: 'good' | 'bad' | 'neutral' }
   | { type: 'publisher'; value: 'Marvel Comics' | 'DC Comics' }
   | null;
 
-// Armazenaremos os dados em cache para evitar buscas repetidas no CSV
 let cachedData: Character[] = [];
 
 export const useSuperheroes = (filter: DashboardFilter = null) => {
@@ -22,7 +22,6 @@ export const useSuperheroes = (filter: DashboardFilter = null) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Se já temos os dados no cache, não busca de novo
     if (cachedData.length > 0) {
       setIsLoading(false);
       return;
@@ -41,11 +40,17 @@ export const useSuperheroes = (filter: DashboardFilter = null) => {
             .filter(d => d.Name && d.Name.trim() !== '')
             .map(d => ({
               ...d,
-              TotalPower: (d.Intelligence||0)+(d.Strength||0)+(d.Speed||0)+(d.Durability||0)+(d.Power||0)+(d.Combat||0),
+              Intelligence: d.Intelligence || 0, // Garante que não é null
+              Strength: d.Strength || 0,
+              Speed: d.Speed || 0,
+              Durability: d.Durability || 0,
+              Power: d.Power || 0,
+              Combat: d.Combat || 0,
+              TotalPower: (d.Intelligence || 0) + (d.Strength || 0) + (d.Speed || 0) + (d.Durability || 0) + (d.Power || 0) + (d.Combat || 0),
               Height: parseHeight(d.Height),
               Weight: parseWeight(d.Weight),
             }));
-          cachedData = processedData; // Salva no cache
+          cachedData = processedData;
           setAllData(processedData);
           setIsLoading(false);
         },
@@ -55,10 +60,9 @@ export const useSuperheroes = (filter: DashboardFilter = null) => {
     fetchData();
   }, []);
 
-  // Aplica o filtro aos dados
   const filteredData = useMemo(() => {
     if (!filter) return allData;
-    
+
     if (filter.type === 'alignment') {
       return allData.filter(char => char.Alignment === filter.value);
     }
@@ -68,5 +72,11 @@ export const useSuperheroes = (filter: DashboardFilter = null) => {
     return allData;
   }, [allData, filter]);
 
-  return { data: filteredData, isLoading };
+  // Novo: Função para buscar um personagem pelo nome
+  const getCharacterByName = useCallback((name: string): Character | undefined => {
+    return allData.find(char => char.Name.toLowerCase() === name.toLowerCase());
+  }, [allData]);
+
+
+  return { data: filteredData, isLoading, getCharacterByName, allData }; // Retorna allData também
 };

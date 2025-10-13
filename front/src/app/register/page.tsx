@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { API_URL } from "@/lib/api";
 
@@ -19,6 +19,24 @@ export default function RegisterPage() {
   });
 
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  useEffect(() => {
+    // Limpa classes de background ao sair
+    return () => {
+      document.body.classList.remove("auth-marvel-bg", "auth-dc-bg");
+    };
+  }, []);
+
+  useEffect(() => {
+    // Atualiza a classe do body baseada no universo favorito
+    document.body.classList.remove("auth-marvel-bg", "auth-dc-bg");
+    if (form.univ_fav === "Marvel") {
+      document.body.classList.add("auth-marvel-bg");
+    } else if (form.univ_fav === "DC") {
+      document.body.classList.add("auth-dc-bg");
+    }
+  }, [form.univ_fav]);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,7 +62,7 @@ export default function RegisterPage() {
       });
 
       if (!res.ok) throw new Error(await res.text());
-      
+
       localStorage.setItem("username", form.username);
 
       setMessage({ type: "success", text: "Cadastro realizado com sucesso! Faça o login." });
@@ -55,14 +73,14 @@ export default function RegisterPage() {
   };
 
   return (
-    <div
-      className={`auth-container universe-${
-        form.univ_fav.toLowerCase() || "default"
-      }`}
-    >
-      <h2 className="auth-title">Cadastro de Novo Fã</h2>
-      <form className="auth-form" onSubmit={handleSubmit}> 
-        <label>Usuário*</label> 
+    <>
+      {/* Dynamic Background based on universe choice */}
+      <div className={`auth-page-bg ${form.univ_fav.toLowerCase() || 'default'}`}></div>
+
+      <div className="auth-container">
+        <h2 className="auth-title">Cadastro de Novo Fã</h2>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <label>Usuário*</label>
           <input
             type="text"
             name="username"
@@ -70,85 +88,86 @@ export default function RegisterPage() {
             onChange={handleChange}
             placeholder="Digite seu usuário"
             required
-          /> 
+          />
 
-        {/* Nome + Email */}
-        <div className="form-grid">
-          <div>
-            <label>Nome Completo*</label>
-            <input type="text" name="nome" value={form.nome} onChange={handleChange} required />
+          {/* Nome + Email */}
+          <div className="form-grid">
+            <div>
+              <label>Nome Completo*</label>
+              <input type="text" name="nome" value={form.nome} onChange={handleChange} required />
+            </div>
+
+            <div>
+              <label>Email*</label>
+              <input type="email" name="email" value={form.email} onChange={handleChange} required />
+            </div>
           </div>
 
-          <div>
-            <label>Email*</label>
-            <input type="email" name="email" value={form.email} onChange={handleChange} required />
+          {/* Senha */}
+          <label>Senha*</label>
+          <input type="password" name="password" value={form.password} onChange={handleChange} required />
+
+          {/* Gênero + Idade */}
+          <div className="form-grid">
+            <div>
+              <label>Gênero</label>
+              <select name="genero" value={form.genero} onChange={handleChange}>
+                <option value="">Selecione...</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+            <div>
+              <label>Idade</label>
+              <input type="number" name="idade" value={form.idade} onChange={handleChange} />
+            </div>
           </div>
-        </div>
 
-        {/* Senha */}
-        <label>Senha*</label>
-        <input type="password" name="password" value={form.password} onChange={handleChange} required />
-
-        {/* Gênero + Idade */}
-        <div className="form-grid">
-          <div>
-            <label>Gênero</label>
-            <select name="genero" value={form.genero} onChange={handleChange}>
-              <option value="">Selecione...</option>
-              <option value="Masculino">Masculino</option>
-              <option value="Feminino">Feminino</option>
-              <option value="Outro">Outro</option>
-            </select>
+          {/* Universo Favorito */}
+          <label>Universo Favorito</label>
+          <div className="universe-choice">
+            <button
+              type="button"
+              className={`universe-btn marvel ${form.univ_fav === "Marvel" ? "active" : ""}`}
+              onClick={() => handleUniverseSelect("Marvel")}
+            >
+              <img src="/marvel.png" alt="Marvel" />
+            </button>
+            <button
+              type="button"
+              className={`universe-btn dc ${form.univ_fav === "DC" ? "active" : ""}`}
+              onClick={() => handleUniverseSelect("DC")}
+            >
+              <img src="/dc.png" alt="DC" />
+            </button>
           </div>
-          <div>
-            <label>Idade</label>
-            <input type="number" name="idade" value={form.idade} onChange={handleChange} />
+
+          {/* Tempo Geek + Ocupação */}
+          <div className="form-grid">
+            <div>
+              <label>Tempo Geek (anos)</label>
+              <input type="number" name="tempoGeek" value={form.tempoGeek} onChange={handleChange} />
+            </div>
+            <div>
+              <label>Ocupação</label>
+              <input type="text" name="ocupacao" value={form.ocupacao} onChange={handleChange} />
+            </div>
           </div>
-        </div>
 
-        {/* Universo Favorito */}
-        <label>Universo Favorito</label>
-        <div className="universe-choice">
-          <button
-            type="button"
-            className={`universe-btn marvel ${form.univ_fav === "Marvel" ? "active" : ""}`}
-            onClick={() => handleUniverseSelect("Marvel")}
-          >
-            <img src="/marvel.png" alt="Marvel" />
-          </button>
-          <button
-            type="button"
-            className={`universe-btn dc ${form.univ_fav === "DC" ? "active" : ""}`}
-            onClick={() => handleUniverseSelect("DC")}
-          >
-            <img src="/dc.png" alt="DC" />
-          </button>
-        </div>
+          <button type="submit" className="btn-cta">Cadastrar</button>
+        </form>
 
-        {/* Tempo Geek + Ocupação */}
-        <div className="form-grid">
-          <div>
-            <label>Tempo Geek (anos)</label>
-            <input type="number" name="tempoGeek" value={form.tempoGeek} onChange={handleChange} />
+        {message && (
+          <div className={`alert mt-3 ${message.type === "success" ? "alert-success" : "alert-danger"}`}>
+            {message.text}
           </div>
-          <div>
-            <label>Ocupação</label>
-            <input type="text" name="ocupacao" value={form.ocupacao} onChange={handleChange} />
-          </div>
-        </div>
+        )}
 
-        <button type="submit" className="btn-cta">Cadastrar</button>
-      </form>
-
-      {message && (
-        <div className={`alert mt-3 ${message.type === "success" ? "alert-success" : "alert-danger"}`}>
-          {message.text}
-        </div>
-      )}
-
-      <p className="auth-link">
-        Já tem conta? <a href="/login">Faça o login</a>
-      </p>
-    </div>
+        <p className="auth-link">
+          Já tem conta? <a href="/login">Faça o login</a>
+        </p>
+      </div>
+    </>
   );
 }

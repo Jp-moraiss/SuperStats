@@ -57,13 +57,42 @@ export default function RootLayout({
             <div className="content">
               <aside className="sidebar">
                 <ul className="sidebar-list">
-                  <li><Link href="/todos">Todos Personagens</Link></li>
-                  <li><Link href="/herois">Heróis</Link></li>
-                  <li><Link href="/viloes">Vilões</Link></li>
-                  <li><Link href="/antiherois">Anti-Heróis</Link></li>
-                  <li><Link href="/dc">DC</Link></li>
-                  <li><Link href="/marvel">Marvel</Link></li>
-                  <li><Link href="/comparar">Comparar Stats</Link></li>
+                  {/* Verificamos se o pathname é igual ao href e adicionamos a classe 'active' */}
+                  <li>
+                    <Link href="/todos" className={pathname === "/todos" ? "active" : ""}>
+                      Todos Personagens
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/herois" className={pathname === "/herois" ? "active" : ""}>
+                      Heróis
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/viloes" className={pathname === "/viloes" ? "active" : ""}>
+                      Vilões
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/antiherois" className={pathname === "/antiherois" ? "active" : ""}>
+                      Anti-Heróis
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/dc" className={pathname === "/dc" ? "active" : ""}>
+                      DC
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/marvel" className={pathname === "/marvel" ? "active" : ""}>
+                      Marvel
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/comparar" className={pathname === "/comparar" ? "active" : ""}>
+                      Comparar Stats
+                    </Link>
+                  </li>
                 </ul>
               </aside>
 
