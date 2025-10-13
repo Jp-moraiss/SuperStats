@@ -1,0 +1,3 @@
+ALTER TABLE Filme ADD COLUMN avaliacao_tmdb DECIMAL(4, 2) NULL;
+
+ALTER TABLE Filme ADD COLUMN trailer_url VARCHAR(255) NULL;

@@ -1,21 +1,25 @@
 package com.cesar.superstats.service;
 
-import com.cesar.superstats.dto.FilmeDTO;
+import com.cesar.superstats.dto.*;
 import com.cesar.superstats.exceptions.ResourceNotFoundException;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.Filme;
 import com.cesar.superstats.repository.FilmeRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class FilmeService {
 
     private final FilmeRepository repository;
+    private final TMDBService tmdbService;
 
-    public FilmeService(FilmeRepository repository) {
+    public FilmeService(FilmeRepository repository, TMDBService tmdbService) {
         this.repository = repository;
+        this.tmdbService = tmdbService;
     }
 
     public List<Filme> findAll(Fa faLogado) {
@@ -46,14 +50,51 @@ public class FilmeService {
         return repository.findByProdutora(produtora);
     }
 
-    public void save(Filme filme) {
-        if (filme.getTitulo() == null || filme.getTitulo().isBlank()) {
-            throw new IllegalArgumentException("Título não pode ser nulo ou vazio");
+    public Filme create(FilmeCreateDTO filmeDTO) {
+        if (filmeDTO.getTitulo() == null || filmeDTO.getTitulo().isBlank()) {
+            throw new IllegalArgumentException("O título do filme é obrigatório para a busca.");
         }
-        if (filme.getDataLancamento() == null) {
-            throw new IllegalArgumentException("Data de lançamento não pode ser nula");
+
+        TmdbMovieResult dadosBasicos = tmdbService.buscarFilme(filmeDTO.getTitulo());
+        int movieId = dadosBasicos.getId();
+
+        TmdbMovieDetailsDTO detalhes = tmdbService.buscarDetalhes(movieId);
+        TmdbCreditsDTO creditos = tmdbService.buscarCreditos(movieId);
+        TmdbVideosResponseDTO videos = tmdbService.buscarVideos(movieId);
+
+        Filme filme = new Filme();
+        filme.setTitulo(dadosBasicos.getTitle());
+        filme.setPosterUrl(dadosBasicos.getPosterPath());
+
+        filme.setAvaliacaoTmdb(BigDecimal.valueOf(detalhes.getVoteAverage()));
+
+        try {
+            if (dadosBasicos.getReleaseDate() != null && !dadosBasicos.getReleaseDate().isEmpty()) {
+                filme.setDataLancamento(LocalDate.parse(dadosBasicos.getReleaseDate()));
+            }
+        } catch (Exception e) {
+            filme.setDataLancamento(null);
         }
-        repository.save(filme);
+
+        if (detalhes.getProductionCompanies() != null && !detalhes.getProductionCompanies().isEmpty()) {
+            filme.setProdutora(detalhes.getProductionCompanies().get(0).getName());
+        }
+
+        if (creditos.getCrew() != null) {
+            creditos.getCrew().stream()
+                    .filter(membro -> "Director".equalsIgnoreCase(membro.getJob()))
+                    .findFirst()
+                    .ifPresent(diretor -> filme.setDiretor(diretor.getName()));
+        }
+
+        if (videos.getResults() != null) {
+            videos.getResults().stream()
+                    .filter(video -> "YouTube".equalsIgnoreCase(video.getSite()) && "Trailer".equalsIgnoreCase(video.getType()))
+                    .findFirst()
+                    .ifPresent(trailer -> filme.setTrailerUrl("https://www.youtube.com/watch?v=" + trailer.getKey()));
+        }
+
+        return repository.save(filme);
     }
 
     public void update(Integer id, FilmeDTO filme) {
@@ -102,4 +143,3 @@ public class FilmeService {
         return repository.findAssistidosByFaId(faLogado.getId());
     }
 }
-
