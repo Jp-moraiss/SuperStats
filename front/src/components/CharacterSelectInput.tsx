@@ -1,6 +1,14 @@
 // app/components/CharacterSelectInput.tsx
-import React, { useState, useMemo } from 'react';
-import { Character } from './useSuperheroes';  
+import React, { useState, useMemo, useEffect } from 'react';
+// Make sure the Character type is imported correctly
+// import { Character } from './useSuperheroes'; 
+
+// Example Character type if not defined elsewhere
+interface Character {
+  id?: number | string; // It's good practice to expect an ID
+  Name: string;
+  Publisher: string;
+}
 
 interface CharacterSelectInputProps {
   label: string;
@@ -18,14 +26,13 @@ const CharacterSelectInput: React.FC<CharacterSelectInputProps> = ({
   const [searchTerm, setSearchTerm] = useState(selectedCharacter?.Name || '');
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  // Filtra as sugestões com base no termo de busca
   const suggestions = useMemo(() => {
-    if (searchTerm.length < 2) return []; // Começa a sugerir após 2 letras
+    if (searchTerm.length < 2) return [];
     return allCharacters
       .filter(char =>
         char.Name.toLowerCase().includes(searchTerm.toLowerCase())
       )
-      .slice(0, 10); // Limita a 10 sugestões
+      .slice(0, 10);
   }, [searchTerm, allCharacters]);
 
   const handleSelectCharacter = (char: Character) => {
@@ -41,34 +48,34 @@ const CharacterSelectInput: React.FC<CharacterSelectInputProps> = ({
       setShowSuggestions(true);
     } else {
       setShowSuggestions(false);
-      onSelect(null); // Limpa o personagem selecionado se o termo for removido
+      onSelect(null);
     }
   };
 
-  // Se o personagem selecionado externamente mudar, atualiza o searchTerm
-  React.useEffect(() => {
+  useEffect(() => {
     if (selectedCharacter && selectedCharacter.Name !== searchTerm) {
       setSearchTerm(selectedCharacter.Name);
     } else if (!selectedCharacter && searchTerm) {
-        setSearchTerm(''); // Limpa o input se o personagem for removido
+        setSearchTerm('');
     }
   }, [selectedCharacter]);
 
   return (
-    <div className="character-select-input-container"> 
+    <div className="character-select-input-container">
       <input
         type="text"
         placeholder={`Digite o nome do personagem ${label}...`}
-        className="searchInput" 
+        className="searchInput"
         value={searchTerm}
         onChange={handleChange}
         onFocus={() => searchTerm.length >= 2 && setShowSuggestions(true)}
-        onBlur={() => setTimeout(() => setShowSuggestions(false), 100)} // Pequeno delay para permitir clique nas sugestões
+        onBlur={() => setTimeout(() => setShowSuggestions(false), 100)}
       />
       {showSuggestions && suggestions.length > 0 && (
         <ul className="suggestions-list">
-          {suggestions.map(char => (
-            <li key={char.Name} onClick={() => handleSelectCharacter(char)}>
+          {suggestions.map((char, index) => (
+            // FIX: Added the map 'index' to guarantee a unique key
+            <li key={`${char.Name}-${char.Publisher}-${index}`} onClick={() => handleSelectCharacter(char)}>
               {char.Name} ({char.Publisher})
             </li>
           ))}
