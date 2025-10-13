@@ -1,5 +1,6 @@
 package com.cesar.superstats.controller;
 
+import com.cesar.superstats.dto.FilmeCreateDTO;
 import com.cesar.superstats.dto.FilmeDTO;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.Filme;
@@ -46,9 +47,9 @@ public class FilmeController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody Filme filme) {
-        service.save(filme);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Filme> create(@RequestBody FilmeCreateDTO filmeDTO) {
+        Filme filmeCriado = service.create(filmeDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(filmeCriado);
     }
 
     @PutMapping("/{id}")

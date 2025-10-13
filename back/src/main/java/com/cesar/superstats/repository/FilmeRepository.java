@@ -5,10 +5,14 @@ import com.cesar.superstats.model.entities.Filme;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -54,14 +58,27 @@ public class FilmeRepository {
         return jdbcTemplate.query(sql, new FilmeRowMapper(), produtora);
     }
 
-    public void save(Filme filme) {
-        String sql = "INSERT INTO filme (titulo, produtora, diretor, data_lancamento) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(sql,
-                filme.getTitulo(),
-                filme.getProdutora(),
-                filme.getDiretor(),
-                filme.getDataLancamento()
-        );
+    public Filme save(Filme filme) {
+        // Adicionamos as novas colunas no INSERT
+        String sql = "INSERT INTO filme (titulo, produtora, diretor, data_lancamento, poster_url, avaliacao_tmdb, trailer_url) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, filme.getTitulo());
+            ps.setString(2, filme.getProdutora());
+            ps.setString(3, filme.getDiretor());
+            ps.setObject(4, filme.getDataLancamento());
+            ps.setString(5, filme.getPosterUrl());
+            ps.setBigDecimal(6, filme.getAvaliacaoTmdb());
+            ps.setString(7, filme.getTrailerUrl());
+            return ps;
+        }, keyHolder);
+
+        if (keyHolder.getKey() != null) {
+            filme.setId(keyHolder.getKey().intValue());
+        }
+        return filme;
     }
 
     public void update(Integer id, FilmeDTO filme) {
@@ -124,11 +141,13 @@ public class FilmeRepository {
             filme.setProdutora(rs.getString("produtora"));
             filme.setDiretor(rs.getString("diretor"));
             filme.setDataLancamento(rs.getObject("data_lancamento", LocalDate.class));
+            filme.setPosterUrl(rs.getString("poster_url"));
+            filme.setAvaliacaoTmdb(rs.getBigDecimal("avaliacao_tmdb"));
+            filme.setTrailerUrl(rs.getString("trailer_url"));
 
-            if (rs.getMetaData().getColumnCount() > 5) {
+            if (rs.getMetaData().getColumnCount() > 8) {
                 filme.setAssistido(rs.getBoolean("assistido"));
             }
-
             return filme;
         }
     }
