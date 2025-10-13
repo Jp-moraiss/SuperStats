@@ -55,25 +55,17 @@ public class FilmeService {
             throw new IllegalArgumentException("O título do filme é obrigatório para a busca.");
         }
 
-        // 1. Busca inicial para pegar o ID e dados básicos
         TmdbMovieResult dadosBasicos = tmdbService.buscarFilme(filmeDTO.getTitulo());
         int movieId = dadosBasicos.getId();
 
-        // 2. Busca os detalhes (produtoras e avaliação)
         TmdbMovieDetailsDTO detalhes = tmdbService.buscarDetalhes(movieId);
-
-        // 3. Busca os créditos (diretor)
         TmdbCreditsDTO creditos = tmdbService.buscarCreditos(movieId);
-
-        // 4. Busca os vídeos (trailer)
         TmdbVideosResponseDTO videos = tmdbService.buscarVideos(movieId);
 
-        // 5. Monta a nossa entidade Filme com TODOS os dados
         Filme filme = new Filme();
         filme.setTitulo(dadosBasicos.getTitle());
         filme.setPosterUrl(dadosBasicos.getPosterPath());
 
-        // Converte a avaliação de double para BigDecimal
         filme.setAvaliacaoTmdb(BigDecimal.valueOf(detalhes.getVoteAverage()));
 
         try {
@@ -84,12 +76,10 @@ public class FilmeService {
             filme.setDataLancamento(null);
         }
 
-        // Extrai o nome da primeira produtora
         if (detalhes.getProductionCompanies() != null && !detalhes.getProductionCompanies().isEmpty()) {
             filme.setProdutora(detalhes.getProductionCompanies().get(0).getName());
         }
 
-        // Procura o diretor na lista da equipe ('crew')
         if (creditos.getCrew() != null) {
             creditos.getCrew().stream()
                     .filter(membro -> "Director".equalsIgnoreCase(membro.getJob()))
@@ -97,7 +87,6 @@ public class FilmeService {
                     .ifPresent(diretor -> filme.setDiretor(diretor.getName()));
         }
 
-        // Procura o trailer oficial no YouTube e monta a URL
         if (videos.getResults() != null) {
             videos.getResults().stream()
                     .filter(video -> "YouTube".equalsIgnoreCase(video.getSite()) && "Trailer".equalsIgnoreCase(video.getType()))
@@ -105,7 +94,6 @@ public class FilmeService {
                     .ifPresent(trailer -> filme.setTrailerUrl("https://www.youtube.com/watch?v=" + trailer.getKey()));
         }
 
-        // 6. Salva no nosso banco e retorna
         return repository.save(filme);
     }
 
