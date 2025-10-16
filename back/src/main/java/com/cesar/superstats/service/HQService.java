@@ -1,6 +1,6 @@
 package com.cesar.superstats.service;
 
-import com.cesar.superstats.dto.HQDTO;
+import com.cesar.superstats.dto.*;
 import com.cesar.superstats.exceptions.ResourceNotFoundException;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.HQ;
@@ -8,6 +8,7 @@ import com.cesar.superstats.repository.HQRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -15,6 +16,7 @@ import java.util.List;
 public class HQService {
 
     private final HQRepository repository;
+    private final ComicVineService comicVineService;
 
     public List<HQ> findAll(Fa faLogado) {
         return repository.findAll(faLogado.getId());
@@ -43,17 +45,53 @@ public class HQService {
         return repository.findAllEditoras();
     }
 
-    public void create(HQDTO hqDto) {
-        if (hqDto.getTitulo() == null || hqDto.getTitulo().isBlank()) {
-            throw new IllegalArgumentException("O título da HQ não pode ser nulo ou vazio.");
+    public HQ create(HqCreateDTO hqCreateDto) {
+        if (hqCreateDto.getTitulo() == null || hqCreateDto.getTitulo().isBlank()) {
+            throw new IllegalArgumentException("O título da HQ é obrigatório para a busca.");
         }
-        // Converte DTO para Entidade
+
+        // 1. Busca inicial para pegar dados básicos e as URLs de detalhes
+        ComicVineIssueSummaryDTO dadosBasicos = comicVineService.buscarHq(hqCreateDto.getTitulo());
+
+        // 2. Busca os detalhes da ISSUE para pegar a capa em alta resolução
+        ComicVineIssueDetailsDTO detalhesIssue = comicVineService.buscarDetalhesHq(dadosBasicos.getApiDetailUrl());
+        if (detalhesIssue == null || detalhesIssue.getVolume() == null || detalhesIssue.getVolume().getApiDetailUrl() == null) {
+            throw new ResourceNotFoundException("Não foi possível obter detalhes essenciais da HQ.");
+        }
+
+        // 3. Busca os detalhes do VOLUME para pegar a editora
+        String volumeDetailUrl = detalhesIssue.getVolume().getApiDetailUrl();
+        ComicVineVolumeDetailsDTO detalhesVolume = comicVineService.buscarDetalhesVolume(volumeDetailUrl);
+
+        // 4. Monta a entidade HQ com TODOS os dados
         HQ hq = new HQ();
-        hq.setTitulo(hqDto.getTitulo());
-        hq.setEdicao(hqDto.getEdicao());
-        hq.setEditora(hqDto.getEditora());
-        hq.setDataLancamento(hqDto.getDataLancamento());
-        repository.save(hq);
+        String tituloCompleto = detalhesIssue.getVolume().getName();
+        if (detalhesIssue.getIssueNumber() != null) {
+            tituloCompleto += " #" + detalhesIssue.getIssueNumber();
+        }
+        hq.setTitulo(tituloCompleto);
+        hq.setEdicao(detalhesIssue.getIssueNumber());
+
+        if (detalhesVolume != null && detalhesVolume.getPublisher() != null) {
+            hq.setEditora(detalhesVolume.getPublisher().getName());
+        }
+
+        if (detalhesIssue.getImage() != null) {
+            hq.setCoverUrl(detalhesIssue.getImage().getOriginalUrl());
+        } else if (dadosBasicos.getImage() != null) {
+            hq.setCoverUrl(dadosBasicos.getImage().getSuperUrl());
+        }
+
+        try {
+            if (detalhesIssue.getCoverDate() != null) {
+                hq.setDataLancamento(LocalDate.parse(detalhesIssue.getCoverDate()));
+            }
+        } catch (Exception e) {
+            hq.setDataLancamento(null);
+        }
+
+        // 5. Salva no nosso banco e retorna a entidade completa com o ID
+        return repository.save(hq);
     }
 
     public void update(Integer id, HQDTO hqDto) {

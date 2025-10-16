@@ -14,6 +14,7 @@ public class HQ {
     private String edicao;
     private String editora;
     private String titulo;
+    private String coverUrl;
     private boolean lido;
 
     @JsonFormat(pattern = "yyyy-MM-dd")

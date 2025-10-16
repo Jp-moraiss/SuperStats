@@ -1,8 +1,10 @@
 package com.cesar.superstats.controller;
 
 import com.cesar.superstats.dto.HQDTO;
+import com.cesar.superstats.dto.HqCreateDTO;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.HQ;
+import com.cesar.superstats.service.ComicVineService;
 import com.cesar.superstats.service.HQService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,8 @@ import java.util.List;
 public class HQController {
 
     private final HQService service;
+    private final ComicVineService comicVineService;
+
 
     @GetMapping
     public ResponseEntity<List<HQ>> findAll(@AuthenticationPrincipal Fa faLogado) {
@@ -45,9 +49,9 @@ public class HQController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody HQDTO hqDto) {
-        service.create(hqDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("HQ criada com sucesso!");
+    public ResponseEntity<HQ> create(@RequestBody HqCreateDTO hqCreateDto) {
+        HQ hqCriada = service.create(hqCreateDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(hqCriada);
     }
 
     @PutMapping("/{id}")

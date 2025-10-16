@@ -1,7 +1,7 @@
 package com.cesar.superstats.service;
 
-import com.cesar.superstats.dto.PersonagemNovoDTO;
 import com.cesar.superstats.dto.ContagemAlinhamentoDTO;
+import com.cesar.superstats.dto.PersonagemNovoDTO;
 import com.cesar.superstats.dto.PersonagemNovoResponseDTO;
 import com.cesar.superstats.exceptions.ResourceNotFoundException;
 import com.cesar.superstats.model.entities.Fa;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.security.access.AccessDeniedException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
