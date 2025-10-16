@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-// DTOs aninhados (wrappers)
+// DTOs aninhados (wrappers) para as respostas
 @Data
 class ComicVineGenericSearchResponseDTO {
     public List<ComicVineGenericResultDTO> results;
@@ -42,7 +42,7 @@ public class ComicVineService {
         try {
             String encodedQuery = URLEncoder.encode(titulo, StandardCharsets.UTF_8);
             url = String.format("%s/search/?api_key=%s&format=json&query=%s", apiUrl, apiKey, encodedQuery);
-        } catch (Exception e) { throw new RuntimeException("Falha ao codificar URL", e); }
+        } catch (Exception e) { throw new RuntimeException("Falha ao codificar URL de busca", e); }
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("User-Agent", "SuperStatsApp/1.0");
@@ -61,36 +61,48 @@ public class ComicVineService {
                 .collect(Collectors.toList());
     }
 
+    // --- O TRADUTOR INTELIGENTE E CORRIGIDO ---
     private HqSearchResultDTO traduzirParaDtoPadronizado(ComicVineGenericResultDTO item) {
         try {
             HqSearchResultDTO dto = new HqSearchResultDTO();
             dto.setResourceType(item.getResourceType());
             dto.setApiDetailUrl(item.getApiDetailUrl());
 
-            if ("issue".equals(item.getResourceType()) && item.getVolume() != null) {
-                String titulo = item.getVolume().getName();
+            // Só processa se for 'issue' ou 'volume'
+            if ("issue".equals(item.getResourceType())) {
+                if (item.getVolume() == null) return null; // Ignora 'issue' sem 'volume'
 
-                // --- A CORREÇÃO ESTÁ AQUI ---
-                if (item.getIssueNumber() != null) { // Trocado de getIssue_number para getIssueNumber
-                    titulo += " #" + item.getIssueNumber(); // Trocado de getIssue_number para getIssueNumber
+                dto.setVolumeName(item.getVolume().getName()); // NOME DO VOLUME (SÉRIE)
+
+                // Título da edição específica
+                String tituloEdicao = item.getName();
+                if (tituloEdicao == null || tituloEdicao.isBlank()) {
+                    tituloEdicao = "Edição #" + item.getIssueNumber();
                 }
-                dto.setTitle(titulo);
+                dto.setTitle(tituloEdicao);
 
             } else if ("volume".equals(item.getResourceType())) {
-                dto.setTitle(item.getName());
+                dto.setTitle(item.getName()); // Título do volume (encadernado/graphic novel)
+                dto.setVolumeName(item.getPublisher() != null ? item.getPublisher().getName() : "Editora Desconhecida");
+
+                // Para volumes, a 'apiDetailUrl' que nos interessa é a da primeira issue
                 if(item.getFirstIssue() != null) {
                     dto.setApiDetailUrl(item.getFirstIssue().getApiDetailUrl());
+                } else {
+                    return null; // Ignora volumes que não têm uma 'first_issue' clicável
                 }
             } else {
-                return null;
+                return null; // Ignora outros tipos de recurso como 'character'
             }
 
+            // Define o ano
             if (item.getCoverDate() != null && item.getCoverDate().length() >= 4) {
                 dto.setYear(item.getCoverDate().substring(0, 4));
             } else if (item.getStartYear() != null) {
                 dto.setYear(item.getStartYear());
             }
 
+            // Define a URL da imagem
             if (item.getImage() != null) {
                 dto.setImageUrl(item.getImage().getSuperUrl());
             }

@@ -51,26 +51,29 @@ public class HQService {
 
     public HQ createFromApi(HqFinalizeCreateDTO dto) {
         if (dto.getApiDetailUrl() == null || dto.getApiDetailUrl().isBlank()) {
-            throw new IllegalArgumentException("A URL de detalhes da API é obrigatória para criar a HQ.");
+            throw new IllegalArgumentException("A URL de detalhes da API é obrigatória.");
         }
 
-        // 1. Busca os detalhes da ISSUE
         ComicVineIssueDetailsDTO detalhesIssue = comicVineService.buscarDetalhesHq(dto.getApiDetailUrl());
         if (detalhesIssue == null || detalhesIssue.getVolume() == null || detalhesIssue.getVolume().getApiDetailUrl() == null) {
-            throw new ResourceNotFoundException("Não foi possível obter detalhes essenciais da HQ a partir da URL fornecida.");
+            throw new ResourceNotFoundException("Detalhes essenciais da HQ não foram encontrados.");
         }
 
-        // 2. Busca os detalhes do VOLUME para pegar a editora
         String volumeDetailUrl = detalhesIssue.getVolume().getApiDetailUrl();
         ComicVineVolumeDetailsDTO detalhesVolume = comicVineService.buscarDetalhesVolume(volumeDetailUrl);
 
-        // 3. Monta a entidade HQ com todos os dados
         HQ hq = new HQ();
-        String tituloCompleto = detalhesIssue.getVolume().getName();
-        if (detalhesIssue.getIssueNumber() != null) {
-            tituloCompleto += " #" + detalhesIssue.getIssueNumber();
+
+        // --- LÓGICA DE SEPARAÇÃO APRIMORADA ---
+        hq.setVolumeName(detalhesIssue.getVolume().getName()); // Salva o nome da série/volume
+
+        // O 'título' agora é o nome específico da edição
+        if (detalhesIssue.getName() != null && !detalhesIssue.getName().isBlank()) {
+            hq.setTitulo(detalhesIssue.getName());
+        } else {
+            hq.setTitulo("Edição #" + detalhesIssue.getIssueNumber());
         }
-        hq.setTitulo(tituloCompleto);
+
         hq.setEdicao(detalhesIssue.getIssueNumber());
 
         if (detalhesVolume != null && detalhesVolume.getPublisher() != null) {
@@ -85,12 +88,8 @@ public class HQService {
             if (detalhesIssue.getCoverDate() != null) {
                 hq.setDataLancamento(LocalDate.parse(detalhesIssue.getCoverDate()));
             }
-        } catch (Exception e) {
-            System.err.println("Não foi possível parsear a data da HQ: " + detalhesIssue.getCoverDate());
-            hq.setDataLancamento(null);
-        }
+        } catch (Exception e) { hq.setDataLancamento(null); }
 
-        // 4. Salva a entidade completa no banco e a retorna
         return repository.save(hq);
     }
 

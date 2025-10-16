@@ -75,8 +75,27 @@
             container.innerHTML = "";
             if (data.length === 0) { container.innerHTML = '<p class="text-center col-12">Nenhuma HQ no catálogo.</p>'; return; }
             data.forEach(hq => {
-                const botao = hq.lido ? `<button class="btn btn-outline-secondary btn-sm" onclick="removerDosLidos(${hq.id})">Remover ✖</button>` : `<button class="btn btn-success btn-sm" onclick="marcarComoLido(${hq.id})">Lido ✓</button>`;
-                container.innerHTML += `<div class="col"><div class="card h-100"><img src="${hq.coverUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 400px; object-fit: cover;" alt="Capa de ${hq.titulo}"><div class="card-body d-flex flex-column"><h5 class="card-title">${hq.titulo}</h5><p class="card-text text-muted small">${hq.editora || 'Editora não informada'}</p><div class="mt-auto text-center">${botao}</div></div></div></div>`;
+                const botao = hq.lido
+                    ? `<button class="btn btn-outline-secondary btn-sm" onclick="removerDosLidos(${hq.id})">Remover ✖</button>`
+                    : `<button class="btn btn-success btn-sm" onclick="marcarComoLido(${hq.id})">Lido ✓</button>`;
+
+                const cardHtml = `
+        <div class="col">
+            <div class="card h-100">
+                <img src="${hq.coverUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 400px; object-fit: cover;" alt="Capa de ${hq.titulo}">
+                <div class="card-body d-flex flex-column">
+
+                    <h5 class="card-title">${hq.volumeName}</h5>
+                    <p class="card-subtitle mb-2 text-muted">${hq.titulo}</p>
+
+                    <p class="card-text small">${hq.editora || 'Editora não informada'}</p>
+                    <div class="mt-auto text-center">
+                        ${botao}
+                    </div>
+                </div>
+            </div>
+        </div>`;
+                container.innerHTML += cardHtml;
             });
         } catch(e) { console.error(e) }
     }
@@ -112,7 +131,21 @@
                 const isClickable = item.resourceType === 'issue';
                 const cardClass = isClickable ? 'search-result-card' : 'disabled bg-light';
                 const onClickAction = isClickable ? `onclick="finalizeHqCreation('${item.apiDetailUrl}')"` : 'style="cursor: not-allowed;"';
-                const cardHtml = `<div class="col"><div class="card h-100 ${cardClass}" ${onClickAction}><img src="${item.imageUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 300px; object-fit: cover;" alt="Capa de ${item.title}"><div class="card-body text-center"><h6 class="card-title">${item.title || 'Título desconhecido'}</h6><p class="card-text text-muted small">Ano: ${item.year || 'N/A'}</p><span class="badge bg-secondary">${item.resourceType}</span></div></div></div>`;
+                const cardHtml = `
+        <div class="col">
+            <div class="card h-100 ${cardClass}" ${onClickAction}>
+                <img src="${item.imageUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 300px; object-fit: cover;" alt="Capa de ${item.title}">
+                <div class="card-body text-center d-flex flex-column">
+                    <h6 class="card-title">${item.title || 'Título desconhecido'}</h6>
+
+                    <p class="card-text text-muted small mt-auto">
+                        ${item.volumeName || ''}<br>
+                        Ano: ${item.year || 'N/A'}
+                    </p>
+
+                </div>
+            </div>
+        </div>`;
                 container.innerHTML += cardHtml;
             });
         } catch (error) { status.textContent = 'Erro ao buscar HQs.'; console.error(error); }

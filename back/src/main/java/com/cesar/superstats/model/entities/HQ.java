@@ -11,9 +11,10 @@ import java.util.List;
 public class HQ {
 
     private Integer id;
+    private String titulo;
+    private String volumeName;
     private String edicao;
     private String editora;
-    private String titulo;
     private String coverUrl;
     private boolean lido;
 

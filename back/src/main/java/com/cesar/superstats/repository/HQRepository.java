@@ -55,22 +55,21 @@ public class HQRepository {
     }
 
     public HQ save(HQ hq) {
-        String sql = "INSERT INTO hq (titulo, edicao, editora, data_lancamento, cover_url) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO hq (titulo, volume_name, edicao, editora, data_lancamento, cover_url) VALUES (?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, hq.getTitulo());
-            ps.setString(2, hq.getEdicao());
-            ps.setString(3, hq.getEditora());
-            ps.setObject(4, hq.getDataLancamento());
-            ps.setString(5, hq.getCoverUrl()); // <-- Adicionado
+            ps.setString(2, hq.getVolumeName());
+            ps.setString(3, hq.getEdicao());
+            ps.setString(4, hq.getEditora());
+            ps.setObject(5, hq.getDataLancamento());
+            ps.setString(6, hq.getCoverUrl());
             return ps;
         }, keyHolder);
 
-        if (keyHolder.getKey() != null) {
-            hq.setId(keyHolder.getKey().intValue());
-        }
+        if (keyHolder.getKey() != null) { hq.setId(keyHolder.getKey().intValue()); }
         return hq;
     }
 
@@ -129,6 +128,7 @@ public class HQRepository {
             HQ hq = new HQ();
             hq.setId(rs.getInt("id"));
             hq.setTitulo(rs.getString("titulo"));
+            hq.setVolumeName(rs.getString("volume_name"));
             hq.setEdicao(rs.getString("edicao"));
             hq.setEditora(rs.getString("editora"));
             hq.setDataLancamento(rs.getObject("data_lancamento", LocalDate.class));
