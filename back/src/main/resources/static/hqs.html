@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <title>SuperStats - Gestão de HQs</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         body { padding: 20px; background-color: #f4f4f4; }
         .section { margin-bottom: 2rem; }
-        pre { background-color: #e9ecef; padding: 10px; border-radius: 5px; margin-top: 1rem; white-space: pre-wrap; }
         .search-result-card { cursor: pointer; }
         .search-result-card:hover { background-color: #e9ecef; transition: background-color 0.2s; }
         .card-img-top { object-fit: cover; }
@@ -27,26 +25,16 @@
     <ul class="nav nav-tabs" id="hqsTab" role="tablist">
         <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#todas-hqs-pane" type="button" role="tab">Todas as HQs</button></li>
         <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#lidas-pane" type="button" role="tab">HQs Lidas</button></li>
-        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#gerenciar-pane" type="button" role="tab">Adicionar & Buscar</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#gerenciar-pane" type="button" role="tab">Adicionar HQ</button></li>
     </ul>
 
     <div class="tab-content" id="hqsTabContent">
         <div class="tab-pane fade show active p-3 border border-top-0" id="todas-hqs-pane" role="tabpanel">
-            <h3>Catálogo Completo de HQs</h3>
-            <button class="btn btn-primary btn-sm mb-2" onclick="refreshAll()">Atualizar Lista</button>
-            <div id="catalogoHqContainer" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-            </div>
+            <div id="catalogoHqContainer" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4"></div>
         </div>
-
         <div class="tab-pane fade p-3 border border-top-0" id="lidas-pane" role="tabpanel">
-            <h3>Minha Lista de Leitura</h3>
-            <button class="btn btn-primary btn-sm mb-2" onclick="fetchLidos()">Atualizar Lista</button>
-            <table class="table table-striped">
-                <thead><tr><th>ID</th><th>Título</th><th>Editora</th><th>Edição</th></tr></thead>
-                <tbody id="lidosTableBody"></tbody>
-            </table>
+            <table class="table table-striped"><thead><tr><th>ID</th><th>Título</th><th>Editora</th><th>Edição</th></tr></thead><tbody id="lidosTableBody"></tbody></table>
         </div>
-
         <div class="tab-pane fade p-3 border border-top-0" id="gerenciar-pane" role="tabpanel">
             <h3>Adicionar Nova HQ ao Catálogo</h3>
             <div class="section">
@@ -59,8 +47,7 @@
             <hr>
             <div class="section">
                 <h4 id="statusBusca">Resultados da Busca</h4>
-                <div id="searchResultsContainer" class="row row-cols-1 row-cols-md-3 g-4 mt-1">
-                </div>
+                <div id="searchResultsContainer" class="row row-cols-1 row-cols-md-3 g-4 mt-1"></div>
             </div>
         </div>
     </div>
@@ -70,20 +57,8 @@
 <script>
     const baseUrl = 'http://localhost:8080/hqs';
 
-    // --- LÓGICA DE SEGURANÇA E INICIALIZAÇÃO ---
-    document.addEventListener('DOMContentLoaded', () => {
-        if (!localStorage.getItem('jwtToken')) {
-            window.location.href = 'login.html';
-        } else {
-            refreshAll();
-        }
-    });
-
-    function handleLogout() {
-        localStorage.removeItem('jwtToken');
-        window.location.href = 'login.html';
-    }
-
+    document.addEventListener('DOMContentLoaded', () => { if (!localStorage.getItem('jwtToken')) { window.location.href = 'login.html'; } else { refreshAll(); } });
+    function handleLogout() { localStorage.removeItem('jwtToken'); window.location.href = 'login.html'; }
     async function fetchWithAuth(url, options = {}) {
         const token = localStorage.getItem('jwtToken');
         const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers };
@@ -92,33 +67,16 @@
         return response;
     }
 
-    // --- FUNÇÕES DE LISTAGEM E AÇÃO ---
     async function getAll() {
         try {
             const res = await fetchWithAuth(baseUrl);
             const data = await res.json();
             const container = document.getElementById('catalogoHqContainer');
             container.innerHTML = "";
-            if (data.length === 0) {
-                container.innerHTML = '<p class="text-center col-12">Nenhuma HQ no catálogo. Adicione uma na aba "Adicionar & Buscar".</p>';
-                return;
-            }
+            if (data.length === 0) { container.innerHTML = '<p class="text-center col-12">Nenhuma HQ no catálogo.</p>'; return; }
             data.forEach(hq => {
-                const botao = hq.lido
-                    ? `<button class="btn btn-outline-secondary btn-sm" onclick="removerDosLidos(${hq.id})">Remover ✖</button>`
-                    : `<button class="btn btn-success btn-sm" onclick="marcarComoLido(${hq.id})">Lido ✓</button>`;
-                const cardHtml = `
-                    <div class="col">
-                        <div class="card h-100">
-                            <img src="${hq.coverUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 400px; object-fit: cover;" alt="Capa de ${hq.titulo}">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">${hq.titulo}</h5>
-                                <p class="card-text text-muted small">${hq.editora || 'Editora não informada'}</p>
-                                <div class="mt-auto text-center">${botao}</div>
-                            </div>
-                        </div>
-                    </div>`;
-                container.innerHTML += cardHtml;
+                const botao = hq.lido ? `<button class="btn btn-outline-secondary btn-sm" onclick="removerDosLidos(${hq.id})">Remover ✖</button>` : `<button class="btn btn-success btn-sm" onclick="marcarComoLido(${hq.id})">Lido ✓</button>`;
+                container.innerHTML += `<div class="col"><div class="card h-100"><img src="${hq.coverUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 400px; object-fit: cover;" alt="Capa de ${hq.titulo}"><div class="card-body d-flex flex-column"><h5 class="card-title">${hq.titulo}</h5><p class="card-text text-muted small">${hq.editora || 'Editora não informada'}</p><div class="mt-auto text-center">${botao}</div></div></div></div>`;
             });
         } catch(e) { console.error(e) }
     }
@@ -129,20 +87,15 @@
             const res = await fetchWithAuth(`${baseUrl}/lidos`);
             const data = await res.json();
             tbody.innerHTML = "";
-            if (data.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="text-center">Você ainda não marcou nenhuma HQ como lida.</td></tr>'; return; }
+            if (data.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhuma HQ lida.</td></tr>'; return; }
             data.forEach(hq => { tbody.innerHTML += `<tr><td>${hq.id}</td><td>${hq.titulo}</td><td>${hq.editora}</td><td>${hq.edicao || ''}</td></tr>`; });
         } catch(e) { console.error(e) }
     }
 
-    function refreshAll() {
-        getAll();
-        fetchLidos();
-    }
+    function refreshAll() { getAll(); fetchLidos(); }
+    async function marcarComoLido(hqId) { try { const res = await fetchWithAuth(`${baseUrl}/${hqId}/ler`, { method: 'POST' }); if (res.ok) refreshAll(); } catch (e) { console.error(e) } }
+    async function removerDosLidos(hqId) { try { const res = await fetchWithAuth(`${baseUrl}/${hqId}/ler`, { method: 'DELETE' }); if (res.ok) refreshAll(); } catch (e) { console.error(e) } }
 
-    async function marcarComoLido(hqId) { try { const res = await fetchWithAuth(`${baseUrl}/${hqId}/ler`, { method: 'POST' }); if (res.ok) { refreshAll(); } else { throw new Error(await res.text()); } } catch (error) { alert(`Erro: ${error.message}`); } }
-    async function removerDosLidos(hqId) { try { const res = await fetchWithAuth(`${baseUrl}/${hqId}/ler`, { method: 'DELETE' }); if (res.ok) { refreshAll(); } else { throw new Error(await res.text()); } } catch (error) { alert(`Erro: ${error.message}`); } }
-
-    // --- FUNÇÕES DO FLUXO DE BUSCA E CRIAÇÃO ---
     async function searchHqs() {
         const titulo = document.getElementById('tituloBusca').value;
         const container = document.getElementById('searchResultsContainer');
@@ -153,45 +106,16 @@
         try {
             const res = await fetchWithAuth(`${baseUrl}/buscar-externo?titulo=${encodeURIComponent(titulo)}`);
             const results = await res.json();
-
-            if (results.length === 0) {
-                status.textContent = 'Nenhum resultado encontrado. Tente um termo de busca mais específico ou em inglês.';
-                return;
-            }
-
-            status.textContent = 'Resultados encontrados. Clique em uma HQ (Issue) para adicioná-la:';
+            if (results.length === 0) { status.textContent = 'Nenhum resultado encontrado. Tente um termo de busca mais específico ou em inglês.'; return; }
+            status.textContent = 'Resultados encontrados. Clique em uma HQ para adicioná-la:';
             results.forEach(item => {
-                // Apenas resultados que são do tipo 'issue' são clicáveis
-                const isIssue = item.resourceType === 'issue';
-                const cardClass = isIssue ? 'search-result-card' : 'disabled bg-light';
-                const onClickAction = isIssue ? `onclick="finalizeHqCreation('${item.apiDetailUrl}')"` : 'style="cursor: not-allowed;"';
-
-                // Monta o título de forma inteligente
-                let title = item.name;
-                if (isIssue && item.volume && item.volume.name) {
-                    title = item.volume.name + (item.issueNumber ? ` #${item.issueNumber}` : '');
-                }
-
-                const year = item.coverDate ? item.coverDate.substring(0, 4) : item.startYear || 'N/A';
-                const imageUrl = item.image?.superUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa';
-
-                const cardHtml = `
-                    <div class="col">
-                        <div class="card h-100 ${cardClass}" ${onClickAction}>
-                            <img src="${imageUrl}" class="card-img-top" style="height: 300px; object-fit: cover;" alt="Capa de ${title}">
-                            <div class="card-body text-center">
-                                <h6 class="card-title">${title || 'Título desconhecido'}</h6>
-                                <p class="card-text text-muted small">Ano: ${year}</p>
-                                <span class="badge bg-secondary">${item.resourceType}</span>
-                            </div>
-                        </div>
-                    </div>`;
+                const isClickable = item.resourceType === 'issue';
+                const cardClass = isClickable ? 'search-result-card' : 'disabled bg-light';
+                const onClickAction = isClickable ? `onclick="finalizeHqCreation('${item.apiDetailUrl}')"` : 'style="cursor: not-allowed;"';
+                const cardHtml = `<div class="col"><div class="card h-100 ${cardClass}" ${onClickAction}><img src="${item.imageUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 300px; object-fit: cover;" alt="Capa de ${item.title}"><div class="card-body text-center"><h6 class="card-title">${item.title || 'Título desconhecido'}</h6><p class="card-text text-muted small">Ano: ${item.year || 'N/A'}</p><span class="badge bg-secondary">${item.resourceType}</span></div></div></div>`;
                 container.innerHTML += cardHtml;
             });
-        } catch (error) {
-            status.textContent = 'Erro ao buscar HQs.';
-            console.error(error);
-        }
+        } catch (error) { status.textContent = 'Erro ao buscar HQs.'; console.error(error); }
     }
 
     async function finalizeHqCreation(apiDetailUrl) {
@@ -206,12 +130,8 @@
                 document.getElementById('searchResultsContainer').innerHTML = '';
                 document.getElementById('tituloBusca').value = '';
                 refreshAll();
-            } else {
-                throw new Error(await res.text());
-            }
-        } catch (error) {
-            status.textContent = `Erro ao adicionar HQ: ${error.message}`;
-        }
+            } else { throw new Error(await res.text()); }
+        } catch (error) { status.textContent = `Erro ao adicionar HQ: ${error.message}`; }
     }
 </script>
 </body>

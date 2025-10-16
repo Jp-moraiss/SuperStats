@@ -2,6 +2,8 @@ package com.cesar.superstats.controller;
 
 import com.cesar.superstats.dto.HQDTO;
 import com.cesar.superstats.dto.HqCreateDTO;
+import com.cesar.superstats.dto.HqFinalizeCreateDTO;
+import com.cesar.superstats.dto.HqSearchResultDTO;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.HQ;
 import com.cesar.superstats.service.ComicVineService;
@@ -48,9 +50,15 @@ public class HQController {
         return ResponseEntity.ok(service.findAllEditoras());
     }
 
+    @GetMapping("/buscar-externo")
+    public ResponseEntity<List<HqSearchResultDTO>> buscarHqsExternas(@RequestParam String titulo) {
+        return ResponseEntity.ok(service.buscarHqsExternas(titulo));
+    }
+
+    // Endpoint de CRIAÇÃO modificado para a finalização
     @PostMapping
-    public ResponseEntity<HQ> create(@RequestBody HqCreateDTO hqCreateDto) {
-        HQ hqCriada = service.create(hqCreateDto);
+    public ResponseEntity<HQ> create(@RequestBody HqFinalizeCreateDTO dto) {
+        HQ hqCriada = service.createFromApi(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(hqCriada);
     }
 

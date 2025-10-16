@@ -1,25 +1,27 @@
 package com.cesar.superstats.service;
 
-import com.cesar.superstats.dto.ComicVineIssueDetailsDTO;
-import com.cesar.superstats.dto.ComicVineIssueSummaryDTO;
-import com.cesar.superstats.dto.ComicVineSearchResponseDTO;
-import com.cesar.superstats.dto.ComicVineVolumeDetailsDTO;
+import com.cesar.superstats.dto.*;
 import com.cesar.superstats.exceptions.ResourceNotFoundException;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-/**
- * Classes DTO aninhadas (wrappers) para lidar com a estrutura "results"
- * das respostas de detalhes da API do Comic Vine.
- */
+// DTOs aninhados (wrappers)
+@Data
+class ComicVineGenericSearchResponseDTO {
+    public List<ComicVineGenericResultDTO> results;
+}
 class ComicVineIssueDetailsResponseDTO {
     public ComicVineIssueDetailsDTO results;
 }
@@ -27,95 +29,94 @@ class ComicVineVolumeDetailsResponseDTO {
     public ComicVineVolumeDetailsDTO results;
 }
 
-
 @Service
 public class ComicVineService {
 
     @Value("${comicvine.api.key}")
     private String apiKey;
-
     private final String apiUrl = "https://comicvine.gamespot.com/api";
-
     private final RestTemplate restTemplate = new RestTemplate();
 
-    /**
-     * Passo 1: Busca uma HQ (issue) pelo título.
-     * Usa o endpoint /search/ e constrói a URL manualmente para máxima compatibilidade.
-     * @param titulo O nome da HQ a ser buscada.
-     * @return O primeiro resultado da busca, contendo dados básicos e URLs para os detalhes.
-     */
-    public ComicVineIssueSummaryDTO buscarHq(String titulo) {
+    public List<HqSearchResultDTO> buscarRecursos(String titulo) {
         String url;
         try {
-            // Codifica o título manualmente para garantir que espaços sejam tratados como %20
             String encodedQuery = URLEncoder.encode(titulo, StandardCharsets.UTF_8);
-
-            url = String.format(
-                    "%s/search/?api_key=%s&format=json&query=%s&resources=issue",
-                    apiUrl,
-                    apiKey,
-                    encodedQuery
-            );
-        } catch (Exception e) {
-            throw new RuntimeException("Falha ao codificar a URL de busca", e);
-        }
-
-        // Log para depuração: mostra a URL exata que está sendo chamada
-        System.out.println("URL FINAL ENVIADA (BUSCA): " + url);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("User-Agent", "SuperStatsApp/1.0"); // Exigido pela API do Comic Vine
-        headers.set("Accept", "application/json");      // Garante que a resposta seja JSON
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        ComicVineSearchResponseDTO response = restTemplate.exchange(url, HttpMethod.GET, entity, ComicVineSearchResponseDTO.class).getBody();
-
-        if (response == null || response.getResults() == null || response.getResults().isEmpty()) {
-            throw new ResourceNotFoundException("Nenhuma HQ encontrada no Comic Vine com o título: " + titulo);
-        }
-
-        return response.getResults().get(0);
-    }
-
-    /**
-     * Passo 2: Busca os detalhes de uma HQ (issue) específica.
-     * @param detailUrl A URL completa para os detalhes da issue, obtida no Passo 1.
-     * @return Um DTO com os detalhes da issue.
-     */
-    public ComicVineIssueDetailsDTO buscarDetalhesHq(String detailUrl) {
-        String url = String.format("%s?api_key=%s&format=json", detailUrl, apiKey);
+            url = String.format("%s/search/?api_key=%s&format=json&query=%s", apiUrl, apiKey, encodedQuery);
+        } catch (Exception e) { throw new RuntimeException("Falha ao codificar URL", e); }
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("User-Agent", "SuperStatsApp/1.0");
         headers.set("Accept", "application/json");
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ComicVineIssueDetailsResponseDTO response = restTemplate.exchange(url, HttpMethod.GET, entity, ComicVineIssueDetailsResponseDTO.class).getBody();
+        ComicVineGenericSearchResponseDTO response = restTemplate.exchange(url, HttpMethod.GET, entity, ComicVineGenericSearchResponseDTO.class).getBody();
 
-        if (response == null || response.results == null) {
-            throw new ResourceNotFoundException("Detalhes da HQ não encontrados.");
+        if (response == null || response.getResults() == null || response.getResults().isEmpty()) {
+            return List.of();
         }
+
+        return response.getResults().stream()
+                .map(this::traduzirParaDtoPadronizado)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    private HqSearchResultDTO traduzirParaDtoPadronizado(ComicVineGenericResultDTO item) {
+        try {
+            HqSearchResultDTO dto = new HqSearchResultDTO();
+            dto.setResourceType(item.getResourceType());
+            dto.setApiDetailUrl(item.getApiDetailUrl());
+
+            if ("issue".equals(item.getResourceType()) && item.getVolume() != null) {
+                String titulo = item.getVolume().getName();
+
+                // --- A CORREÇÃO ESTÁ AQUI ---
+                if (item.getIssueNumber() != null) { // Trocado de getIssue_number para getIssueNumber
+                    titulo += " #" + item.getIssueNumber(); // Trocado de getIssue_number para getIssueNumber
+                }
+                dto.setTitle(titulo);
+
+            } else if ("volume".equals(item.getResourceType())) {
+                dto.setTitle(item.getName());
+                if(item.getFirstIssue() != null) {
+                    dto.setApiDetailUrl(item.getFirstIssue().getApiDetailUrl());
+                }
+            } else {
+                return null;
+            }
+
+            if (item.getCoverDate() != null && item.getCoverDate().length() >= 4) {
+                dto.setYear(item.getCoverDate().substring(0, 4));
+            } else if (item.getStartYear() != null) {
+                dto.setYear(item.getStartYear());
+            }
+
+            if (item.getImage() != null) {
+                dto.setImageUrl(item.getImage().getSuperUrl());
+            }
+
+            if (dto.getTitle() == null || dto.getApiDetailUrl() == null) { return null; }
+            return dto;
+        } catch (Exception e) { return null; }
+    }
+
+    public ComicVineIssueDetailsDTO buscarDetalhesHq(String detailUrl) {
+        String url = String.format("%s?api_key=%s&format=json", detailUrl, apiKey);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("User-Agent", "SuperStatsApp/1.0");
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ComicVineIssueDetailsResponseDTO response = restTemplate.exchange(url, HttpMethod.GET, entity, ComicVineIssueDetailsResponseDTO.class).getBody();
+        if (response == null || response.results == null) throw new ResourceNotFoundException("Detalhes da HQ não encontrados.");
         return response.results;
     }
 
-    /**
-     * Passo 3: Busca os detalhes de um Volume (série de HQs).
-     * @param volumeDetailUrl A URL completa para os detalhes do volume, obtida no Passo 1.
-     * @return Um DTO com os detalhes do volume.
-     */
     public ComicVineVolumeDetailsDTO buscarDetalhesVolume(String volumeDetailUrl) {
         String url = String.format("%s?api_key=%s&format=json", volumeDetailUrl, apiKey);
-
         HttpHeaders headers = new HttpHeaders();
         headers.set("User-Agent", "SuperStatsApp/1.0");
-        headers.set("Accept", "application/json");
         HttpEntity<String> entity = new HttpEntity<>(headers);
-
         ComicVineVolumeDetailsResponseDTO response = restTemplate.exchange(url, HttpMethod.GET, entity, ComicVineVolumeDetailsResponseDTO.class).getBody();
-
-        if (response == null || response.results == null) {
-            throw new ResourceNotFoundException("Detalhes do volume da HQ não encontrados.");
-        }
+        if (response == null || response.results == null) throw new ResourceNotFoundException("Detalhes do volume não encontrados.");
         return response.results;
     }
 }

@@ -45,25 +45,26 @@ public class HQService {
         return repository.findAllEditoras();
     }
 
-    public HQ create(HqCreateDTO hqCreateDto) {
-        if (hqCreateDto.getTitulo() == null || hqCreateDto.getTitulo().isBlank()) {
-            throw new IllegalArgumentException("O título da HQ é obrigatório para a busca.");
+    public List<HqSearchResultDTO> buscarHqsExternas(String titulo) {
+        return comicVineService.buscarRecursos(titulo);
+    }
+
+    public HQ createFromApi(HqFinalizeCreateDTO dto) {
+        if (dto.getApiDetailUrl() == null || dto.getApiDetailUrl().isBlank()) {
+            throw new IllegalArgumentException("A URL de detalhes da API é obrigatória para criar a HQ.");
         }
 
-        // 1. Busca inicial para pegar dados básicos e as URLs de detalhes
-        ComicVineIssueSummaryDTO dadosBasicos = comicVineService.buscarHq(hqCreateDto.getTitulo());
-
-        // 2. Busca os detalhes da ISSUE para pegar a capa em alta resolução
-        ComicVineIssueDetailsDTO detalhesIssue = comicVineService.buscarDetalhesHq(dadosBasicos.getApiDetailUrl());
+        // 1. Busca os detalhes da ISSUE
+        ComicVineIssueDetailsDTO detalhesIssue = comicVineService.buscarDetalhesHq(dto.getApiDetailUrl());
         if (detalhesIssue == null || detalhesIssue.getVolume() == null || detalhesIssue.getVolume().getApiDetailUrl() == null) {
-            throw new ResourceNotFoundException("Não foi possível obter detalhes essenciais da HQ.");
+            throw new ResourceNotFoundException("Não foi possível obter detalhes essenciais da HQ a partir da URL fornecida.");
         }
 
-        // 3. Busca os detalhes do VOLUME para pegar a editora
+        // 2. Busca os detalhes do VOLUME para pegar a editora
         String volumeDetailUrl = detalhesIssue.getVolume().getApiDetailUrl();
         ComicVineVolumeDetailsDTO detalhesVolume = comicVineService.buscarDetalhesVolume(volumeDetailUrl);
 
-        // 4. Monta a entidade HQ com TODOS os dados
+        // 3. Monta a entidade HQ com todos os dados
         HQ hq = new HQ();
         String tituloCompleto = detalhesIssue.getVolume().getName();
         if (detalhesIssue.getIssueNumber() != null) {
@@ -78,8 +79,6 @@ public class HQService {
 
         if (detalhesIssue.getImage() != null) {
             hq.setCoverUrl(detalhesIssue.getImage().getOriginalUrl());
-        } else if (dadosBasicos.getImage() != null) {
-            hq.setCoverUrl(dadosBasicos.getImage().getSuperUrl());
         }
 
         try {
@@ -87,10 +86,11 @@ public class HQService {
                 hq.setDataLancamento(LocalDate.parse(detalhesIssue.getCoverDate()));
             }
         } catch (Exception e) {
+            System.err.println("Não foi possível parsear a data da HQ: " + detalhesIssue.getCoverDate());
             hq.setDataLancamento(null);
         }
 
-        // 5. Salva no nosso banco e retorna a entidade completa com o ID
+        // 4. Salva a entidade completa no banco e a retorna
         return repository.save(hq);
     }
 
