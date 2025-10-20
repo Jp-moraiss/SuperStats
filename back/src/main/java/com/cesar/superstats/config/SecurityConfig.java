@@ -4,12 +4,14 @@ import com.cesar.superstats.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -19,26 +21,29 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
-// Dentro da classe SecurityConfig.java
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // Habilita o CORS usando a configuração do seu WebConfig (essencial para o Next.js)
+                .cors(withDefaults())
+
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        // ESSENCIAL: Permite as requisições de verificação do CORS de qualquer origem.
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // Permite acesso público aos endpoints da API de autenticação E aos arquivos estáticos do site antigo.
                         .requestMatchers(
                                 "/auth/**",
-                                "/login.html",
-                                "/filmes.html",
-                                "/meus-personagens.html",
-                                "/graficos.html",
-                                "/hqs.html",
                                 "/",
+                                "/*.html", // Usa um wildcard para pegar todos os arquivos .html na raiz
                                 "/error",
-                                "/images/**",   // 👈 libera imagens
-                                "/css/**",      // 👈 se usar CSS
-                                "/js/**"        // 👈 se usar JS
+                                "/images/**",
+                                "/css/**",
+                                "/js/**"
                         ).permitAll()
+
+                        // Exige autenticação para todas as outras requisições.
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -47,5 +52,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 }

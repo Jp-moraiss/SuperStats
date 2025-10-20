@@ -13,7 +13,7 @@ export default function RootLayout({
   const pathname = usePathname();
 
   // rotas que não devem usar o layout global
-  const noLayoutRoutes = ["/login", "/register"];
+  const noLayoutRoutes = ["/auth/login", "/auth/register"];
   const isAuthPage = noLayoutRoutes.includes(pathname);
 
   const [username, setUsername] = useState<string | null>(null);
@@ -48,7 +48,7 @@ export default function RootLayout({
                 {username ? (
                   <span className="user-label">Olá, {username}!</span>
                 ) : (
-                  <a href="/login" className="animated-link">Login</a>
+                  <a href="/auth/login" className="animated-link">Login</a>
                 )}
               </nav>
             </header>
