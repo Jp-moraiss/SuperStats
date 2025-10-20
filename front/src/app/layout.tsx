@@ -43,7 +43,7 @@ export default function RootLayout({
                 <Link href="/" className="animated-link">Início</Link>
                 <Link href="/graficos" className="animated-link">Pesquisa</Link>
                 <Link href="/filmes" className="animated-link">Filmes</Link>
-                <Link href="/quadrinhos" className="animated-link">HQs</Link> 
+                <Link href="/hqs" className="animated-link">HQs</Link> 
 
                 {username ? (
                   <span className="user-label">Olá, {username}!</span>

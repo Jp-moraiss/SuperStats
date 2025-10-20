@@ -1,21 +1,18 @@
-// src/components/movies/AddMovieForm.tsx
 "use client";
-
 import { FaSearch } from 'react-icons/fa';
-import styles from './AddMovieForm.module.css';
+import styles from './AddHqForm.module.css';
 
-type AddMovieFormProps = {
+type AddHqFormProps = {
   query: string;
   onQueryChange: (query: string) => void;
   isLoading: boolean;
 };
 
-export default function AddMovieForm({ query, onQueryChange, isLoading }: AddMovieFormProps) {
+export default function AddHqForm({ query, onQueryChange, isLoading }: AddHqFormProps) {
   return (
     <div className={`card ${styles.addFormContainer}`}>
-      <h2 className="cardTitle">Adicionar Novo Filme</h2>
-      <p>Busque na TMDB pelo título original (em inglês)</p>
-      
+      <h2 className="cardTitle">Adicionar Nova HQ</h2>
+      <p>Busque na Comic Vine pelo título original (em inglês).</p>
       <div className={styles.searchWrapper}>
         <div className={styles.searchInputContainer}>
           <FaSearch className={styles.searchIcon} />
@@ -24,7 +21,7 @@ export default function AddMovieForm({ query, onQueryChange, isLoading }: AddMov
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
             className={styles.searchInput}
-            placeholder="Ex: Spider-Man, Batman..."
+            placeholder="Ex: The Killing Joke, Batman Year One..."
             autoComplete="off"
           />
           {isLoading && <div className={styles.spinner}></div>}

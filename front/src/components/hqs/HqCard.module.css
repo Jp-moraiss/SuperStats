@@ -1,0 +1,91 @@
+/* src/components/hqs/HqCard.module.css */
+
+.hqCard {
+  background: #fff;
+  border: 3px solid var(--color-secondary);
+  box-shadow: var(--shadow-light);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border-radius: 8px;
+}
+.hqCard:hover {
+  transform: translateY(-12px);
+  box-shadow: 16px 16px 0px var(--color-secondary-dark);
+}
+
+.coverContainer {
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 6px 6px 0 0;
+}
+
+.coverImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.hqCard:hover .coverImage {
+  transform: scale(1.1);
+}
+
+.cardInfo {
+  padding: 1rem;
+  border-top: 4px solid var(--color-secondary);
+}
+
+.volumeTitle {
+  font-family: 'Bangers', cursive;
+  font-size: 1.8rem;
+  line-height: 1.2;
+  margin: 0 0 0.25rem 0;
+  color: var(--text-primary-color);
+}
+
+.issueTitle {
+  font-family: "Comic Neue", cursive;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--text-primary-color);
+  margin: 0;
+}
+
+.publisher {
+  font-family: "Comic Neue", cursive;
+  font-size: 0.9rem;
+  color: var(--text-secondary-color);
+  margin-top: 0.25rem;
+}
+
+.readButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 2;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.hqCard:hover .readButton {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.readButton:hover {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  transform: scale(1.15);
+}

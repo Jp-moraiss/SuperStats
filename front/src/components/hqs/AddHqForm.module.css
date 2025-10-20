@@ -1,0 +1,55 @@
+/* src/components/hqs/AddHqForm.module.css */
+
+.addFormContainer {
+  width: 100%;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+.searchWrapper {
+  position: relative;
+}
+
+.searchInputContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 15px;
+  color: var(--text-secondary-color);
+  z-index: 2;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.8rem 1rem 0.8rem 2.5rem;
+  font-size: 1.2rem;
+  font-family: 'Comic Neue', cursive;
+  border: 3px solid var(--border-color);
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.searchInput:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px var(--color-primary-light);
+}
+
+.spinner {
+  position: absolute;
+  right: 15px;
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
