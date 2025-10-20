@@ -1,5 +1,7 @@
-import { FaTrash, FaYoutube, FaCheck, FaUndo } from 'react-icons/fa';
-import { Movie } from '../../app/filmes/page'; // Importando o tipo
+"use client";
+
+import { FaTrash, FaYoutube, FaEye, FaUndo, FaStar } from 'react-icons/fa'; // Ícone FaCheck removido, FaEye adicionado
+import { Movie } from '../../types/movies';
 import styles from './MovieCard.module.css';
 
 type MovieCardProps = {
@@ -19,33 +21,36 @@ export default function MovieCard({ movie, onDelete, onToggleWatched, onShowTrai
           <p className={styles.movieProducer}>{movie.produtora}</p>
         </div>
         <div className={styles.rating}>
-            {movie.avaliacaoTmdb.toFixed(1)} ⭐
+          <span>{movie.avaliacaoTmdb.toFixed(1)}</span>
+          <FaStar />
         </div>
-      </div>
-      <div className={styles.cardActions}>
-        <button 
+        
+        <div className={styles.cardActions}>
+          <button 
             className={`${styles.actionButton} ${styles.watchButton}`} 
             onClick={() => onToggleWatched(movie.id, movie.assistido)}
-            aria-label={movie.assistido ? "Marcar como não assistido" : "Marcar como assistido"}
-        >
-          {movie.assistido ? <FaUndo/> : <FaCheck/>}
-        </button>
-        {movie.trailerUrl && (
-          <button 
-            className={`${styles.actionButton} ${styles.trailerButton}`} 
-            onClick={() => onShowTrailer(movie.trailerUrl)}
-            aria-label="Assistir trailer"
+            // aria-label removido
           >
-            <FaYoutube />
+            {/* Ícone de olho adicionado */}
+            {movie.assistido ? <FaUndo/> : <FaEye/>}
           </button>
-        )}
-        <button 
+          {movie.trailerUrl && (
+            <button 
+              className={`${styles.actionButton} ${styles.trailerButton}`} 
+              onClick={() => onShowTrailer(movie.trailerUrl)}
+              // aria-label removido
+            >
+              <FaYoutube />
+            </button>
+          )}
+          <button 
             className={`${styles.actionButton} ${styles.deleteButton}`} 
             onClick={() => onDelete(movie.id)}
-            aria-label="Deletar filme"
-        >
-          <FaTrash />
-        </button>
+            // aria-label removido
+          >
+            <FaTrash />
+          </button>
+        </div>
       </div>
     </div>
   );

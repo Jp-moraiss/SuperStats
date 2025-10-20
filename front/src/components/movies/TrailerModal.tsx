@@ -1,3 +1,6 @@
+// src/components/movies/TrailerModal.tsx
+"use client"; // Mantenha esta diretiva, se não estiver já no arquivo
+
 import { FaTimes } from 'react-icons/fa';
 import styles from './TrailerModal.module.css';
 

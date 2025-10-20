@@ -23,7 +23,6 @@ export default function SearchResults({ results, onAddMovie, isLoading, searchQu
     return (
       <div className={styles.emptyState}>
         <h3>Nenhum resultado encontrado para "{searchQuery}"</h3>
-        <p>Tente buscar por um título diferente.</p>
       </div>
     );
   }
@@ -40,8 +39,6 @@ export default function SearchResults({ results, onAddMovie, isLoading, searchQu
           <div className={styles.spinner}></div>
         </div>
       )}
-      
-      <h3 className={styles.resultsTitle}>Resultados da Busca</h3>
       <div className={styles.resultsGrid}>
         {results.map((movie) => {
           const isAdding = addingMovieId === movie.id;

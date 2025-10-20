@@ -44,7 +44,6 @@
 .resultCard {
   background: #fff;
   border: 3px solid var(--border-color);
-  box-shadow: var(--shadow-light);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -58,7 +57,6 @@
 
 .resultCard:hover {
   transform: translateY(-8px);
-  box-shadow: var(--shadow-base);
 }
 
 .resultCard img {

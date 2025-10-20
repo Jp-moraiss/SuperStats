@@ -1,4 +1,3 @@
-// src/app/filmes/page.tsx
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import styles from './MoviesPage.module.css';
@@ -40,7 +39,6 @@ export default function MoviesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTrailer, setSelectedTrailer] = useState<string | null>(null);
   
-  // Estado da busca
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<TmdbMovie[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -100,7 +98,7 @@ export default function MoviesPage() {
         method: 'POST',
         body: JSON.stringify({ titulo: title })
       });
-      await loadInitialData();
+      await loadInitialData(); // Recarrega tudo após adicionar um novo para obter o ID correto do DB
       setSearchQuery('');
       setSearchResults([]);
     } catch (error) {
@@ -113,23 +111,48 @@ export default function MoviesPage() {
 
   const handleDeleteMovie = async (id: number) => {
     if (!confirm(`Tem certeza que deseja deletar o filme?`)) return;
+
+    const originalMovies = [...movies];
+    const originalWatchedMovies = [...watchedMovies];
+
+    setMovies(prev => prev.filter(m => m.id !== id));
+    setWatchedMovies(prev => prev.filter(m => m.id !== id));
+
     try {
       await fetchWithAuth(`${API_URL}/filmes/${id}`, { method: 'DELETE' });
-      setMovies(prev => prev.filter(m => m.id !== id));
-      setWatchedMovies(prev => prev.filter(m => m.id !== id));
     } catch (error) {
-      console.error("Erro ao deletar:", error);
+       console.error("Erro ao deletar:", error);
+       alert("Não foi possível deletar o filme. Tente novamente.");
+       setMovies(originalMovies);
+       setWatchedMovies(originalWatchedMovies);
     }
   };
   
   const handleToggleWatched = async (id: number, isWatched: boolean) => {
+    const originalMovies = [...movies];
+    const originalWatchedMovies = [...watchedMovies];
+
+    const updatedMovies = movies.map(movie => 
+      movie.id === id ? { ...movie, assistido: !isWatched } : movie
+    );
+    setMovies(updatedMovies);
+
+    if (!isWatched) {
+      const movieToAdd = movies.find(m => m.id === id);
+      if(movieToAdd) setWatchedMovies(prev => [...prev, {...movieToAdd, assistido: true}].sort((a,b) => a.titulo.localeCompare(b.titulo)));
+    } else {
+      setWatchedMovies(prev => prev.filter(m => m.id !== id));
+    }
+
     try {
       await fetchWithAuth(`${API_URL}/filmes/${id}/assistir`, { 
         method: isWatched ? 'DELETE' : 'POST' 
       });
-      await loadInitialData();
     } catch (error) {
       console.error("Erro ao marcar como assistido:", error);
+      alert("Não foi possível alterar o status do filme. Tente novamente.");
+      setMovies(originalMovies);
+      setWatchedMovies(originalWatchedMovies);
     }
   };
 
@@ -166,7 +189,16 @@ export default function MoviesPage() {
              <h2 className="cardTitle">Minha Lista de Assistidos</h2>
               <div className="tableContainer">
                 <table className="table">
-                  {/* ... conteúdo da tabela ... */}
+                  <thead><tr><th>Título</th><th>Produtora</th><th>Avaliação</th></tr></thead>
+                  <tbody>
+                    {watchedMovies.length > 0 ? watchedMovies.map(movie => (
+                      <tr key={movie.id}>
+                        <td>{movie.titulo}</td>
+                        <td>{movie.produtora}</td>
+                        <td>{movie.avaliacaoTmdb.toFixed(1)} ⭐</td>
+                      </tr>
+                    )) : <tr><td colSpan={3}>Nenhum filme assistido ainda.</td></tr>}
+                  </tbody>
                 </table>
               </div>
           </div>

@@ -1,49 +1,57 @@
+/* =======================================
+   Trailer Modal - VISUAL APRIMORADO
+   ======================================= */
+
 .modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.95); /* Fundo mais escuro */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn 0.3s ease-out forwards; /* Animação de entrada mais suave */
 }
 
 .modalContent {
   position: relative;
-  background: #000;
-  padding: 1rem;
+  background: var(--background-dark-color); /* Fundo escuro para o modal */
+  padding: 0.75rem; /* Padding interno reduzido */
   border: 4px solid var(--color-primary);
-  box-shadow: 0 0 30px var(--color-primary);
-  width: 90%;
-  max-width: 960px;
+  border-radius: 8px; /* Bordas arredondadas */
+  box-shadow: 0 0 40px var(--color-primary-dark), 0 0 15px rgba(255, 255, 255, 0.1); /* Sombra mais profunda e com brilho */
+  width: 95%; /* Um pouco mais largo em telas menores */
+  max-width: 1024px; /* Max-width ajustado para telas maiores */
+  transform: scale(0.9); /* Começa um pouco menor */
+  animation: scaleIn 0.3s ease-out forwards; /* Animação de escala na entrada */
 }
 
 .closeButton {
   position: absolute;
-  top: -20px;
-  right: -20px;
-  background: var(--color-primary);
+  right: -75px; /* Mais próximo do canto */
+  background: var(--color-error); /* Cor vermelha para fechar */
   color: #fff;
   border: 3px solid #fff;
-  width: 40px;
-  height: 40px;
+  width: 38px; /* Ligeiramente menor */
+  height: 38px;
   border-radius: 50%;
-  font-size: 1.5rem;
+  font-size: 1.3rem; /* Tamanho do ícone ajustado */
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   transition: all 0.2s ease;
+  z-index: 1001; /* Garante que o botão esteja acima de tudo */
 }
 
 .closeButton:hover {
-  transform: scale(1.1) rotate(90deg);
-  background: var(--color-accent);
-  color: var(--color-secondary);
+  transform: scale(1.1); /* Remove a rotação, só escala */
+  background: var(--color-error-dark); /* Cor mais escura no hover */
+  border-color: var(--color-accent); /* Borda em cor de destaque */
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); /* Pequena sombra no hover */
 }
 
 .videoWrapper {
@@ -51,6 +59,8 @@
   padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
   height: 0;
   overflow: hidden;
+  border-radius: 4px; /* Bordas arredondadas para o vídeo */
+  background-color: #000; /* Fundo preto para preencher enquanto carrega */
 }
 
 .videoWrapper iframe {
@@ -59,9 +69,17 @@
   left: 0;
   width: 100%;
   height: 100%;
+  border: none; /* Remove a borda padrão do iframe */
 }
 
+/* Animação para o overlay */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Animação para o conteúdo do modal */
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
