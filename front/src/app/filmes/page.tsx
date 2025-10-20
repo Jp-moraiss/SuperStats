@@ -1,13 +1,13 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styles from './MoviesPage.module.css';
 import { debounce } from 'lodash';
 
 // Componentes
 import MovieCard from "../../components/movies/MovieCard";
 import AddMovieForm from "../../components/movies/AddMovieForm";
-import TrailerModal from "../../components/movies/TrailerModal";
 import SearchResults from "../../components/movies/SearchResults";
+import TrailerModal from "../../components/movies/TrailerModal";
 
 // Tipos
 import { Movie, TmdbMovie } from "../../types/movies";
@@ -16,6 +16,15 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('jwtToken');
+
+  // Se não houver token, não tente fazer a requisição.
+  // Redireciona para o login e interrompe a execução.
+  if (!token) {
+    window.location.href = '/auth/login'; 
+    throw new Error('Nenhum token de autenticação encontrado. Redirecionando...');
+  }
+  // --- FIM DA CORREÇÃO ---
+  
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${token}`,
@@ -77,27 +86,30 @@ export default function MoviesPage() {
     }
   };
 
-  const fetchSuggestions = useCallback(
-    debounce(async (query: string) => {
-      if (query.length < 3) {
-        setSearchResults([]);
-        return;
-      }
-      setIsSearching(true);
-      try {
-        const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-        const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(query)}&language=pt-BR`;
-        const response = await fetch(url);
-        const data = await response.json();
-        setSearchResults(data.results ?? []);
-      } catch (error) {
-        console.error("Erro ao buscar sugestões no TMDB:", error);
-        setSearchResults([]);
-      } finally {
-        setIsSearching(false);
-      }
-    }, 500),
-    []
+  const fetchSuggestions = useMemo(
+    () =>
+      debounce(async (query: string) => {
+        if (query.length < 3) {
+          setSearchResults([]);
+          return;
+        }
+        setIsSearching(true);
+        try {
+          const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+          const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(
+            query
+          )}&language=pt-BR`;
+          const response = await fetch(url);
+          const data = await response.json();
+          setSearchResults(data.results ?? []);
+        } catch (error) {
+          console.error("Erro ao buscar sugestões no TMDB:", error);
+          setSearchResults([]);
+        } finally {
+          setIsSearching(false);
+        }
+      }, 500),
+    [] // As dependências estão vazias porque `setSearchResults` e `setIsSearching` são estáveis
   );
 
   useEffect(() => {

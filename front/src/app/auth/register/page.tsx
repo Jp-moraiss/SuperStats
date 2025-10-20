@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 // ALTERADO: Acessando a URL da API a partir das variáveis de ambiente
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -77,8 +78,14 @@ export default function RegisterPage() {
       setMessage({ type: "success", text: "Cadastro realizado com sucesso! Redirecionando para o login..." });
       setTimeout(() => router.push("/auth/login"), 2000);
 
-    } catch (err: any) {
-      setMessage({ type: "error", text: `Erro no cadastro: ${err.message}` });
+    } catch (err) { // Remove o ": any"
+          if (err instanceof Error) {
+            // Agora é seguro acessar err.message
+            setMessage({ type: "error", text: `Erro no cadastro: ${err.message}` });
+          } else {
+            // Um fallback para erros que não são objetos 'Error'
+            setMessage({ type: "error", text: "Ocorreu um erro desconhecido no cadastro." });
+          }
     } finally {
       setLoading(false); // NOVO: Desativa o loading em qualquer cenário (sucesso ou erro)
     }
@@ -90,7 +97,6 @@ export default function RegisterPage() {
       <div className="auth-container">
         <h2 className="auth-title">Cadastro de Novo Fã</h2>
         <form className="auth-form" onSubmit={handleSubmit}>
-          {/* ... todos os seus inputs e labels continuam aqui ... */}
           <label>Usuário*</label>
           <input type="text" name="username" value={form.username} onChange={handleChange} placeholder="Digite seu usuário" required />
           <div className="form-grid">
@@ -105,8 +111,8 @@ export default function RegisterPage() {
           </div>
           <label>Universo Favorito</label>
           <div className="universe-choice">
-            <button type="button" className={`universe-btn marvel ${form.univ_fav === "Marvel" ? "active" : ""}`} onClick={() => handleUniverseSelect("Marvel")}><img src="/marvel.png" alt="Marvel" /></button>
-            <button type="button" className={`universe-btn dc ${form.univ_fav === "DC" ? "active" : ""}`} onClick={() => handleUniverseSelect("DC")}><img src="/dc.png" alt="DC" /></button>
+            <button type="button" className={`universe-btn marvel ${form.univ_fav === "Marvel" ? "active" : ""}`} onClick={() => handleUniverseSelect("Marvel")}><Image src="/marvel.png" alt="Marvel" width={50} height={50} /></button>
+            <button type="button" className={`universe-btn dc ${form.univ_fav === "DC" ? "active" : ""}`} onClick={() => handleUniverseSelect("DC")}><Image src="/dc.png" alt="DC" width={50} height={50} /></button>
           </div>
           <div className="form-grid">
             <div><label>Tempo Geek (anos)</label><input type="number" name="tempoGeek" value={form.tempoGeek} onChange={handleChange} /></div>

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styles from './HqsPage.module.css';
 import { debounce } from 'lodash';
 
@@ -99,29 +99,30 @@ export default function HqsPage() {
     }
   };
 
-  const fetchExternalHqs = useCallback(
-    debounce(async (query: string) => {
-      if (query.length < 3) {
-        setSearchResults([]);
-        return;
-      }
-      setIsSearching(true);
-      try {
-        const res = await fetchWithAuth(`${API_URL}/hqs/buscar-externo?titulo=${encodeURIComponent(query)}`);
-        const results: ComicVineSearchResult[] = await res.json();
-        
-        // CORREÇÃO: Remove duplicatas da resposta da API antes de salvar no estado
-        const uniqueResults = Array.from(new Map(results.map(item => [item.apiDetailUrl, item])).values());
-        
-        setSearchResults(uniqueResults);
+  const fetchExternalHqs = useMemo(
+    () => 
+        debounce(async (query: string) => {
+        if (query.length < 3) {
+            setSearchResults([]);
+            return;
+        }
+        setIsSearching(true);
+        try {
+            // Assumindo que 'fetchWithAuth' e 'API_URL' são estáveis (definidos fora do componente ou memorizados)
+            const res = await fetchWithAuth(`${API_URL}/hqs/buscar-externo?titulo=${encodeURIComponent(query)}`);
+            const results: ComicVineSearchResult[] = await res.json();
+            
+            const uniqueResults = Array.from(new Map(results.map(item => [item.apiDetailUrl, item])).values());
+            
+            setSearchResults(uniqueResults);
 
-      } catch (error) {
-        console.error("Erro ao buscar HQs:", error);
-      } finally {
-        setIsSearching(false);
-      }
-    }, 800),
-    []
+        } catch (error) {
+            console.error("Erro ao buscar HQs:", error);
+        } finally {
+            setIsSearching(false);
+        }
+        }, 800),
+    [] // O array de dependências está vazio, veja a nota abaixo
   );
 
   useEffect(() => {

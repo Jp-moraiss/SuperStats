@@ -1,7 +1,23 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'image.tmdb.org',
+        port: '',
+        pathname: '/t/p/**', // Permite qualquer imagem do diretório /t/p/
+      },
+      // NOVO: Adicione este objeto para as imagens das HQs
+      {
+        protocol: 'https',
+        hostname: 'comicvine.gamespot.com',
+        port: '',
+        pathname: '/a/uploads/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

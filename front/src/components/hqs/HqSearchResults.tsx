@@ -2,6 +2,7 @@
 import { FaPlusCircle } from "react-icons/fa";
 import styles from './HqSearchResults.module.css';
 import { ComicVineSearchResult } from '../../types/hqs';
+import Image from 'next/image';
 
 type HqSearchResultsProps = {
   results: ComicVineSearchResult[];
@@ -15,7 +16,7 @@ export default function HqSearchResults({ results, onAddHq, isLoading, searchQue
   if (!isLoading && searchQuery.length < 3) return null;
 
   if (!isLoading && results.length === 0 && searchQuery.length >= 3) {
-    return <div className={styles.emptyState}><h3>Nenhum resultado para "{searchQuery}"</h3></div>;
+    return <div className={styles.emptyState}><h3>Nenhum resultado para {searchQuery}</h3></div>;
   }
   
   if (results.length === 0 && !isLoading) return null;
@@ -36,7 +37,7 @@ export default function HqSearchResults({ results, onAddHq, isLoading, searchQue
               onClick={isClickable && !isAdding ? () => onAddHq(item.apiDetailUrl) : undefined}
               title={!isClickable ? "Este é um volume. Apenas edições únicas podem ser adicionadas." : "Clique para adicionar ao seu catálogo"}
             >
-              <img src={item.imageUrl || '/placeholder.png'} alt={`Capa de ${item.title}`} />
+              <Image src={item.imageUrl || '/placeholder.png'} alt={`Capa de ${item.title}`} width={185} height={278} />
               <div className={styles.cardContent}>
                 {/* Melhoria na exibição para dar mais contexto */}
                 <p className={styles.hqVolumeName}>{item.volumeName}</p>

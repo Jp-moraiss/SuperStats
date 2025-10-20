@@ -2,10 +2,10 @@
 "use client";
 
 import { useState } from 'react';
-import { useSuperheroes, Character } from '../../components/useSuperheroes'; // Ajuste o caminho
-import CharacterSelectInput from '../../components/CharacterSelectInput';
-import ComparisonCard from '../../components/ComparisonCard';
-import ComparisonRadarChart from '../../components/ComparisonRadarChart';
+import { useSuperheroes, Character } from '../../../components/useSuperheroes'; // Ajuste o caminho
+import CharacterSelectInput from '../../../components/CharacterSelectInput';
+import ComparisonCard from '../../../components/ComparisonCard';
+import ComparisonRadarChart from '../../../components/ComparisonRadarChart';
 
 const CompararPage: React.FC = () => {
   const { allData, isLoading } = useSuperheroes(); // Pega todos os dados sem filtro

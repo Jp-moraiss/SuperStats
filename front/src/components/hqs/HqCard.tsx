@@ -2,6 +2,7 @@
 import { FaBookReader, FaBook } from 'react-icons/fa';
 import { Hq } from '../../types/hqs';
 import styles from './HqCard.module.css';
+import Image from 'next/image';
 
 type HqCardProps = {
   hq: Hq;
@@ -12,7 +13,7 @@ export default function HqCard({ hq, onToggleRead }: HqCardProps) {
   return (
     <div className={styles.hqCard}>
       <div className={styles.coverContainer}>
-        <img src={hq.coverUrl || '/placeholder.png'} alt={`Capa de ${hq.titulo}`} className={styles.coverImage} />
+        <Image src={hq.coverUrl || '/placeholder.png'} alt={`Capa de ${hq.titulo}`} className={styles.coverImage} width={150} height={225} />
         <button 
           className={styles.readButton} 
           onClick={() => onToggleRead(hq.id, hq.lido)}

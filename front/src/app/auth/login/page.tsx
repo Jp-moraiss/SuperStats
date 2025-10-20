@@ -58,8 +58,14 @@ export default function LoginPage() {
       localStorage.setItem("username", form.username);
       router.push("/");
 
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) { // Remove o ": any"
+      if (err instanceof Error) {
+        // Se for um objeto de Erro, acessamos a mensagem com segurança
+        setError(err.message);
+      } else {
+        // Caso contrário, definimos uma mensagem genérica
+        setError("Ocorreu um erro desconhecido");
+      }
     } finally {
       setLoading(false); // NOVO: Desativa o loading em qualquer cenário (sucesso ou erro)
     }

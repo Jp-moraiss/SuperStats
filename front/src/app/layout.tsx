@@ -59,37 +59,37 @@ export default function RootLayout({
                 <ul className="sidebar-list">
                   {/* Verificamos se o pathname é igual ao href e adicionamos a classe 'active' */}
                   <li>
-                    <Link href="/todos" className={pathname === "/todos" ? "active" : ""}>
+                    <Link href="/dashboard/todos" className={pathname === "/dashboard/todos" ? "active" : ""}>
                       Todos Personagens
                     </Link>
                   </li>
                   <li>
-                    <Link href="/herois" className={pathname === "/herois" ? "active" : ""}>
+                    <Link href="/dashboard/herois" className={pathname === "/dashboard/herois" ? "active" : ""}>
                       Heróis
                     </Link>
                   </li>
                   <li>
-                    <Link href="/viloes" className={pathname === "/viloes" ? "active" : ""}>
+                    <Link href="/dashboard/viloes" className={pathname === "/dashboard/viloes" ? "active" : ""}>
                       Vilões
                     </Link>
                   </li>
                   <li>
-                    <Link href="/antiherois" className={pathname === "/antiherois" ? "active" : ""}>
+                    <Link href="/dashboard/antiherois" className={pathname === "/dashboard/antiherois" ? "active" : ""}>
                       Anti-Heróis
                     </Link>
                   </li>
                   <li>
-                    <Link href="/dc" className={pathname === "/dc" ? "active" : ""}>
+                    <Link href="/dashboard/dc" className={pathname === "/dashboard/dc" ? "active" : ""}>
                       DC
                     </Link>
                   </li>
                   <li>
-                    <Link href="/marvel" className={pathname === "/marvel" ? "active" : ""}>
+                    <Link href="/dashboard/marvel" className={pathname === "/dashboard/marvel" ? "active" : ""}>
                       Marvel
                     </Link>
                   </li>
                   <li>
-                    <Link href="/comparar" className={pathname === "/comparar" ? "active" : ""}>
+                    <Link href="/dashboard/comparar" className={pathname === "/dashboard/comparar" ? "active" : ""}>
                       Comparar Stats
                     </Link>
                   </li>

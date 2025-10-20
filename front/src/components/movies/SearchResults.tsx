@@ -4,6 +4,7 @@
 import { FaFilm } from "react-icons/fa";
 import styles from './SearchResults.module.css';
 import { TmdbMovie } from "../../types/movies";
+import Image from "next/image";
 
 type SearchResultsProps = {
   results: TmdbMovie[];
@@ -22,7 +23,7 @@ export default function SearchResults({ results, onAddMovie, isLoading, searchQu
   if (!isLoading && results.length === 0 && searchQuery.length >= 3) {
     return (
       <div className={styles.emptyState}>
-        <h3>Nenhum resultado encontrado para "{searchQuery}"</h3>
+        <h3>Nenhum resultado encontrado para {searchQuery}</h3>
       </div>
     );
   }
@@ -44,9 +45,11 @@ export default function SearchResults({ results, onAddMovie, isLoading, searchQu
           const isAdding = addingMovieId === movie.id;
           return (
             <div key={movie.id} className={`${styles.resultCard} ${isAdding ? styles.disabled : ''}`}>
-              <img 
+              <Image 
                 src={movie.poster_path ? `https://image.tmdb.org/t/p/w185${movie.poster_path}` : '/placeholder.png'} 
                 alt={`Pôster de ${movie.title}`}
+                width={185}
+                height={278}
               />
               <div className={styles.cardContent}>
                 <p className={styles.movieTitle}>{movie.title}</p>
