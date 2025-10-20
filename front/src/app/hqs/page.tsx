@@ -16,17 +16,30 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('jwtToken');
-  const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers };
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+    ...options.headers,
+  };
+
   const response = await fetch(url, { ...options, headers });
 
   if (response.status === 401 || response.status === 403) {
     localStorage.removeItem('jwtToken');
     window.location.href = '/login';
-    throw new Error('Sessão expirada ou não autorizada. Redirecionando para login...'); 
+    throw new Error('Sessão expirada ou não autorizada. Redirecionando para login...');
   }
-  
+
   if (!response.ok) {
-    throw new Error(`Erro na requisição: ${response.statusText}`);
+    const errorText = await response.text();
+    // detecta se o backend mandou um erro de token expirado
+    if (errorText.includes("JWT expired")) {
+      localStorage.removeItem('jwtToken');
+      window.location.href = '/login';
+      throw new Error('Sessão expirada. Faça login novamente.');
+    }
+
+    throw new Error(`Erro na requisição: ${response.statusText || response.status} - ${errorText}`);
   }
 
   return response;
