@@ -12,7 +12,7 @@ export default function AddHqForm({ query, onQueryChange, isLoading }: AddHqForm
   return (
     <div className={`card ${styles.addFormContainer}`}>
       <h2 className="cardTitle">Adicionar Nova HQ</h2>
-      <p>Busque na Comic Vine pelo título original (em inglês).</p>
+    <p style={{ marginBottom: '5px' }}>Busque na Comic Vine pelo título original (em inglês).</p>
       <div className={styles.searchWrapper}>
         <div className={styles.searchInputContainer}>
           <FaSearch className={styles.searchIcon} />

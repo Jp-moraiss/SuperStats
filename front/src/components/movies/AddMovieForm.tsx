@@ -14,7 +14,7 @@ export default function AddMovieForm({ query, onQueryChange, isLoading }: AddMov
   return (
     <div className={`card ${styles.addFormContainer}`}>
       <h2 className="cardTitle">Adicionar Novo Filme</h2>
-      <p>Busque na TMDB pelo título original (em inglês)</p>
+      <p style={{ marginBottom: '5px' }}>Busque na TMDB pelo título original (em inglês)</p>
       
       <div className={styles.searchWrapper}>
         <div className={styles.searchInputContainer}>
