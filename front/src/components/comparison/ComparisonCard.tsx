@@ -1,10 +1,10 @@
-// app/components/ComparisonCard.tsx
+// src/components/comparison/ComparisonCard.tsx
 import React from 'react';
-import { Character } from './useSuperheroes'; // Ajuste o caminho
+import { Character } from '@/types';
 
 interface ComparisonCardProps {
   character: Character | null;
-  onClear: () => void; // Para remover o personagem do slot
+  onClear: () => void;
 }
 
 const ComparisonCard: React.FC<ComparisonCardProps> = ({ character, onClear }) => {
@@ -17,10 +17,8 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({ character, onClear }) =
     );
   }
 
-  // Define a classe de badge com base no alinhamento
   const alignmentClass = character.Alignment?.toLowerCase() || 'neutral';
 
-  // Array de poderes para renderização
   const powers = [
     { label: 'Inteligência', value: character.Intelligence },
     { label: 'Força', value: character.Strength },
@@ -30,7 +28,6 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({ character, onClear }) =
     { label: 'Combate', value: character.Combat },
   ];
 
-  // Determina o valor máximo para a barra de progresso (poderes vão de 0 a 100)
   const maxPowerValue = 100;
 
   return (
@@ -41,7 +38,7 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({ character, onClear }) =
           <p className="heroPublisher">{character.Publisher}</p>
         </div>
         <button className="clear-button" onClick={onClear} aria-label="Remover personagem">
-            &times; {/* Ícone de fechar */}
+          &times;
         </button>
       </div>
 
@@ -56,8 +53,9 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({ character, onClear }) =
         
         <h4 className="cardTitle" style={{marginTop: '1.5rem', marginBottom: '1rem', borderBottom: '2px dashed var(--border-color)', paddingBottom: '0.5rem'}}>Estatísticas de Poder</h4>
         <div className="heroStatsGrid">
-          {powers.map((power, index) => (
-            <div key={index} className="statBarWrapper">
+          {powers.map((power) => (
+            // ✅ CORREÇÃO: Usando uma chave mais estável (power.label)
+            <div key={power.label} className="statBarWrapper">
               <span className="statBarLabel">{power.label}</span>
               <div className="statBarContainer">
                 <div 

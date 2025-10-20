@@ -1,18 +1,28 @@
+// src/components/charts/PowerDistributionChart.tsx
+"use client";
+
 import { useMemo } from 'react';
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, Legend, Bar, CartesianGrid } from 'recharts';
-import styles from './Dashboard.module.css';
+import { Character } from '@/types'; // ✅ 1. Importa o tipo correto
 
-const PowerDistributionChart = ({ data }: { data: any[] }) => {
+interface PowerDistributionChartProps {
+    data: Character[];
+}
+
+type PowerAttributes = 'Intelligence' | 'Strength' | 'Speed' | 'Durability' | 'Power' | 'Combat';
+
+const PowerDistributionChart = ({ data }: PowerDistributionChartProps) => {
   const chartData = useMemo(() => {
-    const attributes = ['Intelligence', 'Strength', 'Speed', 'Durability', 'Power', 'Combat'];
-    const buckets = { "0-20": {}, "21-40": {}, "41-60": {}, "61-80": {}, "81-100": {} };
+    const attributes: PowerAttributes[] = ['Intelligence', 'Strength', 'Speed', 'Durability', 'Power', 'Combat'];
     
-    // Inicializa os contadores para cada atributo em cada balde
-    Object.keys(buckets).forEach(bucket => {
-        attributes.forEach(attr => {
-            buckets[bucket][attr] = 0;
-        });
-    });
+    // ✅ 2. Tipagem forte para os buckets
+    const buckets: Record<string, Record<PowerAttributes, number>> = { 
+      "0-20": { Intelligence: 0, Strength: 0, Speed: 0, Durability: 0, Power: 0, Combat: 0 },
+      "21-40": { Intelligence: 0, Strength: 0, Speed: 0, Durability: 0, Power: 0, Combat: 0 },
+      "41-60": { Intelligence: 0, Strength: 0, Speed: 0, Durability: 0, Power: 0, Combat: 0 },
+      "61-80": { Intelligence: 0, Strength: 0, Speed: 0, Durability: 0, Power: 0, Combat: 0 },
+      "81-100": { Intelligence: 0, Strength: 0, Speed: 0, Durability: 0, Power: 0, Combat: 0 },
+    };
 
     data.forEach(char => {
       attributes.forEach(attr => {
@@ -32,12 +42,10 @@ const PowerDistributionChart = ({ data }: { data: any[] }) => {
     <div className="card">
       <h3 className="cardTitle">Distribuição de Atributos de Poder</h3>
       <ResponsiveContainer width="100%" height={400}>
-        {/* Adicionamos a propriedade "margin" aqui */}
         <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 25 }}>
           <CartesianGrid strokeDasharray="3 3" />
-          {/* Adicionamos um "offset" para mover o rótulo para baixo */}
-          <XAxis dataKey="name" label={{ value: 'Nível de Poder', position: 'insideBottom', offset: -35 }}/>
-          <YAxis label={{ value: 'Nº de Personagens', angle: -90, position: 'insideLeft' }}/>
+          <XAxis dataKey="name" label={{ value: 'Nível de Poder', position: 'insideBottom', offset: -10 }}/>
+          <YAxis label={{ value: 'Nº de Personagens', angle: -90, position: 'insideLeft' }} allowDecimals={false}/>
           <Tooltip />
           <Legend />
           <Bar dataKey="Intelligence" fill="#8884d8" />

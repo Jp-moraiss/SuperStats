@@ -2,8 +2,9 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
-import SpeechBubble from "../components/SpeechBubble";
-import HeroVideoOverlay from "../components/HeroVideoOverlay";
+import SpeechBubble from "../components/ui/SpeechBubble";
+import HeroVideoOverlay from "../components/ui/HeroVideoOverlay";
+import Image from "next/image";
 
 export default function HomePage() {
   const spidermanAudio = useRef<HTMLAudioElement>(null);
@@ -55,7 +56,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <SpeechBubble type="electric" style={{ padding: "12% 18% 36% 0%" }}>
+        <SpeechBubble type="electric">
           <span>WOW!</span>
         </SpeechBubble>
       </section>
@@ -70,23 +71,23 @@ export default function HomePage() {
       <div className="hero-gallery">
         <div className="hero-grid">
           <div className="hero-card batman" onClick={() => playTheme("batman")}>
-            <img src="/batman.png" alt="Batman" />
+            <Image src="/batman.png" alt="Batman" width={200} height={200} />
             <span className="hero-label">Batman</span>
           </div>
 
           <div className="hero-card spiderman" onClick={() => playTheme("spiderman")}>
-            <img src="/spiderman.png" alt="Homem-Aranha" />
+            <Image src="/spiderman.png" alt="Homem-Aranha" width={200} height={200} />
             <span className="hero-label">Homem-Aranha</span>
           </div>
 
           <div className="hero-card superman" onClick={() => playTheme("superman")}>
-            <img src="/superman.png" alt="Superman" />
+            <Image src="/superman.png" alt="Superman" width={200} height={200} />
             <span className="hero-label">Superman</span>
           </div>
         </div>
 
         <div className="hero-horizontal avengers" onClick={() => playTheme("avengers")}>
-          <img src="/avengers.png" alt="Vingadores" />
+          <Image src="/avengers.png" alt="Vingadores" width={225} height={250} />
           <span className="hero-label">Os Vingadores</span>
         </div>
 

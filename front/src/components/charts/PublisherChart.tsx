@@ -1,9 +1,17 @@
+// src/components/charts/PublisherChart.tsx
+"use client";
+
 import { useMemo } from 'react';
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, Legend, Bar } from 'recharts';
+import { Character } from '@/types'; // ✅ 1. Importa o tipo correto
 
-const PublisherChart = ({ data }: { data: any[] }) => {
+interface PublisherChartProps {
+    data: Character[];
+}
+
+const PublisherChart = ({ data }: PublisherChartProps) => {
   const publisherData = useMemo(() => {
-    const counts = data.reduce((acc, curr) => {
+    const counts = data.reduce((acc: Record<string, number>, curr) => {
       const pub = curr.Publisher || 'Outros';
       if (pub && pub !== '-') acc[pub] = (acc[pub] || 0) + 1;
       return acc;
@@ -19,7 +27,7 @@ const PublisherChart = ({ data }: { data: any[] }) => {
     <div className="card">
       <h3 className="cardTitle">Top 5 Editoras</h3>
       <ResponsiveContainer width="100%" height={250}>
-        <BarChart data={publisherData} layout="vertical">
+        <BarChart data={publisherData} layout="vertical" margin={{ left: 10, right: 30 }}>
           <XAxis type="number" hide />
           <YAxis type="category" dataKey="name" width={80} tickLine={false} axisLine={false} />
           <Tooltip />
@@ -30,4 +38,5 @@ const PublisherChart = ({ data }: { data: any[] }) => {
     </div>
   );
 };
+
 export default PublisherChart;

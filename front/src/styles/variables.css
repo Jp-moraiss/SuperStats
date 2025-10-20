@@ -1,0 +1,20 @@
+/* ===========================
+🎨 VARIÁVEIS GLOBAIS
+=========================== */
+:root {
+  --color-primary: #E30000;
+  --color-secondary: #121212;
+  --color-accent: #FFD700;
+  --accent-color-1: #3b82f6; /* Azul */
+  --accent-color-2: #ef4444; /* Vermelho */
+  --accent-color-3: #10b981; /* Verde */
+  --card-background-color: #ffffff;
+  --text-primary-color: #1e293b;
+  --text-secondary-color: #64748b;
+  --border-color: #e2e8f0;
+  --color-background: #FAFAFA;
+  --color-surface: #FFFFFF;
+  --shadow-strong: 8px 8px 0 var(--color-secondary);
+  --shadow-light: 4px 4px 0 var(--color-secondary);
+  --transition-base: all 0.25s ease;
+}

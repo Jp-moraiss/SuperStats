@@ -1,14 +1,8 @@
-// app/components/CharacterSelectInput.tsx
-import React, { useState, useMemo, useEffect } from 'react';
-// Make sure the Character type is imported correctly
-// import { Character } from './useSuperheroes'; 
+// src/components/comparison/CharacterSelectInput.tsx
+"use client";
 
-// Example Character type if not defined elsewhere
-interface Character {
-  id?: number | string; // It's good practice to expect an ID
-  Name: string;
-  Publisher: string;
-}
+import React, { useState, useMemo, useEffect } from 'react';
+import { Character } from '@/types';
 
 interface CharacterSelectInputProps {
   label: string;
@@ -23,8 +17,19 @@ const CharacterSelectInput: React.FC<CharacterSelectInputProps> = ({
   onSelect,
   selectedCharacter,
 }) => {
-  const [searchTerm, setSearchTerm] = useState(selectedCharacter?.Name || '');
+  const [searchTerm, setSearchTerm] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
+
+  // ✅ CORREÇÃO 1: O useEffect agora SÓ depende da prop externa.
+  // Ele apenas atualiza o texto do input se o personagem for limpo de fora (pelo "X" no card).
+  useEffect(() => {
+    if (selectedCharacter) {
+      setSearchTerm(selectedCharacter.Name);
+    } else {
+      // Se o personagem for limpo externamente, limpa o texto do input.
+      setSearchTerm('');
+    }
+  }, [selectedCharacter]);
 
   const suggestions = useMemo(() => {
     if (searchTerm.length < 2) return [];
@@ -36,46 +41,41 @@ const CharacterSelectInput: React.FC<CharacterSelectInputProps> = ({
   }, [searchTerm, allCharacters]);
 
   const handleSelectCharacter = (char: Character) => {
-    setSearchTerm(char.Name);
-    onSelect(char);
+    onSelect(char); // Informa ao pai a nova seleção
     setShowSuggestions(false);
+    setSearchTerm(char.Name); // Atualiza o input com o nome completo
   };
 
+  // ✅ CORREÇÃO 2: A lógica de digitação foi simplificada e corrigida.
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
-    if (value.length >= 2) {
-      setShowSuggestions(true);
-    } else {
-      setShowSuggestions(false);
+    setShowSuggestions(value.length >= 2);
+
+    // Se o texto digitado for diferente do personagem selecionado,
+    // significa que o usuário está buscando um novo personagem.
+    // Portanto, limpamos a seleção atual no componente pai.
+    if (selectedCharacter && value !== selectedCharacter.Name) {
       onSelect(null);
     }
   };
 
-  useEffect(() => {
-    if (selectedCharacter && selectedCharacter.Name !== searchTerm) {
-      setSearchTerm(selectedCharacter.Name);
-    } else if (!selectedCharacter && searchTerm) {
-        setSearchTerm('');
-    }
-  }, [selectedCharacter]);
-
   return (
     <div className="character-select-input-container">
+      <label>{label}</label>
       <input
         type="text"
-        placeholder={`Digite o nome do personagem ${label}...`}
+        placeholder="Digite o nome do personagem..."
         className="searchInput"
         value={searchTerm}
         onChange={handleChange}
         onFocus={() => searchTerm.length >= 2 && setShowSuggestions(true)}
-        onBlur={() => setTimeout(() => setShowSuggestions(false), 100)}
+        onBlur={() => setTimeout(() => setShowSuggestions(false), 200)} // Leve delay para permitir o clique na sugestão
       />
       {showSuggestions && suggestions.length > 0 && (
         <ul className="suggestions-list">
-          {suggestions.map((char, index) => (
-            // FIX: Added the map 'index' to guarantee a unique key
-            <li key={`${char.Name}-${char.Publisher}-${index}`} onClick={() => handleSelectCharacter(char)}>
+          {suggestions.map((char) => ( 
+            <li key={char.id} onClick={() => handleSelectCharacter(char)}>
               {char.Name} ({char.Publisher})
             </li>
           ))}

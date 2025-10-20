@@ -1,13 +1,27 @@
-import { useState, useMemo } from 'react'; 
+// src/components/dashboard/CharacterTable.tsx
+"use client";
 
-const CharacterTable = ({ data, onCharacterSelect }: { data: any[], onCharacterSelect: (char: any) => void }) => {
+import { useState, useMemo } from 'react'; 
+import { Character } from '@/types'; // ✅ 1. Importa o tipo central 'Character'
+
+// ✅ 2. Define uma interface clara para as props do componente
+interface CharacterTableProps {
+  data: Character[];
+  onCharacterSelect: (char: Character) => void;
+}
+
+// ✅ 3. Usa a nova interface de props
+const CharacterTable = ({ data, onCharacterSelect }: CharacterTableProps) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredData = useMemo(() => {
-    if (!searchTerm) return data.slice(0, 50);
-    return data.filter(item => 
-      item.Name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const lowercasedSearch = searchTerm.toLowerCase();
+    const filtered = searchTerm
+      ? data.filter(item => item.Name.toLowerCase().includes(lowercasedSearch))
+      : data;
+    
+    // Mostra todos os resultados da busca ou limita a 50 se o campo estiver vazio
+    return searchTerm ? filtered : filtered.slice(0, 50);
   }, [data, searchTerm]);
 
   return (
@@ -31,9 +45,9 @@ const CharacterTable = ({ data, onCharacterSelect }: { data: any[], onCharacterS
             </tr>
           </thead>
           <tbody>
-            {/* A correção está na linha abaixo */}
-            {filteredData.map((item, index) => (
-              <tr key={`${item.Name}-${index}`} onClick={() => onCharacterSelect(item)}>
+            {filteredData.map((item) => (
+              // ✅ 4. Usa o 'item.id' único como chave ('key')
+              <tr key={item.id} onClick={() => onCharacterSelect(item)}>
                 <td>{item.Name}</td>
                 <td>{item.Publisher}</td>
                 <td>{item.Alignment}</td>

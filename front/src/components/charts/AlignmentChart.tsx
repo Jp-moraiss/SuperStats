@@ -1,15 +1,28 @@
+// src/components/charts/AlignmentChart.tsx
+"use client";
+
 import { useMemo } from 'react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Legend, Tooltip } from 'recharts';
+import { Character } from '@/types'; // ✅ 1. Importa o tipo correto
 
-const AlignmentChart = ({ data }: { data: any[] }) => {
-  const COLORS = { good: '#3b82f6', bad: '#ef4444', neutral: '#64748b' };
+// ✅ 2. Define a interface para as props
+interface AlignmentChartProps {
+  data: Character[];
+}
+
+// ✅ 3. Usa a nova interface de props
+const AlignmentChart = ({ data }: AlignmentChartProps) => {
+  // ✅ 4. Tipagem explícita para o objeto de cores
+  const COLORS: { [key: string]: string } = { good: '#3b82f6', bad: '#ef4444', neutral: '#64748b' };
 
   const alignmentData = useMemo(() => {
-    const counts = data.reduce((acc, curr) => {
+    // ✅ 5. Tipagem para o acumulador do reduce
+    const counts = data.reduce((acc: { [key: string]: number }, curr) => {
       const align = curr.Alignment || 'neutral';
       if (align !== '-') acc[align] = (acc[align] || 0) + 1;
       return acc;
     }, {});
+    
     return Object.entries(counts).map(([name, value]) => ({ name, value }));
   }, [data]);
 
@@ -19,8 +32,9 @@ const AlignmentChart = ({ data }: { data: any[] }) => {
       <ResponsiveContainer width="100%" height={250}>
         <PieChart>
           <Pie data={alignmentData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-            {alignmentData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[entry.name]} />
+            {alignmentData.map((entry) => (
+              // ✅ 6. Chave mais estável usando o nome da entrada
+              <Cell key={`cell-${entry.name}`} fill={COLORS[entry.name]} />
             ))}
           </Pie>
           <Tooltip />

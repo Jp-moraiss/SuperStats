@@ -8,11 +8,12 @@ type BubbleType = "speech" | "whisper" | "electric";
 interface SpeechBubbleProps {
   type: BubbleType;
   children: ReactNode;
+  style?: React.CSSProperties;
 }
 
-export default function SpeechBubble({ type, children }: SpeechBubbleProps) {
+export default function SpeechBubble({ type, children, style }: SpeechBubbleProps) {
   return (
-    <blockquote className={`${styles.bubble} ${styles[type]}`}>
+    <blockquote className={`${styles.bubble} ${styles[type]}`} style={style}>
       {children}
     </blockquote>
   );

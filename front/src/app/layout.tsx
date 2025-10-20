@@ -1,6 +1,6 @@
 "use client";
 
-import "./globals.css";
+import "../styles/globals.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react"; 
@@ -72,12 +72,7 @@ export default function RootLayout({
                     <Link href="/dashboard/viloes" className={pathname === "/dashboard/viloes" ? "active" : ""}>
                       Vilões
                     </Link>
-                  </li>
-                  <li>
-                    <Link href="/dashboard/antiherois" className={pathname === "/dashboard/antiherois" ? "active" : ""}>
-                      Anti-Heróis
-                    </Link>
-                  </li>
+                  </li> 
                   <li>
                     <Link href="/dashboard/dc" className={pathname === "/dashboard/dc" ? "active" : ""}>
                       DC
@@ -89,7 +84,7 @@ export default function RootLayout({
                     </Link>
                   </li>
                   <li>
-                    <Link href="/dashboard/comparar" className={pathname === "/dashboard/comparar" ? "active" : ""}>
+                    <Link href="/comparar" className={pathname === "/comparar" ? "active" : ""}>
                       Comparar Stats
                     </Link>
                   </li>
