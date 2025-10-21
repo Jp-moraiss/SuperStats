@@ -2,7 +2,8 @@
 
 import "../styles/globals.css";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname } from "next/navigation"; // NOVO: Importa o useRouter
+import router from "next/router";
 import { useEffect, useState } from "react"; 
 
 export default function RootLayout({
@@ -17,6 +18,19 @@ export default function RootLayout({
   const isAuthPage = noLayoutRoutes.includes(pathname);
 
   const [username, setUsername] = useState<string | null>(null);
+
+    // NOVO: Função de Logout
+  const handleLogout = () => {
+    // Limpa os dados do localStorage
+    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("username");
+
+    // Atualiza o estado para refletir o logout na UI
+    setUsername(null);
+
+    // Redireciona o usuário para a página de login
+    router.push("/auth/login");
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
@@ -46,9 +60,14 @@ export default function RootLayout({
                 <Link href="/hqs" className="animated-link">HQs</Link> 
 
                 {username ? (
-                  <span className="user-label">Olá, {username}!</span>
+                  <div className="user-session">
+                    <span className="user-greeting">{username}!</span>
+                    <button onClick={handleLogout} className="logout-btn">
+                      Sair
+                    </button>
+                  </div>
                 ) : (
-                  <a href="/auth/login" className="animated-link">Login</a>
+                  <Link href="/auth/login" className="login-btn">Login</Link>
                 )}
               </nav>
             </header>
