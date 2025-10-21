@@ -70,64 +70,121 @@ a {
 }
 
 /* ================================
-💥 NAV LINKS
+💥 NAV LINKS - ESTILO PREMIUM REFINADO
 ================================ */
 .nav {
   display: flex;
-  gap: 1.5rem; /* Espaçamento entre os links */
+  flex-wrap: wrap;
   align-items: center;
+  gap: 0.8rem;
 }
 
-.nav a {
+/* --- LINKS E BOTÕES DE NAVEGAÇÃO --- */
+.nav a,
+.nav button {
   font-family: "Permanent Marker", cursive;
-  font-size: 1.2rem; /* Um pouco maior para mais impacto */
-  color: var(--color-surface);
-  position: relative;
-  padding: 0.25rem 0.5rem; /* Adiciona um pouco de respiro */
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  background-color: #fff;
   
-  /* Sombra sutil para destacar do fundo, combinando com o logo */
-  text-shadow: 2px 2px 0px var(--color-secondary);
-
-  /* Transição com um "bounce" para um efeito mais cartunesco */
-  transition:
-    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-    color 0.2s ease-out,
-    text-shadow 0.2s ease-out;
+  padding: 0.5rem 1rem;
+  border: 3px solid var(--color-secondary);
+  box-shadow: 3px 3px 0 var(--color-secondary);
+  
+  transition: 
+    transform 0.15s ease-out,
+    box-shadow 0.15s ease-out,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    filter 0.3s ease;
 }
 
-/* Linha de sublinhado animada */
-.nav a::after {
-  content: '';
-  position: absolute;
-  bottom: -2px; /* Posição abaixo do texto */
-  left: 0;
-  width: 100%;
-  height: 4px; /* Linha mais grossa e impactante */
-  background-color: var(--color-accent);
-
-  /* Estado inicial: escondido (escalado para 0) */
-  transform: scaleX(0);
-  transform-origin: left; /* Animação da esquerda para a direita */
-  transition: transform 0.3s ease-in-out;
-}
-
-/* Efeito de hover e foco para acessibilidade */
 .nav a:hover,
-.nav a:focus-visible { 
-  color: var(--color-accent); /* Muda para a cor de destaque */
-  
-  /* Efeito de pulo, rotação e escala para um "POW!" */
-  transform: translateY(-3px) rotate(-2deg) scale(1.1);
-  
-  /* Sombra mais forte no hover para um maior "pop" */
-  text-shadow: 3px 3px 0px var(--color-secondary);
+.nav button:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--color-secondary);
+  filter: brightness(1.05);
 }
 
-/* Ativa o sublinhado no hover e foco */
-.nav a:hover::after,
-.nav a:focus-visible::after {
-  transform: scaleX(1);
+.nav a:active,
+.nav button:active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 var(--color-secondary);
+  transition: transform 0.1s, box-shadow 0.1s;
 }
+
+.nav a:focus-visible,
+.nav button:focus-visible {
+  outline: 3px dashed var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* --- ESTADO ATIVO --- */
+.nav a.active {
+  background-color: var(--color-accent);
+  color: var(--color-secondary);
+  box-shadow: inset 0 0 0 3px var(--color-secondary);
+}
+
+/* ================================
+💬 PAINEL DO USUÁRIO
+================================ */
+.user-session {
+  display: flex;
+  border-radius: 15px;
+  align-items: center;
+  gap: 0.8rem; 
+  background-color: var(--color-accent);
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--color-secondary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.user-greeting {
+  font-family: "Permanent Marker", cursive; 
+  font-size: 1.5rem;
+  color: #000;
+  letter-spacing: 0.5px;
+  text-shadow: none;
+}
+
+/* --- BOTÃO DE SAIR --- */
+.logout-btn {
+  background-color: var(--color-primary);
+  color: #fff;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  padding: 0.4rem 0.8rem;
+  border: 2px solid var(--color-secondary);
+  box-shadow: 2px 2px 0 var(--color-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: var(--color-secondary);
+  color: #fff;
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0 var(--color-primary);
+}
+
+.login-btn {
+  background-color: var(--color-accent);
+  color: #fff;
+  border: 2px solid var(--color-secondary);
+  padding: 0.4rem 0.8rem;
+  box-shadow: 2px 2px 0 var(--color-secondary);
+  transition: all 0.2s ease;
+}
+
+.login-btn:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-accent);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--color-accent);
+}
+
 
 /* ================================
 💥 Content

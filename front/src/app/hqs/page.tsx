@@ -26,7 +26,7 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
 
   if (response.status === 401 || response.status === 403) {
     localStorage.removeItem('jwtToken');
-    window.location.href = '/login';
+    window.location.href = '/auth/login';
     throw new Error('Sessão expirada ou não autorizada. Redirecionando para login...');
   }
 
@@ -35,7 +35,7 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
     // detecta se o backend mandou um erro de token expirado
     if (errorText.includes("JWT expired")) {
       localStorage.removeItem('jwtToken');
-      window.location.href = '/login';
+      window.location.href = '/auth/login';
       throw new Error('Sessão expirada. Faça login novamente.');
     }
 

@@ -132,7 +132,7 @@ export default function RegisterPage() {
         )}
 
         <p className="auth-link">
-          Já tem conta? <a href="/login">Faça o login</a>
+          Já tem conta? <a href="/auth/login">Faça o login</a>
         </p>
       </div>
     </>
