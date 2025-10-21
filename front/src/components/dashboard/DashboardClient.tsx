@@ -18,9 +18,11 @@ import PowerDistributionChart from '../charts/PowerDistributionChart';
 type DashboardClientProps = {
   initialData: Character[];
   filter: DashboardFilter;
+  title: string;
+  subtitle: string;
 };
 
-export default function DashboardClient({ initialData, filter }: DashboardClientProps) {
+export default function DashboardClient({ initialData, filter, title, subtitle }: DashboardClientProps) {
   const [data] = useState<Character[]>(initialData);
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
 
@@ -38,6 +40,10 @@ export default function DashboardClient({ initialData, filter }: DashboardClient
   
   return (
     <div className="dashboardContainer">
+        {/* Aqui você pode adicionar os títulos */}
+        <h2 style={{ fontFamily: '"Bangers", cursive', fontSize: '3rem', color: 'var(--color-primary)' }}>{title}</h2>
+        <p style={{ marginTop: '-1rem', fontSize: '1.2rem' }}>{subtitle}</p>
+
       <div className="statsGrid">
         <StatCard title="Total de Personagens" value={summaryStats?.total} />
         {showPublisherComponents && (
