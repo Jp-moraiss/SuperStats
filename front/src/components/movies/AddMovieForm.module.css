@@ -24,16 +24,18 @@
 .searchInput {
   width: 100%;
   padding: 0.8rem 1rem 0.8rem 2.5rem;
-  font-size: 1.2rem;
-  font-family: 'Comic Neue', cursive;
-  border: 3px solid var(--border-color);
+  font-size: 1.1rem;
+  font-family: 'Roboto', sans-serif;
   border-radius: 8px;
+  border: 3px solid var(--border-color);
+  box-shadow: var(--shadow-light);
   transition: all 0.2s ease-in-out;
 }
 
 .searchInput:focus {
+  outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 4px var(--color-primary-light);
+  box-shadow: 0 0 0 4px rgba(255, 87, 87, 0.4); /* Adapte a cor primária */
 }
 
 .spinner {

@@ -14,16 +14,14 @@ import { Movie, TmdbMovie } from "../../types/movies";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
+// A função fetchWithAuth permanece a mesma...
 const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('jwtToken');
 
-  // Se não houver token, não tente fazer a requisição.
-  // Redireciona para o login e interrompe a execução.
   if (!token) {
-    window.location.href = '/auth/login'; 
+    window.location.href = '/auth/login';
     throw new Error('Nenhum token de autenticação encontrado. Redirecionando...');
   }
-  // --- FIM DA CORREÇÃO ---
   
   const headers = {
     'Content-Type': 'application/json',
@@ -41,18 +39,17 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
 
   if (!response.ok) {
     const errorText = await response.text();
-    // detecta se o backend mandou um erro de token expirado
     if (errorText.includes("JWT expired")) {
       localStorage.removeItem('jwtToken');
       window.location.href = '/auth/login';
       throw new Error('Sessão expirada. Faça login novamente.');
     }
-
     throw new Error(`Erro na requisição: ${response.statusText || response.status} - ${errorText}`);
   }
 
   return response;
 };
+
 
 export default function MoviesPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -65,6 +62,9 @@ export default function MoviesPage() {
   const [searchResults, setSearchResults] = useState<TmdbMovie[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [addingMovieId, setAddingMovieId] = useState<number | null>(null);
+
+  // <-- NOVO: Estado para o filtro do catálogo
+  const [filterQuery, setFilterQuery] = useState('');
 
   useEffect(() => {
     loadInitialData();
@@ -85,7 +85,8 @@ export default function MoviesPage() {
       setIsLoading(false);
     }
   };
-
+  
+  // A lógica de fetchSuggestions, handleAddMovie, handleDeleteMovie, etc., permanece a mesma...
   const fetchSuggestions = useMemo(
     () =>
       debounce(async (query: string) => {
@@ -109,7 +110,7 @@ export default function MoviesPage() {
           setIsSearching(false);
         }
       }, 500),
-    [] // As dependências estão vazias porque `setSearchResults` e `setIsSearching` são estáveis
+    []
   );
 
   useEffect(() => {
@@ -123,7 +124,7 @@ export default function MoviesPage() {
         method: 'POST',
         body: JSON.stringify({ titulo: title })
       });
-      await loadInitialData(); // Recarrega tudo após adicionar um novo para obter o ID correto do DB
+      await loadInitialData();
       setSearchQuery('');
       setSearchResults([]);
     } catch (error) {
@@ -188,6 +189,20 @@ export default function MoviesPage() {
     }
   };
 
+  // <-- NOVO: Lógica para filtrar os filmes do catálogo
+  const filteredMovies = useMemo(() => {
+    if (!filterQuery) {
+      return movies;
+    }
+    const lowercasedFilter = filterQuery.toLowerCase();
+    return movies.filter(movie => 
+      movie.titulo.toLowerCase().includes(lowercasedFilter) ||
+      movie.produtora.toLowerCase().includes(lowercasedFilter) ||
+      movie.diretor.toLowerCase().includes(lowercasedFilter)
+    );
+  }, [movies, filterQuery]);
+
+
   const renderContent = () => {
     if (isLoading) {
       return <div className={styles.loadingSpinner}></div>;
@@ -196,37 +211,54 @@ export default function MoviesPage() {
     switch (activeTab) {
       case 'catalogo':
         return (
-          <div className={styles.moviesGrid}>
-            {movies.map(movie => (
-              <MovieCard 
-                key={movie.id} 
-                movie={movie}
-                onDelete={handleDeleteMovie}
-                onToggleWatched={handleToggleWatched}
-                onShowTrailer={openTrailerModal}
-              />
-            ))}
-          </div>
+          <>
+            {/* <-- NOVO: Campo de input para o filtro --> */}
+            <div className={styles.filterContainer}>
+                <input
+                    type="text"
+                    value={filterQuery}
+                    onChange={(e) => setFilterQuery(e.target.value)}
+                    placeholder="Filtrar por título, diretor, produtora..."
+                    className={styles.filterInput}
+                />
+            </div>
+            {/* <-- ALTERADO: Usa filteredMovies em vez de movies --> */}
+            <div className={styles.moviesGrid}>
+              {filteredMovies.map(movie => (
+                <MovieCard 
+                  key={movie.id} 
+                  movie={movie}
+                  onDelete={handleDeleteMovie}
+                  onToggleWatched={handleToggleWatched}
+                  onShowTrailer={openTrailerModal}
+                />
+              ))}
+            </div>
+            {/* <-- NOVO: Mensagem para quando não há resultados --> */}
+            {filteredMovies.length === 0 && !isLoading && (
+                <p className={styles.noResults}>Nenhum filme encontrado com o filtro atual.</p>
+            )}
+          </>
         );
       case 'assistidos':
         return (
           <div className="card">
              <h2 className="cardTitle">Minha Lista de Assistidos</h2>
-              <div className="tableContainer">
-                <table className="table">
-                  <thead><tr><th>Título</th><th>Produtora</th><th>Avaliação</th></tr></thead>
-                  <tbody>
-                    {watchedMovies.length > 0 ? watchedMovies.map(movie => (
-                      <tr key={movie.id}>
-                        <td>{movie.titulo}</td>
-                        <td>{movie.produtora}</td>
-                        <td>{movie.avaliacaoTmdb.toFixed(1)} ⭐</td>
-                      </tr>
-                    )) : <tr><td colSpan={3}>Nenhum filme assistido ainda.</td></tr>}
-                  </tbody>
-                </table>
-              </div>
-          </div>
+               <div className="tableContainer">
+                 <table className="table">
+                   <thead><tr><th>Título</th><th>Produtora</th><th>Avaliação</th></tr></thead>
+                   <tbody>
+                     {watchedMovies.length > 0 ? watchedMovies.map(movie => (
+                       <tr key={movie.id}>
+                         <td>{movie.titulo}</td>
+                         <td>{movie.produtora}</td>
+                         <td>{movie.avaliacaoTmdb.toFixed(1)} ⭐</td>
+                       </tr>
+                     )) : <tr><td colSpan={3}>Nenhum filme assistido ainda.</td></tr>}
+                   </tbody>
+                 </table>
+               </div>
+           </div>
         );
       case 'gerenciar':
         return (
