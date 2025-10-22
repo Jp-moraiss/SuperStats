@@ -1,0 +1,64 @@
+/* Dashboard Module Styles */
+.container {
+  padding: clamp(1rem, 4vw, 2.5rem);
+  max-width: 1400px;
+  margin: auto;
+  font-family: "Comic Neue", cursive;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.title {
+  font-family: "Bangers", cursive;
+  font-size: 3rem;
+  color: var(--color-primary);
+  margin-bottom: -1rem;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  margin-top: -1rem;
+}
+
+.statsGrid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.chartsGrid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+}
+
+.chartsGridFull {
+  display: grid;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.sideChartsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .chartsGrid {
+    grid-template-columns: 3fr 2fr;
+  }
+  
+  .chartsGrid > .card {
+    grid-column: span 1;
+  }
+  
+  .chartsGrid:has(> .card + .card) {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .chartsGridFull {
+    grid-template-columns: 1fr;
+  }
+}

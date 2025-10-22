@@ -1,0 +1,389 @@
+/* Comic Book Button System - Standardized Animations */
+
+/* Base Button Styles */
+.comic-btn {
+  font-family: var(--comic-font-accent);
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: var(--comic-space-md) var(--comic-space-xl);
+  border: var(--comic-border-medium) solid var(--comic-border);
+  border-radius: var(--comic-radius);
+  background: var(--comic-bg-primary);
+  color: var(--comic-text-primary);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--comic-duration-normal) ease;
+  box-shadow: 
+    4px 4px 0 var(--comic-shadow);
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  user-select: none;
+  outline: none;
+}
+
+.comic-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.4s ease;
+}
+
+.comic-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    6px 6px 0 var(--comic-shadow);
+}
+
+.comic-btn:hover::before {
+  left: 100%;
+}
+
+.comic-btn:active {
+  transform: translateY(0);
+  box-shadow: 
+    2px 2px 0 var(--comic-shadow);
+}
+
+.comic-btn:focus {
+  outline: 3px solid var(--comic-yellow);
+  outline-offset: 2px;
+}
+
+/* Button Sizes */
+.comic-btn--small {
+  font-size: 0.8rem;
+  padding: var(--comic-space-sm) var(--comic-space-md);
+  border-width: var(--comic-border-thin);
+}
+
+.comic-btn--large {
+  font-size: 1.2rem;
+  padding: var(--comic-space-lg) var(--comic-space-2xl);
+  border-width: var(--comic-border-thick);
+}
+
+.comic-btn--xlarge {
+  font-size: 1.4rem;
+  padding: var(--comic-space-xl) var(--comic-space-2xl);
+  border-width: var(--comic-border-thick);
+}
+
+/* Button Variants */
+.comic-btn--primary {
+  background: var(--comic-red);
+  color: white;
+  text-shadow: 1px 1px 0 var(--comic-border);
+  border-color: var(--comic-red);
+}
+
+.comic-btn--primary:hover {
+  background: #cc0000;
+  box-shadow: 
+    6px 6px 0 var(--comic-shadow),
+    0 0 20px rgba(227, 0, 0, 0.3);
+}
+
+.comic-btn--secondary {
+  background: var(--comic-blue);
+  color: white;
+  text-shadow: 1px 1px 0 var(--comic-border);
+  border-color: var(--comic-blue);
+}
+
+.comic-btn--secondary:hover {
+  background: #0052a3;
+  box-shadow: 
+    6px 6px 0 var(--comic-shadow),
+    0 0 20px rgba(0, 102, 204, 0.3);
+}
+
+.comic-btn--accent {
+  background: var(--comic-yellow);
+  color: var(--comic-text-primary);
+  text-shadow: 1px 1px 0 var(--comic-border);
+  border-color: var(--comic-yellow);
+}
+
+.comic-btn--accent:hover {
+  background: #e6c200;
+  box-shadow: 
+    6px 6px 0 var(--comic-shadow),
+    0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.comic-btn--success {
+  background: var(--comic-green);
+  color: white;
+  text-shadow: 1px 1px 0 var(--comic-border);
+  border-color: var(--comic-green);
+}
+
+.comic-btn--success:hover {
+  background: #00b359;
+  box-shadow: 
+    6px 6px 0 var(--comic-shadow),
+    0 0 20px rgba(0, 204, 102, 0.3);
+}
+
+.comic-btn--warning {
+  background: var(--comic-orange);
+  color: white;
+  text-shadow: 1px 1px 0 var(--comic-border);
+  border-color: var(--comic-orange);
+}
+
+.comic-btn--warning:hover {
+  background: #e65c00;
+  box-shadow: 
+    6px 6px 0 var(--comic-shadow),
+    0 0 20px rgba(255, 102, 0, 0.3);
+}
+
+.comic-btn--danger {
+  background: var(--comic-red);
+  color: white;
+  text-shadow: 1px 1px 0 var(--comic-border);
+  border-color: var(--comic-red);
+}
+
+.comic-btn--danger:hover {
+  background: #cc0000;
+  box-shadow: 
+    6px 6px 0 var(--comic-shadow),
+    0 0 20px rgba(227, 0, 0, 0.4);
+}
+
+.comic-btn--outline {
+  background: transparent;
+  color: var(--comic-text-primary);
+  border-color: var(--comic-border);
+}
+
+.comic-btn--outline:hover {
+  background: var(--comic-text-primary);
+  color: white;
+}
+
+.comic-btn--ghost {
+  background: transparent;
+  color: var(--comic-text-primary);
+  border: none;
+  box-shadow: none;
+}
+
+.comic-btn--ghost:hover {
+  background: rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 0 var(--comic-shadow);
+}
+
+/* Special Effects */
+.comic-btn--explosion {
+  position: relative;
+}
+
+.comic-btn--explosion::after {
+  content: '💥';
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  font-size: 1.5rem;
+  animation: comicBounce 1s infinite;
+  z-index: 10;
+}
+
+.comic-btn--pow {
+  position: relative;
+}
+
+.comic-btn--pow::before {
+  content: 'POW!';
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-15deg);
+  font-family: var(--comic-font-title);
+  font-size: 1.2rem;
+  color: var(--comic-red);
+  text-shadow: 2px 2px 0 var(--comic-border);
+  animation: comicShake 0.5s ease-in-out;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.comic-btn--pow:hover::before {
+  opacity: 1;
+}
+
+.comic-btn--bam {
+  position: relative;
+}
+
+.comic-btn--bam::before {
+  content: 'BAM!';
+  position: absolute;
+  top: -25px;
+  right: -15px;
+  transform: rotate(15deg);
+  font-family: var(--comic-font-title);
+  font-size: 1.2rem;
+  color: var(--comic-blue);
+  text-shadow: 2px 2px 0 var(--comic-border);
+  animation: comicPulse 1s ease-in-out;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.comic-btn--bam:hover::before {
+  opacity: 1;
+}
+
+/* Button States */
+.comic-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.comic-btn--loading {
+  position: relative;
+  color: transparent;
+}
+
+.comic-btn--loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid var(--comic-border);
+  border-top: 2px solid var(--comic-red);
+  border-radius: 50%;
+  animation: comicSpin 1s linear infinite;
+}
+
+/* Button Groups */
+.comic-btn-group {
+  display: flex;
+  gap: var(--comic-space-sm);
+  flex-wrap: wrap;
+}
+
+.comic-btn-group--vertical {
+  flex-direction: column;
+}
+
+.comic-btn-group .comic-btn {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Icon Buttons */
+.comic-btn--icon {
+  padding: var(--comic-space-sm);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.comic-btn--icon.comic-btn--small {
+  width: 30px;
+  height: 30px;
+  padding: var(--comic-space-xs);
+}
+
+.comic-btn--icon.comic-btn--large {
+  width: 50px;
+  height: 50px;
+  padding: var(--comic-space-md);
+}
+
+/* Floating Action Button */
+.comic-btn--fab {
+  position: fixed;
+  bottom: var(--comic-space-xl);
+  right: var(--comic-space-xl);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  z-index: 1000;
+  box-shadow: 
+    4px 4px 0 var(--comic-shadow),
+    0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.comic-btn--fab:hover {
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 
+    6px 6px 0 var(--comic-shadow),
+    0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .comic-btn {
+    font-size: 0.9rem;
+    padding: var(--comic-space-sm) var(--comic-space-lg);
+  }
+  
+  .comic-btn--large {
+    font-size: 1.1rem;
+    padding: var(--comic-space-md) var(--comic-space-xl);
+  }
+  
+  .comic-btn--xlarge {
+    font-size: 1.2rem;
+    padding: var(--comic-space-lg) var(--comic-space-xl);
+  }
+  
+  .comic-btn-group {
+    flex-direction: column;
+  }
+  
+  .comic-btn-group .comic-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .comic-btn {
+    font-size: 0.8rem;
+    padding: var(--comic-space-sm) var(--comic-space-md);
+  }
+  
+  .comic-btn--fab {
+    bottom: var(--comic-space-lg);
+    right: var(--comic-space-lg);
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Animation Delays for Staggered Effects */
+.comic-btn:nth-child(1) { animation-delay: 0.1s; }
+.comic-btn:nth-child(2) { animation-delay: 0.2s; }
+.comic-btn:nth-child(3) { animation-delay: 0.3s; }
+.comic-btn:nth-child(4) { animation-delay: 0.4s; }
+.comic-btn:nth-child(5) { animation-delay: 0.5s; }
+.comic-btn:nth-child(6) { animation-delay: 0.6s; }

@@ -4,6 +4,22 @@
 import { useMemo } from 'react';
 import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend, Tooltip } from 'recharts'; 
 import { Character } from '@/types'; // ✅ 1. Importa o tipo correto
+import {
+  RadarCard,
+  CardTitle,
+  SelectedHeroPanel,
+  HeroHeader,
+  HeroName,
+  HeroPublisher,
+  HeroBadge,
+  HeroStatsGrid,
+  StatBarWrapper,
+  StatBarLabel,
+  StatBarContainer,
+  StatBarFill,
+  SelectionPrompt,
+  ChartContainer
+} from './PowerRadarChart.styled';
 
 // ✅ 2. Componente StatBar extraído e tipado
 interface StatBarProps {
@@ -11,14 +27,14 @@ interface StatBarProps {
   value: number;
 }
 const StatBar = ({ label, value }: StatBarProps) => (
-  <div className="statBarWrapper">
-    <span className="statBarLabel">{label}</span>
-    <div className="statBarContainer">
-      <div className="statBarFill" style={{ width: `${value}%` }}>
+  <StatBarWrapper>
+    <StatBarLabel>{label}</StatBarLabel>
+    <StatBarContainer>
+      <StatBarFill width={value}>
         {value}
-      </div>
-    </div>
-  </div>
+      </StatBarFill>
+    </StatBarContainer>
+  </StatBarWrapper>
 );
 
 
@@ -66,44 +82,46 @@ const PowerRadarChart = ({ data, selectedCharacter }: PowerRadarChartProps) => {
   }, [data, selectedCharacter, attributes]);
 
   return (
-    <div className="card radarCardContainer">
-      <h3 className="cardTitle">Comparativo de Atributos de Poder</h3>
-      <ResponsiveContainer width="100%" height={400}>
-        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={comparisonData}>
-          <PolarGrid />
-          <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--text-primary-color)', fontFamily: 'Permanent Marker' }} />
-          <PolarRadiusAxis angle={30} domain={[0, 100]} />
-          <Tooltip />
-          <Radar name="Média Heróis" dataKey="Média Heróis" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.5} />
-          <Radar name="Média Vilões" dataKey="Média Vilões" stroke="#ef4444" fill="#ef4444" fillOpacity={0.5} />
-          {selectedCharacter && (
-            <Radar name={selectedCharacter.Name} dataKey={selectedCharacter.Name} stroke="#10b981" fill="#10b981" fillOpacity={0.6} />
-          )}
-          <Legend />
-        </RadarChart>
-      </ResponsiveContainer>
+    <RadarCard>
+      <CardTitle>Comparativo de Atributos de Poder</CardTitle>
+      <ChartContainer>
+        <ResponsiveContainer width="100%" height={400}>
+          <RadarChart cx="50%" cy="50%" outerRadius="80%" data={comparisonData}>
+            <PolarGrid />
+            <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--text-primary-color)', fontFamily: 'Permanent Marker' }} />
+            <PolarRadiusAxis angle={30} domain={[0, 100]} />
+            <Tooltip />
+            <Radar name="Média Heróis" dataKey="Média Heróis" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.5} />
+            <Radar name="Média Vilões" dataKey="Média Vilões" stroke="#ef4444" fill="#ef4444" fillOpacity={0.5} />
+            {selectedCharacter && (
+              <Radar name={selectedCharacter.Name} dataKey={selectedCharacter.Name} stroke="#10b981" fill="#10b981" fillOpacity={0.6} />
+            )}
+            <Legend />
+          </RadarChart>
+        </ResponsiveContainer>
+      </ChartContainer>
       
       {selectedCharacter ? (
-        <div className="selectedHeroPanel">
-          <div className="heroHeader">
-            <h4 className="heroName">{selectedCharacter.Name}</h4>
-            <span className={`heroBadge ${selectedCharacter.Alignment?.toLowerCase()}`}>
+        <SelectedHeroPanel>
+          <HeroHeader>
+            <HeroName>{selectedCharacter.Name}</HeroName>
+            <HeroBadge alignment={selectedCharacter.Alignment?.toLowerCase() as 'good' | 'bad' | 'neutral' || 'neutral'}>
               {selectedCharacter.Alignment}
-            </span>
-          </div>
-          <p className="heroPublisher">{selectedCharacter.Publisher}</p>
-          <div className="heroStatsGrid">
+            </HeroBadge>
+          </HeroHeader>
+          <HeroPublisher>{selectedCharacter.Publisher}</HeroPublisher>
+          <HeroStatsGrid>
             {attributes.map(attr => (
               <StatBar key={attr} label={attr} value={selectedCharacter[attr] as number} />
             ))}
-          </div>
-        </div>
+          </HeroStatsGrid>
+        </SelectedHeroPanel>
       ) : (
-        <div className="selectionPrompt">
+        <SelectionPrompt>
           <p>Clique em um personagem na tabela para ver seus detalhes aqui!</p>
-        </div>
+        </SelectionPrompt>
       )}
-    </div>
+    </RadarCard>
   );
 };
 

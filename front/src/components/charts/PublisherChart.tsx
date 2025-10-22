@@ -4,6 +4,7 @@
 import { useMemo } from 'react';
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, Legend, Bar } from 'recharts';
 import { Character } from '@/types'; // ✅ 1. Importa o tipo correto
+import styles from './Chart.module.css';
 
 interface PublisherChartProps {
     data: Character[];
@@ -24,8 +25,8 @@ const PublisherChart = ({ data }: PublisherChartProps) => {
   }, [data]);
 
   return (
-    <div className="card">
-      <h3 className="cardTitle">Top 5 Editoras</h3>
+    <div className={styles.card}>
+      <h3 className={styles.title}>Top 5 Editoras</h3>
       <ResponsiveContainer width="100%" height={250}>
         <BarChart data={publisherData} layout="vertical" margin={{ left: 10, right: 30 }}>
           <XAxis type="number" hide />

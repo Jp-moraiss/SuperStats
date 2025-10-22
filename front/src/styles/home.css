@@ -1,0 +1,334 @@
+/* ===========================
+🖼️ SEÇÕES PRINCIPAIS
+=========================== */
+
+/* Página inicial - Container */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding: 2rem;
+}
+
+/* Seção Principal */
+.hero-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  position: relative;
+  background-color: var(--color-background);
+  padding: 3rem 2rem;
+  border: 4px solid var(--color-secondary);
+  box-shadow: 10px 10px 0px var(--color-secondary);
+}
+
+.hero-content {
+  flex: 1;
+  min-width: 280px;
+}
+
+.hero-title {
+  font-family: "Bangers", cursive;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  text-transform: uppercase;
+  color: var(--color-primary);
+  line-height: 1.1;
+  letter-spacing: 1px;
+
+  /* Contorno vibrante estilo HQ */
+  text-shadow:
+    -3px -3px 0 var(--color-secondary),
+     3px -3px 0 var(--color-secondary),
+    -3px  3px 0 var(--color-secondary),
+     3px  3px 0 var(--color-secondary),
+     6px  6px 0 #000;
+
+  transition: transform 0.2s ease, text-shadow 0.3s ease;
+}
+
+.hero-title span {
+  color: var(--color-accent);
+  text-shadow:
+    -3px -3px 0 var(--color-secondary),
+     3px -3px 0 var(--color-secondary),
+    -3px  3px 0 var(--color-secondary),
+     3px  3px 0 var(--color-secondary),
+     6px  6px 0 #000;
+}
+
+.hero-subtitle {
+  margin-top: 1rem;
+  font-size: 1.3rem;
+  line-height: 1.5;
+}
+
+.hero-buttons {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+/* ================================
+🚀 Botões principais
+================================ */
+.hero-buttons {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-cta, .btn-secondary, .btn-cta-final {
+  padding: 0.8rem 1.5rem;
+  font-family: 'Permanent Marker', cursive;
+  font-weight: bold;
+  text-decoration: none;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0 var(--color-secondary);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+  border: 3px solid var(--color-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 1px;
+}
+
+/* Botão primário */
+.btn-cta {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.btn-cta:hover {
+  transform: translate(-4px, -4px);
+  background: var(--color-accent);
+  color: var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+}
+
+/* Botão secundário */
+.btn-secondary {
+  background: #fff;
+  color: var(--color-secondary);
+}
+
+.btn-secondary:hover {
+  transform: translate(-4px, -4px);
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: 8px 8px 0 var(--color-secondary);
+}
+
+.hero-bubbles {
+  flex: 1;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+} 
+
+/* ================================
+🔥 Seção Final (Call to Action)
+================================ */
+.cta-section {
+  text-align: center;
+  background: var(--color-primary);
+  color: #fff;
+  padding: 3rem 2rem;
+  border: 6px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Cabeçalho da CTA */
+.cta-section h2 {
+  font-family: "Bangers", cursive;
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 1rem;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  /* Efeito HQ */
+  text-shadow:
+    -2px -2px 0 var(--color-secondary),
+     2px -2px 0 var(--color-secondary),
+    -2px  2px 0 var(--color-secondary),
+     2px  2px 0 var(--color-secondary),
+     4px  4px 0 #000;
+
+  transition: text-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.cta-section h2:hover {
+  transform: scale(1.05) rotate(-1deg); 
+}
+
+.cta-section p {
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+  font-family: "Comic Neue", cursive;
+  text-shadow: 1px 1px 0 var(--color-secondary);
+  color: #fff;
+}
+
+/* Botão CTA Final */
+.btn-cta-final {
+  background: var(--color-accent);
+  color: var(--color-secondary);
+  font-size: 1.2rem;
+}
+
+.btn-cta-final:hover {
+  transform: translate(-6px, -6px);
+  box-shadow: 10px 10px 0 var(--color-secondary);  
+}
+ 
+/* ===========================
+ Hero Gallery 
+=========================== */
+
+.hero-gallery {
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1200px; 
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+/* Estilo base para todos os cards */
+.hero-card,
+.hero-horizontal {
+  position: relative; /* Essencial para o efeito de brilho */
+  overflow: hidden;   /* Esconde o brilho quando está fora do card */
+  border: 4px solid var(--color-secondary); 
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  background-color: #fff;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  /* NOVO: Padrão de meio-tom para o fundo */
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 5px 5px;
+}
+
+/* Efeito de brilho (glint) com pseudo-elemento */
+.hero-card::before,
+.hero-horizontal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%; /* Começa fora da tela à esquerda */
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg); /* Inclina o brilho */
+  transition: left 0.5s ease-in-out;
+}
+
+/* Card vertical (individual) */
+.hero-card {
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.hero-card img {
+  max-width: 100%;
+  height: auto;
+  pointer-events: none;
+  transition: transform 0.4s ease;
+  margin-bottom: 1rem; /* Espaçamento entre imagem e texto */
+}
+
+/* Efeitos de Hover para todos os cards */
+.hero-card:hover,
+.hero-horizontal:hover {
+  transform: translateY(-10px) scale(1.03); /* Animação mais sutil */
+  box-shadow: 14px 14px 0 var(--color-accent);
+}
+
+/* Ativa a animação do brilho no hover */
+.hero-card:hover::before,
+.hero-horizontal:hover::before {
+  left: 150%;
+}
+
+.hero-card:hover img,
+.hero-horizontal:hover img {
+  transform: scale(1.08) rotate(2deg); /* Rotação e escala mais sutis */
+}
+
+/* Estilo da Label (título) */
+.hero-label {
+  margin-top: auto; /* Alinha o texto na base */
+  font-family: "Bangers", cursive;
+  font-size: 1.8rem;
+  color: var(--color-primary);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+  
+  /* NOVO: Efeito de contorno com text-shadow */
+  text-shadow: 
+    -2px -2px 0 var(--color-secondary),  
+     2px -2px 0 var(--color-secondary),
+    -2px  2px 0 var(--color-secondary),
+     2px  2px 0 var(--color-secondary);
+}
+
+.hero-card:hover .hero-label,
+.hero-horizontal:hover .hero-label {
+  color: var(--color-accent);
+  text-shadow: 
+    -2px -2px 0 #000,  
+     2px -2px 0 #000,
+    -2px  2px 0 #000,
+     2px  2px 0 #000;
+}
+
+/* Card Horizontal (Avengers) */
+.hero-horizontal {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.hero-horizontal img {
+  max-height: 150px;
+  margin-right: 1.5rem;
+}
+
+.hero-horizontal .hero-label {
+  font-size: 2.2rem;
+}
+
+/* Media Query para melhorar a responsividade do card dos Vingadores */
+@media (max-width: 600px) {
+  .hero-horizontal {
+    flex-direction: column;
+    padding: 1.5rem;
+  }
+
+  .hero-horizontal img {
+    max-height: 120px;
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+}

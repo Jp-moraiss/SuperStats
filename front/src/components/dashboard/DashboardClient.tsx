@@ -13,16 +13,14 @@ import AlterEgoChart from '../charts/AlterEgoChart';
 import PhysicalStatsCharts from '../charts/PhysicalStatsCharts';
 import PowerDistributionChart from '../charts/PowerDistributionChart';
 
-// ... importe o CSS Module do Dashboard aqui quando criá-lo
+import styles from './Dashboard.module.css';
 
 type DashboardClientProps = {
   initialData: Character[];
   filter: DashboardFilter;
-  title: string;
-  subtitle: string;
 };
 
-export default function DashboardClient({ initialData, filter, title, subtitle }: DashboardClientProps) {
+export default function DashboardClient({ initialData, filter }: DashboardClientProps) {
   const [data] = useState<Character[]>(initialData);
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
 
@@ -39,35 +37,49 @@ export default function DashboardClient({ initialData, filter, title, subtitle }
   const showPublisherComponents = !filter || filter.type !== 'publisher';
   
   return (
-    <div className="dashboardContainer">
-        {/* Aqui você pode adicionar os títulos */}
-        <h2 style={{ fontFamily: '"Bangers", cursive', fontSize: '3rem', color: 'var(--color-primary)' }}>{title}</h2>
-        <p style={{ marginTop: '-1rem', fontSize: '1.2rem' }}>{subtitle}</p>
+    <div className={styles.container}>
+      <div className={styles.header}>
+      </div>
 
-      <div className="statsGrid">
-        <StatCard title="Total de Personagens" value={summaryStats?.total} />
+      <div className={styles.statsGrid}>
+        <StatCard 
+          title="Total de Personagens" 
+          value={summaryStats?.total} 
+          variant="total" 
+          effect="explosion" 
+        />
         {showPublisherComponents && (
           <>
-            <StatCard title="Personagens da Marvel" value={summaryStats?.marvelCount} />
-            <StatCard title="Personagens da DC" value={summaryStats?.dcCount} />
+            <StatCard 
+              title="Personagens da Marvel" 
+              value={summaryStats?.marvelCount} 
+              variant="marvel" 
+              effect="pow" 
+            />
+            <StatCard 
+              title="Personagens da DC" 
+              value={summaryStats?.dcCount} 
+              variant="dc" 
+              effect="bam" 
+            />
           </>
         )}
       </div>
 
-      <div className="chartsGrid">
+      <div className={styles.chartsGrid}>
         <PowerRadarChart data={data} selectedCharacter={selectedCharacter} />
-        <div className="sideChartsContainer">
+        <div className={styles.sideChartsContainer}>
           {showAlignmentChart && <AlignmentChart data={data} />}
           {showPublisherComponents && <PublisherChart data={data} />}
           <AlterEgoChart data={data} />
         </div>
       </div>
       
-      <div className="chartsGridFull">
+      <div className={styles.chartsGridFull}>
         <PowerDistributionChart data={data} />
       </div>
 
-      <div className="chartsGrid">
+      <div className={styles.chartsGrid}>
         <PhysicalStatsCharts data={data} />
       </div>
 

@@ -4,6 +4,7 @@
 import { useMemo } from 'react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Legend, Tooltip } from 'recharts';
 import { Character } from '@/types'; // ✅ 1. Importa o tipo correto
+import styles from './Chart.module.css';
 
 // ✅ 2. Define a interface para as props
 interface AlignmentChartProps {
@@ -27,8 +28,8 @@ const AlignmentChart = ({ data }: AlignmentChartProps) => {
   }, [data]);
 
   return (
-    <div className="card">
-      <h3 className="cardTitle">Divisão por Alinhamento</h3>
+    <div className={styles.card}>
+      <h3 className={styles.title}>Divisão por Alinhamento</h3>
       <ResponsiveContainer width="100%" height={250}>
         <PieChart>
           <Pie data={alignmentData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>

@@ -1,6 +1,25 @@
 // src/components/comparison/ComparisonCard.tsx
 import React from 'react';
 import { Character } from '@/types';
+import {
+  ComparisonCardContainer,
+  PlaceholderCard,
+  PlaceholderTitle,
+  PlaceholderText,
+  HeroHeader,
+  HeroName,
+  HeroPublisher,
+  ClearButton,
+  SelectedHeroPanel,
+  HeroBadge,
+  PowerMetric,
+  SectionTitle,
+  HeroStatsGrid,
+  StatBarWrapper,
+  StatBarLabel,
+  StatBarContainer,
+  StatBarFill
+} from './ComparisonCard.styled';
 
 interface ComparisonCardProps {
   character: Character | null;
@@ -10,10 +29,10 @@ interface ComparisonCardProps {
 const ComparisonCard: React.FC<ComparisonCardProps> = ({ character, onClear }) => {
   if (!character) {
     return (
-      <div className="card comparison-placeholder">
-        <h3 className="cardTitle">Nenhum Personagem Selecionado</h3>
-        <p>Use a caixa de pesquisa acima para escolher um herói/vilão para comparar.</p>
-      </div>
+      <PlaceholderCard>
+        <PlaceholderTitle>Nenhum Personagem Selecionado</PlaceholderTitle>
+        <PlaceholderText>Use a caixa de pesquisa acima para escolher um herói/vilão para comparar.</PlaceholderText>
+      </PlaceholderCard>
     );
   }
 
@@ -31,45 +50,41 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({ character, onClear }) =
   const maxPowerValue = 100;
 
   return (
-    <div className="card comparison-card">
-      <div className="heroHeader">
+    <ComparisonCardContainer>
+      <HeroHeader>
         <div>
-          <h3 className="heroName">{character.Name}</h3>
-          <p className="heroPublisher">{character.Publisher}</p>
+          <HeroName>{character.Name}</HeroName>
+          <HeroPublisher>{character.Publisher}</HeroPublisher>
         </div>
-        <button className="clear-button" onClick={onClear} aria-label="Remover personagem">
+        <ClearButton onClick={onClear} aria-label="Remover personagem">
           &times;
-        </button>
-      </div>
+        </ClearButton>
+      </HeroHeader>
 
-      <div className="selectedHeroPanel">
-        <span className={`heroBadge ${alignmentClass}`}>{character.Alignment || 'Desconhecido'}</span>
+      <SelectedHeroPanel>
+        <HeroBadge alignment={alignmentClass as 'good' | 'bad' | 'neutral'}>{character.Alignment || 'Desconhecido'}</HeroBadge>
         
-        <p><strong>Total de Poder:</strong> <span className="statCardMetric" style={{fontSize: '1.8rem', display: 'inline-block'}}>{character.TotalPower}</span></p>
+        <p><strong>Total de Poder:</strong> <PowerMetric>{character.TotalPower}</PowerMetric></p>
         <p><strong>Gênero:</strong> {character.Gender || 'Desconhecido'}</p>
         <p><strong>Altura:</strong> {character.Height > 0 ? `${character.Height} cm` : 'Desconhecido'}</p>
         <p><strong>Peso:</strong> {character.Weight > 0 ? `${character.Weight} kg` : 'Desconhecido'}</p>
         <p><strong>Alter Egos:</strong> {character['Alter Egos'] === 'No Alter Egos' ? 'Nenhum' : character['Alter Egos']}</p>
         
-        <h4 className="cardTitle" style={{marginTop: '1.5rem', marginBottom: '1rem', borderBottom: '2px dashed var(--border-color)', paddingBottom: '0.5rem'}}>Estatísticas de Poder</h4>
-        <div className="heroStatsGrid">
+        <SectionTitle>Estatísticas de Poder</SectionTitle>
+        <HeroStatsGrid>
           {powers.map((power) => (
-            // ✅ CORREÇÃO: Usando uma chave mais estável (power.label)
-            <div key={power.label} className="statBarWrapper">
-              <span className="statBarLabel">{power.label}</span>
-              <div className="statBarContainer">
-                <div 
-                  className="statBarFill" 
-                  style={{ width: `${(power.value / maxPowerValue) * 100}%` }}
-                >
+            <StatBarWrapper key={power.label}>
+              <StatBarLabel>{power.label}</StatBarLabel>
+              <StatBarContainer>
+                <StatBarFill width={(power.value / maxPowerValue) * 100}>
                   {power.value}
-                </div>
-              </div>
-            </div>
+                </StatBarFill>
+              </StatBarContainer>
+            </StatBarWrapper>
           ))}
-        </div>
-      </div>
-    </div>
+        </HeroStatsGrid>
+      </SelectedHeroPanel>
+    </ComparisonCardContainer>
   );
 };
 

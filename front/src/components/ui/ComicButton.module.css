@@ -1,0 +1,100 @@
+/* Comic Button Module Styles */
+
+.comic-btn-icon {
+  margin-right: var(--comic-space-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comic-btn-loading-text {
+  opacity: 0.7;
+}
+
+/* Button Group Styles */
+.comic-btn-group {
+  display: flex;
+  gap: var(--comic-space-sm);
+  flex-wrap: wrap;
+}
+
+.comic-btn-group--vertical {
+  flex-direction: column;
+}
+
+.comic-btn-group .comic-btn {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Icon Button Styles */
+.comic-btn--icon {
+  padding: var(--comic-space-sm);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.comic-btn--icon.comic-btn--small {
+  width: 30px;
+  height: 30px;
+  padding: var(--comic-space-xs);
+}
+
+.comic-btn--icon.comic-btn--large {
+  width: 50px;
+  height: 50px;
+  padding: var(--comic-space-md);
+}
+
+/* Floating Action Button */
+.comic-btn--fab {
+  position: fixed;
+  bottom: var(--comic-space-xl);
+  right: var(--comic-space-xl);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  z-index: 1000;
+  box-shadow: 
+    4px 4px 0 var(--comic-shadow),
+    0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.comic-btn--fab:hover {
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 
+    6px 6px 0 var(--comic-shadow),
+    0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .comic-btn-group {
+    flex-direction: column;
+  }
+  
+  .comic-btn-group .comic-btn {
+    width: 100%;
+  }
+  
+  .comic-btn--fab {
+    bottom: var(--comic-space-lg);
+    right: var(--comic-space-lg);
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Animation Delays for Staggered Effects */
+.comic-btn:nth-child(1) { animation-delay: 0.1s; }
+.comic-btn:nth-child(2) { animation-delay: 0.2s; }
+.comic-btn:nth-child(3) { animation-delay: 0.3s; }
+.comic-btn:nth-child(4) { animation-delay: 0.4s; }
+.comic-btn:nth-child(5) { animation-delay: 0.5s; }
+.comic-btn:nth-child(6) { animation-delay: 0.6s; }
