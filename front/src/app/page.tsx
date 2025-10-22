@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react"; // <-- NOVO (adicionado useEffect)
 import Link from "next/link";
 import SpeechBubble from "../components/ui/SpeechBubble";
 import HeroVideoOverlay from "../components/ui/HeroVideoOverlay";
@@ -13,6 +13,15 @@ export default function HomePage() {
   const avengersAudio = useRef<HTMLAudioElement>(null);
 
   const [activeHero, setActiveHero] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // <-- NOVO
+
+  // <-- NOVO: Verifica se o usuário está logado ao carregar a página
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []); // O array vazio [] garante que isso rode apenas uma vez, quando o componente montar
 
   const playTheme = (hero: "spiderman" | "superman" | "batman" | "avengers") => {
     [spidermanAudio, supermanAudio, batmanAudio, avengersAudio].forEach((ref) => {
@@ -27,7 +36,6 @@ export default function HomePage() {
     if (hero === "batman" && batmanAudio.current) batmanAudio.current.play();
     if (hero === "avengers" && avengersAudio.current) avengersAudio.current.play();
     
-    // Ativar vídeo
     setActiveHero(hero);
   };
 
@@ -61,11 +69,9 @@ export default function HomePage() {
         </SpeechBubble>
       </section>
 
-
-  <SpeechBubble type="speech">
-    Clique nos heróis e tenha uma experiência única!
-  </SpeechBubble>
-
+      <SpeechBubble type="speech">
+        Clique nos heróis e tenha uma experiência única!
+      </SpeechBubble>
 
       {/* Hero Gallery */}
       <div className="hero-gallery">
@@ -99,13 +105,16 @@ export default function HomePage() {
       </div>
 
       {/* CTA Final */}
-      <section className="cta-section">
-        <h2>Participe da Pesquisa!</h2>
-        <p>Suas respostas moldam o futuro do nosso universo de estatísticas. Junte-se à liga!</p>
-        <a href="/pesquisa" className="btn-cta-final">
-          <i className="fas fa-pencil-alt"></i> Começar Pesquisa
-        </a>
-      </section>
+      {/* <-- NOVO: Adicionado renderização condicional --> */}
+      {isLoggedIn && (
+        <section className="cta-section">
+          <h2>Participe da Pesquisa!</h2>
+          <p>Suas respostas moldam o futuro do nosso universo de estatísticas. Junte-se à liga!</p>
+          <a href="/pesquisa" className="btn-cta-final">
+            <i className="fas fa-pencil-alt"></i> Começar Pesquisa
+          </a>
+        </section>
+      )}
     </div>
   );
 }
