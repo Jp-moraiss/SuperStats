@@ -1,0 +1,69 @@
+/* Comparison Component Responsive Styles */
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+  
+  .inputsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .cardsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .card {
+    padding: 1rem;
+  }
+  
+  .heroName {
+    font-size: 1.5rem;
+  }
+  
+  .heroStatsGrid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+    gap: 1rem;
+  }
+  
+  .card {
+    padding: 0.75rem;
+  }
+  
+  .heroName {
+    font-size: 1.2rem;
+  }
+  
+  .statBarLabel {
+    font-size: 0.8rem;
+    width: 70px;
+  }
+  
+  .statBarFill {
+    font-size: 0.7rem;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .inputsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .cardsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+}

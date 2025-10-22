@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ThemeProvider } from "../styles/ThemeProvider";
 import "../styles/comic-theme.css";
-import "../styles/comic-buttons.css"; 
+import "../styles/comic-buttons.css";
+import ModernFooter from "../components/ui/ModernFooter"; 
 
 export default function RootLayout({
   children,
@@ -14,7 +15,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  // --- CORREÇÃO AQUI --- 
 
   const noLayoutRoutes = ["/auth/login", "/auth/register"];
   const isAuthPage = noLayoutRoutes.includes(pathname);
@@ -123,9 +123,7 @@ export default function RootLayout({
               </div>
 
               {/* FOOTER */}
-              <footer className="footer">
-                <p>© {new Date().getFullYear()} SuperStats - Portal de Fãs</p>
-              </footer>
+              <ModernFooter />
             </div>
           )}
         </ThemeProvider>

@@ -1,0 +1,48 @@
+/* Character Table Responsive Styles */
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .characterTable {
+    font-size: 0.8rem;
+  }
+  
+  .characterTable th,
+  .characterTable td {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .characterTable th:nth-child(3),
+  .characterTable td:nth-child(3),
+  .characterTable th:nth-child(4),
+  .characterTable td:nth-child(4) {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .characterTable {
+    font-size: 0.7rem;
+  }
+  
+  .characterTable th,
+  .characterTable td {
+    padding: 0.25rem 0.1rem;
+  }
+  
+  .characterTable th:nth-child(2),
+  .characterTable td:nth-child(2) {
+    display: none;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .characterTable {
+    font-size: 0.9rem;
+  }
+  
+  .characterTable th,
+  .characterTable td {
+    padding: 0.75rem 0.5rem;
+  }
+}

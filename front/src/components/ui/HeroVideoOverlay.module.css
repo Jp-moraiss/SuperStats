@@ -1,0 +1,91 @@
+/* Hero Video Overlay Module Styles */
+.heroVideoOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: pointer;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.heroVideo {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+}
+
+.heroVideo:hover {
+  transform: scale(1.02);
+}
+
+.closeHint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-family: "Comic Neue", cursive;
+  font-size: 0.9rem;
+  animation: pulse 2s infinite;
+  border: 2px solid var(--color-primary);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .heroVideo {
+    max-width: 95%;
+    max-height: 80%;
+  }
+  
+  .closeHint {
+    bottom: 1rem;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroVideo {
+    max-width: 98%;
+    max-height: 70%;
+  }
+  
+  .closeHint {
+    bottom: 0.5rem;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+}

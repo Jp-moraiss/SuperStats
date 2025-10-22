@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react"; 
+import { useEffect, useRef } from "react";
+import styles from "./HeroVideoOverlay.module.css";
 
 interface HeroVideoOverlayProps {
   hero: string | null;
@@ -30,16 +31,16 @@ export default function HeroVideoOverlay({ hero, onClose }: HeroVideoOverlayProp
   const videoSrc = videoSrcMap[hero];
 
   return (
-    <div className="hero-video-overlay" onClick={onClose}>
+    <div className={styles.heroVideoOverlay} onClick={onClose}>
       <video
         ref={videoRef}
         src={videoSrc}
-        className="hero-video"
+        className={styles.heroVideo}
         autoPlay
         muted
         onEnded={onClose}
       />
-      <div className="close-hint">Clique para fechar</div>
+      <div className={styles.closeHint}>Clique para fechar</div>
     </div>
   );
 }

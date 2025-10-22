@@ -1,0 +1,399 @@
+/* ===========================
+📱 RESPONSIVE DESIGN SYSTEM
+=========================== */
+
+/* Breakpoints */
+:root {
+  --mobile: 480px;
+  --tablet: 768px;
+  --desktop: 1024px;
+  --large-desktop: 1200px;
+}
+
+/* Mobile First Approach */
+/* Base styles are for mobile */
+
+/* ===========================
+📱 MOBILE STYLES (0-480px)
+=========================== */
+
+/* Hero Section Mobile */
+@media (max-width: 480px) {
+  .hero-section {
+    padding: 1rem;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  
+  .btn-cta, .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Hero Gallery Mobile */
+@media (max-width: 480px) {
+  .hero-gallery {
+    padding: 1rem;
+  }
+  
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .hero-card {
+    padding: 1rem;
+  }
+  
+  .hero-horizontal {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  
+  .hero-horizontal img {
+    max-height: 120px;
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Navigation Mobile */
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  
+  .nav {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  
+  .user-session {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* Sidebar Mobile */
+@media (max-width: 480px) {
+  .sidebar {
+    display: none;
+  }
+  
+  .content {
+    flex-direction: column;
+  }
+  
+  .main {
+    width: 100%;
+  }
+}
+
+/* ===========================
+📱 TABLET STYLES (481px-768px)
+=========================== */
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .hero-section {
+    padding: 2rem;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .hero-horizontal {
+    grid-column: 1 / -1;
+  }
+  
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+/* ===========================
+💻 DESKTOP STYLES (769px+)
+=========================== */
+
+@media (min-width: 769px) {
+  .hero-section {
+    padding: 3rem;
+  }
+  
+  .hero-title {
+    font-size: 3rem;
+  }
+  
+  .hero-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  
+  .hero-horizontal {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ===========================
+📊 COMPONENT RESPONSIVE STYLES
+=========================== */
+
+/* Charts Responsive */
+@media (max-width: 768px) {
+  .chart-container {
+    height: 300px;
+  }
+  
+  .chart-title {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-container {
+    height: 250px;
+  }
+  
+  .chart-title {
+    font-size: 1rem;
+  }
+}
+
+/* Tables Responsive */
+@media (max-width: 768px) {
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .table {
+    min-width: 600px;
+  }
+  
+  .table th,
+  .table td {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .table th,
+  .table td {
+    padding: 0.25rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Cards Responsive */
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .card {
+    padding: 1rem;
+  }
+}
+
+/* Forms Responsive */
+@media (max-width: 768px) {
+  .form-container {
+    padding: 1rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    padding: 0.5rem;
+  }
+  
+  .form-input {
+    padding: 0.5rem;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Modals Responsive */
+@media (max-width: 768px) {
+  .modal {
+    width: 90%;
+    max-width: 500px;
+    margin: 1rem;
+  }
+  
+  .modal-content {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal {
+    width: 95%;
+    margin: 0.5rem;
+  }
+  
+  .modal-content {
+    padding: 0.75rem;
+  }
+}
+
+/* ===========================
+🎨 UTILITY CLASSES
+=========================== */
+
+/* Hide/Show on different screen sizes */
+.hide-mobile {
+  display: block;
+}
+
+.show-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none;
+  }
+  
+  .show-mobile {
+    display: block;
+  }
+}
+
+/* Text alignment responsive */
+.text-center-mobile {
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .text-center-mobile {
+    text-align: center;
+  }
+}
+
+/* Spacing responsive */
+.padding-responsive {
+  padding: 1rem;
+}
+
+@media (min-width: 769px) {
+  .padding-responsive {
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .padding-responsive {
+    padding: 3rem;
+  }
+}
+
+/* ===========================
+📱 TOUCH-FRIENDLY STYLES
+=========================== */
+
+@media (max-width: 768px) {
+  /* Increase touch targets */
+  .btn, .button, button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improve form usability */
+  input, select, textarea {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Better link spacing */
+  a {
+    padding: 0.5rem;
+    display: inline-block;
+  }
+}
+
+/* ===========================
+🎯 ACCESSIBILITY IMPROVEMENTS
+=========================== */
+
+@media (max-width: 768px) {
+  /* Better focus indicators */
+  *:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  
+  /* Improved contrast for small screens */
+  .text-small {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+}
+
+/* ===========================
+📐 CONTAINER QUERIES (Future-proofing)
+=========================== */
+
+@container (max-width: 400px) {
+  .card {
+    padding: 0.75rem;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+  }
+}
+
+@container (max-width: 300px) {
+  .card {
+    padding: 0.5rem;
+  }
+  
+  .card-title {
+    font-size: 1rem;
+  }
+}

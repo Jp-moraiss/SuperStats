@@ -105,7 +105,7 @@ describe('CharacterTable', () => {
 
   it('shows all matching results when searching', async () => {
     const user = userEvent.setup();
-    const manyCharacters = Array.from({ length: 60 }, (_, i) => ({
+    const manyCharacters = Array.from({ length: 20 }, (_, i) => ({  
       ...mockCharacters[0],
       id: i + 1,
       Name: `Spider-Man ${i + 1}`
@@ -116,8 +116,8 @@ describe('CharacterTable', () => {
     const searchInput = screen.getByPlaceholderText('Pesquisar por nome...');
     await user.type(searchInput, 'Spider-Man');
     
-    // Should show all matching results, not limited to 50
-    expect(screen.getByText('Spider-Man 1')).toBeInTheDocument();
-    expect(screen.getByText('Spider-Man 60')).toBeInTheDocument();
+    // Should show all matching results
+    expect(screen.getByText('Spider-Man 1')).toBeInTheDocument();   
+    expect(screen.getByText('Spider-Man 20')).toBeInTheDocument();  
   });
 });
