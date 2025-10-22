@@ -1,9 +1,6 @@
 package com.cesar.superstats.controller;
 
-import com.cesar.superstats.dto.HQDTO;
-import com.cesar.superstats.dto.HqCreateDTO;
-import com.cesar.superstats.dto.HqFinalizeCreateDTO;
-import com.cesar.superstats.dto.HqSearchResultDTO;
+import com.cesar.superstats.dto.*;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.HQ;
 import com.cesar.superstats.service.ComicVineService;
@@ -53,6 +50,12 @@ public class HQController {
     @GetMapping("/buscar-externo")
     public ResponseEntity<List<HqSearchResultDTO>> buscarHqsExternas(@RequestParam String titulo) {
         return ResponseEntity.ok(service.buscarHqsExternas(titulo));
+    }
+
+    // --- CORREÇÃO AQUI ---
+    @GetMapping("/buscar-volume-issues")
+    public ResponseEntity<List<HqSearchResultDTO>> buscarIssuesDeVolume(@RequestParam int volumeId) {
+        return ResponseEntity.ok(comicVineService.buscarIssuesDeVolume(volumeId));
     }
 
     // Endpoint de CRIAÇÃO modificado para a finalização

@@ -10,30 +10,25 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-// DTOs aninhados (wrappers) para as respostas
+// DTOs aninhados (wrappers)
 @Data
-class ComicVineGenericSearchResponseDTO {
-    public List<ComicVineGenericResultDTO> results;
-}
-class ComicVineIssueDetailsResponseDTO {
-    public ComicVineIssueDetailsDTO results;
-}
-class ComicVineVolumeDetailsResponseDTO {
-    public ComicVineVolumeDetailsDTO results;
-}
+class ComicVineGenericSearchResponseDTO { public List<ComicVineGenericResultDTO> results; }
+class ComicVineIssueDetailsResponseDTO { public ComicVineIssueDetailsDTO results; }
+class ComicVineVolumeDetailsResponseDTO { public ComicVineVolumeDetailsDTO results; }
+@Data
+class ComicVineIssuesResponseDTO { public List<ComicVineIssueSummaryDTO> results; }
+
 
 @Service
 public class ComicVineService {
 
-    @Value("${comicvine.api.key}")
-    private String apiKey;
+    @Value("${comicvine.api.key}") private String apiKey;
     private final String apiUrl = "https://comicvine.gamespot.com/api";
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -61,53 +56,32 @@ public class ComicVineService {
                 .collect(Collectors.toList());
     }
 
-    // --- O TRADUTOR INTELIGENTE E CORRIGIDO ---
     private HqSearchResultDTO traduzirParaDtoPadronizado(ComicVineGenericResultDTO item) {
         try {
             HqSearchResultDTO dto = new HqSearchResultDTO();
             dto.setResourceType(item.getResourceType());
-            dto.setApiDetailUrl(item.getApiDetailUrl());
+            dto.setId(item.getId());
 
-            // Só processa se for 'issue' ou 'volume'
             if ("issue".equals(item.getResourceType())) {
-                if (item.getVolume() == null) return null; // Ignora 'issue' sem 'volume'
-
-                dto.setVolumeName(item.getVolume().getName()); // NOME DO VOLUME (SÉRIE)
-
-                // Título da edição específica
-                String tituloEdicao = item.getName();
-                if (tituloEdicao == null || tituloEdicao.isBlank()) {
-                    tituloEdicao = "Edição #" + item.getIssueNumber();
-                }
-                dto.setTitle(tituloEdicao);
-
+                if(item.getVolume() == null) return null;
+                dto.setApiDetailUrl(item.getApiDetailUrl());
+                dto.setVolumeName(item.getVolume().getName());
+                dto.setTitle(item.getName() != null && !item.getName().isBlank() ? item.getName() : "Edição #" + item.getIssueNumber());
             } else if ("volume".equals(item.getResourceType())) {
-                dto.setTitle(item.getName()); // Título do volume (encadernado/graphic novel)
-                dto.setVolumeName(item.getPublisher() != null ? item.getPublisher().getName() : "Editora Desconhecida");
-
-                // Para volumes, a 'apiDetailUrl' que nos interessa é a da primeira issue
-                if(item.getFirstIssue() != null) {
+                dto.setTitle(item.getName());
+                if (item.getPublisher() != null) dto.setVolumeName(item.getPublisher().getName());
+                if (item.getFirstIssue() != null && item.getFirstIssue().getApiDetailUrl() != null) {
                     dto.setApiDetailUrl(item.getFirstIssue().getApiDetailUrl());
-                } else {
-                    return null; // Ignora volumes que não têm uma 'first_issue' clicável
-                }
-            } else {
-                return null; // Ignora outros tipos de recurso como 'character'
-            }
+                } else { return null; }
+            } else { return null; }
 
-            // Define o ano
             if (item.getCoverDate() != null && item.getCoverDate().length() >= 4) {
                 dto.setYear(item.getCoverDate().substring(0, 4));
             } else if (item.getStartYear() != null) {
                 dto.setYear(item.getStartYear());
             }
-
-            // Define a URL da imagem
-            if (item.getImage() != null) {
-                dto.setImageUrl(item.getImage().getSuperUrl());
-            }
-
-            if (dto.getTitle() == null || dto.getApiDetailUrl() == null) { return null; }
+            if (item.getImage() != null) { dto.setImageUrl(item.getImage().getSuperUrl()); }
+            if (dto.getTitle() == null) { return null; }
             return dto;
         } catch (Exception e) { return null; }
     }
@@ -130,5 +104,41 @@ public class ComicVineService {
         ComicVineVolumeDetailsResponseDTO response = restTemplate.exchange(url, HttpMethod.GET, entity, ComicVineVolumeDetailsResponseDTO.class).getBody();
         if (response == null || response.results == null) throw new ResourceNotFoundException("Detalhes do volume não encontrados.");
         return response.results;
+    }
+
+    // --- CORREÇÃO AQUI ---
+    public List<HqSearchResultDTO> buscarIssuesDeVolume(int volumeId) {
+        String url = String.format("%s/issues/?api_key=%s&format=json&filter=volume:%d&sort=issue_number:asc", apiUrl, apiKey, volumeId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("User-Agent", "SuperStatsApp/1.0");
+        headers.set("Accept", "application/json");
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ComicVineIssuesResponseDTO response = restTemplate.exchange(url, HttpMethod.GET, entity, ComicVineIssuesResponseDTO.class).getBody();
+
+        if (response == null || response.getResults() == null) { return List.of(); }
+
+        // Traduz a lista de issues para o nosso DTO padronizado
+        return response.getResults().stream()
+                .map(this::traduzirIssueParaDtoPadronizado)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    // Novo tradutor específico para a lista de issues de um volume
+    private HqSearchResultDTO traduzirIssueParaDtoPadronizado(ComicVineIssueSummaryDTO item) {
+        try {
+            HqSearchResultDTO dto = new HqSearchResultDTO();
+            dto.setResourceType("issue");
+            dto.setApiDetailUrl(item.getApiDetailUrl());
+            dto.setTitle(item.getName() != null && !item.getName().isBlank() ? item.getName() : "Edição #" + item.getIssueNumber());
+            if (item.getCoverDate() != null && item.getCoverDate().length() >= 4) {
+                dto.setYear(item.getCoverDate().substring(0, 4));
+            }
+            if (item.getImage() != null) {
+                dto.setImageUrl(item.getImage().getSuperUrl());
+            }
+            return dto;
+        } catch(Exception e) { return null; }
     }
 }
