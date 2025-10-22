@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class HqSearchResultDTO {
+    private int id;
     private String title;
     private String volumeName;
     private String year;

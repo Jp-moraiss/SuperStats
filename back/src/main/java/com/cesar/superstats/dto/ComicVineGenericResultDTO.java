@@ -8,6 +8,9 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ComicVineGenericResultDTO {
 
+    @JsonProperty("id")
+    private int id;
+
     @JsonProperty("api_detail_url")
     private String apiDetailUrl;
 
@@ -35,4 +38,5 @@ public class ComicVineGenericResultDTO {
 
     @JsonProperty("publisher")
     private ComicVinePublisherDTO publisher;
+
 }

@@ -33,21 +33,24 @@
             <div id="catalogoHqContainer" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4"></div>
         </div>
         <div class="tab-pane fade p-3 border border-top-0" id="lidas-pane" role="tabpanel">
-            <table class="table table-striped"><thead><tr><th>ID</th><th>Título</th><th>Editora</th><th>Edição</th></tr></thead><tbody id="lidosTableBody"></tbody></table>
+            <table class="table table-striped"><thead><tr><th>ID</th><th>Título</th><th>Volume</th><th>Editora</th><th>Edição</th></tr></thead><tbody id="lidosTableBody"></tbody></table>
         </div>
         <div class="tab-pane fade p-3 border border-top-0" id="gerenciar-pane" role="tabpanel">
             <h3>Adicionar Nova HQ ao Catálogo</h3>
             <div class="section">
-                <p class="text-muted small">Para melhores resultados, use o título original em inglês (ex: "The Killing Joke", "Batman Year One").</p>
+                <p class="text-muted small">Para melhores resultados, use o título original em inglês (ex: "The Killing Joke", "Batman").</p>
                 <div class="input-group">
-                    <input type="text" id="tituloBusca" class="form-control" placeholder="Digite o título da HQ...">
+                    <input type="text" id="tituloBusca" class="form-control" placeholder="Digite o título da HQ ou da Série...">
                     <button class="btn btn-primary" type="button" onclick="searchHqs()">Buscar na Comic Vine</button>
                 </div>
             </div>
             <hr>
             <div class="section">
-                <h4 id="statusBusca">Resultados da Busca</h4>
-                <div id="searchResultsContainer" class="row row-cols-1 row-cols-md-3 g-4 mt-1"></div>
+                <div class="d-flex align-items-center mb-2">
+                    <button id="backToSearchBtn" class="btn btn-outline-secondary btn-sm me-3" onclick="goBackToSearch()" style="display: none;">&larr; Voltar</button>
+                    <h4 id="statusBusca" class="mb-0">Resultados da Busca</h4>
+                </div>
+                <div id="searchResultsContainer" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mt-1"></div>
             </div>
         </div>
     </div>
@@ -56,6 +59,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const baseUrl = 'http://localhost:8080/hqs';
+    let lastSearchTerm = '';
 
     document.addEventListener('DOMContentLoaded', () => { if (!localStorage.getItem('jwtToken')) { window.location.href = 'login.html'; } else { refreshAll(); } });
     function handleLogout() { localStorage.removeItem('jwtToken'); window.location.href = 'login.html'; }
@@ -75,27 +79,8 @@
             container.innerHTML = "";
             if (data.length === 0) { container.innerHTML = '<p class="text-center col-12">Nenhuma HQ no catálogo.</p>'; return; }
             data.forEach(hq => {
-                const botao = hq.lido
-                    ? `<button class="btn btn-outline-secondary btn-sm" onclick="removerDosLidos(${hq.id})">Remover ✖</button>`
-                    : `<button class="btn btn-success btn-sm" onclick="marcarComoLido(${hq.id})">Lido ✓</button>`;
-
-                const cardHtml = `
-        <div class="col">
-            <div class="card h-100">
-                <img src="${hq.coverUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 400px; object-fit: cover;" alt="Capa de ${hq.titulo}">
-                <div class="card-body d-flex flex-column">
-
-                    <h5 class="card-title">${hq.volumeName}</h5>
-                    <p class="card-subtitle mb-2 text-muted">${hq.titulo}</p>
-
-                    <p class="card-text small">${hq.editora || 'Editora não informada'}</p>
-                    <div class="mt-auto text-center">
-                        ${botao}
-                    </div>
-                </div>
-            </div>
-        </div>`;
-                container.innerHTML += cardHtml;
+                const botao = hq.lido ? `<button class="btn btn-outline-secondary btn-sm" onclick="removerDosLidos(${hq.id})">Remover ✖</button>` : `<button class="btn btn-success btn-sm" onclick="marcarComoLido(${hq.id})">Lido ✓</button>`;
+                container.innerHTML += `<div class="col"><div class="card h-100"><img src="${hq.coverUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 400px; object-fit: cover;" alt="Capa de ${hq.titulo}"><div class="card-body d-flex flex-column"><h5 class="card-title">${hq.volumeName}</h5><p class="card-subtitle mb-2 text-muted">${hq.titulo}</p><p class="card-text small">${hq.editora || 'Editora não informada'}</p><div class="mt-auto text-center">${botao}</div></div></div></div>`;
             });
         } catch(e) { console.error(e) }
     }
@@ -106,8 +91,8 @@
             const res = await fetchWithAuth(`${baseUrl}/lidos`);
             const data = await res.json();
             tbody.innerHTML = "";
-            if (data.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhuma HQ lida.</td></tr>'; return; }
-            data.forEach(hq => { tbody.innerHTML += `<tr><td>${hq.id}</td><td>${hq.titulo}</td><td>${hq.editora}</td><td>${hq.edicao || ''}</td></tr>`; });
+            if (data.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhuma HQ lida.</td></tr>'; return; }
+            data.forEach(hq => { tbody.innerHTML += `<tr><td>${hq.id}</td><td>${hq.titulo}</td><td>${hq.volumeName}</td><td>${hq.editora}</td><td>${hq.edicao || ''}</td></tr>`; });
         } catch(e) { console.error(e) }
     }
 
@@ -115,40 +100,55 @@
     async function marcarComoLido(hqId) { try { const res = await fetchWithAuth(`${baseUrl}/${hqId}/ler`, { method: 'POST' }); if (res.ok) refreshAll(); } catch (e) { console.error(e) } }
     async function removerDosLidos(hqId) { try { const res = await fetchWithAuth(`${baseUrl}/${hqId}/ler`, { method: 'DELETE' }); if (res.ok) refreshAll(); } catch (e) { console.error(e) } }
 
-    async function searchHqs() {
-        const titulo = document.getElementById('tituloBusca').value;
+    // --- NOVO FLUXO DE BUSCA E CRIAÇÃO ---
+    async function searchHqs(term = null) {
+        const titulo = term || document.getElementById('tituloBusca').value;
+        if (!titulo) return;
+        lastSearchTerm = titulo;
+
         const container = document.getElementById('searchResultsContainer');
         const status = document.getElementById('statusBusca');
-        if (!titulo) { status.textContent = 'Por favor, digite um título.'; return; }
+        document.getElementById('backToSearchBtn').style.display = 'none';
         status.textContent = `Buscando por "${titulo}"...`;
-        container.innerHTML = '';
+        container.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
         try {
             const res = await fetchWithAuth(`${baseUrl}/buscar-externo?titulo=${encodeURIComponent(titulo)}`);
             const results = await res.json();
-            if (results.length === 0) { status.textContent = 'Nenhum resultado encontrado. Tente um termo de busca mais específico ou em inglês.'; return; }
-            status.textContent = 'Resultados encontrados. Clique em uma HQ para adicioná-la:';
+            container.innerHTML = '';
+            if (results.length === 0) { status.textContent = 'Nenhum resultado encontrado.'; return; }
+            status.textContent = 'Resultados da Busca. Clique para ver detalhes ou adicionar:';
             results.forEach(item => {
-                const isClickable = item.resourceType === 'issue';
-                const cardClass = isClickable ? 'search-result-card' : 'disabled bg-light';
-                const onClickAction = isClickable ? `onclick="finalizeHqCreation('${item.apiDetailUrl}')"` : 'style="cursor: not-allowed;"';
-                const cardHtml = `
-        <div class="col">
-            <div class="card h-100 ${cardClass}" ${onClickAction}>
-                <img src="${item.imageUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 300px; object-fit: cover;" alt="Capa de ${item.title}">
-                <div class="card-body text-center d-flex flex-column">
-                    <h6 class="card-title">${item.title || 'Título desconhecido'}</h6>
-
-                    <p class="card-text text-muted small mt-auto">
-                        ${item.volumeName || ''}<br>
-                        Ano: ${item.year || 'N/A'}
-                    </p>
-
-                </div>
-            </div>
-        </div>`;
+                const isIssue = item.resourceType === 'issue';
+                const onClickAction = item.resourceType === 'issue'
+                    ? `finalizeHqCreation('${item.apiDetailUrl}')`
+                    : `showIssuesForVolume(${item.id}, '${item.title.replace(/'/g, "\\'")}')`;
+                const cardHtml = `<div class="col"><div class="card h-100 search-result-card" onclick="${onClickAction}"><img src="${item.imageUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 300px; object-fit: cover;" alt="..."><div class="card-body text-center"><h6 class="card-title">${item.title}</h6><p class="card-text text-muted small">${item.volumeName || ''}<br>Ano: ${item.year || 'N/A'}</p><span class="badge bg-secondary">${item.resourceType}</span></div></div></div>`;
                 container.innerHTML += cardHtml;
             });
         } catch (error) { status.textContent = 'Erro ao buscar HQs.'; console.error(error); }
+    }
+
+    async function showIssuesForVolume(volumeId, volumeTitle) {
+        const container = document.getElementById('searchResultsContainer');
+        const status = document.getElementById('statusBusca');
+        document.getElementById('backToSearchBtn').style.display = 'block';
+        status.textContent = `Edições de "${volumeTitle}". Clique para adicionar:`;
+        container.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+        try {
+            const res = await fetchWithAuth(`${baseUrl}/buscar-volume-issues?volumeId=${volumeId}`);
+            const issues = await res.json();
+            container.innerHTML = "";
+            if (issues.length === 0) { container.innerHTML = '<p class="text-center col-12">Nenhuma edição encontrada para este volume.</p>'; return; }
+            issues.forEach(issue => {
+                const title = issue.name || `Edição #${issue.issueNumber}`;
+                const imageUrl = issue.image?.superUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa';
+                container.innerHTML += `<div class="col"><div class="card h-100 search-result-card" onclick="finalizeHqCreation('${issue.apiDetailUrl}')"><img src="${imageUrl}" class="card-img-top" style="height: 300px; object-fit: cover;" alt="..."><div class="card-body text-center"><h6 class="card-title">${title}</h6></div></div></div>`;
+            });
+        } catch (error) { status.textContent = 'Erro ao buscar edições.'; console.error(error); }
+    }
+
+    function goBackToSearch() {
+        searchHqs(lastSearchTerm);
     }
 
     async function finalizeHqCreation(apiDetailUrl) {
@@ -163,7 +163,10 @@
                 document.getElementById('searchResultsContainer').innerHTML = '';
                 document.getElementById('tituloBusca').value = '';
                 refreshAll();
-            } else { throw new Error(await res.text()); }
+            } else {
+                const errorData = await res.json();
+                throw new Error(errorData.message || 'Erro desconhecido ao adicionar HQ.');
+            }
         } catch (error) { status.textContent = `Erro ao adicionar HQ: ${error.message}`; }
     }
 </script>
