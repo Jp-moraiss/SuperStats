@@ -31,7 +31,7 @@ describe('SpeechBubble', () => {
     const types = ['speech', 'electric', 'thought'];
     
     types.forEach(type => {
-      const { container } = render(<SpeechBubble type={type as any}>Test</SpeechBubble>);
+      const { container } = render(<SpeechBubble type={type as 'speech' | 'electric' | 'thought'}>Test</SpeechBubble>);
       expect(container.firstChild).toHaveClass('bubble', type);
     });
   });

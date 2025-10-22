@@ -4,7 +4,7 @@ import RegisterPage from '../register/page';
 
 // Mock Next.js components
 jest.mock('next/link', () => {
-  return function MockLink({ href, children, ...props }: any) {
+  return function MockLink({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: unknown }) {
     return <a href={href} {...props}>{children}</a>;
   };
 });

@@ -2,12 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import MovieCard from '../MovieCard';
 
-// Mock Next.js Image component
-jest.mock('next/image', () => {
-  return function MockImage({ src, alt, ...props }: any) {
-    return <img src={src} alt={alt} {...props} />;
-  };
-});
+// Mock is handled globally in jest.setup.js
 
 describe('MovieCard', () => {
   const mockMovie = {
@@ -36,8 +31,9 @@ describe('MovieCard', () => {
   it('renders movie poster', () => {
     render(<MovieCard movie={mockMovie} onDelete={jest.fn()} onToggleWatched={jest.fn()} onShowTrailer={jest.fn()} />);
     
-    const poster = screen.getByAltText('Pôster de The Dark Knight');
-    expect(poster).toHaveAttribute('src', '/poster.jpg');
+    const poster = screen.getByTestId('next-image-mock');
+    expect(poster).toHaveAttribute('data-src', '/poster.jpg');
+    expect(poster).toHaveAttribute('data-alt', 'Pôster de The Dark Knight');
   });
 
   it('handles click events', () => {

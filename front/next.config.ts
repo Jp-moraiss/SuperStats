@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 const nextConfig: NextConfig = {
-images: {
+  images: {
     remotePatterns: [
       {
         protocol: 'https',
@@ -17,7 +21,15 @@ images: {
         pathname: '/a/uploads/**',
       },
     ],
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 60,
   },
+  // Otimizações de performance
+  experimental: {
+    optimizePackageImports: ['react-icons', 'recharts'],
+  },
+  // Compressão
+  compress: true,
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

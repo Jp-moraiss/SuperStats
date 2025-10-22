@@ -1,10 +1,10 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import HomePage from '../page';
 
 // Mock Next.js components
 jest.mock('next/link', () => {
-  return function MockLink({ href, children, ...props }: any) {
+  return function MockLink({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: unknown }) {
     return <a href={href} {...props}>{children}</a>;
   };
 });
@@ -30,11 +30,7 @@ Object.defineProperty(HTMLVideoElement.prototype, 'currentTime', {
   value: 0,
 });
 
-jest.mock('next/image', () => {
-  return function MockImage({ src, alt, ...props }: any) {
-    return <img src={src} alt={alt} {...props} />;
-  };
-});
+// Mock is handled globally in jest.setup.js
 
 // Mock localStorage
 const localStorageMock = {
@@ -92,10 +88,10 @@ describe('HomePage', () => {
   it('renders hero gallery', () => {
     render(<HomePage />);
     
-    expect(screen.getByText('Batman')).toBeInTheDocument();
-    expect(screen.getByText('Homem-Aranha')).toBeInTheDocument();
-    expect(screen.getByText('Superman')).toBeInTheDocument();
-    expect(screen.getByText('Os Vingadores')).toBeInTheDocument();
+    expect(screen.getAllByText('Batman')).toHaveLength(2); // Image mock + label
+    expect(screen.getAllByText('Homem-Aranha')).toHaveLength(2);
+    expect(screen.getAllByText('Superman')).toHaveLength(2);
+    expect(screen.getAllByText('Os Vingadores')).toHaveLength(1); // Only label for Avengers
   });
 
   it('renders speech bubbles', () => {
@@ -108,7 +104,7 @@ describe('HomePage', () => {
   it('plays audio when hero is clicked', () => {
     render(<HomePage />);
     
-    const batmanCard = screen.getByText('Batman').closest('div');
+    const batmanCard = screen.getByText('Batman').closest('.hero-card');
     fireEvent.click(batmanCard!);
     
     expect(mockAudio.play).toHaveBeenCalled();
@@ -138,20 +134,19 @@ describe('HomePage', () => {
   it('renders hero images with correct attributes', () => {
     render(<HomePage />);
     
-    const batmanImage = screen.getByAltText('Batman');
-    expect(batmanImage).toHaveAttribute('src', '/batman.png');
-    expect(batmanImage).toHaveAttribute('width', '200');
-    expect(batmanImage).toHaveAttribute('height', '200');
+    const batmanImage = screen.getByText('Batman').closest('[data-testid="next-image-mock"]');
+    expect(batmanImage).toHaveAttribute('data-src', '/batman.png');
+    expect(batmanImage).toHaveAttribute('data-width', '200');
+    expect(batmanImage).toHaveAttribute('data-height', '200');
   });
 
   it('handles different hero clicks', () => {
     render(<HomePage />);
     
-    const heroes = ['Batman', 'Homem-Aranha', 'Superman', 'Os Vingadores'];
+    const heroImages = screen.getAllByTestId('next-image-mock');
     
-    heroes.forEach(hero => {
-      const card = screen.getByText(hero).closest('div');
-      fireEvent.click(card!);
+    heroImages.forEach(image => {
+      fireEvent.click(image);
     });
     
     expect(mockAudio.play).toHaveBeenCalledTimes(4);

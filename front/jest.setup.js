@@ -1,5 +1,23 @@
 import '@testing-library/jest-dom'
 
+// Mock Next.js Image component globally
+jest.mock('next/image', () => {
+  return function MockImage({ src, alt, width, height, ...props }) {
+    return (
+      <div 
+        data-testid="next-image-mock"
+        data-src={src}
+        data-alt={alt}
+        data-width={width}
+        data-height={height}
+        {...props}
+      >
+        {alt}
+      </div>
+    );
+  };
+});
+
 // Mock next/router
 jest.mock('next/router', () => ({
   useRouter() {
