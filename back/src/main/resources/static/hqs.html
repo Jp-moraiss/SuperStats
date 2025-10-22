@@ -33,8 +33,18 @@
             <div id="catalogoHqContainer" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4"></div>
         </div>
         <div class="tab-pane fade p-3 border border-top-0" id="lidas-pane" role="tabpanel">
-            <table class="table table-striped"><thead><tr><th>ID</th><th>Título</th><th>Volume</th><th>Editora</th><th>Edição</th></tr></thead><tbody id="lidosTableBody"></tbody></table>
-        </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Volume</th>
+                    <th>Editora</th>
+                    <th>Edição</th>
+                    <th>Lançamento</th> </tr>
+                </thead>
+                <tbody id="lidosTableBody"></tbody>
+            </table>        </div>
         <div class="tab-pane fade p-3 border border-top-0" id="gerenciar-pane" role="tabpanel">
             <h3>Adicionar Nova HQ ao Catálogo</h3>
             <div class="section">
@@ -77,10 +87,40 @@
             const data = await res.json();
             const container = document.getElementById('catalogoHqContainer');
             container.innerHTML = "";
-            if (data.length === 0) { container.innerHTML = '<p class="text-center col-12">Nenhuma HQ no catálogo.</p>'; return; }
+            if (data.length === 0) {
+                container.innerHTML = '<p class="text-center col-12">Nenhuma HQ no catálogo.</p>';
+                return;
+            }
             data.forEach(hq => {
-                const botao = hq.lido ? `<button class="btn btn-outline-secondary btn-sm" onclick="removerDosLidos(${hq.id})">Remover ✖</button>` : `<button class="btn btn-success btn-sm" onclick="marcarComoLido(${hq.id})">Lido ✓</button>`;
-                container.innerHTML += `<div class="col"><div class="card h-100"><img src="${hq.coverUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 400px; object-fit: cover;" alt="Capa de ${hq.titulo}"><div class="card-body d-flex flex-column"><h5 class="card-title">${hq.volumeName}</h5><p class="card-subtitle mb-2 text-muted">${hq.titulo}</p><p class="card-text small">${hq.editora || 'Editora não informada'}</p><div class="mt-auto text-center">${botao}</div></div></div></div>`;
+                const botao = hq.lido
+                    ? `<button class="btn btn-outline-secondary btn-sm" onclick="removerDosLidos(${hq.id})">Remover ✖</button>`
+                    : `<button class="btn btn-success btn-sm" onclick="marcarComoLido(${hq.id})">Lido ✓</button>`;
+
+                // --- LÓGICA PARA FORMATAR A DATA ---
+                let dataFormatada = 'Data não informada';
+                if (hq.dataLancamento) {
+                    // A data vem como "YYYY-MM-DD", vamos inverter para "DD/MM/YYYY"
+                    const parts = hq.dataLancamento.split('-');
+                    dataFormatada = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                }
+
+                const cardHtml = `
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="${hq.coverUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 400px; object-fit: cover;" alt="Capa de ${hq.titulo}">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${hq.volumeName}</h5>
+                            <p class="card-subtitle mb-2 text-muted">${hq.titulo}</p>
+                            <p class="card-text small">
+                                ${hq.editora || 'Editora não informada'}<br>
+                                <strong>Lançamento:</strong> ${dataFormatada} </p>
+                            <div class="mt-auto text-center">
+                                ${botao}
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                container.innerHTML += cardHtml;
             });
         } catch(e) { console.error(e) }
     }
@@ -91,8 +131,26 @@
             const res = await fetchWithAuth(`${baseUrl}/lidos`);
             const data = await res.json();
             tbody.innerHTML = "";
-            if (data.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhuma HQ lida.</td></tr>'; return; }
-            data.forEach(hq => { tbody.innerHTML += `<tr><td>${hq.id}</td><td>${hq.titulo}</td><td>${hq.volumeName}</td><td>${hq.editora}</td><td>${hq.edicao || ''}</td></tr>`; });
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Nenhuma HQ lida.</td></tr>'; // colspan agora é 6
+                return;
+            }
+            data.forEach(hq => {
+                let dataFormatada = 'N/A';
+                if (hq.dataLancamento) {
+                    const parts = hq.dataLancamento.split('-');
+                    dataFormatada = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                }
+
+                tbody.innerHTML += `
+                <tr>
+                    <td>${hq.id}</td>
+                    <td>${hq.titulo}</td>
+                    <td>${hq.volumeName}</td>
+                    <td>${hq.editora}</td>
+                    <td>${hq.edicao || ''}</td>
+                    <td>${dataFormatada}</td> </tr>`;
+            });
         } catch(e) { console.error(e) }
     }
 
@@ -133,16 +191,20 @@
         const status = document.getElementById('statusBusca');
         document.getElementById('backToSearchBtn').style.display = 'block';
         status.textContent = `Edições de "${volumeTitle}". Clique para adicionar:`;
-        container.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+        container.innerHTML = '<div class="text-center col-12">Carregando edições...</div>';
         try {
             const res = await fetchWithAuth(`${baseUrl}/buscar-volume-issues?volumeId=${volumeId}`);
             const issues = await res.json();
             container.innerHTML = "";
             if (issues.length === 0) { container.innerHTML = '<p class="text-center col-12">Nenhuma edição encontrada para este volume.</p>'; return; }
+
+            // --- A LÓGICA AGORA É MUITO MAIS SIMPLES ---
             issues.forEach(issue => {
-                const title = issue.name || `Edição #${issue.issueNumber}`;
-                const imageUrl = issue.image?.superUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa';
-                container.innerHTML += `<div class="col"><div class="card h-100 search-result-card" onclick="finalizeHqCreation('${issue.apiDetailUrl}')"><img src="${imageUrl}" class="card-img-top" style="height: 300px; object-fit: cover;" alt="..."><div class="card-body text-center"><h6 class="card-title">${title}</h6></div></div></div>`;
+                // Não precisamos mais adivinhar os nomes dos campos
+                const title = issue.title; // Vem do nosso DTO padronizado
+                const imageUrl = issue.imageUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa';
+
+                container.innerHTML += `<div class="col"><div class="card h-100 search-result-card" onclick="finalizeHqCreation('${issue.apiDetailUrl}')"><img src="${imageUrl}" class="card-img-top" style="height: 300px; object-fit: cover;" alt="Capa de ${title}"><div class="card-body text-center"><h6 class="card-title">${title}</h6></div></div></div>`;
             });
         } catch (error) { status.textContent = 'Erro ao buscar edições.'; console.error(error); }
     }

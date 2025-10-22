@@ -52,7 +52,6 @@ public class HQController {
         return ResponseEntity.ok(service.buscarHqsExternas(titulo));
     }
 
-    // --- CORREÇÃO AQUI ---
     @GetMapping("/buscar-volume-issues")
     public ResponseEntity<List<HqSearchResultDTO>> buscarIssuesDeVolume(@RequestParam int volumeId) {
         return ResponseEntity.ok(comicVineService.buscarIssuesDeVolume(volumeId));

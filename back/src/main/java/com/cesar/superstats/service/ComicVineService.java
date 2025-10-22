@@ -106,26 +106,23 @@ public class ComicVineService {
         return response.results;
     }
 
-    // --- CORREÇÃO AQUI ---
     public List<HqSearchResultDTO> buscarIssuesDeVolume(int volumeId) {
         String url = String.format("%s/issues/?api_key=%s&format=json&filter=volume:%d&sort=issue_number:asc", apiUrl, apiKey, volumeId);
         HttpHeaders headers = new HttpHeaders();
         headers.set("User-Agent", "SuperStatsApp/1.0");
         headers.set("Accept", "application/json");
         HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        ComicVineIssuesResponseDTO response = restTemplate.exchange(url, HttpMethod.GET, entity, ComicVineIssuesResponseDTO.class).getBody();
+        ComicVineSearchResponseDTO response = restTemplate.exchange(url, HttpMethod.GET, entity, ComicVineSearchResponseDTO.class).getBody();
 
         if (response == null || response.getResults() == null) { return List.of(); }
 
-        // Traduz a lista de issues para o nosso DTO padronizado
+        // Agora, também traduzimos esta lista para o nosso formato padronizado
         return response.getResults().stream()
                 .map(this::traduzirIssueParaDtoPadronizado)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
-    // Novo tradutor específico para a lista de issues de um volume
     private HqSearchResultDTO traduzirIssueParaDtoPadronizado(ComicVineIssueSummaryDTO item) {
         try {
             HqSearchResultDTO dto = new HqSearchResultDTO();
