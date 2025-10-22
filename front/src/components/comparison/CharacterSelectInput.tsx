@@ -3,6 +3,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { Character } from '@/types';
+import styles from './Comparison.module.css';
 
 interface CharacterSelectInputProps {
   label: string;
@@ -61,19 +62,19 @@ const CharacterSelectInput: React.FC<CharacterSelectInputProps> = ({
   };
 
   return (
-    <div className="character-select-input-container">
+    <div className={styles.characterSelectContainer}>
       <label>{label}</label>
       <input
         type="text"
         placeholder="Digite o nome do personagem..."
-        className="searchInput"
+        className={styles.searchInput}
         value={searchTerm}
         onChange={handleChange}
         onFocus={() => searchTerm.length >= 2 && setShowSuggestions(true)}
         onBlur={() => setTimeout(() => setShowSuggestions(false), 200)} // Leve delay para permitir o clique na sugestão
       />
       {showSuggestions && suggestions.length > 0 && (
-        <ul className="suggestions-list">
+        <ul className={styles.suggestionsList}>
           {suggestions.map((char) => ( 
             <li key={char.id} onClick={() => handleSelectCharacter(char)}>
               {char.Name} ({char.Publisher})

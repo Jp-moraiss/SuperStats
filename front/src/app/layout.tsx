@@ -4,7 +4,10 @@ import "../styles/globals.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation"; // NOVO: Importa o useRouter
 import router from "next/router";
-import { useEffect, useState } from "react"; 
+import { useEffect, useState } from "react";
+import { ThemeProvider } from "../styles/ThemeProvider";
+import "../styles/comic-theme.css";
+import "../styles/comic-buttons.css"; 
 
 export default function RootLayout({
   children,
@@ -46,9 +49,10 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body>
-        {isAuthPage ? (
-          <>{children}</>
-        ) : (
+        <ThemeProvider>
+          {isAuthPage ? (
+            <>{children}</>
+          ) : (
           <div className="app-container">
             {/* HEADER */}
             <header className="header">
@@ -121,7 +125,8 @@ export default function RootLayout({
               <p>© {new Date().getFullYear()} SuperStats - Portal de Fãs</p>
             </footer>
           </div>
-        )}
+          )}
+        </ThemeProvider>
       </body>
     </html>
   );

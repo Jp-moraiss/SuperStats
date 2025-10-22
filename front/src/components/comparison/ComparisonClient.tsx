@@ -6,6 +6,7 @@ import { Character } from '@/types';
 import CharacterSelectInput from './CharacterSelectInput';
 import ComparisonCard from './ComparisonCard';
 import ComparisonRadarChart from '../charts/ComparisonRadarChart';
+import styles from './Comparison.module.css';
 
 interface ComparisonClientProps {
   allCharacters: Character[];
@@ -16,8 +17,8 @@ export default function ComparisonClient({ allCharacters }: ComparisonClientProp
   const [character2, setCharacter2] = useState<Character | null>(null);
 
   return (
-    <div className="dashboardContainer"> 
-      <div className="comparison-inputs-grid">
+    <div className={styles.container}> 
+      <div className={styles.inputsGrid}>
         <CharacterSelectInput
           label="Personagem 1"
           allCharacters={allCharacters}
@@ -34,7 +35,7 @@ export default function ComparisonClient({ allCharacters }: ComparisonClientProp
         />
       </div>
 
-      <div className="comparison-cards-grid">
+      <div className={styles.cardsGrid}>
         <ComparisonCard character={character1} onClear={() => setCharacter1(null)} />
         <ComparisonCard character={character2} onClear={() => setCharacter2(null)} />
       </div>

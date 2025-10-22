@@ -1,0 +1,412 @@
+/* Comic Book Theme - Modern Superhero Aesthetics */
+
+/* Comic Book Color Palette */
+:root {
+  /* Primary Comic Colors */
+  --comic-red: #E30000;
+  --comic-blue: #0066CC;
+  --comic-yellow: #FFD700;
+  --comic-green: #00CC66;
+  --comic-purple: #9900CC;
+  --comic-orange: #FF6600;
+  
+  /* Background Colors */
+  --comic-bg-primary: #FFFFFF;
+  --comic-bg-secondary: #F8F9FA;
+  --comic-bg-dark: #1A1A1A;
+  --comic-bg-card: #FFFFFF;
+  
+  /* Text Colors */
+  --comic-text-primary: #1A1A1A;
+  --comic-text-secondary: #666666;
+  --comic-text-accent: #E30000;
+  
+  /* Border & Shadow Colors */
+  --comic-border: #000000;
+  --comic-shadow: rgba(0, 0, 0, 0.3);
+  --comic-glow: rgba(227, 0, 0, 0.3);
+  
+  /* Comic Book Typography */
+  --comic-font-title: "Bangers", cursive;
+  --comic-font-subtitle: "Permanent Marker", cursive;
+  --comic-font-body: "Comic Neue", cursive;
+  --comic-font-accent: "Bangers", cursive;
+  
+  /* Comic Book Spacing */
+  --comic-space-xs: 0.25rem;
+  --comic-space-sm: 0.5rem;
+  --comic-space-md: 1rem;
+  --comic-space-lg: 1.5rem;
+  --comic-space-xl: 2rem;
+  --comic-space-2xl: 3rem;
+  
+  /* Comic Book Effects */
+  --comic-border-thick: 4px;
+  --comic-border-medium: 3px;
+  --comic-border-thin: 2px;
+  --comic-radius: 8px;
+  --comic-radius-lg: 12px;
+  
+  /* Animation Durations */
+  --comic-duration-fast: 0.2s;
+  --comic-duration-normal: 0.3s;
+  --comic-duration-slow: 0.5s;
+}
+
+/* Comic Book Animations */
+@keyframes comicBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes comicPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes comicShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-2px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes comicGlow {
+  0% {
+    box-shadow: 0 0 5px var(--comic-glow);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--comic-glow), 0 0 30px var(--comic-glow);
+  }
+  100% {
+    box-shadow: 0 0 5px var(--comic-glow);
+  }
+}
+
+@keyframes comicSlideIn {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes comicFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes comicSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Comic Book Utility Classes */
+.comic-bounce {
+  animation: comicBounce 1s infinite;
+}
+
+.comic-pulse {
+  animation: comicPulse 2s infinite;
+}
+
+.comic-shake {
+  animation: comicShake 0.5s ease-in-out;
+}
+
+.comic-glow {
+  animation: comicGlow 2s ease-in-out infinite;
+}
+
+.comic-slide-in {
+  animation: comicSlideIn 0.6s ease-out;
+}
+
+.comic-fade-in {
+  animation: comicFadeIn 0.4s ease-out;
+}
+
+.comic-spin {
+  animation: comicSpin 1s linear infinite;
+}
+
+/* Comic Book Typography */
+.comic-title {
+  font-family: var(--comic-font-title);
+  font-size: 3rem;
+  color: var(--comic-text-primary);
+  text-shadow: 3px 3px 0 var(--comic-border);
+  letter-spacing: 2px;
+  line-height: 1.1;
+}
+
+.comic-subtitle {
+  font-family: var(--comic-font-subtitle);
+  font-size: 1.5rem;
+  color: var(--comic-text-accent);
+  text-shadow: 2px 2px 0 var(--comic-border);
+  letter-spacing: 1px;
+}
+
+.comic-text {
+  font-family: var(--comic-font-body);
+  font-size: 1rem;
+  color: var(--comic-text-primary);
+  line-height: 1.6;
+}
+
+.comic-accent {
+  font-family: var(--comic-font-accent);
+  font-size: 1.2rem;
+  color: var(--comic-text-accent);
+  text-shadow: 1px 1px 0 var(--comic-border);
+}
+
+/* Comic Book Card Styles */
+.comic-card {
+  background: var(--comic-bg-card);
+  border: var(--comic-border-thick) solid var(--comic-border);
+  border-radius: var(--comic-radius-lg);
+  box-shadow: 
+    8px 8px 0 var(--comic-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--comic-duration-normal) ease;
+}
+
+.comic-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+
+.comic-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    12px 12px 0 var(--comic-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.comic-card:hover::before {
+  left: 100%;
+}
+
+/* Comic Book Button Styles */
+.comic-button {
+  font-family: var(--comic-font-accent);
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: var(--comic-space-md) var(--comic-space-xl);
+  border: var(--comic-border-medium) solid var(--comic-border);
+  border-radius: var(--comic-radius);
+  background: var(--comic-bg-primary);
+  color: var(--comic-text-primary);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--comic-duration-normal) ease;
+  box-shadow: 
+    4px 4px 0 var(--comic-shadow);
+}
+
+.comic-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.4s ease;
+}
+
+.comic-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    6px 6px 0 var(--comic-shadow);
+}
+
+.comic-button:hover::before {
+  left: 100%;
+}
+
+.comic-button:active {
+  transform: translateY(0);
+  box-shadow: 
+    2px 2px 0 var(--comic-shadow);
+}
+
+/* Comic Button Variants */
+.comic-button--primary {
+  background: var(--comic-red);
+  color: white;
+  text-shadow: 1px 1px 0 var(--comic-border);
+}
+
+.comic-button--secondary {
+  background: var(--comic-blue);
+  color: white;
+  text-shadow: 1px 1px 0 var(--comic-border);
+}
+
+.comic-button--accent {
+  background: var(--comic-yellow);
+  color: var(--comic-text-primary);
+  text-shadow: 1px 1px 0 var(--comic-border);
+}
+
+.comic-button--success {
+  background: var(--comic-green);
+  color: white;
+  text-shadow: 1px 1px 0 var(--comic-border);
+}
+
+.comic-button--warning {
+  background: var(--comic-orange);
+  color: white;
+  text-shadow: 1px 1px 0 var(--comic-border);
+}
+
+.comic-button--danger {
+  background: var(--comic-red);
+  color: white;
+  text-shadow: 1px 1px 0 var(--comic-border);
+}
+
+/* Comic Book Grid System */
+.comic-grid {
+  display: grid;
+  gap: var(--comic-space-xl);
+}
+
+.comic-grid--2 {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.comic-grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.comic-grid--4 {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+/* Comic Book Responsive Design */
+@media (max-width: 768px) {
+  .comic-title {
+    font-size: 2rem;
+  }
+  
+  .comic-subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .comic-button {
+    font-size: 0.9rem;
+    padding: var(--comic-space-sm) var(--comic-space-lg);
+  }
+  
+  .comic-grid--2,
+  .comic-grid--3,
+  .comic-grid--4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Comic Book Special Effects */
+.comic-explosion {
+  position: relative;
+}
+
+.comic-explosion::after {
+  content: '💥';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 1.5rem;
+  animation: comicBounce 1s infinite;
+}
+
+.comic-pow {
+  position: relative;
+}
+
+.comic-pow::before {
+  content: 'POW!';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-15deg);
+  font-family: var(--comic-font-title);
+  font-size: 1.2rem;
+  color: var(--comic-red);
+  text-shadow: 2px 2px 0 var(--comic-border);
+  animation: comicShake 0.5s ease-in-out;
+}
+
+.comic-bam {
+  position: relative;
+}
+
+.comic-bam::before {
+  content: 'BAM!';
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  transform: rotate(15deg);
+  font-family: var(--comic-font-title);
+  font-size: 1.2rem;
+  color: var(--comic-blue);
+  text-shadow: 2px 2px 0 var(--comic-border);
+  animation: comicPulse 1s ease-in-out;
+}

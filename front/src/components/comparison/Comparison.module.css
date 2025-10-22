@@ -1,0 +1,309 @@
+/* Comparison Module Styles */
+.container {
+  padding: clamp(1rem, 4vw, 2.5rem);
+  max-width: 1400px;
+  margin: auto;
+  font-family: "Comic Neue", cursive;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.inputsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .inputsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .cardsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.characterSelectContainer {
+  position: relative;
+}
+
+.characterSelectContainer label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 3px solid var(--color-secondary);
+  outline: none;
+  font-size: 1.1rem;
+  font-family: "Comic Neue", cursive;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-light);
+  transition: var(--transition-base);
+}
+
+.searchInput:focus {
+  border-color: var(--color-primary);
+  box-shadow: 6px 6px 0 var(--color-primary);
+}
+
+.suggestionsList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 3px solid var(--color-secondary);
+  box-shadow: 6px 6px 0 rgba(0,0,0,0.1);
+  max-height: 250px;
+  overflow-y: auto;
+  list-style: none;
+  z-index: 10;
+}
+
+.suggestionsList li {
+  padding: 0.8rem 1.2rem;
+  cursor: pointer;
+  border-bottom: 1px dashed var(--border-color);
+  font-family: "Comic Neue", cursive;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.suggestionsList li:last-child {
+  border-bottom: none;
+}
+
+.suggestionsList li:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+  font-weight: bold;
+}
+
+.card {
+  background: #fff;
+  border: 4px solid var(--color-secondary);
+  box-shadow: var(--shadow-strong);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition-base);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.card:hover {
+  transform: translate(-6px, -6px);
+  box-shadow: 12px 12px 0 var(--color-accent);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.6s ease-in-out;
+}
+
+.card:hover::before {
+  left: 150%;
+}
+
+.placeholder {
+  text-align: center;
+  padding: 3rem 1rem;
+  background-color: #f0f0f0;
+  border-style: dashed;
+  color: var(--text-secondary-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.placeholderTitle {
+  font-family: "Permanent Marker", cursive;
+  font-size: 1.3rem;
+  color: var(--text-secondary-color);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  border-bottom: 3px dashed var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.placeholder p {
+  font-family: "Comic Neue", cursive;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  margin-top: 1rem;
+}
+
+.heroHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  padding-right: 40px;
+}
+
+.heroName {
+  font-family: "Bangers", cursive;
+  font-size: 2rem;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 var(--color-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.heroPublisher {
+  font-family: "Permanent Marker", cursive;
+  color: var(--text-secondary-color);
+  margin-top: -0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.clearButton {
+  background: var(--color-primary);
+  color: #fff;
+  border: 2px solid var(--color-secondary);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+  box-shadow: 2px 2px 0 var(--color-secondary);
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.clearButton:hover {
+  background: var(--color-accent);
+  color: var(--color-secondary);
+  transform: scale(1.1) rotate(5deg);
+}
+
+.selectedHeroPanel {
+  border-top: 4px dashed var(--border-color);
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  animation: fadeInComic 0.5s ease;
+}
+
+.heroBadge {
+  font-family: "Bangers", cursive;
+  padding: 0.25rem 0.8rem;
+  border: 3px solid var(--color-secondary);
+  color: var(--color-secondary);
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+.heroBadge.good { 
+  background-color: #3b82f6; 
+  color: #fff; 
+}
+
+.heroBadge.bad { 
+  background-color: #ef4444; 
+  color: #fff; 
+}
+
+.heroBadge.neutral { 
+  background-color: #64748b; 
+  color: #fff; 
+}
+
+.heroStatsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
+}
+
+@media (min-width: 768px) {
+  .heroStatsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.statBarWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.statBarLabel {
+  font-family: "Permanent Marker", cursive;
+  font-size: 0.9rem;
+  width: 90px;
+  text-align: right;
+  color: var(--text-primary-color);
+}
+
+.statBarContainer {
+  flex: 1;
+  background-color: var(--border-color);
+  border: 2px solid var(--color-secondary);
+  padding: 2px;
+}
+
+.statBarFill {
+  background-color: var(--color-accent);
+  color: var(--color-secondary);
+  font-weight: bold;
+  font-size: 0.8rem;
+  text-align: right;
+  padding: 0.2rem 0.5rem;
+  transition: width 0.5s ease-in-out;
+  white-space: nowrap;
+}
+
+.title {
+  font-family: "Permanent Marker", cursive;
+  font-size: 1.3rem;
+  color: var(--color-secondary);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  border-bottom: 3px dashed var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.metric {
+  font-family: "Bangers", cursive;
+  font-size: 1.8rem;
+  color: var(--color-primary);
+  line-height: 1;
+  text-shadow: 2px 2px 0 var(--color-secondary);
+  display: inline-block;
+}
+
+@keyframes fadeInComic {
+  0% { opacity: 0; transform: scale(0.985); }
+  100% { opacity: 1; transform: scale(1); }
+}
