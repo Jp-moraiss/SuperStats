@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SuperStats - Personagens</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding: 20px; background-color: #f4f4f4; }
+        .section { margin-bottom: 2rem; }
+        .search-result-card { cursor: pointer; }
+        .search-result-card:hover { background-color: #e9ecef; }
+        .card-img-top { height: 400px; object-fit: cover; background-color: #343a40; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Gerenciar Personagens</h1>
+        <div>
+            <a href="login.html" class="btn btn-secondary">Ir para a Home</a>
+            <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs" id="personagensTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#catalogo-pane" type="button" role="tab">Meu Catálogo</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#adicionar-pane" type="button" role="tab">Adicionar Personagem</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="personagensTabContent">
+        <div class="tab-pane fade show active p-3 border border-top-0" id="catalogo-pane" role="tabpanel">
+            <h3>Seu Catálogo de Personagens</h3>
+            <div id="personagensContainer" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-2">
+            </div>
+        </div>
+
+        <div class="tab-pane fade p-3 border border-top-0" id="adicionar-pane" role="tabpanel">
+            <div class="section">
+                <p class="text-muted small">Digite o nome do personagem (em inglês) para buscá-lo na Superhero API.</p>
+                <div class="input-group">
+                    <input type="text" id="nomeBusca" class="form-control" placeholder="Ex: Batman, Spider-Man...">
+                    <button class="btn btn-primary" type="button" onclick="searchPersonagens()">Buscar</button>
+                </div>
+            </div>
+            <hr>
+            <div class="section">
+                <h4 id="statusBusca">Resultados da Busca</h4>
+                <div id="searchResultsContainer" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4 mt-1"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const baseUrl = 'http://localhost:8080/personagens';
+
+    // --- LÓGICA DE SEGURANÇA E INICIALIZAÇÃO ---
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!localStorage.getItem('jwtToken')) { window.location.href = 'login.html'; }
+        else { loadPersonagens(); }
+    });
+
+    function handleLogout() { localStorage.removeItem('jwtToken'); window.location.href = 'login.html'; }
+
+    async function fetchWithAuth(url, options = {}) {
+        const token = localStorage.getItem('jwtToken');
+        const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers };
+        const response = await fetch(url, { ...options, headers });
+        if (response.status === 401) handleLogout();
+        return response;
+    }
+
+    // --- FUNÇÃO PARA CARREGAR E EXIBIR O CATÁLOGO ---
+    async function loadPersonagens() {
+        const container = document.getElementById('personagensContainer');
+        container.innerHTML = '<div class="spinner-border text-primary"></div>';
+        try {
+            const res = await fetchWithAuth(baseUrl);
+            if (!res.ok) throw new Error("Falha ao carregar catálogo.");
+            const personagens = await res.json();
+            container.innerHTML = "";
+            if (personagens.length === 0) {
+                container.innerHTML = '<p class="text-center col-12">Nenhum personagem adicionado ao catálogo ainda.</p>';
+                return;
+            }
+            personagens.forEach(p => {
+                container.innerHTML += `
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="${p.imagemUrl || 'https://via.placeholder.com/400x500.png?text=Sem+Imagem'}" class="card-img-top" alt="Imagem de ${p.nome}">
+                            <div class="card-body">
+                                <h5 class="card-title">${p.nome}</h5>
+                                <p class="card-subtitle mb-2 text-muted">${p.nomeCompleto || ''}</p>
+                                <p class="card-text small"><strong>Editora:</strong> ${p.editora || 'N/A'}</p>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        } catch (error) {
+            container.innerHTML = '<p class="text-center col-12 text-danger">Erro ao carregar o catálogo.</p>';
+            console.error(error);
+        }
+    }
+
+    // --- FUNÇÕES DO FLUXO DE BUSCA E CRIAÇÃO ---
+    async function searchPersonagens() {
+        const nome = document.getElementById('nomeBusca').value;
+        const container = document.getElementById('searchResultsContainer');
+        const status = document.getElementById('statusBusca');
+        if (!nome) { status.textContent = 'Por favor, digite um nome.'; return; }
+        status.textContent = `Buscando por "${nome}"...`;
+        container.innerHTML = '<div class="spinner-border text-primary"></div>';
+        try {
+            const res = await fetchWithAuth(`${baseUrl}/buscar-externo?nome=${encodeURIComponent(nome)}`);
+            const results = await res.json();
+            container.innerHTML = '';
+            if (results.length === 0) { status.textContent = 'Nenhum resultado encontrado.'; return; }
+            status.textContent = 'Resultados encontrados. Clique no personagem correto para adicioná-lo:';
+            results.forEach(item => {
+                const imageUrl = item.image?.url || 'https://via.placeholder.com/400x500.png?text=Sem+Imagem';
+                container.innerHTML += `
+                    <div class="col">
+                        <div class="card h-100 search-result-card" onclick="finalizePersonagemCreation('${item.id}')">
+                            <img src="${imageUrl}" class="card-img-top" style="height: 300px" alt="Imagem de ${item.name}">
+                            <div class="card-body">
+                                <h5 class="card-title">${item.name}</h5>
+                                <p class="card-text small text-muted">${item.biography['full-name'] || 'Nome completo não disponível'}</p>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        } catch (error) { status.textContent = 'Erro ao buscar personagens.'; console.error(error); }
+    }
+
+    async function finalizePersonagemCreation(apiId) {
+        const status = document.getElementById('statusBusca');
+        status.textContent = "Adicionando o personagem selecionado ao catálogo...";
+        try {
+            const dto = { apiId: apiId };
+            const res = await fetchWithAuth(baseUrl, { method: 'POST', body: JSON.stringify(dto) });
+            if (res.ok) {
+                const personagemCriado = await res.json();
+                status.textContent = `Sucesso! "${personagemCriado.nome}" foi adicionado.`;
+                document.getElementById('searchResultsContainer').innerHTML = '';
+                document.getElementById('nomeBusca').value = '';
+
+                // Atualiza o catálogo e muda para a aba do catálogo
+                loadPersonagens();
+                const catalogoTab = new bootstrap.Tab(document.querySelector('button[data-bs-target="#catalogo-pane"]'));
+                catalogoTab.show();
+
+            } else {
+                const errorData = await res.json();
+                throw new Error(errorData.message);
+            }
+        } catch (error) { status.textContent = `Erro ao adicionar personagem: ${error.message}`; }
+    }
+</script>
+</body>
+</html>

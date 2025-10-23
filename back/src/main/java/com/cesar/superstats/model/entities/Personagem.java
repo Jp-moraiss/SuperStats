@@ -6,8 +6,8 @@ public class Personagem {
     private Integer id;
     private String nome;
     private String genero;
-    private Double altura;
-    private Double peso;
+    private Integer altura;
+    private Integer peso;
     private String ocupacao;
     private String raca;
     private String nomeCompleto;
@@ -21,5 +21,6 @@ public class Personagem {
     private Integer durabilidade;
     private Integer poder;
     private Integer combate;
+    private String imagemUrl;
 
 }
