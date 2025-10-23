@@ -1,0 +1,87 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "SuperStats" [ref=e6]:
+        - /url: /
+      - navigation [ref=e7]:
+        - link "Início" [ref=e8]:
+          - /url: /
+        - link "Registrar" [ref=e9]:
+          - /url: /auth/register
+        - link "Login" [ref=e10]:
+          - /url: /auth/login
+  - generic [ref=e11]:
+    - complementary [ref=e12]:
+      - list [ref=e13]:
+        - listitem [ref=e14]:
+          - link "Todos Personagens" [ref=e15]:
+            - /url: /dashboard/todos
+        - listitem [ref=e16]:
+          - link "Heróis" [ref=e17]:
+            - /url: /dashboard/herois
+        - listitem [ref=e18]:
+          - link "Vilões" [ref=e19]:
+            - /url: /dashboard/viloes
+        - listitem [ref=e20]:
+          - link "Marvel" [ref=e21]:
+            - /url: /dashboard/marvel
+        - listitem [ref=e22]:
+          - link "DC Comics" [ref=e23]:
+            - /url: /dashboard/dc
+        - listitem [ref=e24]:
+          - link "Comparar Stats" [ref=e25]:
+            - /url: /comparar
+    - main [ref=e26]:
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - heading "Bem-vindo ao SuperStats!" [level=1] [ref=e30]
+          - paragraph [ref=e31]:
+            - text: Seu
+            - strong [ref=e32]: portal de fãs
+            - text: para explorar
+            - emphasis [ref=e33]: Heróis
+            - text: ","
+            - emphasis [ref=e34]: Vilões
+            - text: e todas as estatísticas que fazem os quadrinhos ganharem vida!
+          - generic [ref=e35]:
+            - link "Explorar Agora" [ref=e36]:
+              - /url: /dashboard/todos
+              - text: Explorar Agora
+            - link "Comparar Stats" [ref=e37]:
+              - /url: /comparar
+              - text: Comparar Stats
+        - blockquote [ref=e38]: WOW!
+  - contentinfo [ref=e39]:
+    - generic [ref=e40]:
+      - generic [ref=e41]:
+        - heading "SuperStats" [level=3] [ref=e42]
+        - paragraph [ref=e43]: O portal definitivo para fãs de super-heróis
+      - generic [ref=e44]:
+        - generic [ref=e45]:
+          - heading "Sobre o Projeto" [level=4] [ref=e46]
+          - paragraph [ref=e47]:
+            - text: Este é um projeto acadêmico desenvolvido como parte do Bacharelado em Ciência da Computação da
+            - strong [ref=e48]: CESAR School
+            - text: .
+          - link "Ver Repositório" [ref=e49]:
+            - /url: https://github.com/Jp-moraiss/SuperStats
+            - img [ref=e50]
+            - text: Ver Repositório
+        - generic [ref=e52]:
+          - heading "Fontes de Dados" [level=4] [ref=e53]
+          - paragraph [ref=e54]: "Todos os dados de personagens, filmes e quadrinhos são fornecidos por estas incríveis APIs:"
+          - list [ref=e55]:
+            - listitem [ref=e56]:
+              - link "Comic Vine API" [ref=e57]:
+                - /url: https://comicvine.gamespot.com
+            - listitem [ref=e58]:
+              - link "TMDB (The Movie Database)" [ref=e59]:
+                - /url: https://www.themoviedb.org
+            - listitem [ref=e60]:
+              - link "SuperHero API" [ref=e61]:
+                - /url: https://superheroapi.com
+    - paragraph [ref=e65]: © 2025 SuperStats. Um Projeto Acadêmico da CESAR School.
+```
