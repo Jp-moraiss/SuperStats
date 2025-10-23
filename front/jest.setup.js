@@ -42,13 +42,60 @@ jest.mock('next/router', () => ({
   },
 }))
 
+// Mock HTMLAudioElement methods
+Object.defineProperty(HTMLAudioElement.prototype, 'play', {
+  writable: true,
+  value: jest.fn().mockResolvedValue(undefined)
+});
+
+Object.defineProperty(HTMLAudioElement.prototype, 'pause', {
+  writable: true,
+  value: jest.fn()
+});
+
+Object.defineProperty(HTMLAudioElement.prototype, 'load', {
+  writable: true,
+  value: jest.fn()
+});
+
+Object.defineProperty(HTMLAudioElement.prototype, 'currentTime', {
+  writable: true,
+  value: 0
+});
+
+// Mock HTMLVideoElement methods
+Object.defineProperty(HTMLVideoElement.prototype, 'play', {
+  writable: true,
+  value: jest.fn().mockResolvedValue(undefined)
+});
+
+Object.defineProperty(HTMLVideoElement.prototype, 'pause', {
+  writable: true,
+  value: jest.fn()
+});
+
+Object.defineProperty(HTMLVideoElement.prototype, 'load', {
+  writable: true,
+  value: jest.fn()
+});
+
+Object.defineProperty(HTMLVideoElement.prototype, 'currentTime', {
+  writable: true,
+  value: 0
+});
+
+// Mock process.env
+process.env.NEXT_PUBLIC_API_URL = 'http://localhost:3001';
+
 // Mock styled-components
 jest.mock('styled-components', () => {
-  const React = require('react')
-  const styled = (tag) => (strings, ...values) => {
-    return React.forwardRef((props, ref) => {
+  const React = require('react') // eslint-disable-line @typescript-eslint/no-require-imports
+  const styled = (tag) => () => {
+    const Component = React.forwardRef((props, ref) => {
       return React.createElement(tag, { ...props, ref })
     })
+    Component.displayName = `Styled(${tag})`
+    return Component
   }
   styled.div = styled('div')
   styled.span = styled('span')

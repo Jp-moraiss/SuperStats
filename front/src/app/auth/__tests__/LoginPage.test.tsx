@@ -31,11 +31,7 @@ Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-// Mock environment variables
-Object.defineProperty(process.env, 'NEXT_PUBLIC_API_URL', {
-  value: 'http://localhost:3001',
-  writable: true,
-});
+// Mock environment variables are handled globally in jest.setup.js
 
 // Mock fetch
 global.fetch = jest.fn();
@@ -81,7 +77,7 @@ describe('LoginPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /entrar/i }));
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('undefined/auth/login', {
+      expect(global.fetch).toHaveBeenCalledWith('http://localhost:3001/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -95,7 +91,7 @@ describe('LoginPage', () => {
   it('shows error message on failed login', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: false,
-      json: async () => ({ error: 'Invalid credentials' }),
+      text: async () => 'Invalid credentials',
     });
 
     render(<LoginPage />);
@@ -106,7 +102,7 @@ describe('LoginPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /entrar/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/res.text is not a function/)).toBeInTheDocument();
+      expect(screen.getByText(/Invalid credentials/)).toBeInTheDocument();
     });
   });
 
