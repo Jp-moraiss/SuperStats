@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-// ALTERADO: Acessando a URL da API a partir das variáveis de ambiente
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function RegisterPage() {
@@ -21,35 +20,47 @@ export default function RegisterPage() {
     ocupacao: "",
   });
 
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
   
-  // NOVO: Estado de loading para feedback visual
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    document.body.classList.remove("auth-marvel-bg", "auth-dc-bg");
+    // Gerencia as classes de fundo dinâmicas no <body>
+    document.body.classList.add("auth-body-bg"); // Cor de fundo sólida
+    document.body.classList.add("auth-page-bg"); // Padrão halftone
+    document.body.classList.remove("marvel", "dc", "default"); // Limpa anteriores
+
+    let bgClass = "default";
     if (form.univ_fav === "Marvel") {
-      document.body.classList.add("auth-marvel-bg");
+      bgClass = "marvel";
     } else if (form.univ_fav === "DC") {
-      document.body.classList.add("auth-dc-bg");
+      bgClass = "dc";
     }
+    document.body.classList.add(bgClass);
+    
     return () => {
-      document.body.classList.remove("auth-marvel-bg", "auth-dc-bg");
+      document.body.classList.remove("auth-body-bg", "auth-page-bg", "marvel", "dc", "default");
     };
   }, [form.univ_fav]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleUniverseSelect = (universe: "Marvel" | "DC") => {
-    setForm({ ...form, univ_fav: universe });
+    // Permite desmarcar se clicar no mesmo
+    setForm({ ...form, univ_fav: form.univ_fav === universe ? "" : universe });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
-    setLoading(true); // NOVO: Ativa o estado de loading
+    setLoading(true);
 
     try {
       const res = await fetch(`${API_URL}/auth/register`, {
@@ -57,84 +68,144 @@ export default function RegisterPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          // Garante que campos vazios sejam enviados como null se necessário
           idade: form.idade ? parseInt(form.idade) : null,
           tempoGeek: form.tempoGeek ? parseInt(form.tempoGeek) : null,
+          genero: form.genero || null,
+          ocupacao: form.ocupacao || null,
+          univ_fav: form.univ_fav || null,
         }),
       });
 
       if (!res.ok) {
-        // NOVO: Tenta ler uma mensagem de erro estruturada (JSON) do backend
         try {
-            const errorData = await res.json();
-            // Supondo que seu backend envia um erro como { "message": "..." }
-            throw new Error(errorData.message || "Não foi possível completar o cadastro.");
+          const errorData = await res.json();
+          throw new Error(
+            errorData.message ||
+              "Não foi possível completar o cadastro. Verifique os dados informados."
+          );
         } catch {
-             // Fallback para texto plano se o erro não for JSON
-            throw new Error(await res.text() || "Não foi possível completar o cadastro.");
+          throw new Error(
+            (await res.text()) ||
+              "Não foi possível completar o cadastro. Verifique os dados informados."
+          );
         }
       }
-      
-      localStorage.setItem("username", form.username);
-      setMessage({ type: "success", text: "Cadastro realizado com sucesso! Redirecionando para o login..." });
-      setTimeout(() => router.push("/auth/login"), 2000);
 
-    } catch (err) { // Remove o ": any"
-          if (err instanceof Error) {
-            // Agora é seguro acessar err.message
-            setMessage({ type: "error", text: `Erro no cadastro: ${err.message}` });
-          } else {
-            // Um fallback para erros que não são objetos 'Error'
-            setMessage({ type: "error", text: "Ocorreu um erro desconhecido no cadastro." });
-          }
+      localStorage.setItem("username", form.username);
+      setMessage({
+        type: "success",
+        text: "Cadastro realizado com sucesso! Redirecionando para o login...",
+      });
+      setTimeout(() => router.push("/auth/login"), 2000);
+    } catch (err) {
+      if (err instanceof Error) {
+        setMessage({
+          type: "error",
+          text: err.message || "Ocorreu um erro desconhecido no cadastro.",
+        });
+      } else {
+        setMessage({
+          type: "error",
+          text: "Ocorreu um erro desconhecido no cadastro.",
+        });
+      }
     } finally {
-      setLoading(false); // NOVO: Desativa o loading em qualquer cenário (sucesso ou erro)
+      setLoading(false);
     }
   };
 
   return (
-    <>
-      <div className={`auth-page-bg ${form.univ_fav.toLowerCase() || 'default'}`}></div>
-      <div className="auth-container">
-        <h2 className="auth-title">Cadastro de Novo Fã</h2>
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <label>Usuário*</label>
-          <input type="text" name="username" value={form.username} onChange={handleChange} placeholder="Digite seu usuário" required />
-          <div className="form-grid">
-            <div><label>Nome Completo*</label><input type="text" name="nome" value={form.nome} onChange={handleChange} required /></div>
-            <div><label>Email*</label><input type="email" name="email" value={form.email} onChange={handleChange} required /></div>
+    <div className="auth-container">
+      <h2 className="auth-title">Cadastro de Novo Fã</h2>
+      <form className="auth-form" onSubmit={handleSubmit}>
+
+        {/* ALTERADO: Agrupado com Fieldset */}
+        <fieldset>
+          <legend>Informações de Acesso</legend>
+          <div className="form-group">
+            <label htmlFor="username">Usuário*</label>
+            <input type="text" id="username" name="username" value={form.username} onChange={handleChange} placeholder="Seu nome de herói" required />
           </div>
-          <label>Senha*</label>
-          <input type="password" name="password" value={form.password} onChange={handleChange} required />
-          <div className="form-grid">
-            <div><label>Gênero</label><select name="genero" value={form.genero} onChange={handleChange}><option value="">Selecione...</option><option value="Masculino">Masculino</option><option value="Feminino">Feminino</option><option value="Outro">Outro</option></select></div>
-            <div><label>Idade</label><input type="number" name="idade" value={form.idade} onChange={handleChange} /></div>
+          <div className="form-group">
+            <label htmlFor="email">Email*</label>
+            <input type="email" id="email" name="email" value={form.email} onChange={handleChange} placeholder="ex: peter.parker@clarim.com" required />
           </div>
-          <label>Universo Favorito</label>
+          <div className="form-group">
+            <label htmlFor="password">Senha*</label>
+            <input type="password" id="password" name="password" value={form.password} onChange={handleChange} required />
+          </div>
+        </fieldset>
+
+        {/* ALTERADO: Agrupado com Fieldset */}
+        <fieldset>
+          <legend>Perfil</legend>
+          <div className="form-group">
+            <label htmlFor="nome">Nome Completo*</label>
+            <input type="text" id="nome" name="nome" value={form.nome} onChange={handleChange} placeholder="Sua identidade civil" required />
+          </div>
+          <div className="form-grid">
+            <div className="form-group">
+              <label htmlFor="idade">Idade</label>
+              <input type="number" id="idade" name="idade" value={form.idade} onChange={handleChange} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="genero">Gênero</label>
+              <select id="genero" name="genero" value={form.genero} onChange={handleChange}>
+                <option value="">Selecione...</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="ocupacao">Ocupação</label>
+              <input type="text" id="ocupacao" name="ocupacao" value={form.ocupacao} onChange={handleChange} placeholder="Ex: Fotógrafo, Cientista..." />
+            </div>
+            <div className="form-group">
+              <label htmlFor="tempoGeek">Fã há (anos)</label>
+              <input type="number" id="tempoGeek" name="tempoGeek" value={form.tempoGeek} onChange={handleChange} />
+            </div>
+          </div>
+        </fieldset>
+
+        {/* ALTERADO: Agrupado com Fieldset */}
+        <fieldset>
+          <legend>Universo Favorito</legend>
           <div className="universe-choice">
-            <button type="button" className={`universe-btn marvel ${form.univ_fav === "Marvel" ? "active" : ""}`} onClick={() => handleUniverseSelect("Marvel")}><Image src="/marvel.png" alt="Marvel" width={50} height={50} /></button>
-            <button type="button" className={`universe-btn dc ${form.univ_fav === "DC" ? "active" : ""}`} onClick={() => handleUniverseSelect("DC")}><Image src="/dc.png" alt="DC" width={50} height={50} /></button>
+            <button
+              type="button"
+              className={`universe-btn marvel ${form.univ_fav === "Marvel" ? "active" : ""}`}
+              onClick={() => handleUniverseSelect("Marvel")}
+              aria-label="Escolher Marvel"
+            >
+              <Image src="/marvel.png" alt="Marvel" width={80} height={34} />
+            </button>
+            <button
+              type="button"
+              className={`universe-btn dc ${form.univ_fav === "DC" ? "active" : ""}`}
+              onClick={() => handleUniverseSelect("DC")}
+              aria-label="Escolher DC"
+            >
+              <Image src="/dc.png" alt="DC" width={80} height={45} />
+            </button>
           </div>
-          <div className="form-grid">
-            <div><label>Tempo Geek (anos)</label><input type="number" name="tempoGeek" value={form.tempoGeek} onChange={handleChange} /></div>
-            <div><label>Ocupação</label><input type="text" name="ocupacao" value={form.ocupacao} onChange={handleChange} /></div>
-          </div>
+        </fieldset>
+        
+        <button type="submit" className="btn-cta" disabled={loading}>
+          {loading ? "Cadastrando..." : "Cadastrar"}
+        </button>
+      </form>
 
-          {/* ALTERADO: Botão com estado de loading */}
-          <button type="submit" className="btn-cta" disabled={loading}>
-            {loading ? "Cadastrando..." : "Cadastrar"}
-          </button>
-        </form>
+      {message && (
+        <div className={`alert mt-3 ${message.type === "success" ? "alert-success" : "alert-danger"}`}>
+          {message.text}
+        </div>
+      )}
 
-        {message && (
-          <div className={`alert mt-3 ${message.type === "success" ? "alert-success" : "alert-danger"}`}>
-            {message.text}
-          </div>
-        )}
-
-        <p className="auth-link">
-          Já tem conta? <a href="/auth/login">Faça o login</a>
-        </p>
-      </div>
-    </>
+      <p className="auth-link">
+        Já tem conta? <a href="/auth/login">Faça o login</a>
+      </p>
+    </div>
   );
 }

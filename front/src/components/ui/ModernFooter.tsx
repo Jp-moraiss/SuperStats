@@ -1,7 +1,6 @@
 "use client";
 
 import React from 'react';
-import Link from 'next/link';
 import styles from './ModernFooter.module.css';
 
 const ModernFooter: React.FC = () => {

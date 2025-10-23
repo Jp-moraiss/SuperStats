@@ -119,6 +119,7 @@ describe('RegisterPage', () => {
     await waitFor(() => {
       expect(screen.getByText(/Erro no cadastro/)).toBeInTheDocument();
     });
+
   });
 
   it('validates required fields', () => {
@@ -152,3 +153,4 @@ describe('RegisterPage', () => {
     expect(inputs[2]).toHaveValue('invalid-email');
   });
 });
+
