@@ -26,6 +26,14 @@ export default function HeroVideoOverlay({ hero, onClose }: HeroVideoOverlayProp
     spiderman: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/spiderman.mp4",
     superman: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/superman.mp4",
     avengers: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/avengers.mp4",
+    ironman: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/ironman.mp4",
+    captainamerica: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/captainamerica.mp4",
+    blackpanther: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/blackpanther.mp4",
+    deadpool: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/deadpool.mp4",
+    flash: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/flash.mp4",
+    wonderwoman: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/wonderwoman.mp4",
+    greenlantern: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/greenlantern.mp4",
+    justiceleague: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/justiceleague.mp4",
   };
 
   const videoSrc = videoSrcMap[hero];
