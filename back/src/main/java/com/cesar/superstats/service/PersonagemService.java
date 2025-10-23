@@ -32,6 +32,10 @@ public class PersonagemService {
 
         SuperheroApiResponseDTO apiDto = superheroApiService.buscarPersonagemPorId(dto.getApiId());
 
+        if (personagemRepository.findById(Integer.parseInt(apiDto.getId())).isPresent()){
+            throw new IllegalArgumentException("Esse personagem já foi cadastrado.");
+        }
+
         Personagem personagem = new Personagem();
         personagem.setId(Integer.parseInt(apiDto.getId()));
         
