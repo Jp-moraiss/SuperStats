@@ -224,9 +224,9 @@
   transform: translate(-6px, -6px);
   box-shadow: 10px 10px 0 var(--color-secondary);  
 }
- 
-/* ===========================
- Hero Gallery 
+
+ /* ===========================
+  Hero Gallery 
 =========================== */
 
 .hero-gallery {
@@ -245,28 +245,27 @@
 
 /* Estilo base para todos os cards */
 .hero-card {
-  position: relative; /* Essencial para o efeito de brilho */
-  overflow: hidden;   /* Esconde o brilho quando está fora do card */
+  position: relative;
+  overflow: hidden;
   border: 4px solid var(--color-secondary); 
   box-shadow: 8px 8px 0 var(--color-secondary);
   background-color: #fff;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  padding: 1rem;
   text-align: center;
-
-  /* NOVO: Padrão de meio-tom para o fundo */
-  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px);
-  background-size: 5px 5px;
 }
 
-/* Efeito de brilho (glint) com pseudo-elemento */
+/* Efeito de brilho (glint) com pseudo-elemento (mantido) */
 .hero-card::before {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%; /* Começa fora da tela à esquerda */
+  left: -100%; 
   width: 50%;
   height: 100%;
   background: linear-gradient(
@@ -275,48 +274,80 @@
     rgba(255, 255, 255, 0.4) 50%,
     rgba(255, 255, 255, 0) 100%
   );
-  transform: skewX(-25deg); /* Inclina o brilho */
+  transform: skewX(-25deg);
   transition: left 0.5s ease-in-out;
+  z-index: 2;
 }
 
-/* Card vertical (individual) */
-.hero-card {
-  flex-direction: column;
-  padding: 1rem;
+/* NOVO: Wrapper da Imagem */
+.hero-image-wrapper {
+  position: relative;
+  width: 100%;
+  /* CORREÇÃO/ATUALIZADO: Diminuindo a imagem para proporção 4/3 e adicionando margin-top */
+  aspect-ratio: 8 / 14; 
+  overflow: hidden;    
+  margin-bottom: 1rem; 
+  margin-top: 1rem; /* CORREÇÃO: Margem pequena no topo do wrapper */
+  /* CORREÇÃO: Removido border-radius: 4px; */
+  border: 4px solid var(--color-secondary);
+  background-color: #eee;
+  transition: border-color 0.3s ease, background-image 0.3s ease, background-size 0.3s ease; /* ATUALIZADO: Transição para o background */
+  z-index: 1; 
+
+  /* NOVO: Propriedades iniciais do halftone (invisível) */
+  background-image: radial-gradient(circle, rgba(0,0,0,0.1) 2px, transparent 2px); /* Antigo: rgba(0,0,0,0.05) 1px */
+  background-size: 0px 0px; 
+  background-position: center center;
 }
 
-.hero-card img {
-  max-width: 100%;
-  height: auto;
+/* NOVO: Halftone aparece no hover dentro do wrapper */
+.hero-card:hover .hero-image-wrapper {
+  background-size: 8px 8px; /* Volta ao tamanho normal no hover */
+}
+
+
+/* ATUALIZADO: Estilo da Imagem (agora dentro do wrapper) */
+.hero-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  
   pointer-events: none;
   transition: transform 0.4s ease;
-  margin-bottom: 1rem; /* Espaçamento entre imagem e texto */
 }
 
 /* Efeitos de Hover para todos os cards */
 .hero-card:hover {
-  transform: translateY(-10px) scale(1.03); /* Animação mais sutil */
+  transform: translateY(-10px) scale(1.03); 
   box-shadow: 14px 14px 0 var(--color-accent);
+  border-color: var(--color-accent); 
 }
 
-/* Ativa a animação do brilho no hover */
+/* Ativa a animação do brilho no hover (mantido) */
 .hero-card:hover::before {
   left: 150%;
 }
 
-.hero-card:hover img {
-  transform: scale(1.08) rotate(2deg); /* Rotação e escala mais sutis */
+/* ATUALIZADO: Efeito de hover na imagem (mantido) */
+.hero-card:hover .hero-image-wrapper img {
+  transform: scale(1.10) rotate(2deg); 
 }
 
-/* Estilo da Label (título) */
+/* ATUALIZADO: Muda a borda interna no hover (mantido) */
+.hero-card:hover .hero-image-wrapper {
+   border-color: var(--color-accent);
+}
+
+/* Estilo da Label (título) (mantido) */
 .hero-label {
-  margin-top: auto; /* Alinha o texto na base */
+  margin-top: auto; 
   font-family: "Bangers", cursive;
   font-size: 1.8rem;
   color: var(--color-primary);
   transition: color 0.3s ease, text-shadow 0.3s ease;
+  z-index: 1;
   
-  /* NOVO: Efeito de contorno com text-shadow */
   text-shadow: 
     -2px -2px 0 var(--color-secondary),  
      2px -2px 0 var(--color-secondary),
@@ -333,17 +364,35 @@
      2px  2px 0 #000;
 }
 
-/* Estilos para vilões */
+/* Estilos para vilões (mantido) */
 .villain-card {
-  border-color: #8b0000 !important; /* Vermelho escuro */
+  border-color: #8b0000 !important;
   box-shadow: 8px 8px 0 #8b0000 !important;
   animation: villainAppear 0.8s ease-out;
 }
 
+/* ATUALIZADO: Faz a borda interna do vilão ser vermelha (mantido) */
+.villain-card .hero-image-wrapper {
+  border-color: #8b0000 !important;
+}
+
+/* Estilo do halftone para vilões no hover */
+.villain-card:hover .hero-image-wrapper {
+  /* ATUALIZADO: MAIS EXPRESSIVO - Aumentado o tamanho total do padrão */
+  background-size: 8px 8px; /* Antigo: 5px 5px */
+  background-image: radial-gradient(circle, rgba(139, 0, 0, 0.2) 2px, transparent 2px);
+}
+
 .villain-card:hover {
-  box-shadow: 14px 14px 0 #ff0000 !important; /* Vermelho brilhante no hover */
+  box-shadow: 14px 14px 0 #ff0000 !important; 
   border-color: #ff0000 !important;
 }
+
+/* ATUALIZADO: Faz a borda interna do vilão ficar vermelha brilhante no hover (mantido) */
+.villain-card:hover .hero-image-wrapper {
+  border-color: #ff0000 !important;
+}
+
 
 @keyframes villainAppear {
   0% {

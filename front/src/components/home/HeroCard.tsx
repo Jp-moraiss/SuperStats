@@ -43,14 +43,19 @@ const HeroCardComponent: React.FC<HeroCardProps> = ({
       onKeyDown={handleKeyDown}
       aria-label={`Clique para interagir com ${hero.nome}`}
     >
-      <Image 
-        src={hero.imagemSrc} 
-        alt={hero.nome} 
-        width={200} 
-        height={200}
-        loading="lazy"
-        onError={handleImageError}
-      />
+      {/* NOVO: Wrapper para padronizar a imagem */}
+      <div className="hero-image-wrapper">
+        <Image 
+          src={hero.imagemSrc} 
+          alt={hero.nome} 
+          fill
+          // ATUALIZADO: 'sizes' ajuda o Next.js a otimizar a imagem
+          sizes="(max-width: 600px) 45vw, (max-width: 1024px) 30vw, 220px" 
+          loading="lazy"
+          onError={handleImageError}
+          // As props 'width' e 'height' foram removidas
+        />
+      </div>
       <span className="hero-label">{hero.nome}</span>
     </div>
   );
