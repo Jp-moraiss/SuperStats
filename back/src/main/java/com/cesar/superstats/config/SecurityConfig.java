@@ -32,7 +32,6 @@ public class SecurityConfig {
                         // ESSENCIAL: Permite as requisições de verificação do CORS de qualquer origem.
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // Permite acesso público aos endpoints da API de autenticação E aos arquivos estáticos do site antigo.
                         .requestMatchers(
                                 "/auth/**",
                                 "/",
@@ -43,7 +42,6 @@ public class SecurityConfig {
                                 "/js/**"
                         ).permitAll()
 
-                        // Exige autenticação para todas as outras requisições.
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
