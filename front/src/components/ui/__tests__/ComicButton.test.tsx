@@ -67,7 +67,7 @@ describe('ComicButton', () => {
     const variants = ['primary', 'secondary', 'accent', 'success', 'warning', 'danger'];
     
     variants.forEach(variant => {
-      const { container } = render(<ComicButton variant={variant as any}>Click me</ComicButton>);
+      const { container } = render(<ComicButton variant={variant as 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger'}>Click me</ComicButton>);
       expect(container.firstChild).toHaveClass('comic-btn', `comic-btn--${variant}`);
     });
   });
@@ -76,7 +76,7 @@ describe('ComicButton', () => {
     const sizes = ['small', 'medium', 'large'];
     
     sizes.forEach(size => {
-      const { container } = render(<ComicButton size={size as any}>Click me</ComicButton>);
+      const { container } = render(<ComicButton size={size as 'small' | 'medium' | 'large'}>Click me</ComicButton>);
       if (size === 'medium') {
         expect(container.firstChild).toHaveClass('comic-btn', 'comic-btn--primary');
       } else {

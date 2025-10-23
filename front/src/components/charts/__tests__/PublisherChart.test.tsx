@@ -4,12 +4,12 @@ import PublisherChart from '../PublisherChart';
 
 // Mock recharts components
 jest.mock('recharts', () => ({
-  BarChart: ({ children }: any) => <div data-testid="bar-chart">{children}</div>,
-  Bar: ({ children }: any) => <div data-testid="bar">{children}</div>,
+  BarChart: ({ children }: { children: React.ReactNode }) => <div data-testid="bar-chart">{children}</div>,
+  Bar: ({ children }: { children: React.ReactNode }) => <div data-testid="bar">{children}</div>,
   XAxis: () => <div data-testid="x-axis">XAxis</div>,
   YAxis: () => <div data-testid="y-axis">YAxis</div>,
   CartesianGrid: () => <div data-testid="cartesian-grid">CartesianGrid</div>,
-  ResponsiveContainer: ({ children }: any) => <div data-testid="responsive-container">{children}</div>,
+  ResponsiveContainer: ({ children }: { children: React.ReactNode }) => <div data-testid="responsive-container">{children}</div>,
   Legend: () => <div data-testid="legend">Legend</div>,
   Tooltip: () => <div data-testid="tooltip">Tooltip</div>,
 }));

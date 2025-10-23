@@ -19,10 +19,15 @@
   box-shadow: var(--shadow-strong);
 }
 
-/* ================================
-🦸 LOGO — Estilo Comic Reformulado
-================================ */
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
 .logo {
+  flex-shrink: 0;
   font-family: "Bangers", cursive;
   font-size: clamp(2rem, 4vw, 3rem);
   text-transform: uppercase;
@@ -37,6 +42,13 @@
      5px  5px 0 #000;
 
   transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
 }
 
 .logo:hover {
@@ -300,3 +312,4 @@
     padding: 1rem;
   }
 }
+

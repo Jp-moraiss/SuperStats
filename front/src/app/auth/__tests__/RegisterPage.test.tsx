@@ -4,7 +4,7 @@ import RegisterPage from '../register/page';
 
 // Mock Next.js components
 jest.mock('next/link', () => {
-  return function MockLink({ href, children, ...props }: any) {
+  return function MockLink({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: unknown }) {
     return <a href={href} {...props}>{children}</a>;
   };
 });
@@ -31,11 +31,7 @@ Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-// Mock environment variables
-Object.defineProperty(process.env, 'NEXT_PUBLIC_API_URL', {
-  value: 'http://localhost:3001',
-  writable: true,
-});
+// Mock environment variables are handled globally in jest.setup.js
 
 // Mock fetch
 global.fetch = jest.fn();
@@ -75,15 +71,16 @@ describe('RegisterPage', () => {
 
     render(<RegisterPage />);
     
-    const inputs = screen.getAllByDisplayValue('');
-    fireEvent.change(inputs[0], { target: { value: 'testuser' } }); // Username
-    fireEvent.change(inputs[1], { target: { value: 'Test User' } }); // Nome
-    fireEvent.change(inputs[2], { target: { value: 'test@example.com' } }); // Email
-    fireEvent.change(inputs[3], { target: { value: 'password' } }); // Password
+    // Preenche os campos obrigatórios
+    fireEvent.change(screen.getByLabelText('Usuário*'), { target: { value: 'testuser' } });
+    fireEvent.change(screen.getByLabelText('Email*'), { target: { value: 'test@example.com' } });
+    fireEvent.change(screen.getByLabelText('Senha*'), { target: { value: 'password' } });
+    fireEvent.change(screen.getByLabelText('Nome Completo*'), { target: { value: 'Test User' } });
+    
     fireEvent.click(screen.getByRole('button', { name: /cadastrar/i }));
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('undefined/auth/register', {
+      expect(global.fetch).toHaveBeenCalledWith('http://localhost:3001/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -91,11 +88,11 @@ describe('RegisterPage', () => {
           nome: 'Test User',
           email: 'test@example.com',
           password: 'password',
-          genero: '',
+          genero: null,
           idade: null,
-          univ_fav: '',
+          univ_fav: null,
           tempoGeek: null,
-          ocupacao: '',
+          ocupacao: null,
         }),
       });
     });
@@ -109,15 +106,16 @@ describe('RegisterPage', () => {
 
     render(<RegisterPage />);
     
-    const inputs = screen.getAllByDisplayValue('');
-    fireEvent.change(inputs[0], { target: { value: 'testuser' } }); // Username
-    fireEvent.change(inputs[1], { target: { value: 'Test User' } }); // Nome
-    fireEvent.change(inputs[2], { target: { value: 'test@example.com' } }); // Email
-    fireEvent.change(inputs[3], { target: { value: 'password' } }); // Password
+    // Preenche os campos obrigatórios
+    fireEvent.change(screen.getByLabelText('Usuário*'), { target: { value: 'testuser' } });
+    fireEvent.change(screen.getByLabelText('Email*'), { target: { value: 'test@example.com' } });
+    fireEvent.change(screen.getByLabelText('Senha*'), { target: { value: 'password' } });
+    fireEvent.change(screen.getByLabelText('Nome Completo*'), { target: { value: 'Test User' } });
+    
     fireEvent.click(screen.getByRole('button', { name: /cadastrar/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/Erro no cadastro/)).toBeInTheDocument();
+      expect(screen.getByText(/Email already exists/)).toBeInTheDocument();
     });
   });
 
@@ -152,3 +150,4 @@ describe('RegisterPage', () => {
     expect(inputs[2]).toHaveValue('invalid-email');
   });
 });
+

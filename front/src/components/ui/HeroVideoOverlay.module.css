@@ -22,10 +22,6 @@
   transition: transform 0.3s ease;
 }
 
-.heroVideo:hover {
-  transform: scale(1.02);
-}
-
 .closeHint {
   position: absolute;
   bottom: 2rem;

@@ -3,15 +3,12 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-// ALTERADO: Acessando a URL da API a partir das variáveis de ambiente
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function LoginPage() {
   const router = useRouter();
   const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState<string | null>(null);
-  
-  // NOVO: Estado de loading para feedback visual
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -19,9 +16,10 @@ export default function LoginPage() {
     if (token) {
       router.push("/");
     }
-    document.body.classList.add("auth-page-bg", "auth-page-bg-default");
+    // Adiciona as classes de fundo ao <body>
+    document.body.classList.add("auth-body-bg", "auth-page-bg", "default");
     return () => {
-      document.body.classList.remove("auth-page-bg", "auth-page-bg-default");
+      document.body.classList.remove("auth-body-bg", "auth-page-bg", "default");
     };
   }, [router]);
 
@@ -32,7 +30,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setLoading(true); // NOVO: Ativa o estado de loading
+    setLoading(true);
 
     try {
       const res = await fetch(`${API_URL}/auth/login`, {
@@ -42,14 +40,17 @@ export default function LoginPage() {
       });
 
       if (!res.ok) {
-        // NOVO: Tenta ler uma mensagem de erro estruturada (JSON) do backend
         try {
-            const errorData = await res.json();
-            // Supondo que seu backend envia um erro como { "message": "..." }
-            throw new Error(errorData.message || "Usuário ou senha inválidos");
+          const errorData = await res.json();
+          throw new Error(
+            errorData.message ||
+              "Credenciais inválidas. Verifique seu usuário e senha."
+          );
         } catch {
-            // Fallback para texto plano se o erro não for JSON
-            throw new Error(await res.text() || "Usuário ou senha inválidos");
+          throw new Error(
+            (await res.text()) ||
+              "Credenciais inválidas. Verifique seu usuário e senha."
+          );
         }
       }
 
@@ -57,56 +58,59 @@ export default function LoginPage() {
       localStorage.setItem("jwtToken", data.token);
       localStorage.setItem("username", form.username);
       router.push("/");
-
-    } catch (err) { // Remove o ": any"
+    } catch (err) {
       if (err instanceof Error) {
-        // Se for um objeto de Erro, acessamos a mensagem com segurança
-        setError(err.message);
+        setError(err.message || "Ocorreu um erro desconhecido.");
       } else {
-        // Caso contrário, definimos uma mensagem genérica
-        setError("Ocorreu um erro desconhecido");
+        setError("Ocorreu um erro desconhecido.");
       }
     } finally {
-      setLoading(false); // NOVO: Desativa o loading em qualquer cenário (sucesso ou erro)
+      setLoading(false);
     }
   };
 
   return (
-    <>
-      <div className="auth-page-bg default"></div>
-      <div className="auth-container">
-        <h2 className="auth-title">Login</h2>
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <label>Usuário</label>
+    <div className="auth-container">
+      <h2 className="auth-title">Login</h2>
+      <form className="auth-form" onSubmit={handleSubmit}>
+        {/* ALTERADO: Agrupado para melhor espaçamento */}
+        <div className="form-group">
+          <label htmlFor="username">Usuário</label>
           <input
             type="text"
+            id="username"
             name="username"
             value={form.username}
             onChange={handleChange}
             required
+            autoComplete="username"
           />
+        </div>
 
-          <label>Senha</label>
+        {/* ALTERADO: Agrupado para melhor espaçamento */}
+        <div className="form-group">
+          <label htmlFor="password">Senha</label>
           <input
             type="password"
+            id="password"
             name="password"
             value={form.password}
             onChange={handleChange}
             required
+            autoComplete="current-password"
           />
+        </div>
 
-          {/* ALTERADO: Botão com estado de loading */}
-          <button type="submit" className="btn-cta" disabled={loading}>
-            {loading ? "Entrando..." : "Entrar"}
-          </button>
-        </form>
+        <button type="submit" className="btn-cta" disabled={loading}>
+          {loading ? "Entrando..." : "Entrar"}
+        </button>
+      </form>
 
-        {error && <div className="alert mt-3">{error}</div>}
+      {error && <div className="alert mt-3">{error}</div>}
 
-        <p className="auth-link">
-          Não tem conta? <a href="/auth/register">Cadastre-se</a>
-        </p>
-      </div>
-    </>
+      <p className="auth-link">
+        Não tem conta? <a href="/auth/register">Cadastre-se</a>
+      </p>
+    </div>
   );
 }

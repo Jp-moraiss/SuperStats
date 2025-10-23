@@ -4,10 +4,10 @@ import AlignmentChart from '../AlignmentChart';
 
 // Mock recharts components
 jest.mock('recharts', () => ({
-  PieChart: ({ children }: any) => <div data-testid="pie-chart">{children}</div>,
-  Pie: ({ children }: any) => <div data-testid="pie">{children}</div>,
-  Cell: ({ children }: any) => <div data-testid="cell">{children}</div>,
-  ResponsiveContainer: ({ children }: any) => <div data-testid="responsive-container">{children}</div>,
+  PieChart: ({ children }: { children: React.ReactNode }) => <div data-testid="pie-chart">{children}</div>,
+  Pie: ({ children }: { children: React.ReactNode }) => <div data-testid="pie">{children}</div>,
+  Cell: ({ children }: { children: React.ReactNode }) => <div data-testid="cell">{children}</div>,
+  ResponsiveContainer: ({ children }: { children: React.ReactNode }) => <div data-testid="responsive-container">{children}</div>,
   Legend: () => <div data-testid="legend">Legend</div>,
   Tooltip: () => <div data-testid="tooltip">Tooltip</div>,
 }));

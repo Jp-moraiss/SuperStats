@@ -2,12 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import HqCard from '../HqCard';
 
-// Mock Next.js Image component
-jest.mock('next/image', () => {
-  return function MockImage({ src, alt, ...props }: any) {
-    return <img src={src} alt={alt} {...props} />;
-  };
-});
+// Mock is handled globally in jest.setup.js
 
 describe('HqCard', () => {
   const mockHq = {
@@ -32,8 +27,9 @@ describe('HqCard', () => {
   it('renders HQ cover image', () => {
     render(<HqCard hq={mockHq} onToggleRead={jest.fn()} />);
     
-    const cover = screen.getByAltText('Capa de Batman: The Dark Knight Returns');
-    expect(cover).toHaveAttribute('src', '/hq-cover.jpg');
+    const cover = screen.getByTestId('next-image-mock');
+    expect(cover).toHaveAttribute('data-src', '/hq-cover.jpg');
+    expect(cover).toHaveAttribute('data-alt', 'Capa de Batman: The Dark Knight Returns');
   });
 
   it('renders volume information', () => {
