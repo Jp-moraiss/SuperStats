@@ -20,8 +20,9 @@ export default function HeroVideoOverlay({ hero, onClose }: HeroVideoOverlayProp
 
   if (!hero) return null;
 
-  // Mapear vídeos dos heróis
+  // Mapear vídeos dos heróis e vilões
   const videoSrcMap: Record<string, string> = {
+    // Heróis
     batman: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/batman.mp4",
     spiderman: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/spiderman.mp4",
     superman: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/superman.mp4",
@@ -34,6 +35,20 @@ export default function HeroVideoOverlay({ hero, onClose }: HeroVideoOverlayProp
     wonderwoman: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/wonderwoman.mp4",
     greenlantern: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/greenlantern.mp4",
     justiceleague: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/justiceleague.mp4",
+    // Vilões DC
+    joker: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/joker.mp4",
+    harleyquinn: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/harleyquinn.mp4",
+    lexluthor: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/lexluthor.mp4",
+    bane: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/bane.mp4",
+    darkseid: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/darkseid.mp4",
+    suicidesquad: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/suicidesquad.mp4",
+    // Vilões Marvel
+    thanos: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/thanos.mp4",
+    doom: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/doom.mp4",
+    greengoblin: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/greengoblin.mp4",
+    loki: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/loki.mp4",
+    redskull: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/redskull.mp4",
+    ultron: "https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/ultron.mp4",
   };
 
   const videoSrc = videoSrcMap[hero];

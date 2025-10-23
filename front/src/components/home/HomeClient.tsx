@@ -6,7 +6,7 @@ import SpeechBubble from "../ui/SpeechBubble";
 import HeroVideoOverlay from "../ui/HeroVideoOverlay";
 import Image from "next/image";
 import { useUser } from "../../hooks/useUser";
-import { heroesData, filterHeroesByAffiliation, Hero } from "../../data/heroes";
+import { heroesData, filterHeroesByAffiliation, getVillainsByAffiliation, Hero } from "../../data/heroes";
 
 export default function HomeClient() {
   // User data and authentication
@@ -26,11 +26,29 @@ export default function HomeClient() {
   const greenlanternAudio = useRef<HTMLAudioElement>(null);
   const justiceleagueAudio = useRef<HTMLAudioElement>(null);
   const justiceLeagueSpecialAudio = useRef<HTMLAudioElement>(null);
+  
+  // Audio refs para vilões
+  const jokerAudio = useRef<HTMLAudioElement>(null);
+  const harleyquinnAudio = useRef<HTMLAudioElement>(null);
+  const lexluthorAudio = useRef<HTMLAudioElement>(null);
+  const baneAudio = useRef<HTMLAudioElement>(null);
+  const darkseidAudio = useRef<HTMLAudioElement>(null);
+  const suicidesquadAudio = useRef<HTMLAudioElement>(null);
+  const thanosAudio = useRef<HTMLAudioElement>(null);
+  const doomAudio = useRef<HTMLAudioElement>(null);
+  const greengoblinAudio = useRef<HTMLAudioElement>(null);
+  const lokiAudio = useRef<HTMLAudioElement>(null);
+  const redskullAudio = useRef<HTMLAudioElement>(null);
+  const ultronAudio = useRef<HTMLAudioElement>(null);
+  const villainLaughAudio = useRef<HTMLAudioElement>(null);
+  const thanosSnapAudio = useRef<HTMLAudioElement>(null);
 
   // State management
   const [activeHero, setActiveHero] = useState<string | null>(null);
   const [selectedAffiliation, setSelectedAffiliation] = useState<'all' | 'marvel' | 'dc'>('all');
   const [justiceLeagueClickCount, setJusticeLeagueClickCount] = useState(0);
+  const [villainInvasion, setVillainInvasion] = useState(false);
+  const [showVillains, setShowVillains] = useState(false);
 
   // Auto-set affiliation based on user's favorite universe when logged in
   useEffect(() => {
@@ -42,8 +60,50 @@ export default function HomeClient() {
     }
   }, [isLoggedIn, user?.univ_fav]);
 
-  // Filter heroes based on selected affiliation
-  const filteredHeroes = filterHeroesByAffiliation(heroesData, selectedAffiliation);
+  // Easter Egg de Vilões - Lógica de Sincronia Corrigida
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    // Timer principal de 15 segundos para iniciar o evento
+    const invasionTimer = setTimeout(() => {
+      // 1. Ativa a invasão (overlay, flash e bubble)
+      setVillainInvasion(true);
+      
+      // 2. Toca o som do vilão baseado na afiliação
+      if (selectedAffiliation === 'dc' && villainLaughAudio.current) {
+        villainLaughAudio.current.currentTime = 0;
+        villainLaughAudio.current.play().catch(console.error);
+      } else if (selectedAffiliation === 'marvel' && thanosSnapAudio.current) {
+        thanosSnapAudio.current.currentTime = 0;
+        thanosSnapAudio.current.play().catch(console.error);
+      }
+      
+      // 3. Timer da DURAÇÃO do evento (5.5 segundos)
+      const eventDurationTimer = setTimeout(() => {
+        // 4. Termina o evento de invasão (desliga o overlay)
+        setVillainInvasion(false);
+        // 5. MOSTRA permanentemente os cards dos vilões
+        setShowVillains(true);
+      }, 5500); // Duração da animação de flash
+
+      // Limpeza do timer de duração
+      return () => clearTimeout(eventDurationTimer);
+
+    }, 60000); // 60 segundos
+
+    // Limpeza do timer principal
+    return () => clearTimeout(invasionTimer);
+  }, [isLoggedIn, selectedAffiliation]);
+
+  // Filter heroes based on selected affiliation - APENAS heróis (sem vilões)
+  const allHeroes = heroesData.filter(hero => 
+    !['joker', 'harleyquinn', 'lexluthor', 'bane', 'darkseid', 'suicidesquad', 
+      'thanos', 'doom', 'greengoblin', 'loki', 'redskull', 'ultron'].includes(hero.id)
+  );
+  const filteredHeroes = filterHeroesByAffiliation(allHeroes, selectedAffiliation);
+  
+  // Obtém a lista de vilões APENAS se o evento já rodou
+  const filteredVillains = showVillains && selectedAffiliation !== 'all' ? getVillainsByAffiliation(selectedAffiliation) : [];
 
   const handleHeroClick = (hero: Hero, audioRef: React.RefObject<HTMLAudioElement | null>) => {
     setActiveHero(hero.id);
@@ -80,7 +140,13 @@ export default function HomeClient() {
     }
     
     // Para todas as outras músicas que possamsk estar tocando
-    const allAudioRefs = [spidermanAudio, supermanAudio, batmanAudio, avengersAudio, ironmanAudio, captainamericaAudio, blackpantherAudio, deadpoolAudio, flashAudio, wonderwomanAudio, greenlanternAudio, justiceleagueAudio, justiceLeagueSpecialAudio];
+    const allAudioRefs = [
+      spidermanAudio, supermanAudio, batmanAudio, avengersAudio, ironmanAudio, captainamericaAudio, 
+      blackpantherAudio, deadpoolAudio, flashAudio, wonderwomanAudio, greenlanternAudio, 
+      justiceleagueAudio, justiceLeagueSpecialAudio, jokerAudio, harleyquinnAudio, lexluthorAudio, 
+      baneAudio, darkseidAudio, suicidesquadAudio, thanosAudio, doomAudio, greengoblinAudio, 
+      lokiAudio, redskullAudio, ultronAudio, villainLaughAudio, thanosSnapAudio
+    ];
     
     allAudioRefs.forEach(ref => {
       if (ref.current && ref !== audioRef) {
@@ -109,6 +175,17 @@ export default function HomeClient() {
 
   return (
     <div className="home-container page-transition">
+      
+      {/* Overlay de Invasão de Vilão (Flash e Bubble Centralizado) */}
+      {villainInvasion && (
+        <div className="villain-invasion-overlay">
+          <div className="villain-invasion-bubble">
+            <h2 className="villain-invasion-text">
+                Achou que era só sobre os &apos;mocinhos&apos;?
+            </h2>
+          </div>
+        </div>
+      )}
       <section className="hero-section">
         <div className="hero-content">
           <h1 className="hero-title">
@@ -138,6 +215,8 @@ export default function HomeClient() {
             {getSpeechBubbleText()}
       </SpeechBubble>
 
+      {/* O SpeechBubble do vilão foi movido para o overlay acima */}
+
       <div className="hero-gallery">
         <div className="hero-grid">
               {filteredHeroes.map((hero) => {
@@ -155,31 +234,75 @@ export default function HomeClient() {
                                hero.id === 'justiceleague' ? justiceleagueAudio : avengersAudio;
                 
                 return (
+                    <div 
+                        key={hero.id}
+                        className={`hero-card ${hero.id}`}
+                        onClick={() => handleHeroClick(hero, audioRef)}
+                    >
+                        <Image src={hero.imagemSrc} alt={hero.nome} width={200} height={200} />
+                        <span className="hero-label">{hero.nome}</span>
+                    </div>
+                );
+              })}
+              
+              {/* Renderizar vilões SÓ SE 'showVillains' for true */}
+              {showVillains && filteredVillains.map((villain) => {
+                const audioRef = villain.id === 'joker' ? jokerAudio :
+                               villain.id === 'harleyquinn' ? harleyquinnAudio :
+                               villain.id === 'lexluthor' ? lexluthorAudio :
+                               villain.id === 'bane' ? baneAudio :
+                               villain.id === 'darkseid' ? darkseidAudio :
+                               villain.id === 'suicidesquad' ? suicidesquadAudio :
+                               villain.id === 'thanos' ? thanosAudio :
+                               villain.id === 'doom' ? doomAudio :
+                               villain.id === 'greengoblin' ? greengoblinAudio :
+                               villain.id === 'loki' ? lokiAudio :
+                               villain.id === 'redskull' ? redskullAudio :
+                               villain.id === 'ultron' ? ultronAudio : jokerAudio;
+                
+                return (
                   <div 
-                    key={hero.id}
-                    className={`hero-card ${hero.id}`}
-                    onClick={() => handleHeroClick(hero, audioRef)}
+                    key={villain.id}
+                    className={`hero-card villain-card ${villain.id}`}
+                    onClick={() => handleHeroClick(villain, audioRef)}
                   >
-                    <Image src={hero.imagemSrc} alt={hero.nome} width={200} height={200} />
-                    <span className="hero-label">{hero.nome}</span>
-          </div>
+                    <Image src={villain.imagemSrc} alt={villain.nome} width={200} height={200} />
+                    <span className="hero-label">{villain.nome}</span>
+                  </div>
                 );
               })}
           </div>
             
-            <audio ref={batmanAudio} src="/audio/batman-theme.mp3" />
-            <audio ref={spidermanAudio} src="/audio/spiderman-theme.mp3" />
-            <audio ref={supermanAudio} src="/audio/superman-theme.mp3" />
-            <audio ref={avengersAudio} src="/audio/avengers-theme.mp3" />
-            <audio ref={ironmanAudio} src="/audio/ironman-theme.mp3" />
-            <audio ref={captainamericaAudio} src="/audio/captainamerica-theme.mp3" />
-            <audio ref={blackpantherAudio} src="/audio/blackpanther-theme.mp3" />
-            <audio ref={deadpoolAudio} src="/audio/deadpool-theme.mp3" />
-            <audio ref={flashAudio} src="/audio/flash-theme.mp3" />
-            <audio ref={wonderwomanAudio} src="/audio/wonderwoman-theme.mp3" />
-            <audio ref={greenlanternAudio} src="/audio/greenlantern-theme.mp3" />
-            <audio ref={justiceleagueAudio} src="/audio/justiceleague-theme.mp3" />
-            <audio ref={justiceLeagueSpecialAudio} src="/audio/justiceleague-special-theme.mp3" />
+        <audio ref={batmanAudio} src="/audio/batman-theme.mp3" />
+        <audio ref={spidermanAudio} src="/audio/spiderman-theme.mp3" />
+        <audio ref={supermanAudio} src="/audio/superman-theme.mp3" />
+        <audio ref={avengersAudio} src="/audio/avengers-theme.mp3" />
+        <audio ref={ironmanAudio} src="/audio/ironman-theme.mp3" />
+        <audio ref={captainamericaAudio} src="/audio/captainamerica-theme.mp3" />
+        <audio ref={blackpantherAudio} src="/audio/blackpanther-theme.mp3" />
+        <audio ref={deadpoolAudio} src="/audio/deadpool-theme.mp3" />
+        <audio ref={flashAudio} src="/audio/flash-theme.mp3" />
+        <audio ref={wonderwomanAudio} src="/audio/wonderwoman-theme.mp3" />
+        <audio ref={greenlanternAudio} src="/audio/greenlantern-theme.mp3" />
+        <audio ref={justiceleagueAudio} src="/audio/justiceleague-theme.mp3" />
+        <audio ref={justiceLeagueSpecialAudio} src="/audio/justiceleague-special-theme.mp3" />
+        
+        {/* Áudios dos vilões */}
+        <audio ref={jokerAudio} src="/audio/joker-theme.mp3" />
+        <audio ref={harleyquinnAudio} src="/audio/harleyquinn-theme.mp3" />
+        <audio ref={lexluthorAudio} src="/audio/lexluthor-theme.mp3" />
+        <audio ref={baneAudio} src="/audio/bane-theme.mp3" />
+        <audio ref={darkseidAudio} src="/audio/darkseid-theme.mp3" />
+        <audio ref={suicidesquadAudio} src="/audio/suicidesquad-theme.mp3" />
+        <audio ref={thanosAudio} src="/audio/thanos-theme.mp3" />
+        <audio ref={doomAudio} src="/audio/doom-theme.mp3" />
+        <audio ref={greengoblinAudio} src="/audio/greengoblin-theme.mp3" />
+        <audio ref={lokiAudio} src="/audio/loki-theme.mp3" />
+        <audio ref={redskullAudio} src="/audio/redskull-theme.mp3" />
+        <audio ref={ultronAudio} src="/audio/ultron-theme.mp3" />
+        {/* Áudios do EVENTO de invasão */}
+        <audio ref={villainLaughAudio} src="/audio/joker-laugh.mp3" />
+        <audio ref={thanosSnapAudio} src="/audio/thanos-snap.mp3" />
       </div>
         </>
       ) : null}

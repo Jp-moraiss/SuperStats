@@ -333,6 +333,120 @@
      2px  2px 0 #000;
 }
 
+/* Estilos para vilões */
+.villain-card {
+  border-color: #8b0000 !important; /* Vermelho escuro */
+  box-shadow: 8px 8px 0 #8b0000 !important;
+  animation: villainAppear 0.8s ease-out;
+}
+
+.villain-card:hover {
+  box-shadow: 14px 14px 0 #ff0000 !important; /* Vermelho brilhante no hover */
+  border-color: #ff0000 !important;
+}
+
+@keyframes villainAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) rotate(-10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* ===========================
+ [NOVO] Invasão de Vilões 
+=========================== */
+
+/* Animação de "corrupção" da tela */
+@keyframes dramaticFlash {
+  0%, 100% {
+    background-color: transparent;
+    opacity: 1;
+  }
+  10% { background-color: rgba(128, 0, 128, 0.7); } /* Roxo */
+  20% { background-color: transparent; }
+  25% { background-color: rgba(255, 255, 255, 0.5); } /* Flash branco */
+  30% { background-color: rgba(0, 0, 0, 0.8); } /* "Apagão" */
+  40% { background-color: transparent; }
+  50% { background-color: rgba(255, 0, 0, 0.7); } /* Vermelho */
+  60% { background-color: transparent; }
+  70% { background-color: rgba(0, 0, 0, 0.9); } /* "Apagão" */
+  80% { background-color: rgba(255, 255, 255, 0.3); } /* Flash branco */
+  90% { background-color: rgba(128, 0, 128, 0.5); } /* Roxo */
+  95% { opacity: 1; }
+  100% { opacity: 0; } /* Fade out no final */
+}
+
+/* Animação para o bubble aparecer */
+@keyframes bubblePopIn {
+  0% {
+    transform: scale(0.5) rotate(-15deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* O Overlay principal que cobre a tela */
+.villain-invasion-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9998; /* Abaixo de modals, mas acima de tudo */
+  pointer-events: none; /* Não bloquear cliques */
+  
+  /* Centraliza o conteúdo (o bubble) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Aplica a animação de flash dramático */
+  animation: dramaticFlash 5.5s ease-in-out forwards;
+}
+
+/* Estilo para o Bubble 'electric' DENTRO do overlay */
+.villain-invasion-bubble {
+  /* Força o bubble a ser clicável se necessário, mas o overlay não é */
+  pointer-events: all; 
+  
+  /* Sobrescreve o tamanho de 'vw' para ser legível */
+  width: 60%;
+  max-width: 500px;
+  font-size: 2.2rem !important; /* !important para sobrescrever o .electric */
+  animation: bubblePopIn 0.5s ease-out 0.2s backwards; /* Aparece 0.2s após o início do flash */
+}
+
+/* Sobrescreve o <span> dentro do bubble */
+.villain-invasion-bubble span {
+  font-size: 2.5rem !important; /* !important para sobrescrever o .electric span */
+}
+
+.villain-invasion-text {
+  font-family: "Bangers", cursive;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  color: #fff;
+  text-align: center;
+  line-height: 1.2;
+  
+  /* Efeito de texto "vilão" (roxo/verde) */
+  text-shadow:
+    -3px -3px 0 #6A0DAD, /* Roxo */
+     3px -3px 0 #6A0DAD,
+    -3px  3px 0 #6A0DAD,
+     3px  3px 0 #6A0DAD,
+     6px  6px 0 #00A300; /* Sombra Verde */
+  
+  /* Animação para o texto "pular" na tela */
+  animation: textPopIn 0.5s ease-out 0.2s backwards;
+}
+
 /* Media Query para melhorar a responsividade do card dos Vingadores */
 @media (max-width: 600px) {
   .hero-horizontal {

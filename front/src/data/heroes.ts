@@ -118,6 +118,116 @@ export const heroesData: Hero[] = [
     videoSrc: 'https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/greenlantern.mp4',
     layout: 'card',
   },
+  // VILÕES DC
+  {
+    id: 'joker',
+    nome: 'Coringa',
+    afiliacao: 'dc',
+    imagemSrc: '/joker.png',
+    audioSrc: '/audio/joker-laugh.mp3',
+    videoSrc: 'https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/joker.mp4',
+    layout: 'card',
+  },
+  {
+    id: 'harleyquinn',
+    nome: 'Alerquina',
+    afiliacao: 'dc',
+    imagemSrc: '/harleyquinn.png',
+    audioSrc: '/audio/harleyquinn-theme.mp3',
+    videoSrc: 'https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/harleyquinn.mp4',
+    layout: 'card',
+  },
+  {
+    id: 'lexluthor',
+    nome: 'Lex Luthor',
+    afiliacao: 'dc',
+    imagemSrc: '/lexluthor.png',
+    audioSrc: '/audio/lexluthor-theme.mp3',
+    videoSrc: 'https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/lexluthor.mp4',
+    layout: 'card',
+  },
+  {
+    id: 'bane',
+    nome: 'Bane',
+    afiliacao: 'dc',
+    imagemSrc: '/bane.png',
+    audioSrc: '/audio/bane-theme.mp3',
+    videoSrc: 'https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/bane.mp4',
+    layout: 'card',
+  },
+  {
+    id: 'darkseid',
+    nome: 'Darkseid',
+    afiliacao: 'dc',
+    imagemSrc: '/darkseid.png',
+    audioSrc: '/audio/darkseid-theme.mp3',
+    videoSrc: 'https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/darkseid.mp4',
+    layout: 'card',
+  },
+  {
+    id: 'suicidesquad',
+    nome: 'Esquadrão Suicida',
+    afiliacao: 'dc',
+    imagemSrc: '/suicidesquad.png',
+    audioSrc: '/audio/suicidesquad-theme.mp3',
+    videoSrc: 'https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/suicidesquad.mp4',
+    layout: 'card',
+  },
+  // VILÕES MARVEL
+  {
+    id: 'thanos',
+    nome: 'Thanos',
+    afiliacao: 'marvel',
+    imagemSrc: '/thanos.png',
+    audioSrc: '/audio/thanos-snap.mp3',
+    videoSrc: 'https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/thanos.mp4',
+    layout: 'card',
+  },
+  {
+    id: 'doom',
+    nome: 'Doutor Destino',
+    afiliacao: 'marvel',
+    imagemSrc: '/doom.png',
+    audioSrc: '/audio/doom-theme.mp3',
+    videoSrc: 'https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/doom.mp4',
+    layout: 'card',
+  },
+  {
+    id: 'greengoblin',
+    nome: 'Duende Verde',
+    afiliacao: 'marvel',
+    imagemSrc: '/greengoblin.png',
+    audioSrc: '/audio/greengoblin-theme.mp3',
+    videoSrc: 'https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/greengoblin.mp4',
+    layout: 'card',
+  },
+  {
+    id: 'loki',
+    nome: 'Loki',
+    afiliacao: 'marvel',
+    imagemSrc: '/loki.png',
+    audioSrc: '/audio/loki-theme.mp3',
+    videoSrc: 'https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/loki.mp4',
+    layout: 'card',
+  },
+  {
+    id: 'redskull',
+    nome: 'Caveira Vermelha',
+    afiliacao: 'marvel',
+    imagemSrc: '/redskull.png',
+    audioSrc: '/audio/redskull-theme.mp3',
+    videoSrc: 'https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/redskull.mp4',
+    layout: 'card',
+  },
+  {
+    id: 'ultron',
+    nome: 'Ultron',
+    afiliacao: 'marvel',
+    imagemSrc: '/ultron.png',
+    audioSrc: '/audio/ultron-theme.mp3',
+    videoSrc: 'https://cnhmrnnhplpomdszzpxn.supabase.co/storage/v1/object/public/videos/ultron.mp4',
+    layout: 'card',
+  },
 
 ];
 
@@ -125,4 +235,14 @@ export const heroesData: Hero[] = [
 export const filterHeroesByAffiliation = (heroes: Hero[], affiliation: 'all' | 'marvel' | 'dc') => {
   if (affiliation === 'all') return heroes;
   return heroes.filter(hero => hero.afiliacao === affiliation);
+};
+
+// Função para obter vilões baseado na afiliação
+export const getVillainsByAffiliation = (affiliation: 'marvel' | 'dc') => {
+  const villainIds = {
+    dc: ['joker', 'harleyquinn', 'lexluthor', 'bane', 'darkseid', 'suicidesquad'],
+    marvel: ['thanos', 'doom', 'greengoblin', 'loki', 'redskull', 'ultron']
+  };
+  
+  return heroesData.filter(hero => villainIds[affiliation].includes(hero.id));
 };
