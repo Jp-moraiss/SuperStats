@@ -2,6 +2,8 @@ package com.cesar.superstats.controller;
 
 import com.cesar.superstats.dto.FilmeCreateDTO;
 import com.cesar.superstats.dto.FilmeDTO;
+import com.cesar.superstats.dto.FilmeFinalizeCreateDTO;
+import com.cesar.superstats.dto.TmdbMovieResult;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.Filme;
 import com.cesar.superstats.service.FilmeService;
@@ -46,9 +48,15 @@ public class FilmeController {
         return ResponseEntity.ok(filmes);
     }
 
+    @GetMapping("/buscar-externo")
+    public ResponseEntity<List<TmdbMovieResult>> buscarFilmesExternos(@RequestParam String titulo) {
+        return ResponseEntity.ok(service.buscarFilmesExternos(titulo));
+    }
+
+    // --- ENDPOINT 'CREATE' MODIFICADO: Recebe o ID do TMDB para a criação final ---
     @PostMapping
-    public ResponseEntity<Filme> create(@RequestBody FilmeCreateDTO filmeDTO) {
-        Filme filmeCriado = service.create(filmeDTO);
+    public ResponseEntity<Filme> create(@RequestBody FilmeFinalizeCreateDTO dto) {
+        Filme filmeCriado = service.createFromApi(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(filmeCriado);
     }
 

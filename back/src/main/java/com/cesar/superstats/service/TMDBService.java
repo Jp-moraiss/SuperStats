@@ -18,26 +18,25 @@ public class TMDBService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public TmdbMovieResult buscarFilme(String titulo) {
+    public TmdbSearchResponse buscarFilmes(String titulo) {
         String url = UriComponentsBuilder.fromHttpUrl(apiUrl + "/search/movie")
                 .queryParam("api_key", apiKey)
                 .queryParam("query", titulo)
-                .queryParam("language", "pt-BR") // Bônus: Pede resultados em português
+                .queryParam("language", "pt-BR")
                 .toUriString();
 
         TmdbSearchResponse response = restTemplate.getForObject(url, TmdbSearchResponse.class);
 
-        if (response == null || response.getResults() == null || response.getResults().isEmpty()) {
-            throw new ResourceNotFoundException("Nenhum filme encontrado no TMDB com o título: " + titulo);
+        // Se a resposta for válida, constrói a URL completa do pôster para cada filme na lista
+        if (response != null && response.getResults() != null) {
+            response.getResults().forEach(filme -> {
+                if (filme.getPosterPath() != null && !filme.getPosterPath().isEmpty()) {
+                    filme.setPosterPath(imageUrlBase + filme.getPosterPath());
+                }
+            });
         }
 
-        TmdbMovieResult result = response.getResults().get(0);
-
-        if (result.getPosterPath() != null && !result.getPosterPath().isEmpty()) {
-            result.setPosterPath(imageUrlBase + result.getPosterPath());
-        }
-
-        return result;
+        return response;
     }
 
     public TmdbMovieDetailsDTO buscarDetalhes(int movieId) {

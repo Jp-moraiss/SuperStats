@@ -50,27 +50,38 @@ public class FilmeService {
         return repository.findByProdutora(produtora);
     }
 
-    public Filme create(FilmeCreateDTO filmeDTO) {
-        if (filmeDTO.getTitulo() == null || filmeDTO.getTitulo().isBlank()) {
-            throw new IllegalArgumentException("O título do filme é obrigatório para a busca.");
+    public List<TmdbMovieResult> buscarFilmesExternos(String titulo) {
+        TmdbSearchResponse response = tmdbService.buscarFilmes(titulo);
+        if (response == null || response.getResults() == null || response.getResults().isEmpty()) {
+            return List.of();
+        }
+        return response.getResults();
+    }
+
+    public Filme createFromApi(FilmeFinalizeCreateDTO dto) {
+        if (dto.getTmdbId() <= 0) {
+            throw new IllegalArgumentException("O ID do TMDB é obrigatório para criar o filme.");
         }
 
-        TmdbMovieResult dadosBasicos = tmdbService.buscarFilme(filmeDTO.getTitulo());
-        int movieId = dadosBasicos.getId();
+        int movieId = dto.getTmdbId();
+
 
         TmdbMovieDetailsDTO detalhes = tmdbService.buscarDetalhes(movieId);
         TmdbCreditsDTO creditos = tmdbService.buscarCreditos(movieId);
         TmdbVideosResponseDTO videos = tmdbService.buscarVideos(movieId);
 
-        Filme filme = new Filme();
-        filme.setTitulo(dadosBasicos.getTitle());
-        filme.setPosterUrl(dadosBasicos.getPosterPath());
+        if(detalhes == null) {
+            throw new ResourceNotFoundException("Não foi possível encontrar detalhes para o filme com ID: " + movieId);
+        }
 
+        Filme filme = new Filme();
+        filme.setTitulo(detalhes.getTitle());
+        filme.setPosterUrl("https://image.tmdb.org/t/p/w500" + detalhes.getPosterPath());
         filme.setAvaliacaoTmdb(BigDecimal.valueOf(detalhes.getVoteAverage()));
 
         try {
-            if (dadosBasicos.getReleaseDate() != null && !dadosBasicos.getReleaseDate().isEmpty()) {
-                filme.setDataLancamento(LocalDate.parse(dadosBasicos.getReleaseDate()));
+            if (detalhes.getReleaseDate() != null && !detalhes.getReleaseDate().isEmpty()) {
+                filme.setDataLancamento(LocalDate.parse(detalhes.getReleaseDate()));
             }
         } catch (Exception e) {
             filme.setDataLancamento(null);
