@@ -20,7 +20,7 @@ const formatDate = (dateString?: string) => {
       return `${parts[2]}/${parts[1]}/${parts[0]}`; // DD/MM/YYYY
     }
     return dateString;
-  } catch (e) {
+  } catch {
     return dateString;
   }
 };

@@ -4,11 +4,10 @@ import { useCallback } from 'react';
 
 interface ErrorHandlerOptions {
   onError?: (error: Error, context: string) => void;
-  fallbackMessage?: string;
 }
 
 export const useErrorHandler = (options: ErrorHandlerOptions = {}) => {
-  const { onError, fallbackMessage = 'Ocorreu um erro inesperado' } = options;
+  const { onError } = options;
 
   const handleError = useCallback((error: unknown, context: string) => {
     const errorObj = error instanceof Error ? error : new Error(String(error));

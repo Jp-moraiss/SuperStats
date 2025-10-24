@@ -11,23 +11,32 @@ const mockAudioElement = {
   removeEventListener: jest.fn(),
 };
 
-// Mock useRef
+// Mock React hooks properly
 jest.mock('react', () => ({
   ...jest.requireActual('react'),
-  useRef: jest.fn((initialValue) => ({
-    current: initialValue,
-  })),
   useCallback: jest.fn((fn) => fn),
   useMemo: jest.fn((fn) => fn()),
 }));
 
 describe('useAudioManager', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     jest.clearAllMocks();
-    // Mock useRef to return mock audio elements
-    (jest.requireActual('react').useRef as jest.Mock).mockImplementation(() => ({
-      current: mockAudioElement,
-    }));
+    // Reset mock audio element
+    mockAudioElement.pause.mockClear();
+    mockAudioElement.play.mockClear();
+    
+    // Mock useMemo to return refs with mock audio elements
+    const React = await import('react');
+    React.useMemo.mockImplementation((fn) => {
+      const result = fn();
+      // If it's the audioRefs object, populate it with mock refs
+      if (result && typeof result === 'object' && !Array.isArray(result)) {
+        Object.keys(result).forEach(key => {
+          result[key] = { current: mockAudioElement };
+        });
+      }
+      return result;
+    });
   });
 
   it('should create audio refs for all heroes and villains', () => {
@@ -79,10 +88,18 @@ describe('useAudioManager', () => {
   });
 
   it('should handle missing audio ref', async () => {
-    // Mock useRef to return null for missing audio
-    (jest.requireActual('react').useRef as jest.Mock).mockImplementation(() => ({
-      current: null,
-    }));
+    // Mock useMemo to return refs with null current for missing audio
+    const React = await import('react');
+    React.useMemo.mockImplementation((fn) => {
+      const result = fn();
+      // If it's the audioRefs object, populate it with null refs
+      if (result && typeof result === 'object' && !Array.isArray(result)) {
+        Object.keys(result).forEach(key => {
+          result[key] = { current: null };
+        });
+      }
+      return result;
+    });
     
     const { result } = renderHook(() => useAudioManager());
     

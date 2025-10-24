@@ -44,7 +44,7 @@ const PowerDistributionChart = ({ data }: PowerDistributionChartProps) => {
       <ResponsiveContainer width="100%" height={400}>
         <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 25 }}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" label={{ value: 'Nível de Poder', position: 'insideBottom', offset: -10 }}/>
+          <XAxis dataKey="name"/>
           <YAxis label={{ value: 'Nº de Personagens', angle: -90, position: 'insideLeft' }} allowDecimals={false}/>
           <Tooltip />
           <Legend />

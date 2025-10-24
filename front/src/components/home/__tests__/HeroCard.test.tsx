@@ -7,6 +7,7 @@ import { Hero } from '../../../data/heroes';
 // Mock Next.js Image
 jest.mock('next/image', () => {
   return function MockImage({ src, alt, ...props }: Record<string, unknown>) {
+    // eslint-disable-next-line @next/next/no-img-element
     return <img src={src} alt={alt} {...props} />;
   };
 });
