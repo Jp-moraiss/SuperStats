@@ -80,8 +80,8 @@ export default function HqSearchResults({
       <div className={styles.resultsGrid}>
         {results.map((item) => {
           const isAdding = addingHqUrl === item.apiDetailUrl;
-          const isIssue = item.resourceType === 'issue';
           const resourceType = view === 'volume' ? 'issue' : item.resourceType;
+          const isIssue = resourceType === 'issue';
 
           return (
             <div 
@@ -89,10 +89,8 @@ export default function HqSearchResults({
               className={`
                 ${styles.resultCard} 
                 ${resourceType === 'volume' ? styles.volumeCard : ''}
-                ${isAdding ? styles.adding : ''}
+                ${isAdding ? styles.disabled : ''}
               `}
-              onClick={!isAdding ? () => onSelectResult(item) : undefined}
-              title={resourceType === 'issue' ? "Clique para adicionar ao seu catálogo" : "Clique para ver edições"}
             >
               <Image 
                 src={item.imageUrl || '/placeholder.png'} 
@@ -102,26 +100,31 @@ export default function HqSearchResults({
                 className={styles.resultImage}
               />
               <div className={styles.cardContent}>
-                <p className={styles.hqVolumeName}>{item.volumeName}</p>
-                <p className={styles.hqTitle}>{item.title}</p>
-                <p className={styles.hqYear}>{item.year || 'N/A'}</p>
+                {/* Div para agrupar o texto e usar flex-grow */}
+                <div className={styles.cardTextContent}>
+                  <p className={styles.hqVolumeName}>{item.volumeName}</p>
+                  <p className={styles.hqTitle}>{item.title}</p>
+                  <p className={styles.hqYear}>{item.year || 'N/A'}</p>
+                </div>
+
+                {/* Lógica de Botão (como no componente de Filmes) */}
+                {isIssue ? (
+                  <button 
+                    className="btn-cta" // Usando a classe global/padrão
+                    onClick={() => onSelectResult(item)}
+                    disabled={isAdding}
+                  >
+                    <FaPlusCircle/> {isAdding ? 'Adicionando...' : 'Adicionar'}
+                  </button>
+                ) : (
+                  <button 
+                    className={styles.btnVolume} // Um estilo local para o botão de volume
+                    onClick={() => onSelectResult(item)}
+                  >
+                    <FaFolderOpen/> Ver Edições
+                  </button>
+                )}
               </div>
-
-              {/* Overlay de Adicionar (para issues) */}
-              {resourceType === 'issue' && (
-                <div className={styles.addOverlay}>
-                  <FaPlusCircle />
-                  <span>{isAdding ? 'Adicionando...' : 'Adicionar'}</span>
-                </div>
-              )}
-
-              {/* Overlay de Ver (para volumes) */}
-              {resourceType === 'volume' && (
-                <div className={styles.viewOverlay}>
-                  <FaFolderOpen />
-                  <span>Ver Edições</span>
-                </div>
-              )}
             </div>
           );
         })}

@@ -16,6 +16,7 @@
   align-items: center;
   z-index: 10;
   border-radius: 8px;
+  min-height: 200px;
 }
 
 .spinner {
