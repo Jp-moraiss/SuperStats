@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import TrailerModal from '../TrailerModal';
+import { TrailerModal } from '../../../features/movies';
 
 describe('TrailerModal', () => {
   const mockTrailerUrl = 'https://www.youtube.com/embed/abc123';

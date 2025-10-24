@@ -1,3 +1,4 @@
+import React from 'react';
 import { renderHook, act } from '@testing-library/react';
 import { useAudioManager } from '../useAudioManager';
 
@@ -11,7 +12,7 @@ const mockAudioElement = {
   removeEventListener: jest.fn(),
 };
 
-// Mock React hooks properly
+// Mock React hooks with proper typing
 jest.mock('react', () => ({
   ...jest.requireActual('react'),
   useCallback: jest.fn((fn) => fn),
@@ -19,24 +20,11 @@ jest.mock('react', () => ({
 }));
 
 describe('useAudioManager', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
     jest.clearAllMocks();
     // Reset mock audio element
     mockAudioElement.pause.mockClear();
     mockAudioElement.play.mockClear();
-    
-    // Mock useMemo to return refs with mock audio elements
-    const React = await import('react');
-    React.useMemo.mockImplementation((fn) => {
-      const result = fn();
-      // If it's the audioRefs object, populate it with mock refs
-      if (result && typeof result === 'object' && !Array.isArray(result)) {
-        Object.keys(result).forEach(key => {
-          result[key] = { current: mockAudioElement };
-        });
-      }
-      return result;
-    });
   });
 
   it('should create audio refs for all heroes and villains', () => {
@@ -50,12 +38,21 @@ describe('useAudioManager', () => {
   });
 
   it('should stop all audio when stopAllAudio is called', () => {
-    const { result } = renderHook(() => useAudioManager());
+    // Mock the audio refs to have actual elements
+    const mockRefs = {
+      batman: { current: mockAudioElement },
+      spiderman: { current: mockAudioElement }
+    };
     
+    // Mock useMemo to return our mock refs
+    (React.useMemo as jest.Mock).mockReturnValue(mockRefs);
+    
+    const { result } = renderHook(() => useAudioManager());
+
     act(() => {
       result.current.stopAllAudio();
     });
-    
+
     // Should call pause on all audio elements
     expect(mockAudioElement.pause).toHaveBeenCalled();
   });
@@ -63,9 +60,17 @@ describe('useAudioManager', () => {
   it('should play audio successfully', async () => {
     mockAudioElement.play.mockResolvedValue(undefined);
     
+    // Mock the audio refs to have actual elements
+    const mockRefs = {
+      batman: { current: mockAudioElement }
+    };
+    
+    // Mock useMemo to return our mock refs
+    (React.useMemo as jest.Mock).mockReturnValue(mockRefs);
+    
     const { result } = renderHook(() => useAudioManager());
     
-    let playResult: boolean;
+    let playResult: boolean = false;
     await act(async () => {
       playResult = await result.current.playAudio('batman');
     });
@@ -79,7 +84,7 @@ describe('useAudioManager', () => {
     
     const { result } = renderHook(() => useAudioManager());
     
-    let playResult: boolean;
+    let playResult: boolean = true;
     await act(async () => {
       playResult = await result.current.playAudio('batman');
     });
@@ -88,22 +93,9 @@ describe('useAudioManager', () => {
   });
 
   it('should handle missing audio ref', async () => {
-    // Mock useMemo to return refs with null current for missing audio
-    const React = await import('react');
-    React.useMemo.mockImplementation((fn) => {
-      const result = fn();
-      // If it's the audioRefs object, populate it with null refs
-      if (result && typeof result === 'object' && !Array.isArray(result)) {
-        Object.keys(result).forEach(key => {
-          result[key] = { current: null };
-        });
-      }
-      return result;
-    });
-    
     const { result } = renderHook(() => useAudioManager());
     
-    let playResult: boolean;
+    let playResult: boolean = true;
     await act(async () => {
       playResult = await result.current.playAudio('nonexistent');
     });

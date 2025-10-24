@@ -1,0 +1,57 @@
+/* src/features/hqs/components/AddHqForm.module.css */
+
+.addFormContainer {
+  width: 100%;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+.searchWrapper {
+  position: relative;
+}
+
+.searchInputContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 15px;
+  color: var(--text-secondary-color);
+  z-index: 2;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.8rem 1rem 0.8rem 2.5rem;
+  font-size: 1.1rem;
+  font-family: 'Roboto', sans-serif;
+  border-radius: 8px;
+  border: 3px solid var(--border-color);
+  box-shadow: var(--shadow-light);
+  transition: all 0.2s ease-in-out;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(255, 87, 87, 0.4);
+}
+
+.spinner {
+  position: absolute;
+  right: 15px;
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+

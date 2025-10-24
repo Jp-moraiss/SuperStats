@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import HqCard from '../HqCard';
+import { HqCard } from '../../../features/hqs';
 
 // Mock is handled globally in jest.setup.js
 

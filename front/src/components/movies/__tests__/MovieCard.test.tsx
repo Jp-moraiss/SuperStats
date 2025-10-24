@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import MovieCard from '../MovieCard';
+import { MovieCard } from '../../../features/movies';
 
 // Mock is handled globally in jest.setup.js
 
