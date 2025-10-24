@@ -1,5 +1,3 @@
-// src/app/hqs/page.tsx (ou onde HqsPage.tsx estiver)
-
 "use client";
 import { useState, useEffect, useMemo } from "react";
 import styles from './HqsPage.module.css';
@@ -13,51 +11,8 @@ import HqSearchResults from "../../components/hqs/HqSearchResults";
 // Tipos
 import { Hq, ComicVineSearchResult } from "../../types/hqs";
 
-// Funções de API
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
-
-// Função utilitária de data (para a tabela de lidos)
-const formatDate = (dateString?: string) => {
-  if (!dateString) return 'N/A';
-  try {
-    const parts = dateString.split('-'); // YYYY-MM-DD
-    if (parts.length === 3) {
-      return `${parts[2]}/${parts[1]}/${parts[0]}`; // DD/MM/YYYY
-    }
-    return dateString;
-  } catch {
-    return dateString;
-  }
-};
-
-const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
-  const token = localStorage.getItem('jwtToken');
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`,
-    ...options.headers,
-  };
-
-  const response = await fetch(url, { ...options, headers });
-
-  if (response.status === 401 || response.status === 403) {
-    localStorage.removeItem('jwtToken');
-    window.location.href = '/auth/login';
-    throw new Error('Sessão expirada ou não autorizada. Redirecionando para login...');
-  }
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    if (errorText.includes("JWT expired")) {
-      localStorage.removeItem('jwtToken');
-      window.location.href = '/auth/login';
-      throw new Error('Sessão expirada. Faça login novamente.');
-    }
-    throw new Error(`Erro na requisição: ${response.statusText || response.status} - ${errorText}`);
-  }
-
-  return response;
-};
+// Serviços centralizados
+import { ApiService, API_ENDPOINTS, formatDate } from "../../shared";
 
 export default function HqsPage() {
   const [hqs, setHqs] = useState<Hq[]>([]);
@@ -85,8 +40,8 @@ export default function HqsPage() {
     setIsLoading(true);
     try {
       const [hqsRes, hqsLidasRes] = await Promise.all([
-        fetchWithAuth(`${API_URL}/hqs`),
-        fetchWithAuth(`${API_URL}/hqs/lidos`),
+        ApiService.get(API_ENDPOINTS.HQS),
+        ApiService.get(API_ENDPOINTS.HQS_READ),
       ]);
       setHqs(await hqsRes.json());
       setHqsLidas(await hqsLidasRes.json());
@@ -105,11 +60,9 @@ export default function HqsPage() {
     setHqs(updatedHqs);
 
     try {
-      await fetchWithAuth(`${API_URL}/hqs/${id}/ler`, { 
-        method: isRead ? 'DELETE' : 'POST' 
-      });
+      await ApiService.post(API_ENDPOINTS.HQS_TOGGLE_READ(id));
       // Recarrega discretamente a lista de lidos para garantir consistência
-      const hqsLidasRes = await fetchWithAuth(`${API_URL}/hqs/lidos`);
+      const hqsLidasRes = await ApiService.get(API_ENDPOINTS.HQS_READ);
       setHqsLidas(await hqsLidasRes.json());
     } catch (error) {
       console.error("Erro ao marcar como lido:", error);
@@ -131,7 +84,7 @@ export default function HqsPage() {
         setSearchView('search'); // Reseta a view para a busca
         setLastSearchQuery(query); // Salva a busca
         try {
-          const res = await fetchWithAuth(`${API_URL}/hqs/buscar-externo?titulo=${encodeURIComponent(query)}`);
+          const res = await ApiService.get(`${API_ENDPOINTS.HQS_SEARCH}?titulo=${encodeURIComponent(query)}`);
           const results: ComicVineSearchResult[] = await res.json();
           const uniqueResults = Array.from(new Map(results.map(item => [item.apiDetailUrl || `vol-${item.id}`, item])).values());
           setSearchResults(uniqueResults);
@@ -159,7 +112,7 @@ export default function HqsPage() {
     setIsLoadingVolume(true);
     setVolumeIssues([]);
     try {
-      const res = await fetchWithAuth(`${API_URL}/hqs/buscar-volume-issues?volumeId=${volumeId}`);
+      const res = await ApiService.get(`${API_ENDPOINTS.HQS_VOLUME_ISSUES}?volumeId=${volumeId}`);
       const issues: ComicVineSearchResult[] = await res.json();
       setVolumeIssues(issues);
     } catch (error) {
@@ -190,7 +143,7 @@ export default function HqsPage() {
     setAddingHqUrl(apiDetailUrl);
     try {
       const dto = { apiDetailUrl };
-      await fetchWithAuth(`${API_URL}/hqs`, { method: 'POST', body: JSON.stringify(dto) });
+      await ApiService.post(API_ENDPOINTS.HQS, dto);
       
       // Sucesso
       await loadInitialData(); // Recarrega tudo

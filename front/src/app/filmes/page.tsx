@@ -12,43 +12,9 @@ import TrailerModal from "../../components/movies/TrailerModal";
 // Tipos
 import { Movie, TmdbMovie } from "../../types/movies";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+// Serviços centralizados
+import { ApiService, API_ENDPOINTS } from "../../shared";
 
-// A função fetchWithAuth permanece a mesma...
-const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
-  const token = localStorage.getItem('jwtToken');
-
-  if (!token) {
-    window.location.href = '/auth/login';
-    throw new Error('Nenhum token de autenticação encontrado. Redirecionando...');
-  }
-  
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`,
-    ...options.headers,
-  };
-
-  const response = await fetch(url, { ...options, headers });
-
-  if (response.status === 401 || response.status === 403) {
-    localStorage.removeItem('jwtToken');
-    window.location.href = '/auth/login';
-    throw new Error('Sessão expirada ou não autorizada. Redirecionando para login...');
-  }
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    if (errorText.includes("JWT expired")) {
-      localStorage.removeItem('jwtToken');
-      window.location.href = '/auth/login';
-      throw new Error('Sessão expirada. Faça login novamente.');
-    }
-    throw new Error(`Erro na requisição: ${response.statusText || response.status} - ${errorText}`);
-  }
-
-  return response;
-};
 
 
 export default function MoviesPage() {
@@ -74,8 +40,8 @@ export default function MoviesPage() {
     setIsLoading(true);
     try {
       const [moviesRes, watchedRes] = await Promise.all([
-        fetchWithAuth(`${API_URL}/filmes`),
-        fetchWithAuth(`${API_URL}/filmes/assistidos`),
+        ApiService.get(API_ENDPOINTS.MOVIES),
+        ApiService.get(API_ENDPOINTS.MOVIES_WATCHED),
       ]);
       setMovies(await moviesRes.json());
       setWatchedMovies(await watchedRes.json());
@@ -120,10 +86,7 @@ export default function MoviesPage() {
   const handleAddMovie = async (title: string, tmdbId: number) => {
     setAddingMovieId(tmdbId);
     try {
-      await fetchWithAuth(`${API_URL}/filmes`, {
-        method: 'POST',
-        body: JSON.stringify({ titulo: title })
-      });
+      await ApiService.post(API_ENDPOINTS.MOVIES, { titulo: title });
       await loadInitialData();
       setSearchQuery('');
       setSearchResults([]);
@@ -145,7 +108,7 @@ export default function MoviesPage() {
     setWatchedMovies(prev => prev.filter(m => m.id !== id));
 
     try {
-      await fetchWithAuth(`${API_URL}/filmes/${id}`, { method: 'DELETE' });
+      await ApiService.delete(`${API_ENDPOINTS.MOVIES}/${id}`);
     } catch (error) {
        console.error("Erro ao deletar:", error);
        alert("Não foi possível deletar o filme. Tente novamente.");
@@ -171,9 +134,7 @@ export default function MoviesPage() {
     }
 
     try {
-      await fetchWithAuth(`${API_URL}/filmes/${id}/assistir`, { 
-        method: isWatched ? 'DELETE' : 'POST' 
-      });
+      await ApiService.post(API_ENDPOINTS.MOVIES_TOGGLE_WATCHED(id));
     } catch (error) {
       console.error("Erro ao marcar como assistido:", error);
       alert("Não foi possível alterar o status do filme. Tente novamente.");
