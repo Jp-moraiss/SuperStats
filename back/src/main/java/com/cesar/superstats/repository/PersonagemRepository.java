@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +51,33 @@ public class PersonagemRepository {
         }
     }
 
+    public boolean existsById(Integer id) {
+        String sql = "SELECT COUNT(*) FROM Personagem WHERE id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
+        return count != null && count > 0;
+    }
+
+    public List<Personagem> findByName(String nome, String alignment) {
+        StringBuilder sql = new StringBuilder("SELECT id, nome, imagem_url FROM Personagem WHERE LOWER(nome) LIKE LOWER(?)");
+        List<Object> args = new ArrayList<>();
+        args.add("%" + nome + "%");
+
+        if (alignment != null && !alignment.isBlank()) {
+            sql.append(" AND LOWER(alinhamento) = LOWER(?)");
+            args.add(alignment);
+        }
+        sql.append(" LIMIT 5");
+
+        RowMapper<Personagem> rowMapper = (rs, rowNum) -> {
+            Personagem p = new Personagem();
+            p.setId(rs.getInt("id"));
+            p.setNome(rs.getString("nome"));
+            p.setImagemUrl(rs.getString("imagem_url"));
+            return p;
+        };
+        return jdbcTemplate.query(sql.toString(), rowMapper, args.toArray());
+    }
+
     private static class PersonagemRowMapper implements RowMapper<Personagem> {
         @Override
         public Personagem mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -72,7 +101,6 @@ public class PersonagemRepository {
             p.setPoder(rs.getObject("poder") != null ? rs.getInt("poder") : null);
             p.setCombate(rs.getObject("combate") != null ? rs.getInt("combate") : null);
             p.setImagemUrl(rs.getString("imagem_url"));
-
             return p;
         }
     }

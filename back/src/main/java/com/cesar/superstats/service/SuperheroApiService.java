@@ -15,27 +15,18 @@ public class SuperheroApiService {
     private String apiToken;
 
     private final String API_URL = "https://superheroapi.com/api";
-
     private final RestTemplate restTemplate = new RestTemplate();
 
-    /**
-     * Busca um personagem na Superhero API pelo nome.
-     * @param nome O nome do personagem a ser buscado.
-     * @return O primeiro resultado encontrado na API.
-     * @throws ResourceNotFoundException se nenhum personagem for encontrado.
-     */
-    public SuperheroSearchResponseDTO buscarPersonagem(String nome) {
+    public SuperheroSearchResponseDTO buscarPersonagemPorNome(String nome) {
         String url = UriComponentsBuilder.fromHttpUrl(API_URL)
                 .pathSegment(apiToken, "search", nome)
                 .toUriString();
 
         SuperheroSearchResponseDTO response = restTemplate.getForObject(url, SuperheroSearchResponseDTO.class);
 
-        // A API retorna um erro "character not found" no campo 'response', ou a lista de 'results'
         if (response == null || "error".equals(response.getResponse()) || response.getResults() == null || response.getResults().isEmpty()) {
-            throw new ResourceNotFoundException("Personagem não encontrado na API externa com o nome: " + nome);
+            throw new ResourceNotFoundException("Nenhum personagem encontrado na API externa com o nome: " + nome);
         }
-
         return response;
     }
 

@@ -1,16 +1,11 @@
 package com.cesar.superstats.model.entities;
 import lombok.Data;
-
-import java.util.Date;
-
+import java.time.LocalDate;
 @Data
 public class Resposta {
-
     private Integer id;
-    private Date dataResposta;
     private Personagem personagem;
     private Fa fa;
     private Pergunta pergunta;
-
-    // getters e setters
+    private LocalDate dataResposta;
 }

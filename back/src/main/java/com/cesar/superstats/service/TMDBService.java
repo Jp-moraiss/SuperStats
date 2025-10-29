@@ -27,7 +27,6 @@ public class TMDBService {
 
         TmdbSearchResponse response = restTemplate.getForObject(url, TmdbSearchResponse.class);
 
-        // Se a resposta for válida, constrói a URL completa do pôster para cada filme na lista
         if (response != null && response.getResults() != null) {
             response.getResults().forEach(filme -> {
                 if (filme.getPosterPath() != null && !filme.getPosterPath().isEmpty()) {

@@ -8,6 +8,4 @@ public class Pesquisa {
 
     private Integer idPesquisa;
     private String nome;
-    private List<Pergunta> perguntas;
-
 }

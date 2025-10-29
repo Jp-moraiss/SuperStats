@@ -1,0 +1,732 @@
+ID,Name,Full Name,Alter Egos,Publisher,Alignment,Gender,Race,Height,Weight,Intelligence,Strength,Speed,Durability,Power,Combat
+1,A-Bomb,Richard Milhouse Jones,No alter egos found.,Marvel Comics,good,Male,Human,6'8 // 203 cm,980 lb // 441 kg,38,100,17,80,24,64
+2,Abe Sapien,Abraham Sapien,No alter egos found.,Dark Horse Comics,good,Male,Icthyo Sapien,6'3 // 191 cm,145 lb // 65 kg,88,28,35,65,100,85
+3,Abin Sur,,No alter egos found.,DC Comics,good,Male,Ungaran,6'1 // 185 cm,200 lb // 90 kg,50,90,53,64,99,65
+4,Abomination,Emil Blonsky,No alter egos found.,Marvel Comics,bad,Male,Human / Radiation,6'8 // 203 cm,980 lb // 441 kg,63,80,53,90,62,95
+5,Abraxas,Abraxas,No alter egos found.,Marvel Comics,bad,Male,Cosmic Entity,- // 0 cm,- lb // 0 kg,88,63,83,100,100,55
+6,Absorbing Man,Carl Creel,No alter egos found.,Marvel Comics,bad,Male,Human,6'4 // 193 cm,270 lb // 122 kg,38,80,25,100,98,64
+7,Adam Monroe,,No alter egos found.,NBC - Heroes,good,Male,null,- // 0 cm,- lb // 0 kg,63,10,12,100,100,64
+8,Adam Strange,Adam Strange,No alter egos found.,DC Comics,good,Male,Human,6'1 // 185 cm,195 lb // 88 kg,69,10,33,40,37,50
+9,Agent 13,Sharon Carter,Sharon Carter,Sharon Carter,good,Female,null,5'8 // 173 cm,135 lb // 61 kg,null,46,null,null,null,null
+10,Agent Bob,Bob,No alter egos found.,Marvel Comics,good,Male,Human,5'10 // 178 cm,181 lb // 81 kg,10,8,13,5,5,20
+11,Agent Zero,Christoph Nord,No alter egos found.,Marvel Comics,good,Male,null,6'3 // 191 cm,230 lb // 104 kg,75,28,38,80,72,95
+12,Air-Walker,Gabriel Lan,No alter egos found.,Marvel Comics,bad,Male,null,6'2 // 188 cm,240 lb // 108 kg,50,85,100,85,100,40
+13,Ajax,Francis,No alter egos found.,Marvel Comics,bad,Male,Cyborg,6'4 // 193 cm,200 lb // 90 kg,56,48,35,80,34,55
+14,Alan Scott,Alan Ladd Wellington Scott,No alter egos found.,DC Comics,good,Male,null,5'11 // 180 cm,201 lb // 90 kg,63,80,23,90,100,32
+15,Alex Mercer,Alexander J. Mercer,No alter egos found.,Wildstorm,bad,Male,Human,- // 0 cm,- lb // 0 kg,50,80,42,90,100,50
+16,Alex Woolsly,Alex Woolsly,No alter egos found.,NBC - Heroes,good,Male,null,- // 0 cm,- lb // 0 kg,null,37,null,null,null,null
+17,Alfred Pennyworth,Alfred Thaddeus Crane Pennyworth,No alter egos found.,DC Comics,good,Male,Human,5'10 // 178 cm,160 lb // 72 kg,63,10,17,10,7,55
+18,Alien,Xenomorph,No alter egos found.,Dark Horse Comics,bad,Male,Xenomorph XX121,8'0 // 244 cm,375 lb // 169 kg,50,28,42,90,57,60
+19,Allan Quatermain,,No alter egos found.,Wildstorm,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+20,Amazo,,No alter egos found.,DC Comics,bad,Male,Android,8'5 // 257 cm,385 lb // 173 kg,63,100,83,100,100,100
+21,Ammo,,No alter egos found.,Marvel Comics,bad,Male,Human,6'2 // 188 cm,225 lb // 101 kg,null,null,null,null,null,null
+22,Ando Masahashi,Ando Masahashi,No alter egos found.,NBC - Heroes,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+23,Angel,Liam,No alter egos found.,Dark Horse Comics,good,Male,Vampire,- // 0 cm,- lb // 0 kg,75,30,58,90,100,75
+24,Angel,Warren Kenneth Worthington III,Archangel,Archangel,good,Male,null,6'0 // 183 cm,150 lb // 68 kg,63,13,46,64,28,42
+25,Angel Dust,Christina,No alter egos found.,Marvel Comics,good,Female,Mutant,5'5 // 165 cm,126 lb // 57 kg,38,55,23,42,17,30
+26,Angel Salvadore,Angel Salvadore Bohusk,Tempest,Tempest,good,Female,null,5'4 // 163 cm,121 lb // 54 kg,38,10,28,28,56,60
+27,Angela,,No alter egos found.,Image Comics,bad,Female,null,- // 0 cm,- lb // 0 kg,null,97,null,null,null,null
+28,Animal Man,Bernhard Baker,No alter egos found.,DC Comics,good,Male,Human,6'0 // 183 cm,185 lb // 83 kg,56,48,47,85,73,80
+29,Annihilus,Annihilus,No alter egos found.,Marvel Comics,bad,Male,null,5'11 // 180 cm,200 lb // 90 kg,75,80,47,56,59,64
+30,Ant-Man,Hank Pym,"Giant-Man, Goliath, Wasp II, Yellowjacket",Giant-Man,good,Male,Human,6'11 // 211 cm,270 lb // 122 kg,100,18,23,28,32,32
+31,Ant-Man II,Scott Lang,No alter egos found.,Marvel Comics,good,Male,Human,6'0 // 183 cm,190 lb // 86 kg,75,18,17,40,53,30
+32,Anti-Monitor,,No alter egos found.,DC Comics,bad,Male,God / Eternal,200 // 61.0 meters,- lb // 0 kg,88,100,50,100,100,90
+33,Anti-Spawn,Jason Wynn,No alter egos found.,Image Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,58,null,null,null,null
+34,Anti-Venom,Eddie Brock,"Toxin, Venom",Toxin,-,Male,Symbiote,7'6 // 229 cm,795 lb // 358 kg,75,60,65,90,96,84
+35,Apocalypse,En Sabah Nur,No alter egos found.,Marvel Comics,bad,Male,Mutant,7'0 // 213 cm,300 lb // 135 kg,100,100,33,100,100,60
+36,Aquababy,"Arthur Curry, Jr.",No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,10,16,12,14,37,14
+37,Aqualad,Garth,No alter egos found.,DC Comics,good,Male,Atlantean,5'10 // 178 cm,235 lb // 106 kg,63,44,42,75,89,60
+38,Aquaman,Orin,No alter egos found.,DC Comics,good,Male,Atlantean,6'1 // 185 cm,325 lb // 146 kg,81,85,79,80,100,80
+39,Arachne,Julia Carpenter,No alter egos found.,Marvel Comics,good,Female,Human,5'9 // 175 cm,140 lb // 63 kg,50,48,50,70,71,70
+40,Archangel,Warren Kenneth Worthington III,Angel,Angel,good,Male,Mutant,6'0 // 183 cm,150 lb // 68 kg,63,13,58,64,35,42
+41,Arclight,Philippa Sontag,No alter egos found.,Marvel Comics,bad,Female,null,5'8 // 173 cm,126 lb // 57 kg,38,63,23,42,52,70
+42,Ardina,Ardina,No alter egos found.,Marvel Comics,good,Female,Alien,6'4 // 193 cm,218 lb // 98 kg,63,100,100,80,100,25
+43,Ares,,No alter egos found.,Marvel Comics,good,Male,null,6'1 // 185 cm,600 lb // 270 kg,75,82,35,80,84,101
+44,Ariel,Ariel,No alter egos found.,Marvel Comics,good,Female,null,5'5 // 165 cm,130 lb // 59 kg,50,10,12,14,94,28
+45,Armor,Hisako Ichiki,No alter egos found.,Marvel Comics,good,Female,null,5'4 // 163 cm,112 lb // 50 kg,50,63,12,80,55,54
+46,Arsenal,"Roy William Harper, Jr.",Speedy,Speedy,good,Male,Human,- // 0 cm,- lb // 0 kg,null,54,null,null,null,null
+47,Astro Boy,Atom,No alter egos found.,null,good,Male,null,- // 0 cm,- lb // 0 kg,null,90,null,null,null,null
+48,Atlas,Erik Josten,"Goliath, Power Man, Smuggler",Goliath,good,Male,Mutant,6'0 // 183 cm,225 lb // 101 kg,63,80,25,100,98,50
+49,Atlas,,No alter egos found.,DC Comics,bad,Male,God / Eternal,6'6 // 198 cm,280 lb // 126 kg,63,100,42,100,27,80
+50,Atom,Albert Pratt,No alter egos found.,DC Comics,good,Male,null,5'10 // 178 cm,150 lb // 68 kg,null,null,null,null,null,null
+51,Atom,,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+52,Atom Girl,Salu Digby,No alter egos found.,DC Comics,good,Female,null,5'6 // 168 cm,120 lb // 54 kg,38,10,23,28,38,42
+53,Atom II,Ray Palmer,No alter egos found.,DC Comics,good,Male,Human,6'0 // 183 cm,180 lb // 81 kg,88,10,33,45,40,60
+54,Atom III,Adam Cray,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+55,Atom IV,Ryan Choi,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,160 lb // 72 kg,null,null,null,null,null,null
+56,Aurora,Jeanne-Marie Beaubier,No alter egos found.,Marvel Comics,good,Female,Mutant,5'11 // 180 cm,140 lb // 63 kg,63,10,96,60,74,56
+57,Azazel,,No alter egos found.,Marvel Comics,bad,Male,Neyaphem,6'0 // 183 cm,149 lb // 67 kg,50,11,47,95,100,80
+58,Azrael,Michael Washington Lane,No alter egos found.,DC Comics,good,Male,Human,- // 0 cm,- lb // 0 kg,63,18,17,20,35,80
+59,Aztar,Aztar,Spectre,Spectre,good,Male,null,- // 0 cm,- lb // 0 kg,null,98,null,null,null,null
+60,Bane,,No alter egos found.,DC Comics,bad,Male,Human,6'8 // 203 cm,400 lb // 180 kg,88,38,23,56,51,95
+61,Banshee,Sean Cassidy,No alter egos found.,Marvel Comics,good,Male,Human,6'0 // 183 cm,170 lb // 77 kg,50,10,58,40,63,70
+62,Bantam,Roberto Velasquez,No alter egos found.,Marvel Comics,good,Male,null,5'5 // 165 cm,119 lb // 54 kg,25,53,23,54,21,56
+63,Batgirl,Barbara Gordon,Oracle,Oracle,good,Female,Human,5'7 // 170 cm,126 lb // 57 kg,88,11,33,40,34,90
+64,Batgirl,Mary Elizabeth Kane,Hawkfire,Hawkfire,good,Female,null,- // 0 cm,- lb // 0 kg,null,27,null,null,null,null
+65,Batgirl III,Helena Rosa Bertinelli,Huntress,Huntress,good,Female,null,- // 0 cm,- lb // 0 kg,null,43,null,null,null,null
+66,Batgirl IV,Cassandra Cain,No alter egos found.,DC Comics,good,Female,Human,5'5 // 165 cm,115 lb // 52 kg,69,12,27,56,46,100
+67,Batgirl V,Charlotte Gage-Radcliffe,Misfit,Misfit,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+68,Batgirl VI,Stephanie Brown,Spoiler,Spoiler,good,Female,null,5'6 // 168 cm,135 lb // 61 kg,75,10,23,28,22,80
+69,Batman,Terry McGinnis,No alter egos found.,DC Comics,good,Male,Human,5'10 // 178 cm,170 lb // 77 kg,81,40,29,55,63,90
+70,Batman,Bruce Wayne,No alter egos found.,DC Comics,good,Male,Human,6'2 // 188 cm,210 lb // 95 kg,100,26,27,50,47,100
+71,Batman II,Dick Grayson,"Nightwing, Robin",Nightwing,good,Male,Human,5'10 // 178 cm,175 lb // 79 kg,88,11,33,28,36,100
+72,Battlestar,Lemar Hoskins,No alter egos found.,Marvel Comics,good,Male,null,6'6 // 198 cm,295 lb // 133 kg,50,53,35,74,48,74
+73,Batwoman V,Katherine Rebecca Kane,No alter egos found.,DC Comics,good,Female,Human,5'10 // 178 cm,- lb // 0 kg,81,8,29,25,27,80
+74,Beak,Barnell Bohusk,No alter egos found.,Marvel Comics,good,Male,null,5'9 // 175 cm,140 lb // 63 kg,null,null,null,null,null,null
+75,Beast,Henry Philip McCoy,No alter egos found.,Marvel Comics,good,Male,Mutant,5'11 // 180 cm,402 lb // 181 kg,94,48,38,60,43,85
+76,Beast Boy,Garfield Mark Logan,No alter egos found.,DC Comics,good,Male,Human,5'8 // 173 cm,150 lb // 68 kg,50,28,50,70,79,40
+77,Beetle,,No alter egos found.,Marvel Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,54,null,null,null,null
+78,Ben 10,Benjamin Kirby Tennyson,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,10,7,8,10,90,40
+79,Beta Ray Bill,Beta Ray Bill (translation of his Korbinite name),No alter egos found.,Marvel Comics,good,Male,null,6'7 // 201 cm,480 lb // 216 kg,63,80,35,95,100,84
+80,Beyonder,,No alter egos found.,Marvel Comics,good,Male,God / Eternal,- // 0 cm,- lb // 0 kg,100,100,100,100,100,84
+81,Big Barda,Barda Free,No alter egos found.,DC Comics,bad,Female,New God,6'2 // 188 cm,300 lb // 135 kg,88,100,79,100,100,100
+82,Big Daddy,Damon Macready,No alter egos found.,Icon Comics,good,Male,null,- // 0 cm,- lb // 0 kg,38,10,12,32,22,64
+83,Big Man,Frederick Foswell,No alter egos found.,Marvel Comics,bad,Male,null,5'5 // 165 cm,157 lb // 71 kg,75,12,23,28,19,70
+84,Bill Harken,,No alter egos found.,SyFy,good,Male,Alpha,- // 0 cm,- lb // 0 kg,63,36,33,60,27,40
+85,Billy Kincaid,Billy Kincaid,No alter egos found.,Image Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+86,Binary,Carol Danvers,"Captain Marvel, Warbird",Captain Marvel,good,Female,null,5'11 // 180 cm,120 lb // 54 kg,null,null,null,null,null,null
+87,Bionic Woman,Jamie Sommers,No alter egos found.,,good,Female,Cyborg,- // 0 cm,- lb // 0 kg,56,37,33,40,20,40
+88,Bird-Brain,,No alter egos found.,Marvel Comics,good,-,null,- // 0 cm,- lb // 0 kg,25,10,35,28,21,42
+89,Bird-Man,Henry Hawk,No alter egos found.,Marvel Comics,bad,Male,Human,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+90,Bird-Man II,Achille DiBacco,No alter egos found.,Marvel Comics,bad,Male,Human,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+91,Birdman,Ray Randal,No alter egos found.,Hanna-Barbera,good,Male,God / Eternal,- // 0 cm,- lb // 0 kg,null,35,null,null,null,null
+92,Bishop,Lucas Bishop,No alter egos found.,Marvel Comics,good,Male,Mutant,6'6 // 198 cm,275 lb // 124 kg,63,14,23,75,100,65
+93,Bizarro,Bizarro,No alter egos found.,DC Comics,neutral,Male,Bizarro,6'3 // 191 cm,345 lb // 155 kg,38,95,100,100,100,85
+94,Black Abbott,,No alter egos found.,Marvel Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+95,Black Adam,Teth-Adam,No alter egos found.,DC Comics,bad,Male,null,6'3 // 191 cm,250 lb // 113 kg,88,100,92,100,100,56
+96,Black Bolt,Blackagar Boltagon,No alter egos found.,Marvel Comics,good,Male,Inhuman,6'2 // 188 cm,210 lb // 95 kg,75,67,100,84,100,56
+97,Black Canary,Laurel Lance,No alter egos found.,DC Comics,good,Female,Metahuman,5'7 // 170 cm,130 lb // 59 kg,63,8,33,20,52,80
+98,Black Canary,Dinah Drake Lance,No alter egos found.,DC Comics,good,Female,Human,5'5 // 165 cm,128 lb // 58 kg,63,8,33,15,45,80
+99,Black Cat,Felicia Hardy,No alter egos found.,Marvel Comics,good,Female,Human,5'10 // 178 cm,120 lb // 54 kg,75,16,33,10,23,70
+100,Black Flash,,No alter egos found.,DC Comics,neutral,Male,God / Eternal,- // 0 cm,- lb // 0 kg,44,10,100,80,100,30
+101,Black Goliath,,No alter egos found.,Marvel Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+102,Black Knight III,Dane Whitman,No alter egos found.,Marvel Comics,good,Male,Human,6'0 // 183 cm,190 lb // 86 kg,63,10,8,70,43,70
+103,Black Lightning,Jefferson Pierce,No alter egos found.,DC Comics,good,Male,null,6'1 // 185 cm,200 lb // 90 kg,50,11,53,28,70,75
+104,Black Mamba,Tanya Sealy,No alter egos found.,Marvel Comics,bad,Female,null,5'7 // 170 cm,115 lb // 52 kg,75,10,35,42,88,65
+105,Black Manta,David,No alter egos found.,DC Comics,bad,Male,Human,6'2 // 188 cm,205 lb // 92 kg,75,28,50,60,76,85
+106,Black Panther,T'Challa,No alter egos found.,Marvel Comics,good,Male,Human,6'0 // 183 cm,200 lb // 90 kg,88,16,30,60,41,100
+107,Black Widow,Natasha Romanoff,No alter egos found.,Marvel Comics,good,Female,Human,5'7 // 170 cm,131 lb // 59 kg,75,13,33,30,36,100
+108,Black Widow II,Yelena Belova,No alter egos found.,Marvel Comics,good,Female,null,5'7' // 170 cm,135 lb // 61 kg,null,48,null,null,null,null
+109,Blackout,,No alter egos found.,Marvel Comics,bad,Male,Demon,6'3 // 191 cm,230 lb // 104 kg,63,32,45,80,45,65
+110,Blackwing,Joseph Manfredi,No alter egos found.,Marvel Comics,bad,Male,null,6'1 // 185 cm,190 lb // 86 kg,38,10,35,32,20,56
+111,Blackwulf,Lucian,No alter egos found.,Marvel Comics,-,Male,Alien,6'2 // 188 cm,195 lb // 88 kg,50,28,8,30,69,25
+112,Blade,Eric Brooks,No alter egos found.,Marvel Comics,good,Male,Vampire,6'2 // 188 cm,215 lb // 97 kg,63,28,38,50,40,90
+113,Blaquesmith,-,Vertigo II,Vertigo II,good,-,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+114,Bling!,Roxanne Washington,No alter egos found.,Marvel Comics,good,Female,null,5'6 // 168 cm,152 lb // 68 kg,69,14,12,90,52,28
+115,Blink,Clarice Ferguson,No alter egos found.,Marvel Comics,good,Female,Mutant,5'5 // 165 cm,125 lb // 56 kg,50,8,20,28,77,64
+116,Blizzard,Gregor Shapanka,No alter egos found.,Marvel Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+117,Blizzard,,No alter egos found.,Marvel Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,72,null,null,null,null
+118,Blizzard II,Donald Gill,No alter egos found.,Marvel Comics,bad,Male,null,5'9 // 175 cm,170 lb // 77 kg,38,10,27,42,47,56
+119,Blob,Frederick J. Dukes,No alter egos found.,Marvel Comics,bad,Male,null,5'10 // 178 cm,510 lb // 230 kg,10,83,23,95,28,72
+120,Bloodaxe,Jackie Lukus,No alter egos found.,Marvel Comics,bad,Female,Human,7'2 // 218 cm,1100 lb // 495 kg,63,80,33,80,100,84
+121,Bloodhawk,Lemuel Krug,No alter egos found.,Marvel Comics,good,Male,Mutant,- // 0 cm,- lb // 0 kg,50,10,50,80,80,64
+122,Bloodwraith,Sean Dolan,No alter egos found.,Marvel Comics,bad,Male,null,100'0 // 30.5 meters,- lb // 0 kg,null,72,null,null,null,null
+123,Blue Beetle,Daniel Garrett,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+124,Blue Beetle,,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+125,Blue Beetle II,Theodore Kord,No alter egos found.,DC Comics,good,Male,null,6'0 // 183 cm,190 lb // 86 kg,null,45,null,null,null,null
+126,Blue Beetle III,Jaime Reyes,No alter egos found.,DC Comics,good,Male,Human,- // 0 cm,- lb // 0 kg,50,34,58,80,100,30
+127,Boba Fett,,No alter egos found.,George Lucas,bad,Male,Human / Clone,6'0 // 183 cm,- lb // 0 kg,63,10,38,36,68,70
+128,Bolt,,No alter egos found.,Marvel Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+129,Bomb Queen,,No alter egos found.,Image Comics,bad,Female,null,- // 0 cm,- lb // 0 kg,null,73,null,null,null,null
+130,Boom-Boom,Tabitha Smith,Meltdown,Meltdown,good,Female,Mutant,5'5 // 165 cm,122 lb // 55 kg,38,10,12,42,57,64
+131,Boomer,,No alter egos found.,Marvel Comics,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+132,Booster Gold,Michael Jon Carter,No alter egos found.,DC Comics,good,Male,Human,6'5 // 196 cm,215 lb // 97 kg,69,85,42,70,100,40
+133,Box,Roger Bochs,No alter egos found.,Marvel Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+134,Box III,Dr. Walter Langowski,No alter egos found.,Marvel Comics,good,-,null,6'4 // 193 cm,245 lb // 110 kg,null,null,null,null,null,null
+135,Box IV,Madison Jeffries,Gemini V,Gemini V,good,-,null,- // 0 cm,- lb // 0 kg,50,75,23,28,11,56
+136,Brainiac,Vril Dox,No alter egos found.,DC Comics,bad,Male,Android,6'6 // 198 cm,300 lb // 135 kg,100,95,63,90,60,75
+137,Brainiac 5,Querl Dox,No alter egos found.,DC Comics,good,Male,null,5'7 // 170 cm,135 lb // 61 kg,100,10,23,28,60,32
+138,Brother Voodoo,Jericho Drumm,No alter egos found.,Marvel Comics,good,Male,Human,6'0 // 183 cm,220 lb // 99 kg,null,65,null,null,null,null
+139,Brundlefly,Seth Brundle,No alter egos found.,,-,Male,Mutant,6'4 // 193 cm,- lb // 0 kg,69,32,25,40,27,15
+140,Buffy,Buffy Anne Summers,No alter egos found.,Dark Horse Comics,good,Female,Human,5'2 // 157 cm,115 lb // 52 kg,63,28,42,70,48,60
+141,Bullseye,Lester,No alter egos found.,Marvel Comics,bad,Male,Human,6'0 // 183 cm,200 lb // 90 kg,50,11,25,70,20,70
+142,Bumblebee,Karen Beecher,No alter egos found.,DC Comics,good,Female,Human,5'7 // 170 cm,130 lb // 59 kg,63,28,25,10,47,35
+143,Bumbleboy,,No alter egos found.,Marvel Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+144,Bushido,Ryuko Orsono,No alter egos found.,DC Comics,good,Male,Human,- // 0 cm,- lb // 0 kg,38,10,8,10,19,70
+145,Cable,Nathan Summers,No alter egos found.,Marvel Comics,good,Male,Mutant,6'8 // 203 cm,350 lb // 158 kg,88,48,23,56,100,80
+146,Callisto,Callisto,No alter egos found.,Marvel Comics,bad,Female,null,5'9 // 175 cm,165 lb // 74 kg,63,53,23,42,52,85
+147,Cameron Hicks,,No alter egos found.,SyFy,good,Male,Alpha,- // 0 cm,- lb // 0 kg,50,10,23,28,51,70
+148,Cannonball,Samuel Zachery Guthrie,No alter egos found.,Marvel Comics,good,Male,null,6'0 // 183 cm,181 lb // 81 kg,50,28,67,99,94,56
+149,Captain America,Steve Rogers,No alter egos found.,Marvel Comics,good,Male,Human,6'2 // 188 cm,240 lb // 108 kg,69,19,38,55,60,100
+150,Captain Atom,Nathaniel Adam,No alter egos found.,DC Comics,good,Male,Human / Radiation,6'4 // 193 cm,200 lb // 90 kg,81,93,83,90,100,80
+151,Captain Britain,Brian Braddock,No alter egos found.,Marvel Comics,good,Male,Human,6'6 // 198 cm,257 lb // 116 kg,75,77,50,60,31,80
+152,Captain Cold,Leonard Snart,No alter egos found.,DC Comics,neutral,Male,Human,- // 0 cm,- lb // 0 kg,50,10,17,20,28,20
+153,Captain Epic,,No alter egos found.,Team Epic TV,good,Male,null,6'2 // 188 cm,- lb // 0 kg,null,null,null,null,null,null
+154,Captain Hindsight,Jack Brolin,No alter egos found.,South Park,good,Male,Human,- // 0 cm,- lb // 0 kg,25,10,83,30,10,20
+155,Captain Mar-vell,Mar-Vell,No alter egos found.,Marvel Comics,good,Male,null,6'2' // 188 cm,240 lb // 108 kg,null,80,null,null,null,null
+156,Captain Marvel,Billy Batson,No alter egos found.,DC Comics,good,Male,Human,6'4 // 193 cm,225 lb // 101 kg,88,100,88,95,100,75
+157,Captain Marvel,Carol Danvers,"Binary, Warbird",Binary,good,Female,Human-Kree,5'11 // 180 cm,165 lb // 74 kg,84,88,71,95,100,90
+158,Captain Marvel II,Frederick Christopher Freeman,No alter egos found.,DC Comics,good,Male,Human,5'9 // 175 cm,165 lb // 74 kg,75,81,27,90,34,56
+159,Captain Midnight,,No alter egos found.,Dark Horse Comics,good,Male,Human,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+160,Captain Planet,,No alter egos found.,Marvel Comics,good,Male,God / Eternal,- // 0 cm,- lb // 0 kg,50,88,75,80,100,60
+161,Captain Universe,,No alter egos found.,Marvel Comics,good,-,God / Eternal,- // 0 cm,- lb // 0 kg,null,92,null,null,null,null
+162,Carnage,Cletus Kasady,No alter egos found.,Marvel Comics,bad,Male,Symbiote,6'1 // 185 cm,190 lb // 86 kg,63,63,70,84,88,90
+163,Cat,Shirlee Bryant,No alter egos found.,Marvel Comics,good,Female,null,5'8 // 173 cm,135 lb // 61 kg,null,90,null,null,null,null
+164,Cat II,,No alter egos found.,Marvel Comics,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+165,Catwoman,Selina Kyle,No alter egos found.,DC Comics,good,Female,Human,5'9 // 175 cm,135 lb // 61 kg,69,11,33,28,27,85
+166,Cecilia Reyes,Dr. Cecilia Reyes,No alter egos found.,Marvel Comics,good,-,null,5'7 // 170 cm,138 lb // 62 kg,null,null,null,null,null,null
+167,Century,,No alter egos found.,Marvel Comics,good,Male,Alien,6'7 // 201 cm,215 lb // 97 kg,88,80,53,64,100,100
+168,Cerebra,Shakti Haddad,No alter egos found.,Marvel Comics,good,Female,Mutant,- // 0 cm,- lb // 0 kg,null,57,null,null,null,null
+169,Chamber,Jonothon Evan Starsmore,No alter egos found.,Marvel Comics,good,Male,Mutant,5'9 // 175 cm,140 lb // 63 kg,50,10,20,80,57,64
+170,Chameleon,Dmitri Anatoly Smerdyakov Kravinoff,No alter egos found.,DC Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,88,10,12,28,28,28
+171,Changeling,Kevin Sidney,No alter egos found.,Marvel Comics,bad,Male,null,5'11 // 180 cm,180 lb // 81 kg,63,10,23,42,64,64
+172,Cheetah,Priscilla Rich,No alter egos found.,DC Comics,bad,Female,Human,5'4 // 163 cm,110 lb // 50 kg,38,8,42,20,32,70
+173,Cheetah II,Deborah Domaine,No alter egos found.,DC Comics,bad,Female,Human,5'7 // 170 cm,122 lb // 55 kg,38,20,42,20,39,60
+174,Cheetah III,Barbara Minerva,No alter egos found.,DC Comics,bad,Female,Human,5'9 // 175 cm,120 lb // 54 kg,88,100,88,80,78,95
+175,Chromos,Bernard Embers,No alter egos found.,Team Epic TV,bad,Male,null,6'1 // 185 cm,190 lb // 86 kg,null,null,null,null,null,null
+176,Chuck Norris,Carlos Ray Norris,No alter egos found.,null,good,Male,null,5'10 // 178 cm,- lb // 0 kg,50,80,47,56,42,99
+177,Citizen Steel,Nathan Heywood,No alter egos found.,DC Comics,good,Male,Human,6'0 // 183 cm,378 lb // 170 kg,50,95,33,100,23,60
+178,Claire Bennet,Claire Bennet,No alter egos found.,NBC - Heroes,good,Female,null,- // 0 cm,- lb // 0 kg,38,9,12,100,90,28
+179,Clea,Clea,No alter egos found.,Marvel Comics,good,-,null,- // 0 cm,- lb // 0 kg,null,39,null,null,null,null
+180,Cloak,Tyrone Johnson,No alter egos found.,Marvel Comics,good,Male,null,7'5 // 226 cm,155 lb // 70 kg,63,10,47,64,100,56
+181,Clock King,William Tockman,No alter egos found.,DC Comics,bad,Male,Human,5'10 // 178 cm,173 lb // 78 kg,75,10,17,10,7,40
+182,Cogliostro,Cain,No alter egos found.,Image Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+183,Colin Wagner,,No alter egos found.,HarperCollins,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+184,Colossal Boy,,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+185,Colossus,Piotr Nikolaievitch Rasputin,No alter egos found.,Marvel Comics,good,Male,Mutant,7'5 // 226 cm,500 lb // 225 kg,63,83,33,100,45,80
+186,Copycat,Vanessa Carlysle,No alter egos found.,Marvel Comics,neutral,Female,Mutant,6'0 // 183 cm,148 lb // 67 kg,56,10,21,25,54,60
+187,Corsair,Christopher Summers,No alter egos found.,Marvel Comics,good,Male,null,6'3 // 191 cm,175 lb // 79 kg,null,16,null,null,null,null
+188,Cottonmouth,Burchell Clemens,No alter egos found.,Marvel Comics,bad,Male,Human,6'0 // 183 cm,220 lb // 99 kg,50,10,8,10,27,25
+189,Crimson Crusader,Rory Destine,No alter egos found.,Marvel Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,58,null,null,null,null
+190,Crimson Dynamo,Anton Vanko,No alter egos found.,Marvel Comics,good,Male,null,5'11 // 180 cm,230 lb // 104 kg,null,65,null,null,null,null
+191,Crystal,Crystallia Amaquelin,No alter egos found.,Marvel Comics,good,Female,Inhuman,5'6 // 168 cm,110 lb // 50 kg,63,16,12,14,61,56
+192,Curse,Phillip Krahn,No alter egos found.,Image Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+193,Cy-Gor,,No alter egos found.,Image Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,96,null,null,null,null
+194,Cyborg,Victor Stone,No alter egos found.,DC Comics,good,Male,Cyborg,6'6 // 198 cm,385 lb // 173 kg,75,53,42,85,71,64
+195,Cyborg Superman,Henry Henshaw,No alter egos found.,DC Comics,bad,Male,Cyborg,- // 0 cm,- lb // 0 kg,75,93,92,100,100,80
+196,Cyclops,Scott Summers,No alter egos found.,Marvel Comics,good,Male,Mutant,6'3 // 191 cm,195 lb // 88 kg,75,10,23,42,76,80
+197,Cypher,Douglas Aaron Ramsey,No alter egos found.,Marvel Comics,good,-,null,5'9' // 175 cm,150 lb // 68 kg,null,44,null,null,null,null
+198,Dagger,Tandy Bowen,No alter egos found.,Marvel Comics,good,Female,null,"Shaker Heights, Ohio",116 lb // 52 kg,63,10,35,42,52,70
+199,Danny Cooper,,No alter egos found.,HarperCollins,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+200,Daphne Powell,Daphne Powell,No alter egos found.,ABC Studios,good,Female,null,- // 0 cm,- lb // 0 kg,38,10,8,10,56,10
+201,Daredevil,Matt Murdock,No alter egos found.,Marvel Comics,good,Male,Human,6'0 // 183 cm,200 lb // 90 kg,75,13,25,35,61,100
+202,Darkhawk,Christopher Powell,No alter egos found.,Marvel Comics,good,Male,Human,6'1 // 185 cm,180 lb // 81 kg,50,32,33,70,74,64
+203,Darkman,Peyton Westlake,No alter egos found.,Universal Studios,good,Male,null,- // 0 cm,- lb // 0 kg,75,14,23,85,12,28
+204,Darkseid,Uxas,No alter egos found.,DC Comics,bad,Male,New God,8'9 // 267 cm,1815 lb // 817 kg,88,100,83,100,100,95
+205,Darkside,,No alter egos found.,null,bad,-,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+206,Darkstar,Laynia Petrovna,No alter egos found.,Marvel Comics,good,Female,Mutant,5'6 // 168 cm,125 lb // 56 kg,38,8,35,42,79,64
+207,Darth Maul,,No alter egos found.,George Lucas,bad,Male,Dathomirian Zabrak,5'7 // 170 cm,- lb // 0 kg,56,48,50,30,100,100
+208,Darth Vader,Anakin Skywalker,No alter egos found.,George Lucas,bad,Male,Cyborg,6'6 // 198 cm,300 lb // 135 kg,69,48,33,35,100,100
+209,Dash,Dashiell Robert Parr,No alter egos found.,Dark Horse Comics,good,Male,Human,4'0 // 122 cm,60 lb // 27 kg,25,12,92,60,20,30
+210,Data,Data,No alter egos found.,Star Trek,good,Male,Android,- // 0 cm,- lb // 0 kg,100,32,21,40,56,50
+211,Dazzler,Alison Blaire,No alter egos found.,Marvel Comics,good,Female,Mutant,5'8 // 173 cm,115 lb // 52 kg,63,10,33,60,100,55
+212,Deadman,Boston Brand,No alter egos found.,DC Comics,good,Male,Human,6'0 // 183 cm,201 lb // 90 kg,50,10,33,100,100,42
+213,Deadpool,Wade Wilson,"Evil Deadpool, Venompool",Evil Deadpool,neutral,Male,Mutant,6'2 // 188 cm,210 lb // 95 kg,69,32,50,100,100,100
+214,Deadshot,Floyd Lawton,No alter egos found.,DC Comics,bad,Male,Human,6'1 // 185 cm,202 lb // 91 kg,50,10,23,28,55,80
+215,Deathlok,Luther Manning,No alter egos found.,Marvel Comics,good,Male,Cyborg,6'4 // 193 cm,395 lb // 178 kg,69,32,30,70,40,60
+216,Deathstroke,Slade Joseph Wilson,No alter egos found.,DC Comics,neutral,Male,Human,6'4 // 193 cm,225 lb // 101 kg,75,30,35,100,47,90
+217,Demogoblin,,No alter egos found.,Marvel Comics,bad,Male,Demon,6'1 // 185 cm,210 lb // 95 kg,50,48,42,35,67,60
+218,Destroyer,,No alter egos found.,Marvel Comics,bad,Male,null,6'2 // 188 cm,850 lb // 383 kg,50,95,58,98,85,70
+219,Diamondback,Willis Stryker,No alter egos found.,Marvel Comics,bad,Male,Human,6'4 // 193 cm,200 lb // 90 kg,44,16,23,28,45,60
+220,DL Hawkins,Daniel Lawrence Hawkins,No alter egos found.,NBC - Heroes,good,Male,null,- // 0 cm,- lb // 0 kg,50,12,12,56,48,56
+221,Doc Samson,Leonard Samson,No alter egos found.,Marvel Comics,good,Male,Human / Radiation,6'6 // 198 cm,380 lb // 171 kg,75,80,33,80,36,70
+222,Doctor Doom,Victor von Doom,No alter egos found.,Marvel Comics,bad,Male,Human,6'7 // 201 cm,415 lb // 187 kg,100,32,20,100,100,84
+223,Doctor Doom II,Kristoff Vernard,No alter egos found.,Marvel Comics,bad,Male,null,6'7 // 201 cm,293 lb // 132 kg,null,null,null,null,null,null
+224,Doctor Fate,Kent Nelson,No alter egos found.,DC Comics,good,Male,Human,6'2 // 188 cm,197 lb // 89 kg,81,16,25,80,100,50
+225,Doctor Octopus,Otto Octavius,No alter egos found.,Marvel Comics,bad,Male,Human,5'9 // 175 cm,245 lb // 110 kg,94,48,33,40,53,65
+226,Doctor Strange,Stephen Strange,No alter egos found.,Marvel Comics,good,Male,Human,6'2 // 188 cm,180 lb // 81 kg,100,10,12,84,100,60
+227,Domino,Neena Thurman,No alter egos found.,Marvel Comics,good,Female,Human,5'8 // 173 cm,120 lb // 54 kg,63,10,27,28,49,74
+228,Donatello,,No alter egos found.,IDW Publishing,good,Male,Mutant,- // 0 cm,- lb // 0 kg,88,14,46,60,58,75
+229,Donna Troy,Donna Hinckley Stacey Troy,No alter egos found.,DC Comics,good,Female,Amazon,5'9 // 175 cm,140 lb // 63 kg,null,89,null,null,null,null
+230,Doomsday,Doomsday,No alter egos found.,DC Comics,bad,Male,Alien,8'0 // 244 cm,915 lb // 412 kg,75,100,67,100,100,90
+231,Doppelganger,,No alter egos found.,Marvel Comics,bad,Male,null,6'5 // 196 cm,230 lb // 104 kg,8,63,60,95,69,84
+232,Dormammu,Dormammu,No alter egos found.,Marvel Comics,bad,Male,null,6'1 // 185 cm,- lb // 0 kg,88,95,83,100,100,80
+233,Dr Manhattan,Jonathan Osterman,No alter egos found.,DC Comics,good,Male,Human / Cosmic,- // 0 cm,- lb // 0 kg,88,100,42,100,100,42
+234,Drax the Destroyer,Arthur Sampson Douglas,No alter egos found.,Marvel Comics,good,Male,Human / Altered,6'4 // 193 cm,680 lb // 306 kg,56,80,25,85,46,65
+235,Ego,Ego,No alter egos found.,Marvel Comics,bad,-,null,- // 0 cm,- lb // 0 kg,88,80,83,99,71,28
+236,Elastigirl,Helen Parr,No alter egos found.,Dark Horse Comics,good,Female,Human,5'6 // 168 cm,125 lb // 56 kg,63,32,33,95,52,70
+237,Electro,Maxwell Dillon,No alter egos found.,Marvel Comics,bad,Male,Human,5'11 // 180 cm,165 lb // 74 kg,69,10,50,56,67,64
+238,Elektra,Elektra Natchios,No alter egos found.,Marvel Comics,good,Female,Human,5'9 // 175 cm,130 lb // 59 kg,63,11,30,28,59,100
+239,Elle Bishop,,No alter egos found.,NBC - Heroes,bad,Female,null,- // 0 cm,- lb // 0 kg,50,8,12,42,63,42
+240,Elongated Man,Ralph Dibny,No alter egos found.,DC Comics,good,Male,null,6'1 // 185 cm,178 lb // 80 kg,75,10,33,90,44,40
+241,Emma Frost,Emma Frost,No alter egos found.,Marvel Comics,good,Female,null,5'10' // 178 cm,144 lb // 65 kg,75,63,35,90,100,42
+242,Enchantress,June Moone,No alter egos found.,DC Comics,good,Female,Human,5'6 // 168 cm,126 lb // 57 kg,63,14,25,60,100,40
+243,Energy,,No alter egos found.,HarperCollins,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+244,ERG-1,,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+245,Ethan Hunt,Ethan Hunt,No alter egos found.,null,good,Male,Human,5'6 // 168 cm,- lb // 0 kg,75,11,29,30,26,95
+246,Etrigan,Jason Blood,No alter egos found.,DC Comics,neutral,Male,Demon,6'4 // 193 cm,452 lb // 203 kg,50,85,17,100,100,50
+247,Evil Deadpool,Wade Wilson,"Deadpool, Venompool",Deadpool,bad,Male,Mutant,6'2 // 188 cm,210 lb // 95 kg,69,32,50,100,100,100
+248,Evilhawk,Dargin Bokk,No alter egos found.,Marvel Comics,bad,Male,Alien,6'3 // 191 cm,235 lb // 106 kg,50,32,33,70,85,64
+249,Exodus,Bennet du Paris,No alter egos found.,Marvel Comics,bad,Male,Mutant,6'0 // 183 cm,195 lb // 88 kg,63,81,28,28,100,70
+250,Fabian Cortez,Fabian Cortez,No alter egos found.,Marvel Comics,bad,-,null,6'5 // 196 cm,214 lb // 96 kg,null,null,null,null,null,null
+251,Falcon,Sam Wilson,No alter egos found.,Marvel Comics,good,Male,Human,6'2 // 188 cm,240 lb // 108 kg,38,13,50,28,22,64
+252,Fallen One II,,No alter egos found.,Marvel Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,88,85,83,100,100,56
+253,Faora,Faora Hu-Ul,No alter egos found.,DC Comics,bad,Female,Kryptonian,- // 0 cm,- lb // 0 kg,88,95,75,100,98,90
+254,Feral,Maria Callasantos,No alter egos found.,Marvel Comics,good,-,null,5'9 // 175 cm,110 lb // 50 kg,38,28,45,28,27,70
+255,Fighting Spirit,Carol Carter,No alter egos found.,DC Comics,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+256,Fin Fang Foom,,No alter egos found.,Marvel Comics,good,Male,Kakarantharaian,32'0 // 975 cm,40000 lb // 18 tons,50,81,23,100,75,70
+257,Firebird,Bonita Juarez,No alter egos found.,Marvel Comics,good,Female,null,5'5' // 165 cm,125 lb // 56 kg,38,8,40,14,100,42
+258,Firelord,Pyreus Kril,No alter egos found.,Marvel Comics,good,-,null,6'4' // 193 cm,220 lb // 99 kg,38,63,75,90,52,28
+259,Firestar,Angelica Jones,No alter egos found.,Marvel Comics,good,Female,Mutant,5'8 // 173 cm,125 lb // 56 kg,50,8,54,55,71,32
+260,Firestorm,Jason Rusch,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,50,53,58,56,100,42
+261,Firestorm,Ronald Raymond,No alter egos found.,DC Comics,good,Male,Human,6'2 // 188 cm,202 lb // 91 kg,38,80,58,80,100,40
+262,Fixer,Paul Norbert Ebersol,No alter egos found.,Marvel Comics,bad,-,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+263,Flash,Jay Garrick,No alter egos found.,DC Comics,good,Male,Human,5'11 // 180 cm,179 lb // 81 kg,63,10,100,50,68,32
+264,Flash Gordon,Steven Gordon,No alter egos found.,null,good,Male,null,- // 0 cm,- lb // 0 kg,null,69,null,null,null,null
+265,Flash II,Barry Allen,Black Racer,Black Racer,good,Male,Black Racer,6'0 // 183 cm,195 lb // 88 kg,88,48,100,60,100,60
+266,Flash III,Wally West,Speed Demon,Speed Demon,good,Male,Human,6'0 // 183 cm,190 lb // 86 kg,63,10,100,60,100,32
+267,Flash IV,Bartholomew Allen II,"Impulse, Kid Flash II",Impulse,good,Male,Human,5'2 // 157 cm,115 lb // 52 kg,63,10,100,32,100,48
+268,Forge,,No alter egos found.,Marvel Comics,good,-,null,6' // 183 cm,180 lb // 81 kg,63,10,12,28,25,48
+269,Franklin Richards,Franklin  Richards,No alter egos found.,Marvel Comics,good,Male,Mutant,4'8 // 142 cm,100 lb // 45 kg,63,80,50,60,100,50
+270,Franklin Storm,Dr. Franklin Storm,No alter egos found.,Marvel Comics,good,-,null,6'2' // 188 cm,205 lb // 92 kg,38,10,1,1,0,10
+271,Frenzy,Joanna Cargill,No alter egos found.,Marvel Comics,bad,Female,null,6'11 // 211 cm,230 lb // 104 kg,63,53,35,100,38,52
+272,Frigga,Frigga,No alter egos found.,Marvel Comics,good,Female,null,5'11' // 180 cm,370 lb // 167 kg,null,null,null,null,null,null
+273,Galactus,Galan,No alter egos found.,Marvel Comics,neutral,Male,Cosmic Entity,28'9 // 876 cm,36400 lb // 16 tons,100,100,83,100,100,50
+274,Gambit,Remy Etienne LeBeau,No alter egos found.,Marvel Comics,good,Male,Mutant,6'1 // 185 cm,179 lb // 81 kg,63,10,23,28,55,84
+275,Gamora,Gamora Zen Whoberi Ben Titan,No alter egos found.,Marvel Comics,good,Female,Zen-Whoberian,6'0 // 183 cm,170 lb // 77 kg,75,85,42,85,53,100
+276,Garbage Man,Richard Ethan Morse,No alter egos found.,DC Comics,good,Male,Mutant,- // 0 cm,- lb // 0 kg,null,82,null,null,null,null
+277,Gary Bell,Gary Bell,No alter egos found.,SyFy,good,Male,Alpha,- // 0 cm,- lb // 0 kg,63,5,8,10,54,10
+278,General Zod,Dru-Zod,No alter egos found.,DC Comics,bad,Male,Kryptonian,- // 0 cm,- lb // 0 kg,94,100,96,100,100,95
+279,Genesis,Tyler Dayspring,No alter egos found.,Marvel Comics,good,Male,null,6'1 // 185 cm,191 lb // 86 kg,null,68,null,null,null,null
+280,Ghost Rider,Johnny Blaze,No alter egos found.,Marvel Comics,good,Male,Demon,6'2 // 188 cm,220 lb // 99 kg,50,55,25,100,100,60
+281,Ghost Rider II,Daniel Ketch,No alter egos found.,Marvel Comics,good,-,null,- // 0 cm,- lb // 0 kg,null,70,null,null,null,null
+282,Giant-Man,Hank Pym,"Ant-Man, Goliath, Wasp II, Yellowjacket",Ant-Man,good,Male,Human,- // 0 cm,- lb // 0 kg,null,78,null,null,null,null
+283,Giant-Man II,,No alter egos found.,Marvel Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+284,Giganta,Doris Zuel,No alter egos found.,DC Comics,bad,Female,null,205 // 62.5 meters,1400 lb // 630 kg,81,89,23,85,32,42
+285,Gladiator,Kallark,No alter egos found.,Marvel Comics,neutral,Male,Strontian,6'6 // 198 cm,595 lb // 268 kg,50,100,100,100,77,70
+286,Goblin Queen,Madelyne Jennifer Pryor,No alter egos found.,Marvel Comics,bad,Female,null,5'6 // 168 cm,110 lb // 50 kg,75,10,23,28,65,56
+287,Godzilla,Gojira,No alter egos found.,,bad,-,Kaiju,354'4 // 108.0 meters,"200000000 lb // 90,000 tons",44,100,54,100,100,20
+288,Gog,,No alter egos found.,DC Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,50,34,47,72,39,56
+289,Goku,Kakarot,No alter egos found.,Shueisha,good,Male,Saiyan,5'9 // 175 cm,137 lb // 62 kg,56,100,75,90,100,100
+290,Goliath,Erik Josten,"Atlas, Power Man, Smuggler",Atlas,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+291,Goliath,Clint Barton,"Hawkeye, Ronin",Hawkeye,good,Male,Human,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+292,Goliath,Hank Pym,"Ant-Man, Giant-Man, Wasp II, Yellowjacket",Ant-Man,good,Male,Human,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+293,Goliath IV,William Barrett Foster,No alter egos found.,Marvel Comics,good,Male,null,6' // 183 cm,200 lb // 90 kg,null,null,null,null,null,null
+294,Gorilla Grodd,Grodd,No alter egos found.,DC Comics,bad,Male,Gorilla,6'6 // 198 cm,600 lb // 270 kg,81,53,33,70,100,65
+295,Granny Goodness,,No alter egos found.,DC Comics,bad,Female,null,5'10 // 178 cm,256 lb // 115 kg,null,96,null,null,null,null
+296,Gravity,Greg Willis,No alter egos found.,Marvel Comics,good,Male,Human,5'10 // 178 cm,175 lb // 79 kg,50,32,33,40,69,30
+297,Greedo,Greedo,No alter egos found.,George Lucas,bad,Male,Rodian,5'7 // 170 cm,- lb // 0 kg,38,10,13,15,31,40
+298,Green Arrow,Oliver Queen,No alter egos found.,DC Comics,good,Male,Human,6'2 // 188 cm,195 lb // 88 kg,81,12,35,28,39,90
+299,Green Goblin,Norman Osborn,No alter egos found.,Marvel Comics,bad,Male,Human,5'11 // 180 cm,185 lb // 83 kg,100,48,38,60,48,50
+300,Green Goblin II,Harold Osborn,No alter egos found.,Marvel Comics,bad,Male,null,5'10 // 178 cm,170 lb // 77 kg,75,55,37,50,44,26
+301,Green Goblin III,Barton Hamilton,No alter egos found.,Marvel Comics,good,Male,null,6' // 183 cm,195 lb // 88 kg,null,null,null,null,null,null
+302,Green Goblin IV,Phillip Benjamin Urich,No alter egos found.,Marvel Comics,good,Male,null,5'10 // 178 cm,175 lb // 79 kg,null,null,null,null,null,null
+303,Groot,Groot,No alter egos found.,Marvel Comics,good,Male,Flora Colossus,23'0 // 701 cm,8200 lb // 4 tons,75,85,33,70,100,64
+304,Guardian,James Hudson,No alter egos found.,Marvel Comics,good,Male,Human,- // 0 cm,- lb // 0 kg,null,45,null,null,null,null
+305,Guy Gardner,Guy Gardner,No alter egos found.,DC Comics,good,Male,Human-Vuldarian,6'2 // 188 cm,210 lb // 95 kg,38,90,53,64,100,64
+306,Hal Jordan,Hal Jordan,No alter egos found.,DC Comics,good,Male,Human,6'2 // 188 cm,200 lb // 90 kg,69,90,75,80,100,70
+307,Han Solo,Han Solo,No alter egos found.,George Lucas,good,Male,Human,6'0 // 183 cm,176 lb // 79 kg,50,10,17,20,43,60
+308,Hancock,John Hancock,No alter egos found.,Sony Pictures,good,Male,Human,6'2 // 188 cm,- lb // 0 kg,63,90,67,100,100,50
+309,Harley Quinn,Harley Quinn,No alter egos found.,DC Comics,bad,Female,Human,5'7 // 170 cm,140 lb // 63 kg,88,12,33,65,55,80
+310,Harry Potter,Harry James Potter,No alter egos found.,J. K. Rowling,good,Male,Human,- // 0 cm,- lb // 0 kg,75,7,21,10,100,50
+311,Havok,Alexander Summers,No alter egos found.,Marvel Comics,good,Male,Mutant,6' // 183 cm,175 lb // 79 kg,63,10,25,60,71,45
+312,Hawk,Henry Hall,No alter egos found.,DC Comics,good,Male,null,6'1 // 185 cm,197 lb // 89 kg,38,38,35,95,43,42
+313,Hawkeye,Clint Barton,"Goliath, Ronin",Goliath,good,Male,Human,6'3 // 191 cm,230 lb // 104 kg,56,12,21,10,29,80
+314,Hawkeye II,Katherine Elizabeth Bishop,No alter egos found.,Marvel Comics,good,Female,Human,5'5 // 165 cm,126 lb // 57 kg,50,6,8,10,24,50
+315,Hawkgirl,Kendra Saunders,No alter egos found.,DC Comics,good,Female,null,5'9 // 175 cm,135 lb // 61 kg,50,28,53,99,96,72
+316,Hawkman,Carter Hall,No alter egos found.,DC Comics,good,Male,null,6'1 // 185 cm,195 lb // 88 kg,null,66,null,null,null,null
+317,Hawkwoman,Shayera Hol,No alter egos found.,DC Comics,good,Female,null,5'9 // 175 cm,120 lb // 54 kg,null,96,null,null,null,null
+318,Hawkwoman II,Sharon Parker,No alter egos found.,DC Comics,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+319,Hawkwoman III,Shayera Thal,No alter egos found.,DC Comics,good,Female,null,5'7 // 170 cm,145 lb // 65 kg,null,92,null,null,null,null
+320,Heat Wave,Mick Rory,No alter egos found.,DC Comics,bad,Male,Human,5'11 // 180 cm,179 lb // 81 kg,38,10,17,45,27,30
+321,Hela,,No alter egos found.,Marvel Comics,bad,Female,Asgardian,7'0 // 213 cm,500 lb // 225 kg,63,100,46,100,100,45
+322,Hellboy,Anung Un Rama,No alter egos found.,Dark Horse Comics,good,Male,Demon,8'6 // 259 cm,350 lb // 158 kg,63,53,21,95,73,75
+323,Hellcat,Patricia Walker,No alter egos found.,Marvel Comics,good,Female,Human,5'8 // 173 cm,135 lb // 61 kg,63,11,33,45,46,70
+324,Hellstorm,Daimon Hellstrom,No alter egos found.,Marvel Comics,good,Male,null,6'1' // 185 cm,180 lb // 81 kg,null,56,null,null,null,null
+325,Hercules,Heracles,No alter egos found.,Marvel Comics,good,Male,Demi-God,6'5 // 196 cm,325 lb // 146 kg,63,100,46,85,89,100
+326,Hiro Nakamura,Hiro Nakamura,No alter egos found.,NBC - Heroes,good,Male,null,- // 0 cm,- lb // 0 kg,null,15,null,null,null,null
+327,Hit-Girl,Mindy McCready,No alter egos found.,Icon Comics,good,Female,Human,- // 0 cm,- lb // 0 kg,56,7,29,20,27,65
+328,Hobgoblin,Roderick Kingsley,No alter egos found.,Marvel Comics,bad,Male,null,5'11 // 180 cm,185 lb // 83 kg,null,53,null,null,null,null
+329,Hollow,Monet St. Croix,No alter egos found.,Marvel Comics,good,Female,null,5'7 // 170 cm,- lb // 0 kg,null,null,null,null,null,null
+330,Hope Summers,Hope Summers,No alter egos found.,Marvel Comics,good,Female,null,5'6 // 168 cm,106 lb // 48 kg,63,10,12,32,93,75
+331,Howard the Duck,Howard (Last name unrevealed),No alter egos found.,Marvel Comics,good,Male,null,2'7' // 79 cm,40 lb // 18 kg,null,44,null,null,null,null
+332,Hulk,Bruce Banner,No alter egos found.,Marvel Comics,good,Male,Human / Radiation,8'0 // 244 cm,1400 lb // 630 kg,88,100,63,100,98,85
+333,Human Torch,Johnny Storm,No alter egos found.,Marvel Comics,good,Male,Human / Radiation,5'10 // 178 cm,170 lb // 77 kg,63,11,63,70,87,42
+334,Huntress,Helena Rosa Bertinelli,Batgirl III,Batgirl III,good,Female,null,5'11 // 180 cm,130 lb // 59 kg,69,10,23,28,34,95
+335,Husk,Paige Elisabeth Guthrie,No alter egos found.,Marvel Comics,good,Female,Mutant,5'7 // 170 cm,128 lb // 58 kg,63,63,35,78,48,64
+336,Hybrid,Scott Washington,No alter egos found.,Marvel Comics,good,Male,Symbiote,5'9 // 175 cm,172 lb // 77 kg,63,63,58,75,100,80
+337,Hydro-Man,Morris Bench,No alter egos found.,Marvel Comics,bad,Male,null,6'2 // 188 cm,265 lb // 119 kg,38,13,25,80,66,50
+338,Hyperion,Mark Milton,No alter egos found.,Marvel Comics,good,Male,Eternal,6'0 // 183 cm,460 lb // 207 kg,88,100,100,95,87,80
+339,Iceman,Bobby Drake,No alter egos found.,Marvel Comics,good,Male,Mutant,5'8 // 173 cm,145 lb // 65 kg,63,32,53,100,100,64
+340,Impulse,Bartholomew Allen II,"Flash IV, Kid Flash II",Flash IV,good,Male,Human,5'7 // 170 cm,145 lb // 65 kg,50,10,100,60,74,60
+341,Indiana Jones,Indiana Jones,No alter egos found.,George Lucas,good,Male,Human,6'0 // 183 cm,176 lb // 79 kg,69,10,17,30,19,30
+342,Indigo,Iroque,No alter egos found.,DC Comics,neutral,Female,Alien,- // 0 cm,- lb // 0 kg,75,63,50,50,100,50
+343,Ink,Eric Gitter,No alter egos found.,Marvel Comics,good,Male,Mutant,5'11 // 180 cm,180 lb // 81 kg,38,28,17,40,73,50
+344,Invisible Woman,Susan Storm Richards,No alter egos found.,Marvel Comics,good,Female,Human / Radiation,5'6 // 168 cm,120 lb // 54 kg,88,10,27,85,93,56
+345,Iron Fist,Danny Rand,No alter egos found.,Marvel Comics,good,Male,Human,5'11 // 180 cm,175 lb // 79 kg,75,55,33,50,95,100
+346,Iron Man,Tony Stark,No alter egos found.,Marvel Comics,good,Male,Human,6'6 // 198 cm,425 lb // 191 kg,100,85,58,85,100,64
+347,Iron Monger,Obadiah Stane,No alter egos found.,Marvel Comics,bad,Male,null,- // 0 cm,4230 lb // 2 tons,88,63,25,90,57,56
+348,Isis,Adrianna Tomaz,No alter egos found.,DC Comics,good,Female,null,- // 0 cm,- lb // 0 kg,75,48,75,46,50,56
+349,Jack Bauer,Kiefer Sutherland,No alter egos found.,null,good,Male,null,- // 0 cm,- lb // 0 kg,null,43,null,null,null,null
+350,Jack of Hearts,Jonathan Hart,No alter egos found.,Marvel Comics,good,Male,Human,5'1 // 155 cm,175 lb // 79 kg,63,55,100,30,77,30
+351,Jack-Jack,Jack-Jack Parr,No alter egos found.,Dark Horse Comics,good,Male,Human,2'4 // 71 cm,30 lb // 14 kg,6,34,67,80,100,6
+352,James Bond,James Bond,No alter egos found.,Titan Books,good,Male,Human,6'0 // 183 cm,- lb // 0 kg,88,13,17,35,25,90
+353,James T. Kirk,James T. Kirk,No alter egos found.,Star Trek,good,Male,Human,5'10 // 178 cm,170 lb // 77 kg,69,11,17,30,30,75
+354,Jar Jar Binks,Jar Jar Binks,No alter egos found.,George Lucas,good,Male,Gungan,6'4 // 193 cm,- lb // 0 kg,10,6,33,10,21,15
+355,Jason Bourne,Jason Bourne,No alter egos found.,null,good,Male,Human,- // 0 cm,- lb // 0 kg,88,12,29,30,26,100
+356,Jean Grey,Jean Grey,"Phoenix, White Phoenix of The Crown",Phoenix,good,Female,Mutant,5'6 // 168 cm,115 lb // 52 kg,94,80,21,20,92,70
+357,Jean-Luc Picard,Jean-Luc Picard,No alter egos found.,Star Trek,good,Male,Human,- // 0 cm,- lb // 0 kg,75,10,17,30,26,65
+358,Jennifer Kale,Jennifer Kale,No alter egos found.,Marvel Comics,good,Female,null,5'6 // 168 cm,122 lb // 55 kg,75,10,35,42,74,72
+359,Jesse Quick,Jesse Chambers,Liberty Belle II,Liberty Belle II,good,Female,Human,- // 0 cm,- lb // 0 kg,null,42,null,null,null,null
+360,Jessica Cruz,Jessica Cruz,No alter egos found.,DC Comics,good,Female,Human,- // 0 cm,- lb // 0 kg,56,90,46,50,100,55
+361,Jessica Jones,Jessica Campbell Jones Cage,Power Woman,Power Woman,good,Female,Human,5'7 // 170 cm,124 lb // 56 kg,56,44,50,70,18,55
+362,Jessica Sanders,,No alter egos found.,NBC - Heroes,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+363,Jigsaw,Billy Russo,No alter egos found.,Marvel Comics,bad,Male,null,6'2 // 188 cm,250 lb // 113 kg,null,null,null,null,null,null
+364,Jim Powell,Jim Powell,No alter egos found.,ABC Studios,good,Male,null,- // 0 cm,- lb // 0 kg,38,38,23,80,23,20
+365,JJ Powell,JJ Powell,No alter egos found.,ABC Studios,good,Male,null,- // 0 cm,- lb // 0 kg,88,10,8,10,14,10
+366,Johann Krauss,Johann Krauss,No alter egos found.,Dark Horse Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,30,null,null,null,null
+367,John Constantine,John Constantine,No alter egos found.,DC Comics,good,Male,Human,6'0 // 183 cm,- lb // 0 kg,63,10,8,40,54,65
+368,John Stewart,John Stewart,No alter egos found.,DC Comics,good,Male,Human,6'1 // 185 cm,201 lb // 90 kg,56,85,42,64,100,65
+369,John Wraith,John Wraith,No alter egos found.,Marvel Comics,good,Male,null,6'0 // 183 cm,195 lb // 88 kg,75,12,35,28,87,80
+370,Joker,Jack Napier,No alter egos found.,DC Comics,bad,Male,Human,6'5 // 196 cm,192 lb // 86 kg,100,10,12,60,43,70
+371,Jolt,Helen Takahama,No alter egos found.,Marvel Comics,good,Female,null,5'5 // 165 cm,109 lb // 49 kg,63,12,27,32,31,42
+372,Jubilee,Jubilation Lee,No alter egos found.,Marvel Comics,good,Female,Mutant,5'5 // 165 cm,115 lb // 52 kg,56,8,22,20,66,90
+373,Judge Dredd,Joseph Dredd,No alter egos found.,Rebellion,good,Male,Human,6'2 // 188 cm,- lb // 0 kg,75,18,38,50,52,95
+374,Juggernaut,Cain Marko,No alter egos found.,Marvel Comics,neutral,Male,Human,9'5 // 287 cm,1900 lb // 855 kg,44,100,42,100,85,70
+375,Junkpile,,No alter egos found.,Marvel Comics,bad,Male,Mutant,- // 0 cm,- lb // 0 kg,50,38,17,90,81,30
+376,Justice,Vance Astrovik,No alter egos found.,Marvel Comics,good,Male,Human,5'10 // 178 cm,180 lb // 81 kg,50,10,33,70,55,30
+377,Jyn Erso,Jyn Erso,No alter egos found.,George Lucas,good,Female,Human,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+378,K-2SO,,No alter egos found.,George Lucas,good,Male,Android,7'0 // 213 cm,- lb // 0 kg,null,null,null,null,null,null
+379,Kang,Nathaniel Richards,Iron Lad,Iron Lad,bad,Male,null,6'3 // 191 cm,230 lb // 104 kg,100,48,58,70,100,70
+380,Kathryn Janeway,Kathryn Janeway,No alter egos found.,Star Trek,good,Female,Human,- // 0 cm,- lb // 0 kg,75,8,21,25,21,50
+381,Katniss Everdeen,Katniss Everdeen,No alter egos found.,,good,Female,Human,- // 0 cm,- lb // 0 kg,56,8,21,25,24,55
+382,Kevin 11,Kevin Ethan Levin,No alter egos found.,DC Comics,good,Male,Human,- // 0 cm,- lb // 0 kg,25,7,12,14,100,40
+383,Kick-Ass,Dave Lizewski,No alter egos found.,Icon Comics,good,Male,Human,- // 0 cm,- lb // 0 kg,38,10,23,35,22,56
+384,Kid Flash,Wallace Rudolph West,No alter egos found.,DC Comics,good,Male,Human,- // 0 cm,- lb // 0 kg,25,4,92,42,20,30
+385,Kid Flash II,Bartholomew Allen II,"Flash IV, Impulse",Flash IV,good,Male,null,- // 0 cm,- lb // 0 kg,null,47,null,null,null,null
+386,Killer Croc,Waylon Jones,No alter egos found.,DC Comics,bad,Male,Metahuman,8'0 // 244 cm,790 lb // 356 kg,19,53,35,90,53,60
+387,Killer Frost,Caitlin Snow,No alter egos found.,DC Comics,bad,Female,Human,- // 0 cm,- lb // 0 kg,88,10,13,35,59,30
+388,Kilowog,,No alter egos found.,DC Comics,good,Male,Bolovaxian,7'8 // 234 cm,720 lb // 324 kg,81,90,53,42,100,80
+389,King Kong,King Kong,No alter egos found.,,good,Male,Animal,100'0 // 30.5 meters,"20000000 lb // 9,000 tons",56,100,71,75,47,75
+390,King Shark,Nanaue,No alter egos found.,DC Comics,bad,Male,Animal,- // 0 cm,- lb // 0 kg,50,88,50,90,86,40
+391,Kingpin,Wilson Grant Fisk,No alter egos found.,Marvel Comics,bad,Male,Human,6'7 // 201 cm,450 lb // 203 kg,75,18,25,40,13,70
+392,Klaw,Ulysses Klaw,No alter egos found.,Marvel Comics,bad,Male,Human,6'2 // 188 cm,216 lb // 97 kg,63,38,33,100,62,60
+393,Kool-Aid Man,,No alter egos found.,null,good,Male,null,- // 0 cm,- lb // 0 kg,25,18,8,10,9,14
+394,Kraven II,Alyosha Kravinoff,No alter egos found.,Marvel Comics,bad,Male,Human,6'3 // 191 cm,220 lb // 99 kg,50,34,23,28,43,85
+395,Kraven the Hunter,Sergei Kravinoff,No alter egos found.,Marvel Comics,bad,Male,Human,6'0 // 183 cm,235 lb // 106 kg,63,32,35,42,25,85
+396,Krypto,Krypto the Superdog,No alter egos found.,DC Comics,good,Male,Kryptonian,0'25 // 64 cm,40 lb // 18 kg,9,80,100,90,82,40
+397,Kyle Rayner,Kyle Rayner,No alter egos found.,DC Comics,good,Male,Human,5'11 // 180 cm,175 lb // 79 kg,69,90,50,60,100,60
+398,Kylo Ren,Ben Solo,No alter egos found.,George Lucas,bad,Male,Human,- // 0 cm,- lb // 0 kg,56,44,33,30,100,70
+399,Lady Bullseye,,No alter egos found.,Marvel Comics,bad,Female,null,- // 0 cm,- lb // 0 kg,null,63,null,null,null,null
+400,Lady Deathstrike,Yuriko Oyama,No alter egos found.,Marvel Comics,bad,Female,Cyborg,5'9 // 175 cm,128 lb // 58 kg,63,28,42,85,48,90
+401,Leader,Samuel Sterns,No alter egos found.,Marvel Comics,bad,Male,null,5'10 // 178 cm,140 lb // 63 kg,100,10,12,14,59,42
+402,Leech,,No alter egos found.,Marvel Comics,good,Male,null,- // 0 cm,- lb // 0 kg,25,5,12,14,62,14
+403,Legion,David Haller,No alter egos found.,Marvel Comics,good,Male,Mutant,5'9 // 175 cm,130 lb // 59 kg,50,100,42,30,100,75
+404,Leonardo,Leonardo,No alter egos found.,IDW Publishing,good,Male,Mutant,- // 0 cm,- lb // 0 kg,75,16,50,65,59,80
+405,Lex Luthor,Lex Luthor,No alter egos found.,DC Comics,bad,Male,Human,6'2' // 188 cm,210 lb // 95 kg,100,53,25,65,68,70
+406,Light Lass,Ayla Ranzz,No alter egos found.,DC Comics,good,Female,null,5'5 // 165 cm,120 lb // 54 kg,38,10,35,28,67,42
+407,Lightning Lad,Garth Ranzz,No alter egos found.,DC Comics,good,Male,null,5'1 // 155 cm,145 lb // 65 kg,38,10,23,28,60,42
+408,Lightning Lord,Mekt Ranzz,No alter egos found.,DC Comics,bad,Male,null,6'3 // 191 cm,210 lb // 95 kg,44,10,23,42,66,42
+409,Living Brain,,No alter egos found.,Marvel Comics,bad,-,null,6'6 // 198 cm,800 lb // 360 kg,75,53,35,56,31,28
+410,Living Tribunal,,No alter egos found.,Marvel Comics,neutral,-,Cosmic Entity,- // 0 cm,- lb // 0 kg,100,100,100,100,100,30
+411,Liz Sherman,Elizabeth Anne Sherman,No alter egos found.,Dark Horse Comics,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+412,Lizard,Curtis Connors,No alter egos found.,Marvel Comics,bad,Male,Human,6'8 // 203 cm,510 lb // 230 kg,50,51,27,70,63,56
+413,Lobo,Lobo,No alter egos found.,DC Comics,neutral,Male,Czarnian,7'6 // 229 cm,640 lb // 288 kg,94,100,54,100,100,85
+414,Loki,Loki Laufeyson,No alter egos found.,Marvel Comics,bad,Male,Asgardian,6'4 // 193 cm,525 lb // 236 kg,88,63,46,85,100,60
+415,Longshot,,No alter egos found.,Marvel Comics,good,Male,Human,6'2 // 188 cm,80 lb // 36 kg,50,10,27,10,71,70
+416,Luke Cage,Luke Cage,Power Man,Power Man,good,Male,Human,6'6 // 198 cm,425 lb // 191 kg,50,63,29,95,44,70
+417,Luke Campbell,Luke Campbell,No alter egos found.,NBC - Heroes,bad,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+418,Luke Skywalker,Luke Skywalker,No alter egos found.,George Lucas,good,Male,Human,5'6 // 168 cm,170 lb // 77 kg,69,38,42,25,100,100
+419,Luna,Luna Maximoff,No alter egos found.,Marvel Comics,good,Female,Human,- // 0 cm,- lb // 0 kg,38,6,83,14,53,14
+420,Lyja,Lyja,No alter egos found.,Marvel Comics,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+421,Mach-IV,Abner Jenkins,No alter egos found.,Marvel Comics,bad,Male,null,5'11 // 180 cm,175 lb // 79 kg,75,36,60,84,60,56
+422,Machine Man,"X-51, Aaron Stack",No alter egos found.,Marvel Comics,good,-,null,6' // 183 cm,850 lb // 383 kg,63,32,35,84,51,64
+423,Magneto,Erik Magnus Lensherr,No alter egos found.,Marvel Comics,bad,Male,Mutant,6'2 // 188 cm,190 lb // 86 kg,88,80,27,84,91,80
+424,Magog,David Reid,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,50,48,23,64,66,72
+425,Magus,,No alter egos found.,Marvel Comics,bad,Male,null,6'0 // 183 cm,- lb // 0 kg,88,100,70,99,100,74
+426,Man of Miracles,,No alter egos found.,Image Comics,-,-,God / Eternal,- // 0 cm,- lb // 0 kg,100,100,100,100,100,100
+427,Man-Bat,Robert Kirkland Langstrom,No alter egos found.,DC Comics,neutral,Male,Human,- // 0 cm,- lb // 0 kg,38,18,50,70,33,30
+428,Man-Thing,Dr. Theodore Sallis,No alter egos found.,Marvel Comics,good,Male,null,7'0 // 213 cm,500 lb // 225 kg,50,32,8,100,100,40
+429,Man-Wolf,John Jameson,No alter egos found.,Marvel Comics,good,Male,null,6'2' // 188 cm,200 lb // 90 kg,63,44,35,42,45,70
+430,Mandarin,Khan,No alter egos found.,Marvel Comics,bad,Male,Human,6'2 // 188 cm,215 lb // 97 kg,100,28,23,28,100,95
+431,Mantis,,No alter egos found.,Marvel Comics,good,Female,Human-Kree,5'6 // 168 cm,115 lb // 52 kg,63,8,33,80,100,80
+432,Martian Manhunter,J'onn J'onzz,No alter egos found.,DC Comics,good,Male,Martian,6'7 // 201 cm,300 lb // 135 kg,100,95,92,100,100,85
+433,Marvel Girl,Rachel Anne Summers,No alter egos found.,Marvel Comics,good,Female,null,5'7' // 170 cm,125 lb // 56 kg,63,85,47,42,100,80
+434,Master Brood,Currently Colin Wood,No alter egos found.,Team Epic TV,good,Male,null,6'0 // 183 cm,180 lb // 81 kg,null,null,null,null,null,null
+435,Master Chief,John-117,No alter egos found.,Microsoft,good,Male,Human / Altered,7' // 213 cm,- lb // 0 kg,75,73,35,80,69,100
+436,Match,Kent Connor,No alter egos found.,DC Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,75,95,83,85,100,70
+437,Matt Parkman,Matthew Parkman,No alter egos found.,NBC - Heroes,good,Male,null,- // 0 cm,- lb // 0 kg,63,10,12,14,59,56
+438,Maverick,Christopher Bradley,No alter egos found.,Marvel Comics,good,Male,null,6'4 // 193 cm,244 lb // 110 kg,63,10,12,42,60,85
+439,Maxima,,No alter egos found.,DC Comics,bad,Female,null,5'11 // 180 cm,160 lb // 72 kg,75,90,35,56,81,75
+440,Maya Herrera,Maya Herrera,No alter egos found.,NBC - Heroes,good,Female,null,- // 0 cm,- lb // 0 kg,50,10,12,14,60,14
+441,Medusa,Medusalith Amaquelin Boltagon,No alter egos found.,Marvel Comics,good,Female,Inhuman,5'11 // 180 cm,130 lb // 59 kg,75,34,35,70,37,56
+442,Meltdown,Tabitha Smith,Boom-Boom,Boom-Boom,good,Female,null,5'5 // 165 cm,120 lb // 54 kg,38,10,12,42,62,64
+443,Mephisto,,No alter egos found.,Marvel Comics,bad,Male,null,6'6 // 198 cm,310 lb // 140 kg,88,85,35,95,100,42
+444,Mera,Mera,No alter egos found.,DC Comics,good,Female,Atlantean,5'9 // 175 cm,160 lb // 72 kg,56,62,79,60,92,80
+445,Metallo,John Corben,No alter egos found.,DC Comics,bad,Male,Android,6'5 // 196 cm,200 lb // 90 kg,75,53,23,95,86,64
+446,Metamorpho,Rex Mason,No alter egos found.,DC Comics,good,Male,null,6'1 // 185 cm,200 lb // 90 kg,null,82,null,null,null,null
+447,Meteorite,,No alter egos found.,Marvel Comics,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+448,Metron,Metron,No alter egos found.,DC Comics,good,Male,null,6'1 // 185 cm,190 lb // 86 kg,88,10,47,56,100,28
+449,Micah Sanders,Micah Sanders,No alter egos found.,NBC - Heroes,good,Male,null,- // 0 cm,- lb // 0 kg,63,8,12,14,57,14
+450,Michelangelo,,No alter egos found.,IDW Publishing,good,Male,Mutant,- // 0 cm,- lb // 0 kg,63,14,50,65,59,75
+451,Micro Lad,Gim Allon,No alter egos found.,DC Comics,good,Male,null,6' // 183 cm,170 lb // 77 kg,38,28,27,28,44,32
+452,Mimic,Calvin Montgomery Rankin,No alter egos found.,Marvel Comics,good,Male,null,6'2 // 188 cm,225 lb // 101 kg,63,67,47,56,79,42
+453,Minna Murray,Wilhelmina Harker,No alter egos found.,Wildstorm,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+454,Misfit,Charlotte Gage-Radcliffe,Batgirl V,Batgirl V,good,Female,null,- // 0 cm,- lb // 0 kg,63,32,23,80,91,42
+455,Miss Martian,M'gann M'orzz,No alter egos found.,DC Comics,good,Female,null,5'10 // 178 cm,135 lb // 61 kg,63,85,58,100,100,45
+456,Mister Fantastic,Reed Richards,No alter egos found.,Marvel Comics,good,Male,Human / Radiation,6'1 // 185 cm,180 lb // 81 kg,100,10,18,70,33,64
+457,Mister Freeze,Victor Fries,No alter egos found.,DC Comics,bad,Male,Human,6'0 // 183 cm,190 lb // 86 kg,75,32,12,70,37,28
+458,Mister Knife,J'son,No alter egos found.,Marvel Comics,bad,Male,Spartoi,- // 0 cm,- lb // 0 kg,75,10,17,30,13,65
+459,Mister Mxyzptlk,Mr. Mxyzptlk,No alter egos found.,DC Comics,bad,Male,God / Eternal,- // 0 cm,- lb // 0 kg,100,85,100,100,100,50
+460,Mister Sinister,Nathaniel Essex,No alter egos found.,Marvel Comics,bad,Male,Human / Altered,6'5 // 196 cm,285 lb // 128 kg,100,48,46,90,100,50
+461,Mister Zsasz,Victor Zsasz,No alter egos found.,DC Comics,bad,Male,Human,- // 0 cm,- lb // 0 kg,88,22,33,28,18,85
+462,Mockingbird,Barbara Morse,No alter egos found.,Marvel Comics,good,Female,Human,5'9 // 175 cm,135 lb // 61 kg,75,31,38,20,48,95
+463,MODOK,George Tarleton,No alter egos found.,Marvel Comics,bad,Male,Cyborg,12'0 // 366 cm,750 lb // 338 kg,100,18,25,25,79,15
+464,Mogo,Mogo,No alter egos found.,DC Comics,good,Male,Planet,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+465,Mohinder Suresh,Mohinder Suresh,No alter egos found.,NBC - Heroes,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+466,Moloch,Edgar William Jacobi,No alter egos found.,DC Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+467,Molten Man,Mark Raxton,No alter egos found.,Marvel Comics,bad,Male,null,6'5 // 196 cm,550 lb // 248 kg,50,73,23,84,53,56
+468,Monarch,Nathaniel Christopher Adam,No alter egos found.,DC Comics,good,Male,null,6'4 // 193 cm,200 lb // 90 kg,null,100,null,null,null,null
+469,Monica Dawson,Monica Dawson,No alter egos found.,NBC - Heroes,good,Female,null,- // 0 cm,- lb // 0 kg,50,10,35,14,48,90
+470,Moon Knight,Marc Spector,No alter egos found.,Marvel Comics,good,Male,Human,6'2 // 188 cm,225 lb // 101 kg,50,36,23,42,28,75
+471,Moonstone,Karla Sofen,No alter egos found.,Marvel Comics,bad,Female,null,5'11 // 180 cm,130 lb // 59 kg,56,67,47,52,74,80
+472,Morlun,Morlun,No alter egos found.,Marvel Comics,bad,Male,null,6'2 // 188 cm,175 lb // 79 kg,63,60,35,42,74,56
+473,Morph,Kevin Sydney,No alter egos found.,Marvel Comics,good,Male,null,5'10 // 178 cm,175 lb // 79 kg,null,40,null,null,null,null
+474,Moses Magnum,Moses Magnum,No alter egos found.,Marvel Comics,bad,Male,null,5'9 // 175 cm,159 lb // 72 kg,75,28,12,42,55,56
+475,Mr Immortal,Craig Hollis,No alter egos found.,Marvel Comics,good,Male,Mutant,6'2 // 188 cm,156 lb // 70 kg,50,10,8,100,69,30
+476,Mr Incredible,Robert Parr,No alter egos found.,Dark Horse Comics,good,Male,Human,6'7 // 201 cm,350 lb // 158 kg,50,83,33,95,29,40
+477,Ms Marvel II,Sharon Ventura,She-Thing,She-Thing,good,Female,null,5'8 // 173 cm,135 lb // 61 kg,38,63,23,84,11,56
+478,Multiple Man,James Arthur,No alter egos found.,Marvel Comics,good,Male,null,5'11' // 180 cm,155 lb // 70 kg,63,11,23,70,28,62
+479,Mysterio,Quentin Beck,No alter egos found.,Marvel Comics,bad,Male,Human,5'11 // 180 cm,175 lb // 79 kg,81,10,17,40,82,70
+480,Mystique,Raven Darkholme,No alter egos found.,Marvel Comics,bad,Female,Mutant,5'10 // 178 cm,120 lb // 54 kg,75,12,23,64,64,74
+481,Namor,Namor McKenzie,No alter egos found.,Marvel Comics,good,Male,Atlantean,6'2 // 188 cm,278 lb // 125 kg,69,95,58,70,73,85
+482,Namor,,No alter egos found.,Marvel Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+483,Namora,Aquaria Nautica Neptunia,No alter egos found.,Marvel Comics,good,Female,null,5'11 // 180 cm,189 lb // 85 kg,50,85,42,42,48,64
+484,Namorita,Namorita Prentiss,No alter egos found.,Marvel Comics,good,Female,null,5'6 // 168 cm,225 lb // 101 kg,50,72,47,70,37,70
+485,Naruto Uzumaki,,No alter egos found.,Shueisha,good,Male,Human,5'6 // 168 cm,121 lb // 54 kg,50,80,32,80,100,100
+486,Nathan Petrelli,Nathan Petrelli,No alter egos found.,NBC - Heroes,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+487,Nebula,,No alter egos found.,Marvel Comics,bad,Female,Luphomoid,6'1 // 185 cm,185 lb // 83 kg,63,52,13,50,42,60
+488,Negasonic Teenage Warhead,Ellie Phimister,No alter egos found.,Marvel Comics,good,Female,Mutant,- // 0 cm,- lb // 0 kg,50,7,8,10,45,35
+489,Nick Fury,Nicholas Joseph Fury,No alter egos found.,Marvel Comics,good,Male,Human,6'1 // 185 cm,221 lb // 99 kg,75,11,23,42,25,100
+490,Nightcrawler,Kurt Wagner,No alter egos found.,Marvel Comics,good,Male,null,5'9' // 175 cm,195 lb // 88 kg,50,10,47,14,76,80
+491,Nightwing,Dick Grayson,"Batman II, Robin",Batman II,good,Male,Human,5'10 // 178 cm,175 lb // 79 kg,88,11,33,28,36,100
+492,Niki Sanders,Nicole Sanders,No alter egos found.,NBC - Heroes,good,Female,null,- // 0 cm,- lb // 0 kg,63,52,35,28,37,56
+493,Nina Theroux,,No alter egos found.,SyFy,good,Female,Alpha,- // 0 cm,- lb // 0 kg,63,5,8,10,68,20
+494,Nite Owl II,Daniel Dreiberg,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,45,null,null,null,null
+495,Northstar,Jean-Paul Beaubier,No alter egos found.,Marvel Comics,good,Male,null,5'11 // 180 cm,185 lb // 83 kg,50,18,83,56,65,70
+496,Nova,Richard Rider,No alter egos found.,Marvel Comics,good,Male,Human,6'1 // 185 cm,190 lb // 86 kg,100,85,75,100,100,80
+497,Nova,Frankie Raye,No alter egos found.,Marvel Comics,good,Female,Human / Cosmic,5'4 // 163 cm,130 lb // 59 kg,63,60,100,100,100,35
+498,Odin,Odin Borson,No alter egos found.,Marvel Comics,good,Male,God / Eternal,6'9 // 206 cm,650 lb // 293 kg,100,83,67,95,100,90
+499,Offspring,Luke O'Brian,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,50,10,35,99,100,56
+500,Omega Red,Arkady Gregorivich,No alter egos found.,Marvel Comics,bad,Male,null,6'11 // 211 cm,425 lb // 191 kg,null,61,null,null,null,null
+501,Omniscient,Omniscient is the closest English word that compares to his alien tongue.,No alter egos found.,Team Epic TV,good,Male,null,5'11 // 180 cm,145 lb // 65 kg,null,null,null,null,null,null
+502,One Punch Man,Saitama,No alter egos found.,Shueisha,good,Male,Human,5'9 // 175 cm,154 lb // 69 kg,38,100,83,95,55,50
+503,One-Above-All,,No alter egos found.,Marvel Comics,neutral,-,Cosmic Entity,- // 0 cm,- lb // 0 kg,100,100,100,100,100,100
+504,Onslaught,Onslaught,No alter egos found.,Marvel Comics,bad,Male,Mutant,10'0 // 305 cm,900 lb // 405 kg,88,100,33,100,100,55
+505,Oracle,Barbara Gordon,Batgirl,Batgirl,good,Female,Human,5'10 // 178 cm,132 lb // 59 kg,75,11,23,28,19,76
+506,Osiris,Amon Tomaz,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,75,85,60,95,65,42
+507,Overtkill,Nicholas Rocca,No alter egos found.,Image Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+508,Ozymandias,Adrian Veidt,No alter egos found.,DC Comics,bad,Male,Human,- // 0 cm,- lb // 0 kg,100,18,33,20,49,95
+509,Parademon,,No alter egos found.,DC Comics,bad,-,Parademon,- // 0 cm,- lb // 0 kg,9,28,17,50,53,25
+510,Paul Blart,Paul Blart,No alter egos found.,Sony Pictures,good,Male,Human,5'7 // 170 cm,260 lb // 117 kg,8,11,21,50,7,5
+511,Penance,,No alter egos found.,Marvel Comics,good,-,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+512,Penance I,,No alter egos found.,Marvel Comics,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+513,Penance II,Robert Baldwin,Speedball,Speedball,good,Male,null,6' // 183 cm,197 lb // 89 kg,null,20,null,null,null,null
+514,Penguin,Oswald Chesterfield Cobblepot,No alter egos found.,DC Comics,bad,Male,Human,5'2 // 157 cm,175 lb // 79 kg,75,10,12,28,30,45
+515,Phantom,Christopher Walker,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,48,null,null,null,null
+516,Phantom Girl,Tinya Wazzo,No alter egos found.,DC Comics,good,Female,null,5'6 // 168 cm,120 lb // 54 kg,38,10,23,28,53,42
+517,Phoenix,Jean Grey,"Jean Grey, White Phoenix of The Crown",Jean Grey,good,Female,Mutant,5'6 // 168 cm,115 lb // 52 kg,100,100,83,100,100,80
+518,Plantman,Samuel Smithers,No alter egos found.,Marvel Comics,bad,Male,Mutant,6'0 // 183 cm,193 lb // 87 kg,63,60,25,55,61,25
+519,Plastic Lad,Luke O'Brian,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+520,Plastic Man,Patrick O'Brian,No alter egos found.,DC Comics,good,Male,Human,6'1 // 185 cm,178 lb // 80 kg,50,63,23,100,100,56
+521,Plastique,Bette Sans Souci,No alter egos found.,DC Comics,bad,Female,null,5'6 // 168 cm,123 lb // 55 kg,50,10,23,28,60,42
+522,Poison Ivy,Pamela Isley,No alter egos found.,DC Comics,bad,Female,Human,5'6 // 168 cm,110 lb // 50 kg,81,14,21,40,100,40
+523,Polaris,Lorna Dane,No alter egos found.,Marvel Comics,good,Female,Mutant,5'7 // 170 cm,115 lb // 52 kg,63,73,42,50,100,45
+524,Power Girl,Kara Zor-L,No alter egos found.,DC Comics,good,Female,Kryptonian,5'11 // 180 cm,180 lb // 81 kg,94,100,100,100,100,75
+525,Power Man,Luke Cage,Luke Cage,Luke Cage,good,Male,Mutant,- // 0 cm,- lb // 0 kg,null,82,null,null,null,null
+526,Predator,Yautja,No alter egos found.,Dark Horse Comics,bad,Male,Yautja,7'0 // 213 cm,520 lb // 234 kg,63,30,25,85,100,90
+527,Professor X,Charles Francis Xavier,No alter egos found.,Marvel Comics,good,Male,Mutant,6' // 183 cm,190 lb // 86 kg,100,8,12,14,100,32
+528,Professor Zoom,Eobard Thawne,No alter egos found.,DC Comics,bad,Male,Human,5'11 // 180 cm,179 lb // 81 kg,94,10,100,20,83,20
+529,Psylocke,Elizabeth Braddock,No alter egos found.,Marvel Comics,good,Female,Mutant,5'11 // 180 cm,155 lb // 70 kg,63,33,25,40,100,90
+530,Punisher,Frank Castle,No alter egos found.,Marvel Comics,good,Male,Human,6'0' // 183 cm,200 lb // 90 kg,69,16,21,45,42,100
+531,Purple Man,Zebediah Killgrave,No alter egos found.,Marvel Comics,bad,Male,Human,5'11 // 180 cm,165 lb // 74 kg,56,10,8,30,92,10
+532,Pyro,St. John Allerdyce,No alter egos found.,Marvel Comics,bad,Male,null,5'10 // 178 cm,150 lb // 68 kg,38,10,12,14,54,28
+533,Q,Q,No alter egos found.,Star Trek,-,Male,God / Eternal,- // 0 cm,- lb // 0 kg,100,12,17,100,100,40
+534,Quantum,,No alter egos found.,HarperCollins,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+535,Question,Charles Victor Szasz,No alter egos found.,DC Comics,good,Male,Human,6'2 // 188 cm,185 lb // 83 kg,81,14,27,35,20,80
+536,Quicksilver,Pietro Django Maximoff,No alter egos found.,Marvel Comics,good,Male,Mutant,6'0 // 183 cm,175 lb // 79 kg,63,28,100,60,81,56
+537,Quill,Maxwell Jordan,No alter egos found.,Marvel Comics,good,Male,null,5'4 // 163 cm,124 lb // 56 kg,38,10,12,14,23,14
+538,Ra's Al Ghul,Ra's Al Ghul,No alter egos found.,DC Comics,bad,Male,Human,6'4 // 193 cm,215 lb // 97 kg,100,28,32,42,27,100
+539,Rachel Pirzad,,No alter egos found.,SyFy,good,Female,Alpha,- // 0 cm,- lb // 0 kg,63,4,8,10,52,10
+540,Rambo,John Rambo,No alter egos found.,null,good,Male,Human,5'10 // 178 cm,185 lb // 83 kg,63,14,25,30,30,100
+541,Raphael,,No alter egos found.,IDW Publishing,good,Male,Mutant,- // 0 cm,- lb // 0 kg,63,17,50,65,59,80
+542,Raven,Rachel Roth,No alter egos found.,DC Comics,neutral,Female,Human,5'5 // 165 cm,110 lb // 50 kg,50,10,29,70,84,40
+543,Ray,Ray Terrill,No alter egos found.,DC Comics,good,Male,Human,5'10 // 178 cm,155 lb // 70 kg,50,10,92,100,100,20
+544,Razor-Fist II,Douglas Scott,No alter egos found.,Marvel Comics,bad,Male,null,6'3 // 191 cm,260 lb // 117 kg,null,null,null,null,null,null
+545,Red Arrow,Roy Harper,No alter egos found.,DC Comics,good,Male,Human,5'11 // 180 cm,185 lb // 83 kg,63,16,25,20,23,80
+546,Red Hood,Jason Todd,Robin II,Robin II,neutral,Male,Human,6'0 // 183 cm,180 lb // 81 kg,75,12,23,28,35,95
+547,Red Hulk,Thaddeus E. Ross,No alter egos found.,Marvel Comics,neutral,Male,Human / Radiation,7'0 // 213 cm,1400 lb // 630 kg,50,100,47,85,82,75
+548,Red Mist,Chris Genovese,No alter egos found.,Icon Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,25,10,23,14,20,56
+549,Red Robin,Tim Drake,Robin III,Robin III,good,Male,Human,5'5 // 165 cm,125 lb // 56 kg,81,11,27,32,29,80
+550,Red Skull,Johann Shmidt,No alter egos found.,Marvel Comics,bad,Male,null,6'2 // 188 cm,240 lb // 108 kg,75,10,12,14,19,80
+551,Red Tornado,John Smith,No alter egos found.,DC Comics,good,Male,Android,6'1 // 185 cm,325 lb // 146 kg,75,38,67,60,100,40
+552,Redeemer II,Phil Timper,No alter egos found.,Image Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+553,Redeemer III,Eddie Frank,No alter egos found.,Image Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+554,Renata Soliz,,No alter egos found.,HarperCollins,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+555,Rey,,No alter egos found.,George Lucas,good,Female,Human,5'57 // 297 cm,- lb // 0 kg,63,8,21,10,87,35
+556,Rhino,Aleksei Mikhailovich Sytsevich,No alter egos found.,Marvel Comics,bad,Male,Human / Radiation,6'5 // 196 cm,710 lb // 320 kg,25,80,43,90,36,85
+557,Rick Flag,Richard Rogers Flag,No alter egos found.,DC Comics,bad,Male,null,6'1 // 185 cm,189 lb // 85 kg,88,11,23,28,19,95
+558,Riddler,Edward Nigma,No alter egos found.,DC Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,100,10,12,14,10,14
+559,Rip Hunter,Richard Hunter,No alter egos found.,DC Comics,good,Male,Human,- // 0 cm,- lb // 0 kg,100,8,8,10,100,25
+560,Ripcord,Miranda Leevald,No alter egos found.,Marvel Comics,good,Female,null,5'11 // 180 cm,160 lb // 72 kg,null,null,null,null,null,null
+561,Robin,Dick Grayson,"Batman II, Nightwing",Batman II,good,Male,Human,5'10 // 178 cm,175 lb // 79 kg,88,11,27,28,32,85
+562,Robin II,Jason Todd,Red Hood,Red Hood,good,Male,Human,6'0 // 183 cm,225 lb // 101 kg,75,11,27,28,28,85
+563,Robin III,Tim Drake,Red Robin,Red Robin,good,Male,Human,5'5 // 165 cm,125 lb // 56 kg,81,11,27,28,29,85
+564,Robin V,Damian Wayne,No alter egos found.,DC Comics,good,Male,Human,4'6 // 137 cm,84 lb // 38 kg,69,8,33,16,29,65
+565,Robin VI,Carrie Kelley,No alter egos found.,DC Comics,neutral,Female,Human,- // 0 cm,- lb // 0 kg,50,8,25,20,17,70
+566,Rocket Raccoon,Rocket Raccoon,No alter egos found.,Marvel Comics,good,Male,Animal,4'0 // 122 cm,55 lb // 25 kg,50,5,23,28,28,64
+567,Rogue,Anna Marie,No alter egos found.,Marvel Comics,good,Female,null,5'8 // 173 cm,120 lb // 54 kg,75,10,12,28,80,80
+568,Ronin,Clint Barton,"Goliath, Hawkeye",Goliath,good,Male,Human,6'3 // 191 cm,230 lb // 104 kg,56,12,21,10,13,80
+569,Rorschach,Walter Joseph Kovacs,No alter egos found.,DC Comics,good,Male,Human,5'6 // 168 cm,140 lb // 63 kg,75,10,29,20,23,80
+570,Sabretooth,Victor Creed,No alter egos found.,Marvel Comics,bad,Male,Mutant,6'6 // 198 cm,380 lb // 171 kg,56,48,38,90,50,100
+571,Sage,Tessa,No alter egos found.,Marvel Comics,good,Female,null,5'7' // 170 cm,135 lb // 61 kg,75,10,12,14,28,56
+572,Sandman,William Baker,No alter egos found.,Marvel Comics,neutral,Male,Human,6'1 // 185 cm,450 lb // 203 kg,44,75,46,90,100,60
+573,Sasquatch,Walter Langkowski,No alter egos found.,Marvel Comics,good,Male,null,10' // 305 cm,2000 lb // 900 kg,75,80,23,56,15,42
+574,Sauron,Sauron,No alter egos found.,J. R. R. Tolkien,bad,Male,Maiar,9'2 // 279 cm,- lb // 0 kg,88,85,33,100,100,70
+575,Savage Dragon,Kurr,No alter egos found.,Image Comics,good,Male,null,- // 0 cm,- lb // 0 kg,63,70,54,85,66,72
+576,Scarecrow,Jonathan Crane,No alter egos found.,DC Comics,bad,Male,Human,6'0 // 183 cm,140 lb // 63 kg,81,10,12,14,48,50
+577,Scarlet Spider,Benjamin Reilly,Spider-Carnage,Spider-Carnage,good,Male,Human,5'10' // 178 cm,165 lb // 74 kg,75,53,60,74,46,56
+578,Scarlet Spider II,Kaine Parker,No alter egos found.,Marvel Comics,good,Male,Clone,6'4 // 193 cm,250 lb // 113 kg,88,55,60,40,37,56
+579,Scarlet Witch,Wanda Maximoff,No alter egos found.,Marvel Comics,bad,Female,Mutant,5'7 // 170 cm,132 lb // 59 kg,100,10,29,70,100,80
+580,Scorpia,Elaine Coll,No alter egos found.,Marvel Comics,bad,Female,null,- // 0 cm,- lb // 0 kg,38,28,42,28,34,28
+581,Scorpion,MacDonald Gargan,Venom III,Venom III,bad,Male,Human,6'11 // 211 cm,689 lb // 310 kg,50,52,60,85,49,80
+582,Sebastian Shaw,Sebastian Hiram Shaw,No alter egos found.,Marvel Comics,bad,Male,Mutant,- // 0 cm,- lb // 0 kg,63,85,12,95,36,56
+583,Sentry,Robert Reynolds,No alter egos found.,Marvel Comics,neutral,Male,Mutant,6'2 // 188 cm,194 lb // 87 kg,75,100,100,84,100,40
+584,Shadow King,Amahl Farouk,No alter egos found.,Marvel Comics,good,-,null,6'1 // 185 cm,330 lb // 149 kg,75,12,27,100,100,75
+585,Shadow Lass,Tasmia Mallor,No alter egos found.,DC Comics,good,Female,Talokite,5'8 // 173 cm,120 lb // 54 kg,63,10,67,20,79,80
+586,Shadowcat,Kitty Pryde,No alter egos found.,Marvel Comics,good,Female,Mutant,5'6 // 168 cm,110 lb // 50 kg,88,8,21,25,69,70
+587,Shang-Chi,Shang-Chi,No alter egos found.,Marvel Comics,good,Male,Human,5'10 // 178 cm,175 lb // 79 kg,63,12,30,50,29,100
+588,Shatterstar,Gaveedra Seven,No alter egos found.,Marvel Comics,good,Male,null,6'3 // 191 cm,195 lb // 88 kg,63,48,45,64,49,84
+589,She-Hulk,Jennifer Walters,No alter egos found.,Marvel Comics,good,Female,Human,6'7 // 201 cm,700 lb // 315 kg,81,100,42,100,40,70
+590,She-Thing,Sharon Ventura,Ms Marvel II,Ms Marvel II,good,Female,Human / Radiation,6'0 // 183 cm,340 lb // 153 kg,69,72,21,80,23,65
+591,Shocker,Herman Schultz,No alter egos found.,Marvel Comics,bad,Male,Human,5'9 // 175 cm,175 lb // 79 kg,63,10,23,70,79,56
+592,Shriek,Frances Louise Barrison,No alter egos found.,Marvel Comics,good,Female,null,5'8 // 173 cm,115 lb // 52 kg,50,10,23,28,45,42
+593,Shrinking Violet,,No alter egos found.,DC Comics,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+594,Sif,Sif,No alter egos found.,Marvel Comics,good,Female,Asgardian,6'2 // 188 cm,425 lb // 191 kg,63,90,67,80,100,70
+595,Silk,Cindy Moon,No alter egos found.,Marvel Comics,good,Female,Human,- // 0 cm,- lb // 0 kg,75,48,71,70,71,65
+596,Silk Spectre,Sally Juspeczyk,No alter egos found.,DC Comics,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+597,Silk Spectre II,Laurie Juspeczyk,No alter egos found.,DC Comics,good,Female,null,- // 0 cm,- lb // 0 kg,null,51,null,null,null,null
+598,Silver Surfer,Norrin Radd,No alter egos found.,Marvel Comics,good,Male,Alien,6'4 // 193 cm,225 lb // 101 kg,56,100,100,90,100,32
+599,Silverclaw,Maria de Guadalupe Santiago,No alter egos found.,Marvel Comics,good,Female,null,5'2 // 157 cm,110 lb // 50 kg,50,28,35,42,34,42
+600,Simon Baz,Simoon Baz,No alter egos found.,DC Comics,good,Male,Human,- // 0 cm,- lb // 0 kg,56,90,42,55,100,60
+601,Sinestro,Thaal Sinestro,No alter egos found.,DC Comics,neutral,Male,Korugaran,6'7 // 201 cm,205 lb // 92 kg,75,85,53,64,100,55
+602,Siren,Hila,No alter egos found.,DC Comics,bad,Female,Atlantean,5'9 // 175 cm,160 lb // 72 kg,56,62,79,60,92,60
+603,Siren II,La Sirene la Bailene,No alter egos found.,DC Comics,bad,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+604,Siryn,Theresa Rourke Cassidy,No alter egos found.,Marvel Comics,bad,Female,null,5'6 // 168 cm,115 lb // 52 kg,38,8,47,28,50,42
+605,Skaar,,No alter egos found.,Marvel Comics,good,Male,null,6'6 // 198 cm,400 lb // 180 kg,50,85,27,90,69,85
+606,Snake-Eyes,,No alter egos found.,Marvel Comics,bad,Male,Animal,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+607,Snowbird,Narya,No alter egos found.,Marvel Comics,good,Female,null,5'10' // 178 cm,108 lb // 49 kg,50,32,27,42,70,52
+608,Sobek,Yurrd the Unknown,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,50,34,23,46,20,56
+609,Solomon Grundy,Cyrus Gold,No alter egos found.,DC Comics,bad,Male,Zombie,9'2 // 279 cm,971 lb // 437 kg,9,93,13,100,92,30
+610,Songbird,Melissa Joan Gold,No alter egos found.,Marvel Comics,good,Female,null,5'5 // 165 cm,145 lb // 65 kg,75,36,27,42,55,56
+611,Space Ghost,Thaddeus Bach,No alter egos found.,DC Comics,good,Male,Human,6'2 // 188 cm,250 lb // 113 kg,38,18,33,40,95,80
+612,Spawn,Al Simmons,No alter egos found.,Image Comics,good,Male,Demon,6'11 // 211 cm,900 lb // 405 kg,75,60,50,90,100,95
+613,Spectre,Aztar,Aztar,Aztar,good,Male,God / Eternal,- // 0 cm,- lb // 0 kg,88,100,100,100,100,70
+614,Speedball,Robert Baldwin,Penance II,Penance II,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+615,Speedy,Thea Queen,No alter egos found.,DC Comics,good,Female,Human,- // 0 cm,- lb // 0 kg,50,6,33,20,26,70
+616,Speedy,"Roy William Harper, Jr.",Arsenal,Arsenal,good,Male,Human,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+617,Spider-Carnage,Benjamin Reilly,Scarlet Spider,Scarlet Spider,bad,Male,Symbiote,- // 0 cm,- lb // 0 kg,null,69,null,null,null,null
+618,Spider-Girl,May 'Mayday' Parker,No alter egos found.,Marvel Comics,good,Female,Human,5'7 // 170 cm,119 lb // 54 kg,63,38,60,65,53,75
+619,Spider-Gwen,Gwen Stacy,No alter egos found.,Marvel Comics,good,Female,Human,5'5 // 165 cm,125 lb // 56 kg,75,55,63,70,66,70
+620,Spider-Man,Peter Parker,No alter egos found.,Marvel Comics,good,Male,Human,5'10 // 178 cm,165 lb // 74 kg,90,55,67,75,74,85
+621,Spider-Man,Miguel O'Hara,No alter egos found.,Marvel Comics,good,-,Human,5'10 // 178 cm,170 lb // 77 kg,null,57,null,null,null,null
+622,Spider-Man,Miles Morales,No alter egos found.,Marvel Comics,good,Male,Human,5'2 // 157 cm,125 lb // 56 kg,null,58,null,null,null,null
+623,Spider-Woman,Jessica Drew,No alter egos found.,Marvel Comics,good,Female,Human,5'10 // 178 cm,130 lb // 59 kg,56,42,42,60,68,70
+624,Spider-Woman II,,No alter egos found.,Marvel Comics,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+625,Spider-Woman III,Martha Franklin,No alter egos found.,Marvel Comics,good,Female,null,5'8 // 173 cm,123 lb // 55 kg,50,48,27,42,60,28
+626,Spider-Woman IV,Charlotte Witter,No alter egos found.,Marvel Comics,bad,Female,null,5'10 // 178 cm,128 lb // 58 kg,null,null,null,null,null,null
+627,Spock,S'chn T'gai Spock,No alter egos found.,Star Trek,good,Male,Human-Vulcan,6'1 // 185 cm,180 lb // 81 kg,81,18,17,40,56,40
+628,Spyke,Evan Daniels,No alter egos found.,Marvel Comics,good,Male,Mutant,6'0 // 183 cm,185 lb // 83 kg,50,12,17,60,48,30
+629,Stacy X,,No alter egos found.,Marvel Comics,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+630,Star-Lord,Peter Jason Quill,No alter egos found.,Marvel Comics,good,Male,Human-Spartoi,6'2 // 188 cm,175 lb // 79 kg,69,20,33,50,25,70
+631,Stardust,,No alter egos found.,Marvel Comics,good,Male,null,- // 0 cm,- lb // 0 kg,88,85,100,110,100,85
+632,Starfire,Koriand'r,No alter egos found.,DC Comics,good,Female,Tamaranean,6'4 // 193 cm,158 lb // 71 kg,50,80,33,85,59,70
+633,Stargirl,Courtney Whitmore,No alter egos found.,DC Comics,good,Female,Human,5'5 // 165 cm,137 lb // 62 kg,63,80,25,90,87,55
+634,Static,Virgil Hawkins,No alter egos found.,DC Comics,good,Male,Mutant,5'7 // 170 cm,140 lb // 63 kg,69,8,42,50,90,40
+635,Steel,John Henry Irons,No alter egos found.,DC Comics,good,Male,null,6'7 // 201 cm,290 lb // 131 kg,81,82,53,90,64,64
+636,Stephanie Powell,Stephanie Powell,No alter egos found.,ABC Studios,good,Female,null,- // 0 cm,- lb // 0 kg,69,10,54,10,24,10
+637,Steppenwolf,,No alter egos found.,DC Comics,bad,Male,New God,6'0 // 183 cm,203 lb // 91 kg,94,100,83,100,100,100
+638,Storm,Ororo Munroe,No alter egos found.,Marvel Comics,good,Female,Mutant,5'11 // 180 cm,127 lb // 57 kg,75,10,47,30,88,75
+639,Stormtrooper,,No alter egos found.,George Lucas,bad,Male,Human,6'0 // 183 cm,- lb // 0 kg,10,8,8,15,5,20
+640,Sunspot,Roberto DaCosta,No alter egos found.,Marvel Comics,good,Male,Mutant,5'8 // 173 cm,170 lb // 77 kg,63,63,35,25,90,70
+641,Superboy,Kon-El / Conner Kent,No alter egos found.,DC Comics,good,Male,null,5'7 // 170 cm,150 lb // 68 kg,75,95,83,90,95,60
+642,Superboy-Prime,Kal-El,No alter egos found.,DC Comics,bad,Male,Kryptonian,5'11 // 180 cm,170 lb // 77 kg,94,100,100,100,100,85
+643,Supergirl,Kara Zor-El,No alter egos found.,DC Comics,good,Female,Kryptonian,5'5 // 165 cm,120 lb // 54 kg,94,100,100,100,100,75
+644,Superman,Clark Kent,Superman Prime One-Million,Superman Prime One-Million,good,Male,Kryptonian,6'3 // 191 cm,225 lb // 101 kg,94,100,100,100,100,85
+645,Swamp Thing,Alec Holland,No alter egos found.,DC Comics,bad,Male,God / Eternal,- // 0 cm,- lb // 0 kg,88,95,25,100,100,55
+646,Swarm,Fritz von Meyer,No alter egos found.,Marvel Comics,bad,Male,Mutant,6'5 // 196 cm,104 lb // 47 kg,75,18,50,90,38,35
+647,Sylar,Gabriel Gray,No alter egos found.,NBC - Heroes,bad,Male,null,- // 0 cm,- lb // 0 kg,75,10,12,28,91,56
+648,Synch,Everett Thomas,No alter egos found.,Marvel Comics,good,Male,null,5'11 // 180 cm,165 lb // 74 kg,75,67,23,28,74,56
+649,T-1000,Cyberdyne Systems Series 1000 Terminator,No alter egos found.,Dark Horse Comics,bad,Male,Android,6'0 // 183 cm,325 lb // 146 kg,75,34,33,100,100,75
+650,T-800,Cyberdyne Systems Series 800 Terminator Model 101,No alter egos found.,Dark Horse Comics,bad,Male,Cyborg,- // 0 cm,390 lb // 176 kg,75,34,17,60,73,65
+651,T-850,Cyberdyne Systems Series 850 Terminator,No alter egos found.,Dark Horse Comics,bad,Male,Cyborg,- // 0 cm,440 lb // 198 kg,75,80,25,90,83,75
+652,T-X,Cyberdyne Systems Series X Terminator,No alter egos found.,Dark Horse Comics,bad,Female,Cyborg,- // 0 cm,330 lb // 149 kg,75,63,29,85,100,80
+653,Taskmaster,Tony Masters,No alter egos found.,Marvel Comics,bad,Male,Human,6'2 // 188 cm,220 lb // 99 kg,75,12,50,20,63,100
+654,Tempest,Angel Salvadore Bohusk,Angel Salvadore,Angel Salvadore,good,Female,null,5'4 // 163 cm,121 lb // 54 kg,38,10,45,28,66,60
+655,Thanos,Thanos,No alter egos found.,Marvel Comics,bad,Male,Eternal,6'7 // 201 cm,985 lb // 443 kg,100,100,33,100,100,80
+656,The Cape,Vince Faraday,No alter egos found.,null,good,Male,null,- // 0 cm,- lb // 0 kg,38,10,23,32,22,64
+657,The Comedian,Edward Morgen Blake,No alter egos found.,DC Comics,neutral,Male,Human,6'2 // 188 cm,225 lb // 101 kg,63,14,17,10,12,80
+658,Thing,Ben Grimm,No alter egos found.,Marvel Comics,good,Male,Human / Radiation,6'0 // 183 cm,500 lb // 225 kg,75,84,21,100,38,80
+659,Thor,Thor Odinson,Rune King Thor,Rune King Thor,good,Male,Asgardian,6'6 // 198 cm,640 lb // 288 kg,69,100,83,100,100,100
+660,Thor Girl,Tarene,No alter egos found.,Marvel Comics,good,Female,Asgardian,5'9 // 175 cm,317 lb // 143 kg,75,83,70,84,100,70
+661,Thunderbird,John Proudstar,No alter egos found.,Marvel Comics,good,Male,null,6'1 // 185 cm,225 lb // 101 kg,50,32,27,32,13,70
+662,Thunderbird II,James Proudstar,Warpath,Warpath,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+663,Thunderbird III,Neal Shaara,No alter egos found.,Marvel Comics,good,Male,null,5'9' // 175 cm,165 lb // 74 kg,null,null,null,null,null,null
+664,Thunderstrike,Eric Kevin Masterson,No alter egos found.,Marvel Comics,good,Male,null,6'6 // 198 cm,640 lb // 288 kg,63,80,70,84,42,72
+665,Thundra,Thundra,No alter egos found.,Marvel Comics,good,Female,null,7'2 // 218 cm,350 lb // 158 kg,38,81,32,64,26,54
+666,Tiger Shark,Todd Arliss,No alter egos found.,Marvel Comics,bad,Male,Human,6'1 // 185 cm,450 lb // 203 kg,38,72,46,70,51,28
+667,Tigra,Greer Grant Nelson,No alter egos found.,Marvel Comics,good,Female,null,5'10 // 178 cm,180 lb // 81 kg,63,32,53,38,33,90
+668,Tinkerer,Phineas Mason,No alter egos found.,Marvel Comics,bad,Male,null,5'4 // 163 cm,120 lb // 54 kg,100,10,23,14,10,14
+669,Titan,,No alter egos found.,HarperCollins,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+670,Toad,Mortimer Toynbee,No alter egos found.,Marvel Comics,neutral,Male,Mutant,5'9 // 175 cm,169 lb // 76 kg,50,34,58,56,70,28
+671,Toxin,Patrick Mulligan,No alter egos found.,Marvel Comics,good,Male,Symbiote,6'2 // 188 cm,215 lb // 97 kg,56,73,70,84,82,70
+672,Toxin,Eddie Brock,"Anti-Venom, Venom",Anti-Venom,good,Male,Symbiote,6'3 // 191 cm,260 lb // 117 kg,75,80,42,85,97,70
+673,Tracy Strauss,Tracy Strauss,No alter egos found.,NBC - Heroes,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+674,Trickster,Giovanni Giuseppe,No alter egos found.,DC Comics,-,Male,Human,6'0 // 183 cm,179 lb // 81 kg,null,null,null,null,null,null
+675,Trigon,,No alter egos found.,DC Comics,bad,Male,God / Eternal,- // 0 cm,- lb // 0 kg,null,99,null,null,null,null
+676,Triplicate Girl,Luornu Durgo,No alter egos found.,DC Comics,good,Female,null,5'6 // 168 cm,130 lb // 59 kg,63,10,23,42,44,42
+677,Triton,Triton,No alter egos found.,Marvel Comics,good,Male,Inhuman,6'2 // 188 cm,190 lb // 86 kg,56,63,50,65,35,55
+678,Two-Face,Harvey Dent,No alter egos found.,DC Comics,bad,Male,null,6'0 // 183 cm,182 lb // 82 kg,88,10,12,14,9,28
+679,Ultragirl,Tsu-Zana,No alter egos found.,Marvel Comics,good,Female,null,5'6 // 168 cm,233 lb // 105 kg,50,80,35,70,35,80
+680,Ultron,Ultron,No alter egos found.,Marvel Comics,bad,Male,Android,6'9 // 206 cm,735 lb // 331 kg,88,83,42,100,100,64
+681,Utgard-Loki,,No alter egos found.,Marvel Comics,bad,Male,Frost Giant,50'0 // 15.2 meters,128000 lb // 58 tons,50,80,23,84,85,64
+682,Vagabond,Priscilla Lyons,No alter egos found.,Marvel Comics,good,Female,null,5'6' // 168 cm,120 lb // 54 kg,null,null,null,null,null,null
+683,Valerie Hart,,No alter egos found.,Team Epic TV,good,Female,null,5'9 // 175 cm,125 lb // 56 kg,null,null,null,null,null,null
+684,Valkyrie,Brunnhilde (also spelled Brunnhilda),No alter egos found.,Marvel Comics,good,Female,null,6'3' // 191 cm,475 lb // 214 kg,null,94,null,null,null,null
+685,Vanisher,,No alter egos found.,Marvel Comics,bad,Male,null,5'5 // 165 cm,175 lb // 79 kg,63,10,75,56,61,42
+686,Vegeta,Vegeta,No alter egos found.,Shueisha,bad,Male,Saiyan,5'6 // 168 cm,163 lb // 73 kg,81,100,92,95,100,100
+687,Venom,Eddie Brock,"Anti-Venom, Toxin",Anti-Venom,bad,Male,Symbiote,6'3 // 191 cm,260 lb // 117 kg,75,57,65,84,86,84
+688,Venom II,Angelo Fortunato,No alter egos found.,Marvel Comics,bad,Male,null,5'9 // 175 cm,110 lb // 50 kg,50,57,47,70,54,56
+689,Venom III,MacDonald Gargan,Scorpion,Scorpion,bad,Male,Symbiote,7'6 // 229 cm,742 lb // 334 kg,63,73,35,90,73,56
+690,Venompool,Wade Wilson,"Deadpool, Evil Deadpool",Deadpool,-,Male,Symbiote,7'5 // 226 cm,- lb // 0 kg,69,57,63,100,100,100
+691,Vertigo II,-,Blaquesmith,Blaquesmith,good,Female,null,5'6' // 168 cm,115 lb // 52 kg,null,null,null,null,null,null
+692,Vibe,Cisco Ramon,No alter egos found.,DC Comics,good,Male,Human,5'10 // 178 cm,157 lb // 71 kg,50,10,17,30,99,30
+693,Vindicator,Heather Hudson,Vindicator II,Vindicator II,good,Female,Human,5'5 // 165 cm,120 lb // 54 kg,63,63,53,64,58,70
+694,Vindicator,Dr. James McDonald Hudson,No alter egos found.,Marvel Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+695,Violator,,No alter egos found.,Image Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,53,null,null,null,null
+696,Violet Parr,Violet Parr,No alter egos found.,Dark Horse Comics,good,Female,Human,4'6 // 137 cm,90 lb // 41 kg,56,9,13,50,79,15
+697,Vision,Vision,"Anti-Vision, Vision II",Anti-Vision,good,Male,Android,6'3 // 191 cm,300 lb // 135 kg,100,72,54,95,100,70
+698,Vision II,Vision,"Anti-Vision, Vision",Anti-Vision,good,-,null,6'3' // 191 cm,300 lb // 135 kg,null,null,null,null,null,null
+699,Vixen,Mari McCabe,No alter egos found.,DC Comics,good,Female,Human,5'9 // 175 cm,140 lb // 63 kg,50,38,50,50,62,25
+700,Vulcan,Gabriel Summers,No alter egos found.,Marvel Comics,good,Male,null,- // 0 cm,- lb // 0 kg,null,56,null,null,null,null
+701,Vulture,Adrian Toomes,No alter egos found.,Marvel Comics,bad,Male,Human,5'11 // 180 cm,175 lb // 79 kg,75,22,42,25,26,30
+702,Walrus,Hubert Carpent,No alter egos found.,Marvel Comics,bad,Male,Human,6'0 // 183 cm,360 lb // 162 kg,50,28,8,50,11,20
+703,War Machine,James Rupert Rhodes,No alter egos found.,Marvel Comics,good,Male,Human,6'1 // 185 cm,210 lb // 95 kg,63,80,63,100,100,85
+704,Warbird,Carol Danvers,"Binary, Captain Marvel",Binary,good,Female,null,5'11' // 180 cm,120 lb // 54 kg,null,null,null,null,null,null
+705,Warlock,Adam Warlock,No alter egos found.,Marvel Comics,good,Male,null,6'2' // 188 cm,240 lb // 108 kg,88,36,79,95,71,95
+706,Warp,Emil LaSalle,No alter egos found.,DC Comics,bad,Male,null,5'8 // 173 cm,148 lb // 67 kg,38,10,23,28,85,50
+707,Warpath,James Proudstar,Thunderbird II,Thunderbird II,good,Male,Mutant,7'2 // 218 cm,350 lb // 158 kg,38,72,47,70,26,84
+708,Wasp,Janet Van Dyne,No alter egos found.,Marvel Comics,good,Female,Human,5'4 // 163 cm,110 lb // 50 kg,63,17,58,52,29,42
+709,Watcher,Uatu,No alter egos found.,Marvel Comics,good,Male,null,- // 0 cm,- lb // 0 kg,100,80,67,89,100,56
+710,Weapon XI,Weapon XI,No alter egos found.,Marvel Comics,bad,Male,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+711,White Canary,,No alter egos found.,DC Comics,bad,Female,Human,- // 0 cm,- lb // 0 kg,63,7,33,15,49,90
+712,White Queen,Emma Grace Frost,No alter egos found.,Marvel Comics,good,Female,null,5'10' // 178 cm,144 lb // 65 kg,null,null,null,null,null,null
+713,Wildfire,Drake Burroughs,No alter egos found.,DC Comics,good,Male,null,- // 0 cm,- lb // 0 kg,50,32,23,100,77,42
+714,Winter Soldier,Bucky Barnes,No alter egos found.,Marvel Comics,good,Male,Human,5'9 // 175 cm,260 lb // 117 kg,56,32,35,65,60,84
+715,Wiz Kid,Takashi Matsuya,No alter egos found.,Marvel Comics,good,-,null,4'7' // 140 cm,87 lb // 39 kg,null,null,null,null,null,null
+716,Wolfsbane,Rahne Sinclair,No alter egos found.,Marvel Comics,good,Female,null,12' // 366 cm,1050 lb // 473 kg,38,16,35,42,26,42
+717,Wolverine,Logan,No alter egos found.,Marvel Comics,good,Male,Mutant,5'3 // 160 cm,300 lb // 135 kg,63,32,50,100,89,100
+718,Wonder Girl,Cassandra Elizabeth Sandsmark,No alter egos found.,DC Comics,good,Female,Demi-God,5'5 // 165 cm,114 lb // 51 kg,75,90,25,80,39,60
+719,Wonder Man,Simon Williams,No alter egos found.,Marvel Comics,good,Male,null,6'2 // 188 cm,380 lb // 171 kg,75,100,53,90,64,64
+720,Wonder Woman,Diana Prince,No alter egos found.,DC Comics,good,Female,Amazon,6'0 // 183 cm,165 lb // 74 kg,88,100,79,100,100,100
+721,Wondra,,No alter egos found.,Marvel Comics,good,Female,null,- // 0 cm,- lb // 0 kg,null,null,null,null,null,null
+722,Wyatt Wingfoot,Wyatt Wingfoot,No alter egos found.,Marvel Comics,good,Male,null,6'5' // 196 cm,260 lb // 117 kg,10,10,12,1,1,56
+723,X-23,Laura Kinney,No alter egos found.,Marvel Comics,good,Female,Mutant / Clone,5'1 // 155 cm,110 lb // 50 kg,75,24,42,100,55,95
+724,X-Man,Nate Grey,No alter egos found.,Marvel Comics,good,Male,null,5'9 // 175 cm,135 lb // 61 kg,88,53,53,95,100,84
+725,Yellow Claw,,No alter egos found.,Marvel Comics,bad,Male,null,6'2 // 188 cm,210 lb // 95 kg,null,null,null,null,null,null
+726,Yellowjacket,Hank Pym,"Ant-Man, Giant-Man, Goliath, Wasp II",Ant-Man,good,Male,Human,6' // 183 cm,185 lb // 83 kg,88,10,12,28,12,14
+727,Yellowjacket II,Rita DeMara,No alter egos found.,Marvel Comics,good,Female,Human,5'5 // 165 cm,115 lb // 52 kg,50,10,35,28,31,28
+728,Ymir,Ymir,No alter egos found.,Marvel Comics,good,Male,Frost Giant,1000 // 304.8 meters,- lb // 0 kg,50,100,27,100,98,28
+729,Yoda,Yoda,No alter egos found.,George Lucas,good,Male,Yoda's species,2'2 // 66 cm,38 lb // 17 kg,88,52,33,25,100,90
+730,Zatanna,Zatanna Zatara,No alter egos found.,DC Comics,good,Female,Human,5'7 // 170 cm,127 lb // 57 kg,81,10,23,28,100,56
+731,Zoom,Hunter Zolomon,No alter egos found.,DC Comics,bad,Male,null,6'1 // 185 cm,181 lb // 81 kg,50,10,100,28,100,28

@@ -9,14 +9,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-// DTOs aninhados (wrappers)
 @Data
 class ComicVineGenericSearchResponseDTO { public List<ComicVineGenericResultDTO> results; }
 class ComicVineIssueDetailsResponseDTO { public ComicVineIssueDetailsDTO results; }
