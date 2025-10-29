@@ -59,8 +59,8 @@ const PowerRadarChart = ({ data, selectedCharacter }: PowerRadarChartProps) => {
       return averages;
     };
 
-    const avgGood = calculateAverage(d => d.Alignment === 'good');
-    const avgBad = calculateAverage(d => d.Alignment === 'bad');
+    const avgGood = calculateAverage(d => d.Alignment === 'Herói');
+    const avgBad = calculateAverage(d => d.Alignment === 'Vilão');
     
     const chartData: Array<{
       subject: keyof Pick<Character, 'Intelligence' | 'Strength' | 'Speed' | 'Durability' | 'Power' | 'Combat'>;
@@ -80,6 +80,14 @@ const PowerRadarChart = ({ data, selectedCharacter }: PowerRadarChartProps) => {
     }
     return chartData;
   }, [data, selectedCharacter, attributes]);
+
+  const alignmentMap: { [key: string]: 'good' | 'bad' | 'neutral' } = {
+    'Herói': 'good',
+    'Vilão': 'bad',
+    'Anti-Herói': 'neutral'
+  };
+
+  const selectedAlignment = selectedCharacter ? alignmentMap[selectedCharacter.Alignment] || 'neutral' : 'neutral';
 
   return (
     <RadarCard>
@@ -105,7 +113,7 @@ const PowerRadarChart = ({ data, selectedCharacter }: PowerRadarChartProps) => {
         <SelectedHeroPanel>
           <HeroHeader>
             <HeroName>{selectedCharacter.Name}</HeroName>
-            <HeroBadge alignment={selectedCharacter.Alignment?.toLowerCase() as 'good' | 'bad' | 'neutral' || 'neutral'}>
+            <HeroBadge alignment={selectedAlignment}>
               {selectedCharacter.Alignment}
             </HeroBadge>
           </HeroHeader>

@@ -6,6 +6,7 @@ import { Character, DashboardFilter } from '@/types';
 
 let cachedData: Character[] = [];
 
+// ✅ 1. ADICIONADO 'Alter Egos' à interface de dados brutos
 interface RawCharacterData {
   Name?: string | null;
   Alignment?: string | null;
@@ -19,7 +20,7 @@ interface RawCharacterData {
   Combat?: number | null;
   Height?: string | null;
   Weight?: string | null;
-  'Alter Egos'?: string | null;
+  'Alter Egos'?: string | null; // <-- Propriedade adicionada
 }
 
 const parseDimension = (s: string | null | undefined): number => {
@@ -46,10 +47,12 @@ const processData = (data: RawCharacterData[]): Character[] => {
       TotalPower: (d.Intelligence || 0) + (d.Strength || 0) + (d.Speed || 0) + (d.Durability || 0) + (d.Power || 0) + (d.Combat || 0),
       Height: parseDimension(d.Height),
       Weight: parseDimension(d.Weight),
-      'Alter Egos': d['Alter Egos'] || 'No',
+      // ✅ 2. ADICIONADO 'Alter Egos' ao objeto final do personagem
+      'Alter Egos': d['Alter Egos'] || 'No', // <-- Propriedade adicionada com um valor padrão
     } as Character));
 };
 
+// O resto do arquivo (getSuperheroes, etc.) permanece igual...
 export const getSuperheroes = (filter: DashboardFilter = null): Character[] => {
   if (cachedData.length === 0) {
     const filePath = path.join(process.cwd(), 'public', 'data', 'superheroData.csv');

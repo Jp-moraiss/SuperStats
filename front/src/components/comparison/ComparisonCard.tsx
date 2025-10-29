@@ -36,7 +36,12 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({ character, onClear }) =
     );
   }
 
-  const alignmentClass = character.Alignment?.toLowerCase() || 'neutral';
+  const alignmentMap: { [key: string]: 'good' | 'bad' | 'neutral' } = {
+    'Herói': 'good',
+    'Vilão': 'bad',
+    'Anti-Herói': 'neutral'
+  };
+  const alignmentClass = alignmentMap[character.Alignment] || 'neutral';
 
   const powers = [
     { label: 'Inteligência', value: character.Intelligence },
@@ -62,13 +67,13 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({ character, onClear }) =
       </HeroHeader>
 
       <SelectedHeroPanel>
-        <HeroBadge alignment={alignmentClass as 'good' | 'bad' | 'neutral'}>{character.Alignment || 'Desconhecido'}</HeroBadge>
+        <HeroBadge alignment={alignmentClass}>{character.Alignment || 'Desconhecido'}</HeroBadge>
         
         <p><strong>Total de Poder:</strong> <PowerMetric>{character.TotalPower}</PowerMetric></p>
         <p><strong>Gênero:</strong> {character.Gender || 'Desconhecido'}</p>
         <p><strong>Altura:</strong> {character.Height > 0 ? `${character.Height} cm` : 'Desconhecido'}</p>
         <p><strong>Peso:</strong> {character.Weight > 0 ? `${character.Weight} kg` : 'Desconhecido'}</p>
-        <p><strong>Alter Egos:</strong> {character['Alter Egos'] === 'No Alter Egos' ? 'Nenhum' : character['Alter Egos']}</p>
+        <p><strong>Alter Egos:</strong> {character['Alter Egos'] === 'No' ? 'Nenhum' : character['Alter Egos']}</p>
         
         <SectionTitle>Estatísticas de Poder</SectionTitle>
         <HeroStatsGrid>
