@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,22 +38,32 @@ public class PesquisaService {
 
     @Transactional
     public void salvarRespostas(List<RespostaDTO> respostasDto, Fa faLogado) {
-        System.out.println("Salvando respostas para o usuário: " + faLogado.getUsername());
+        System.out.println("Processando respostas para o usuário: " + faLogado.getUsername());
+
         for (RespostaDTO dto : respostasDto) {
             PersonagemFinalizeCreateDTO createDto = new PersonagemFinalizeCreateDTO();
             createDto.setApiId(dto.getPersonagemId());
             Personagem personagem = personagemService.findOrCreateFromApi(createDto);
 
-            Resposta resposta = new Resposta();
-            resposta.setFa(faLogado);
             Pergunta pergunta = new Pergunta();
             pergunta.setId(dto.getPerguntaId());
-            resposta.setPergunta(pergunta);
-            resposta.setPersonagem(personagem);
-            resposta.setDataResposta(LocalDate.now());
 
-            respostaRepository.save(resposta);
-            System.out.println("  - Resposta salva no banco: Pergunta " + dto.getPerguntaId() + " -> Personagem " + personagem.getNome());
+            Optional<Integer> respostaExistenteId = respostaRepository.findIdByFaAndPergunta(faLogado.getId(), dto.getPerguntaId());
+
+            Resposta novaResposta = new Resposta();
+            novaResposta.setFa(faLogado);
+            novaResposta.setPergunta(pergunta);
+            novaResposta.setPersonagem(personagem);
+            novaResposta.setDataResposta(LocalDate.now());
+
+            if (respostaExistenteId.isPresent()) {
+                novaResposta.setId(respostaExistenteId.get());
+                respostaRepository.update(novaResposta);
+                System.out.println("  - Resposta ATUALIZADA no banco: Pergunta " + dto.getPerguntaId() + " -> Personagem " + personagem.getNome());
+            } else {
+                respostaRepository.save(novaResposta);
+                System.out.println("  - Resposta CRIADA no banco: Pergunta " + dto.getPerguntaId() + " -> Personagem " + personagem.getNome());
+            }
         }
     }
 }

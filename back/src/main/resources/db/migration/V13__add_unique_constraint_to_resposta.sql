@@ -1,0 +1,1 @@
+ALTER TABLE Resposta ADD CONSTRAINT uq_fa_pergunta UNIQUE (fk_Fa_id, fk_Pergunta_id);
