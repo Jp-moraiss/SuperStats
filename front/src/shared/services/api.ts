@@ -106,7 +106,8 @@ export const API_ENDPOINTS = {
   HQS_READ: '/hqs/lidos',
   HQS_SEARCH: '/hqs/buscar-externo',
   HQS_VOLUME_ISSUES: '/hqs/buscar-volume-issues',
-  HQS_TOGGLE_READ: (id: number) => `/hqs/${id}/ler`,
+  HQS_TOGGLE_READ: (id: number | string) => `/hqs/${id}/toggle-read`,
+  HQS_UNREAD: '/hqs/nao-lidas',
   
   MOVIES: '/filmes',
   MOVIES_WATCHED: '/filmes/assistidos',

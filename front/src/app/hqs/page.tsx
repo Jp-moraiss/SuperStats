@@ -17,6 +17,7 @@ import { ApiService, API_ENDPOINTS, formatDate } from "../../shared";
 export default function HqsPage() {
   const [hqs, setHqs] = useState<Hq[]>([]);
   const [hqsLidas, setHqsLidas] = useState<Hq[]>([]);
+  const [hqsNaoLidas, setHqsNaoLidas] = useState<Hq[]>([]);
   const [activeTab, setActiveTab] = useState('catalogo');
   const [isLoading, setIsLoading] = useState(true);
   
@@ -36,21 +37,23 @@ export default function HqsPage() {
     loadInitialData();
   }, []);
 
-  const loadInitialData = async () => {
+const loadInitialData = async () => {
     setIsLoading(true);
     try {
-      const [hqsRes, hqsLidasRes] = await Promise.all([
-        ApiService.get(API_ENDPOINTS.HQS),
-        ApiService.get(API_ENDPOINTS.HQS_READ),
-      ]);
-      setHqs(await hqsRes.json());
-      setHqsLidas(await hqsLidasRes.json());
+        const [hqsRes, hqsLidasRes, hqsNaoLidasRes] = await Promise.all([
+            ApiService.get(API_ENDPOINTS.HQS),
+            ApiService.get(API_ENDPOINTS.HQS_READ),
+            ApiService.get(API_ENDPOINTS.HQS_UNREAD),
+        ]);
+        setHqs(await hqsRes.json());
+        setHqsLidas(await hqsLidasRes.json());
+        setHqsNaoLidas(await hqsNaoLidasRes.json());
     } catch (error) {
-      console.error("Falha ao carregar dados de HQs:", error);
+        console.error("Falha ao carregar dados de HQs:", error);
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  };
+};
 
 const handleToggleRead = async (id: number) => { // 1. Recebe apenas o ID da HQ
    // Salva o estado atual para poder reverter em caso de erro
@@ -237,6 +240,18 @@ const handleToggleRead = async (id: number) => { // 1. Recebe apenas o ID da HQ
             </div>
           </div>
         );
+        case 'naoLidas':
+          return (
+              <div className={styles.hqsGrid}>
+                  {hqsNaoLidas.length > 0 ? hqsNaoLidas.map(hq => (
+                      <HqCard
+                          key={hq.id}
+                          hq={hq}
+                          onToggleRead={handleToggleRead}
+                      />
+                  )) : <p>Ótima notícia! Todas as HQs do catálogo já foram lidas por alguém.</p>}
+              </div>
+          );
       case 'gerenciar':
         return (
           <>
@@ -268,6 +283,7 @@ const handleToggleRead = async (id: number) => { // 1. Recebe apenas o ID da HQ
       <div className={styles.tabsContainer}>
         <button onClick={() => setActiveTab('catalogo')} className={activeTab === 'catalogo' ? styles.active : ''}>Catálogo</button>
         <button onClick={() => setActiveTab('lidas')} className={activeTab === 'lidas' ? styles.active : ''}>HQs Lidas</button>
+        <button onClick={() => setActiveTab('naoLidas')} className={activeTab === 'naoLidas' ? styles.active : ''}>Baixo Engajamento</button>
         <button onClick={() => setActiveTab('gerenciar')} className={activeTab === 'gerenciar' ? styles.active : ''}>Adicionar</button>
       </div>
       <div className={styles.tabContent}>
