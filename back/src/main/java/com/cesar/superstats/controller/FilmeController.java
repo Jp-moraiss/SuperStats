@@ -1,9 +1,6 @@
 package com.cesar.superstats.controller;
 
-import com.cesar.superstats.dto.FilmeCreateDTO;
-import com.cesar.superstats.dto.FilmeDTO;
-import com.cesar.superstats.dto.FilmeFinalizeCreateDTO;
-import com.cesar.superstats.dto.TmdbMovieResult;
+import com.cesar.superstats.dto.*;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.Filme;
 import com.cesar.superstats.service.FilmeService;
@@ -104,6 +101,12 @@ public class FilmeController {
     public ResponseEntity<List<Filme>> getFilmesAssistidos(@PathVariable Integer faId) {
         List<Filme> filmes = service.findAssistidosPeloFa(faId);
         return ResponseEntity.ok(filmes);
+    }
+
+    @GetMapping("/popularidade")
+    public ResponseEntity<List<FilmeComContagemDTO>> getFilmesPorPopularidade() {
+        List<FilmeComContagemDTO> filmesPopulares = service.findAllFilmesWithAssistidoCount();
+        return ResponseEntity.ok(filmesPopulares);
     }
 
 }

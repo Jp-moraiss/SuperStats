@@ -24,8 +24,9 @@
     </div>
 
     <ul class="nav nav-tabs" id="filmesTab" role="tablist">
-        <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#todos-filmes-pane" type="button" role="tab">Catálogo de Filmes</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#todos-filmes-pane" type="button" role="tab">Catálogo</button></li>
         <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#assistidos-pane" type="button" role="tab">Meus Assistidos</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#popularidade-pane" type="button" role="tab">Populares ⭐</button></li>
         <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#gerenciar-pane" type="button" role="tab">Adicionar Filme</button></li>
     </ul>
 
@@ -35,6 +36,11 @@
         </div>
         <div class="tab-pane fade p-3 border border-top-0" id="assistidos-pane" role="tabpanel">
             <table class="table table-striped"><thead><tr><th>ID</th><th>Título</th><th>Produtora</th><th>Diretor</th><th>Avaliação TMDB</th></tr></thead><tbody id="assistidosTableBody"></tbody></table>
+        </div>
+        <div class="tab-pane fade p-3 border border-top-0" id="popularidade-pane" role="tabpanel">
+            <h4 class="mb-3">Filmes Mais Assistidos</h4>
+            <p class="text-muted small">Filmes ordenados pela quantidade de fãs que os marcaram como assistidos.</p>
+            <div id="popularidadeContainer" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4"></div>
         </div>
         <div class="tab-pane fade p-3 border border-top-0" id="gerenciar-pane" role="tabpanel">
             <h3>Adicionar Novo Filme ao Catálogo</h3>
@@ -103,7 +109,52 @@
         } catch(e) { console.error(e); }
     }
 
-    function refreshAll() { getAll(); fetchAssistidos(); }
+    async function fetchPopulares() {
+        try {
+            const res = await fetchWithAuth(`${baseUrl}/popularidade`);
+            const data = await res.json();
+            const container = document.getElementById('popularidadeContainer');
+            container.innerHTML = "";
+
+            if (data.length === 0) {
+                container.innerHTML = '<p class="text-center col-12">Nenhum filme foi assistido ainda para gerar um ranking.</p>';
+                return;
+            }
+
+            data.forEach(item => {
+                const filme = item.filme; // O objeto filme está aninhado
+                const totalAssistido = item.totalAssistido;
+
+                const assistidoBtn = filme.assistido ? `<button class="btn btn-outline-secondary btn-sm" onclick="marcarComoAssistido(${filme.id})">Remover ✖</button>` : `<button class="btn btn-success btn-sm" onclick="marcarComoAssistido(${filme.id})">Assistido ✓</button>`;
+                const trailerBtn = filme.trailerUrl ? `<a href="${filme.trailerUrl}" target="_blank" class="btn btn-danger btn-sm"><i class="bi bi-youtube"></i> Trailer</a>` : '';
+
+                const cardHtml = `
+                <div class="col">
+                    <div class="card h-100 movie-card">
+                        <img src="${filme.posterUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Pôster'}" class="card-img-top" alt="Pôster de ${filme.titulo}">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${filme.titulo}</h5>
+                            <p class="card-text text-muted small">${filme.produtora || 'Produtora não informada'}</p>
+                            <div class="mt-auto">
+                                <p class="mb-2">
+                                    <strong>Visto por:</strong> <span class="badge bg-primary">${totalAssistido} <i class="bi bi-eye-fill"></i></span><br>
+                                    <strong>Avaliação TMDB:</strong> <span class="badge bg-warning text-dark">${filme.avaliacaoTmdb ? filme.avaliacaoTmdb.toFixed(1) : 'N/A'} ⭐</span>
+                                </p>
+                                <div class="d-flex justify-content-between">
+                                    ${assistidoBtn}
+                                    ${trailerBtn}
+                                    <button class="btn btn-outline-danger btn-sm" onclick="deleteFilme(${filme.id})">Deletar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                container.innerHTML += cardHtml;
+            });
+        } catch(e) { console.error('Erro ao buscar filmes populares:', e); }
+    }
+
+    function refreshAll() { getAll(); fetchAssistidos(); fetchPopulares();}
     async function marcarComoAssistido(filmeId) { try { const res = await fetchWithAuth(`${baseUrl}/${filmeId}/assistir`, { method: 'POST' }); if (res.ok) refreshAll(); } catch (error) { console.error(error); } }
     async function removerDosAssistidos(filmeId) { try { const res = await fetchWithAuth(`${baseUrl}/${filmeId}/assistir`, { method: 'DELETE' }); if (res.ok) refreshAll(); } catch (error) { console.error(error); } }
     async function deleteFilme(filmeId) {

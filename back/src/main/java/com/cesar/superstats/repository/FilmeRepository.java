@@ -137,11 +137,21 @@ public class FilmeRepository {
         String sql = "SELECT f.*, " +
                 "  (SELECT COUNT(*) FROM Consome_Filme cf WHERE cf.fk_Filme_id = f.id) as total_assistido " +
                 "FROM Filme f " +
-                "ORDER BY total_assistido DESC";
+                "ORDER BY total_assistido DESC, f.titulo ASC";
 
         RowMapper<FilmeComContagemDTO> rowMapper = (rs, rowNum) -> {
-            Filme filme = new FilmeRowMapper().mapRow(rs, rowNum);
+            Filme filme = new Filme();
+            filme.setId(rs.getInt("id"));
+            filme.setTitulo(rs.getString("titulo"));
+            filme.setProdutora(rs.getString("produtora"));
+            filme.setDiretor(rs.getString("diretor"));
+            filme.setDataLancamento(rs.getObject("data_lancamento", java.time.LocalDate.class));
+            filme.setPosterUrl(rs.getString("poster_url"));
+            filme.setAvaliacaoTmdb(rs.getBigDecimal("avaliacao_tmdb"));
+            filme.setTrailerUrl(rs.getString("trailer_url"));
+
             long contagem = rs.getLong("total_assistido");
+
             return new FilmeComContagemDTO(filme, contagem);
         };
 
