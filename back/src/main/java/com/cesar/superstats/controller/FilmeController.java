@@ -99,4 +99,11 @@ public class FilmeController {
         List<Filme> filmes = service.findAssistidosPeloFa(faLogado);
         return ResponseEntity.ok(filmes);
     }
+
+    @GetMapping("/assistidos/fa/{faId}")
+    public ResponseEntity<List<Filme>> getFilmesAssistidos(@PathVariable Integer faId) {
+        List<Filme> filmes = service.findAssistidosPeloFa(faId);
+        return ResponseEntity.ok(filmes);
+    }
+
 }

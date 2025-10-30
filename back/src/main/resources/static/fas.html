@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SuperStats - Gerenciar Fãs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding: 20px; background-color: #f4f4f4; }
+        .section { margin-bottom: 2rem; }
+        /* Adiciona um cursor de ponteiro para indicar que as linhas são clicáveis */
+        .table-hover tbody tr:hover {
+            cursor: pointer;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">SuperStats - Gerenciar Fãs</h1>
+        <div>
+            <a href="login.html" class="btn btn-secondary">Ir para a Home</a>
+            <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs" id="fasTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#todos-fas-pane" type="button" role="tab">Todos os Fãs</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#buscar-fas-pane" type="button" role="tab">Buscar Fãs</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="fasTabContent">
+        <div class="tab-pane fade show active p-3 border border-top-0" id="todos-fas-pane" role="tabpanel">
+            <p class="text-muted small">Clique em um fã na tabela para ver seu perfil detalhado.</p>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+                <tbody id="todosOsFasTableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade p-3 border border-top-0" id="buscar-fas-pane" role="tabpanel">
+            <div class="section">
+                <h3>Buscar Fãs por Filme Assistido</h3>
+                <p class="text-muted small">Digite o título de um filme para ver a lista de fãs que o marcaram como assistido.</p>
+                <div class="input-group">
+                    <input type="text" id="filmeTituloInput" class="form-control" placeholder="Ex: The Dark Knight">
+                    <button class="btn btn-primary" type="button" onclick="buscarFasPorFilme()">Buscar Fãs</button>
+                </div>
+            </div>
+            <hr>
+            <div class="section">
+                <h4>Resultados da Busca</h4>
+                <div id="resultadoBuscaFas">
+                    <p>Os resultados da busca aparecerão aqui.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const baseUrl = 'http://localhost:8080/fa';
+
+    // Roda quando a página é carregada
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!localStorage.getItem('jwtToken')) {
+            window.location.href = 'login.html';
+        } else {
+            // Carrega a lista inicial de fãs
+            fetchAllFas();
+        }
+    });
+
+    // Função de logout
+    function handleLogout() {
+        localStorage.removeItem('jwtToken');
+        window.location.href = 'login.html';
+    }
+
+    // Função central para requisições autenticadas
+    async function fetchWithAuth(url, options = {}) {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) { handleLogout(); }
+
+        const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers };
+        const response = await fetch(url, { ...options, headers });
+
+        if (response.status === 401 || response.status === 403) { handleLogout(); }
+
+        // Retorna a resposta completa para poder checar o status code antes de dar .json()
+        return response;
+    }
+
+    // Busca todos os fãs e preenche a tabela principal
+    async function fetchAllFas() {
+        const tbody = document.getElementById('todosOsFasTableBody');
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center">Carregando...</td></tr>';
+        try {
+            const res = await fetchWithAuth(baseUrl);
+
+            // Seu controller retorna 204 (No Content) se a lista for vazia
+            if (res.status === 204) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhum fã cadastrado.</td></tr>';
+                return;
+            }
+            if (!res.ok) throw new Error(`Erro na resposta do servidor: ${res.status}`);
+
+            const data = await res.json();
+            tbody.innerHTML = "";
+
+            data.forEach(fa => {
+                const tr = document.createElement('tr');
+                // Adiciona o evento de clique para redirecionar para o perfil
+                tr.onclick = () => verPerfil(fa.id);
+                tr.innerHTML = `
+                    <td>${fa.id}</td>
+                    <td>${fa.nome}</td>
+                    <td>${fa.username}</td>
+                    <td>${fa.email}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch(e) {
+            console.error(e);
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">Erro ao carregar fãs.</td></tr>`;
+        }
+    }
+
+    // Busca fãs que assistiram a um filme específico
+    async function buscarFasPorFilme() {
+        const titulo = document.getElementById('filmeTituloInput').value;
+        const container = document.getElementById('resultadoBuscaFas');
+
+        if (!titulo) {
+            container.innerHTML = '<p class="text-warning">Por favor, digite um título de filme.</p>';
+            return;
+        }
+
+        container.innerHTML = '<div class="spinner-border text-primary"></div>';
+        try {
+            const url = new URL(`${baseUrl}/por-filme-assistido`);
+            url.searchParams.append('titulo', titulo);
+
+            const res = await fetchWithAuth(url.toString());
+            if (!res.ok) throw new Error(`Erro na busca: ${res.status}`);
+
+            const results = await res.json();
+
+            if (results.length === 0) {
+                container.innerHTML = '<p>Nenhum fã encontrado para este filme.</p>';
+                return;
+            }
+
+            let listHtml = '<ul class="list-group">';
+            results.forEach(fa => {
+                listHtml += `<li class="list-group-item">${fa.nome} (Username: ${fa.username})</li>`;
+            });
+            listHtml += '</ul>';
+            container.innerHTML = listHtml;
+
+        } catch (error) {
+            container.innerHTML = `<p class="text-danger">Erro ao buscar fãs: ${error.message}</p>`;
+            console.error(error);
+        }
+    }
+
+    // Redireciona para uma página de perfil (que você pode criar depois)
+    function verPerfil(faId) {
+        // Ex: redireciona para 'perfil.html?id=123'
+        window.location.href = `perfil.html?id=${faId}`;
+    }
+</script>
+</body>
+</html>

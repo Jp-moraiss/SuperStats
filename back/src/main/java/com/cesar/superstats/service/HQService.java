@@ -110,19 +110,26 @@ public class HQService {
         repository.deleteById(id);
     }
 
-    public void marcarComoLido(Integer hqId, Fa faLogado) {
+    public void toggleReadStatus(Integer hqId, Fa faLogado) {
+        Integer faId = faLogado.getId();
+
         if (!repository.existsById(hqId)) {
             throw new ResourceNotFoundException("HQ com ID " + hqId + " não encontrada.");
         }
-        repository.marcarComoLido(faLogado.getId(), hqId);
-    }
 
-    public void removerDosLidos(Integer hqId, Fa faLogado) {
-        repository.removerDosLidos(faLogado.getId(), hqId);
+        if (repository.isLida(faId, hqId)) {
+            repository.removerDosLidos(faId, hqId);
+        } else {
+            repository.marcarComoLido(faId, hqId);
+        }
     }
 
     public List<HQ> findLidosPeloFa(Fa faLogado) {
         return repository.findLidosByFaId(faLogado.getId());
+    }
+
+    public List<HQ> findLidosPeloFa(Integer faId) {
+        return repository.findLidosByFaId(faId);
     }
 
     public List<HQ> findHQsNaoLidasPorNinguem() {

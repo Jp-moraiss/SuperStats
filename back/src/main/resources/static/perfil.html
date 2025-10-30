@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SuperStats - Perfil do Fã</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding: 20px; background-color: #f4f4f4; }
+        .card { margin-top: 1.5rem; }
+        .stat-card { text-align: center; }
+        .profile-header { background-color: #0d6efd; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Perfil do Fã</h1>
+        <div>
+            <a href="fas.html" class="btn btn-outline-secondary">&larr; Voltar para Fãs</a>
+            <a href="login.html" class="btn btn-secondary">Ir para a Home</a>
+            <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
+        </div>
+    </div>
+
+    <div id="profileContainer">
+        <div class="card">
+            <div class="card-header profile-header">
+                <h3 class="mb-0" id="faNome">Carregando...</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Username:</strong> <span id="faUsername">-</span></li>
+                            <li class="list-group-item"><strong>Email:</strong> <span id="faEmail">-</span></li>
+                            <li class="list-group-item"><strong>Gênero:</strong> <span id="faGenero">-</span></li>
+                            <li class="list-group-item"><strong>Idade:</strong> <span id="faIdade">-</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Universo Favorito:</strong> <span id="faUnivFav">-</span></li>
+                            <li class="list-group-item"><strong>Tempo Geek:</strong> <span id="faTempoGeek">-</span></li>
+                            <li class="list-group-item"><strong>Ocupação:</strong> <span id="faOcupacao">-</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Filmes Assistidos</h5>
+                        <p class="card-text fs-2 fw-bold" id="totalFilmes">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <h5 class="card-title">HQs Lidas</h5>
+                        <p class="card-text fs-2 fw-bold" id="totalHqs">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h4>Filmes Assistidos</h4></div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead><tr><th>ID</th><th>Título</th><th>Produtora</th><th>Avaliação TMDB</th></tr></thead>
+                    <tbody id="assistidosTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h4>HQs Lidas</h4></div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead><tr><th>ID</th><th>Título</th><th>Volume</th><th>Editora</th></tr></thead>
+                    <tbody id="lidosTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="errorContainer" class="alert alert-danger mt-4 d-none"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const apiBaseUrl = 'http://localhost:8080';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!localStorage.getItem('jwtToken')) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const faId = urlParams.get('id');
+
+        if (!faId) {
+            showError("ID do fã não encontrado na URL.");
+            return;
+        }
+
+        loadProfileData(faId);
+    });
+
+    function handleLogout() {
+        localStorage.removeItem('jwtToken');
+        window.location.href = 'login.html';
+    }
+
+    async function fetchWithAuth(url, options = {}) {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) handleLogout();
+
+        const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers };
+        const response = await fetch(url, { ...options, headers });
+
+        if (response.status === 401 || response.status === 403) handleLogout();
+
+        return response;
+    }
+
+    function showError(message) {
+        document.getElementById('profileContainer').classList.add('d-none');
+        const errorContainer = document.getElementById('errorContainer');
+        errorContainer.textContent = message;
+        errorContainer.classList.remove('d-none');
+    }
+
+    async function loadProfileData(faId) {
+        try {
+            const [resFa, resFilmes, resHqs] = await Promise.all([
+                fetchWithAuth(`${apiBaseUrl}/fa/${faId}`),
+                fetchWithAuth(`${apiBaseUrl}/filmes/assistidos/fa/${faId}`),
+                fetchWithAuth(`${apiBaseUrl}/hqs/lidos/fa/${faId}`)
+            ]);
+
+            if (!resFa.ok) throw new Error(`Não foi possível carregar o perfil do fã (ID: ${faId}).`);
+
+            const fa = await resFa.json();
+            const filmes = resFilmes.ok ? await resFilmes.json() : [];
+            const hqs = resHqs.ok ? await resHqs.json() : [];
+
+            populateProfile(fa);
+            populateFilmesTable(filmes);
+            populateHqsTable(hqs);
+
+        } catch (error) {
+            console.error(error);
+            showError(error.message);
+        }
+    }
+
+    function populateProfile(fa) {
+        document.getElementById('faNome').textContent = fa.nome || 'Nome não disponível';
+        document.getElementById('faUsername').textContent = fa.username;
+        document.getElementById('faEmail').textContent = fa.email;
+        document.getElementById('faGenero').textContent = fa.genero || 'Não informado';
+        document.getElementById('faIdade').textContent = fa.idade || 'Não informada';
+        document.getElementById('faUnivFav').textContent = fa.univ_fav || 'Não informado';
+        document.getElementById('faTempoGeek').textContent = fa.tempo_geek ? `${fa.tempo_geek} anos` : 'Não informado';
+        document.getElementById('faOcupacao').textContent = fa.ocupacao || 'Não informada';
+    }
+
+    function populateFilmesTable(filmes) {
+        document.getElementById('totalFilmes').textContent = filmes.length;
+        const tbody = document.getElementById('assistidosTableBody');
+        if (filmes.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center">Este fã não marcou nenhum filme como assistido.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = filmes.map(filme => `
+            <tr>
+                <td>${filme.id}</td>
+                <td>${filme.titulo}</td>
+                <td>${filme.produtora || 'N/A'}</td>
+                <td>${filme.avaliacaoTmdb ? filme.avaliacaoTmdb.toFixed(1) : 'N/A'}</td>
+            </tr>
+        `).join('');
+    }
+
+    function populateHqsTable(hqs) {
+        document.getElementById('totalHqs').textContent = hqs.length;
+        const tbody = document.getElementById('lidosTableBody');
+        if (hqs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center">Este fã não marcou nenhuma HQ como lida.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = hqs.map(hq => `
+            <tr>
+                <td>${hq.id}</td>
+                <td>${hq.titulo}</td>
+                <td>${hq.volumeName || 'N/A'}</td>
+                <td>${hq.editora || 'N/A'}</td>
+            </tr>
+        `).join('');
+    }
+</script>
+</body>
+</html>

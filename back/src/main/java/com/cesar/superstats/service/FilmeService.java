@@ -153,4 +153,9 @@ public class FilmeService {
     public List<Filme> findAssistidosPeloFa(Fa faLogado) {
         return repository.findAssistidosByFaId(faLogado.getId());
     }
+
+
+        public List<Filme> findAssistidosPeloFa(Integer faId) {
+        return repository.findAssistidosByFaId(faId);
+    }
 }

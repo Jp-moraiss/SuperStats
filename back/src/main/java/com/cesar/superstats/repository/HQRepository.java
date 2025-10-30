@@ -101,13 +101,14 @@ public class HQRepository {
     }
 
     public void marcarComoLido(Integer faId, Integer hqId) {
-        String checkSql = "SELECT COUNT(*) FROM Consome_HQ WHERE fk_Fa_id = ? AND fk_HQ_id = ?";
-        Integer count = jdbcTemplate.queryForObject(checkSql, Integer.class, faId, hqId);
-        if (count != null && count > 0) {
-            return;
-        }
         String insertSql = "INSERT INTO Consome_HQ (fk_Fa_id, fk_HQ_id) VALUES (?, ?)";
         jdbcTemplate.update(insertSql, faId, hqId);
+    }
+
+    public boolean isLida(Integer faId, Integer hqId) {
+        String sql = "SELECT COUNT(*) FROM Consome_HQ WHERE fk_Fa_id = ? AND fk_HQ_id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, faId, hqId);
+        return count != null && count > 0;
     }
 
     public void removerDosLidos(Integer faId, Integer hqId) {

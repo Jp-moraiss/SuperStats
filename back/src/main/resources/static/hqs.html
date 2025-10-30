@@ -25,32 +25,26 @@
     <ul class="nav nav-tabs" id="hqsTab" role="tablist">
         <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#todas-hqs-pane" type="button" role="tab">Todas as HQs</button></li>
         <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#lidas-pane" type="button" role="tab">HQs Lidas</button></li>
-        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#gerenciar-pane" type="button" role="tab">Adicionar HQ</button></li>
         <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#nao-lidas-pane" type="button" role="tab">Baixo Engajamento</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#gerenciar-pane" type="button" role="tab">Adicionar HQ</button></li>
     </ul>
 
     <div class="tab-content" id="hqsTabContent">
         <div class="tab-pane fade show active p-3 border border-top-0" id="todas-hqs-pane" role="tabpanel">
             <div id="catalogoHqContainer" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4"></div>
         </div>
-        <div class="tab-pane fade p-3 border border-top-0" id="nao-lidas-pane" role="tabpanel">
-            <h4 class="mb-3">HQs Nunca Lidas por Ninguém</h4>
-            <div id="naoLidasContainer" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-            </div>
-        </div>
         <div class="tab-pane fade p-3 border border-top-0" id="lidas-pane" role="tabpanel">
             <table class="table table-striped">
                 <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Volume</th>
-                    <th>Editora</th>
-                    <th>Edição</th>
-                    <th>Lançamento</th> </tr>
+                <tr><th>ID</th><th>Título</th><th>Volume</th><th>Editora</th><th>Edição</th><th>Lançamento</th></tr>
                 </thead>
                 <tbody id="lidosTableBody"></tbody>
-            </table>        </div>
+            </table>
+        </div>
+        <div class="tab-pane fade p-3 border border-top-0" id="nao-lidas-pane" role="tabpanel">
+            <h4 class="mb-3">HQs Nunca Lidas por Ninguém</h4>
+            <div id="naoLidasContainer" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4"></div>
+        </div>
         <div class="tab-pane fade p-3 border border-top-0" id="gerenciar-pane" role="tabpanel">
             <h3>Adicionar Nova HQ ao Catálogo</h3>
             <div class="section">
@@ -99,15 +93,13 @@
             }
             data.forEach(hq => {
                 const botao = hq.lido
-                    ? `<button class="btn btn-outline-secondary btn-sm" onclick="removerDosLidos(${hq.id})">Remover ✖</button>`
-                    : `<button class="btn btn-success btn-sm" onclick="marcarComoLido(${hq.id})">Lido ✓</button>`;
+                    ? `<button class="btn btn-outline-secondary btn-sm" onclick="toggleLidoStatus(this, ${hq.id}, true)">Remover ✖</button>`
+                    : `<button class="btn btn-success btn-sm" onclick="toggleLidoStatus(this, ${hq.id}, false)">Lido ✓</button>`;
 
-                // --- LÓGICA PARA FORMATAR A DATA ---
                 let dataFormatada = 'Data não informada';
                 if (hq.dataLancamento) {
-                    // A data vem como "YYYY-MM-DD", vamos inverter para "DD/MM/YYYY"
                     const parts = hq.dataLancamento.split('-');
-                    dataFormatada = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                    dataFormatada = `${parts[2]}/${parts[1]}`;
                 }
 
                 const cardHtml = `
@@ -117,12 +109,8 @@
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">${hq.volumeName}</h5>
                             <p class="card-subtitle mb-2 text-muted">${hq.titulo}</p>
-                            <p class="card-text small">
-                                ${hq.editora || 'Editora não informada'}<br>
-                                <strong>Lançamento:</strong> ${dataFormatada} </p>
-                            <div class="mt-auto text-center">
-                                ${botao}
-                            </div>
+                            <p class="card-text small">${hq.editora || 'Editora não informada'}<br><strong>Lançamento:</strong> ${dataFormatada}</p>
+                            <div class="mt-auto text-center">${botao}</div>
                         </div>
                     </div>
                 </div>`;
@@ -138,7 +126,7 @@
             const data = await res.json();
             tbody.innerHTML = "";
             if (data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Nenhuma HQ lida.</td></tr>'; // colspan agora é 6
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Nenhuma HQ lida.</td></tr>';
                 return;
             }
             data.forEach(hq => {
@@ -147,15 +135,7 @@
                     const parts = hq.dataLancamento.split('-');
                     dataFormatada = `${parts[2]}/${parts[1]}/${parts[0]}`;
                 }
-
-                tbody.innerHTML += `
-                <tr>
-                    <td>${hq.id}</td>
-                    <td>${hq.titulo}</td>
-                    <td>${hq.volumeName}</td>
-                    <td>${hq.editora}</td>
-                    <td>${hq.edicao || ''}</td>
-                    <td>${dataFormatada}</td> </tr>`;
+                tbody.innerHTML += `<tr><td>${hq.id}</td><td>${hq.titulo}</td><td>${hq.volumeName}</td><td>${hq.editora}</td><td>${hq.edicao || ''}</td><td>${dataFormatada}</td></tr>`;
             });
         } catch(e) { console.error(e) }
     }
@@ -171,40 +151,80 @@
                 return;
             }
             data.forEach(hq => {
-                const botao = `<button class="btn btn-success btn-sm" onclick="marcarComoLido(${hq.id})">Lido ✓</button>`;
+                const botao = `<button class="btn btn-success btn-sm" onclick="toggleLidoStatus(this, ${hq.id}, false)">Lido ✓</button>`;
                 let dataFormatada = 'Data não informada';
                 if (hq.dataLancamento) {
                     const parts = hq.dataLancamento.split('-');
                     dataFormatada = `${parts[2]}/${parts[1]}/${parts[0]}`;
                 }
-
                 const cardHtml = `
-            <div class="col">
-                <div class="card h-100">
-                    <img src="${hq.coverUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 400px; object-fit: cover;" alt="Capa de ${hq.titulo}">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">${hq.volumeName}</h5>
-                        <p class="card-subtitle mb-2 text-muted">${hq.titulo}</p>
-                        <p class="card-text small">
-                            ${hq.editora || 'Editora não informada'}<br>
-                            <strong>Lançamento:</strong> ${dataFormatada}
-                        </p>
-                        <div class="mt-auto text-center">
-                            ${botao}
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="${hq.coverUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 400px; object-fit: cover;" alt="Capa de ${hq.titulo}">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${hq.volumeName}</h5>
+                            <p class="card-subtitle mb-2 text-muted">${hq.titulo}</p>
+                            <p class="card-text small">${hq.editora || 'Editora não informada'}<br><strong>Lançamento:</strong> ${dataFormatada}</p>
+                            <div class="mt-auto text-center">${botao}</div>
                         </div>
                     </div>
-                </div>
-            </div>`;
+                </div>`;
                 container.innerHTML += cardHtml;
             });
         } catch(e) { console.error('Erro ao buscar HQs não lidas:', e) }
     }
 
-    function refreshAll() { getAll(); fetchLidos(); fetchNaoLidas(); }
-    async function marcarComoLido(hqId) { try { const res = await fetchWithAuth(`${baseUrl}/${hqId}/ler`, { method: 'POST' }); if (res.ok) refreshAll(); } catch (e) { console.error(e) } }
-    async function removerDosLidos(hqId) { try { const res = await fetchWithAuth(`${baseUrl}/${hqId}/ler`, { method: 'DELETE' }); if (res.ok) refreshAll(); } catch (e) { console.error(e) } }
+    // ==========================================================
+    // AQUI ESTÁ A FUNÇÃO CORRIGIDA
+    // ==========================================================
+    async function toggleLidoStatus(buttonElement, hqId, isCurrentlyLido) {
+        const originalHtml = buttonElement.innerHTML;
+        const originalClasses = buttonElement.className;
 
-    // --- NOVO FLUXO DE BUSCA E CRIAÇÃO ---
+        buttonElement.disabled = true;
+        // Atualiza a aparência do botão instantaneamente (UI otimista)
+        if (isCurrentlyLido) {
+            buttonElement.innerHTML = 'Lido ✓';
+            buttonElement.className = 'btn btn-success btn-sm';
+        } else {
+            buttonElement.innerHTML = 'Remover ✖';
+            buttonElement.className = 'btn btn-outline-secondary btn-sm';
+        }
+
+        // CORREÇÃO 1: O método é sempre POST
+        const method = 'POST';
+        // CORREÇÃO 2: O endpoint agora é /toggle-read
+        const url = `${baseUrl}/${hqId}/toggle-read`;
+
+        try {
+            const res = await fetchWithAuth(url, { method });
+
+            // O novo endpoint retorna 200 OK em ambos os casos (sucesso)
+            if (!res.ok) {
+                throw new Error('Falha ao atualizar o status no servidor.');
+            }
+
+            // Atualiza o onclick do botão para a próxima ação
+            buttonElement.setAttribute('onclick', `toggleLidoStatus(this, ${hqId}, ${!isCurrentlyLido})`);
+
+            // Atualiza as outras listas (tabela de lidos, etc.) em segundo plano
+            fetchLidos();
+            fetchNaoLidas();
+
+        } catch (error) {
+            console.error(error);
+            alert('Não foi possível atualizar o status da HQ. Tente novamente.');
+            // Reverte a aparência do botão em caso de erro
+            buttonElement.innerHTML = originalHtml;
+            buttonElement.className = originalClasses;
+        } finally {
+            buttonElement.disabled = false;
+        }
+    }
+
+    function refreshAll() { getAll(); fetchLidos(); fetchNaoLidas(); }
+
+    // --- Funções de busca e criação (sem alteração) ---
     async function searchHqs(term = null) {
         const titulo = term || document.getElementById('tituloBusca').value;
         if (!titulo) return;
@@ -222,10 +242,7 @@
             if (results.length === 0) { status.textContent = 'Nenhum resultado encontrado.'; return; }
             status.textContent = 'Resultados da Busca. Clique para ver detalhes ou adicionar:';
             results.forEach(item => {
-                const isIssue = item.resourceType === 'issue';
-                const onClickAction = item.resourceType === 'issue'
-                    ? `finalizeHqCreation('${item.apiDetailUrl}')`
-                    : `showIssuesForVolume(${item.id}, '${item.title.replace(/'/g, "\\'")}')`;
+                const onClickAction = item.resourceType === 'issue' ? `finalizeHqCreation('${item.apiDetailUrl}')` : `showIssuesForVolume(${item.id}, '${item.title.replace(/'/g, "\\'")}')`;
                 const cardHtml = `<div class="col"><div class="card h-100 search-result-card" onclick="${onClickAction}"><img src="${item.imageUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa'}" class="card-img-top" style="height: 300px; object-fit: cover;" alt="..."><div class="card-body text-center"><h6 class="card-title">${item.title}</h6><p class="card-text text-muted small">${item.volumeName || ''}<br>Ano: ${item.year || 'N/A'}</p><span class="badge bg-secondary">${item.resourceType}</span></div></div></div>`;
                 container.innerHTML += cardHtml;
             });
@@ -243,21 +260,15 @@
             const issues = await res.json();
             container.innerHTML = "";
             if (issues.length === 0) { container.innerHTML = '<p class="text-center col-12">Nenhuma edição encontrada para este volume.</p>'; return; }
-
-            // --- A LÓGICA AGORA É MUITO MAIS SIMPLES ---
             issues.forEach(issue => {
-                // Não precisamos mais adivinhar os nomes dos campos
-                const title = issue.title; // Vem do nosso DTO padronizado
+                const title = issue.title;
                 const imageUrl = issue.imageUrl || 'https://via.placeholder.com/500x750.png?text=Sem+Capa';
-
                 container.innerHTML += `<div class="col"><div class="card h-100 search-result-card" onclick="finalizeHqCreation('${issue.apiDetailUrl}')"><img src="${imageUrl}" class="card-img-top" style="height: 300px; object-fit: cover;" alt="Capa de ${title}"><div class="card-body text-center"><h6 class="card-title">${title}</h6></div></div></div>`;
             });
         } catch (error) { status.textContent = 'Erro ao buscar edições.'; console.error(error); }
     }
 
-    function goBackToSearch() {
-        searchHqs(lastSearchTerm);
-    }
+    function goBackToSearch() { searchHqs(lastSearchTerm); }
 
     async function finalizeHqCreation(apiDetailUrl) {
         const status = document.getElementById('statusBusca');

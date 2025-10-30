@@ -76,25 +76,22 @@ public class HQController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{hqId}/ler")
-    public ResponseEntity<Void> marcarComoLido(
+    @PostMapping("/{hqId}/toggle-read")
+    public ResponseEntity<Void> toggleReadStatus(
             @PathVariable Integer hqId,
             @AuthenticationPrincipal Fa faLogado) {
-        service.marcarComoLido(hqId, faLogado);
+        service.toggleReadStatus(hqId, faLogado);
         return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/{hqId}/ler")
-    public ResponseEntity<Void> removerDosLidos(
-            @PathVariable Integer hqId,
-            @AuthenticationPrincipal Fa faLogado) {
-        service.removerDosLidos(hqId, faLogado);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/lidos")
     public ResponseEntity<List<HQ>> getHqsLidas(@AuthenticationPrincipal Fa faLogado) {
         return ResponseEntity.ok(service.findLidosPeloFa(faLogado));
+    }
+
+    @GetMapping("/lidos/fa/{faId}")
+    public ResponseEntity<List<HQ>> getHqsLidasPorFa(@PathVariable Integer faId) {
+        return ResponseEntity.ok(service.findLidosPeloFa(faId));
     }
 
     @GetMapping("/nao-lidas")

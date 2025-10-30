@@ -78,5 +78,11 @@ public class FaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @GetMapping("/por-filme-assistido")
+    public ResponseEntity<List<FaDTO>> getFasPorFilmeAssistido(@RequestParam("titulo") String tituloFilme) {
+        List<FaDTO> fasEncontrados = service.findFasPorFilmeAssistido(tituloFilme);
+        return ResponseEntity.ok(fasEncontrados);
+    }
 }
 

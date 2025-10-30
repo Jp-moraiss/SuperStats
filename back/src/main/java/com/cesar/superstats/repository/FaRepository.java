@@ -89,6 +89,15 @@ public class FaRepository {
         jdbcTemplate.update(sql, id);
     }
 
+    public List<Fa> findFasByTituloFilmeAssistido(String tituloFilme) {
+        String sql = "SELECT * FROM Fa WHERE id IN " +
+                "  (SELECT fk_Fa_id FROM Consome_Filme WHERE fk_Filme_id = " +
+                "      (SELECT id FROM Filme WHERE LOWER(titulo) = LOWER(?))" +
+                "  )";
+
+        return jdbcTemplate.query(sql, new FaRowMapper(), tituloFilme);
+    }
+
     private static class FaRowMapper implements RowMapper<Fa> {
         @Override
         public Fa mapRow(ResultSet rs, int rowNum) throws SQLException {

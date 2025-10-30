@@ -1,5 +1,6 @@
 package com.cesar.superstats.repository;
 
+import com.cesar.superstats.dto.FilmeComContagemDTO;
 import com.cesar.superstats.dto.FilmeDTO;
 import com.cesar.superstats.model.entities.Filme;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -130,6 +131,21 @@ public class FilmeRepository {
                 "JOIN Consome_Filme cf ON f.id = cf.fk_Filme_id " +
                 "WHERE cf.fk_Fa_id = ?";
         return jdbcTemplate.query(sql, new FilmeRowMapper(), faId);
+    }
+
+    public List<FilmeComContagemDTO> findAllWithAssistidoCount() {
+        String sql = "SELECT f.*, " +
+                "  (SELECT COUNT(*) FROM Consome_Filme cf WHERE cf.fk_Filme_id = f.id) as total_assistido " +
+                "FROM Filme f " +
+                "ORDER BY total_assistido DESC";
+
+        RowMapper<FilmeComContagemDTO> rowMapper = (rs, rowNum) -> {
+            Filme filme = new FilmeRowMapper().mapRow(rs, rowNum);
+            long contagem = rs.getLong("total_assistido");
+            return new FilmeComContagemDTO(filme, contagem);
+        };
+
+        return jdbcTemplate.query(sql, rowMapper);
     }
 
     private static class FilmeRowMapper implements RowMapper<Filme> {

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FaService {
@@ -45,6 +46,13 @@ public class FaService {
 
     public List<Fa> findAll() {
         return repository.findAll();
+    }
+
+    public List<FaDTO> findFasPorFilmeAssistido(String tituloFilme) {
+        List<Fa> fas = repository.findFasByTituloFilmeAssistido(tituloFilme);
+        return fas.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     public void save(FaDTO faDto) {
@@ -89,6 +97,17 @@ public class FaService {
             throw new RuntimeException("Fã não encontrado com o id: " + id);
         }
         repository.deleteById(id);
+    }
+
+    private FaDTO convertToDto(Fa fa) {
+        FaDTO dto = new FaDTO();
+        dto.setUsername(fa.getUsername());
+        dto.setNome(fa.getNome());
+        dto.setGenero(fa.getGenero());
+        dto.setIdade(fa.getIdade());
+        dto.setUniv_fav(fa.getUniv_fav());
+        dto.setTempoGeek(fa.getTempo_geek());
+        return dto;
     }
 }
 
