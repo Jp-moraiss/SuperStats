@@ -52,24 +52,44 @@ export default function HqsPage() {
     }
   };
 
-  const handleToggleRead = async (id: number, isRead: boolean) => {
-    const originalHqs = [...hqs];
-    const updatedHqs = hqs.map(hq => 
-      hq.id === id ? { ...hq, lido: !isRead } : hq
-    );
-    setHqs(updatedHqs);
+const handleToggleRead = async (id: number) => { // 1. Recebe apenas o ID da HQ
+   // Salva o estado atual para poder reverter em caso de erro
+   const originalHqs = [...hqs]; 
+   const originalHqsLidas = [...hqsLidas];
 
-    try {
-      await ApiService.post(API_ENDPOINTS.HQS_TOGGLE_READ(id));
-      // Recarrega discretamente a lista de lidos para garantir consistência
-      const hqsLidasRes = await ApiService.get(API_ENDPOINTS.HQS_READ);
-      setHqsLidas(await hqsLidasRes.json());
-    } catch (error) {
-      console.error("Erro ao marcar como lido:", error);
-      alert("Não foi possível alterar o status da HQ.");
-      setHqs(originalHqs); // Reverte em caso de erro
-    }
-  };
+   // 2. Atualização Otimista: muda a UI imediatamente
+   const updatedHqs = originalHqs.map(hq => 
+     hq.id === id ? { ...hq, lido: !hq.lido } : hq
+   );
+   setHqs(updatedHqs);
+
+   // Sincroniza a lista de lidos também, para a outra aba refletir a mudança
+   const hqToggled = updatedHqs.find(hq => hq.id === id);
+   if (hqToggled?.lido) {
+     // Adiciona na lista de lidos se não estiver lá
+     if (!originalHqsLidas.some(h => h.id === id)) {
+       setHqsLidas([...originalHqsLidas, hqToggled]);
+     }
+   } else {
+     // Remove da lista de lidos
+     setHqsLidas(originalHqsLidas.filter(h => h.id !== id));
+   }
+   
+   // 3. Tenta salvar a mudança na API
+   try {
+     await ApiService.post(API_ENDPOINTS.HQS_TOGGLE_READ(id));
+     // Se deu certo, não precisa fazer mais nada, a UI já está atualizada.
+     // Para garantir consistência total, você pode recarregar os dados discretamente:
+     // loadInitialData(); 
+     // Mas a atualização otimista já resolve visualmente.
+   } catch (error) {
+     console.error("Erro ao marcar como lido:", error);
+     alert("Não foi possível alterar o status da HQ.");
+     // 4. Reverte a mudança na UI em caso de erro na API
+     setHqs(originalHqs); 
+     setHqsLidas(originalHqsLidas);
+   }
+ };
 
   // Debounce da busca externa
   const fetchExternalHqs = useMemo(

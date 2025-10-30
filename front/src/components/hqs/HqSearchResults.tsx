@@ -4,7 +4,6 @@
 import { FaPlusCircle, FaFolderOpen } from "react-icons/fa";
 import styles from './HqSearchResults.module.css';
 import { ComicVineSearchResult } from '../../types/hqs';
-import Image from 'next/image';
 
 type HqSearchResultsProps = {
   results: ComicVineSearchResult[];
@@ -92,11 +91,9 @@ export default function HqSearchResults({
                 ${isAdding ? styles.disabled : ''}
               `}
             >
-              <Image 
+              <img
                 src={item.imageUrl || '/placeholder.png'} 
                 alt={`Capa de ${item.title}`} 
-                width={185} 
-                height={278} 
                 className={styles.resultImage}
               />
               <div className={styles.cardContent}>

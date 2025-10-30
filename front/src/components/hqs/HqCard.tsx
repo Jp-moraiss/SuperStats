@@ -4,11 +4,10 @@
 import { FaBookReader, FaBook } from 'react-icons/fa';
 import { Hq } from '../../types/hqs';
 import styles from './HqCard.module.css';
-import Image from 'next/image';
 
 type HqCardProps = {
   hq: Hq;
-  onToggleRead: (id: number, isRead: boolean) => void;
+  onToggleRead: (id: number) => void;
 };
 
 // Pequena função utilitária para formatar a data
@@ -31,17 +30,15 @@ export default function HqCard({ hq, onToggleRead }: HqCardProps) {
   return (
     <div className={styles.hqCard}>
       <div className={styles.coverContainer}>
-        <Image 
+        <img
           src={hq.coverUrl || '/placeholder.png'} 
           alt={`Capa de ${hq.titulo}`} 
           className={styles.coverImage} 
-          width={500} // Aumentado para melhor qualidade/proporção
-          height={750}
           style={{ objectFit: 'cover' }}
         />
         <button 
           className={styles.readButton} 
-          onClick={() => onToggleRead(hq.id, hq.lido)}
+          onClick={() => onToggleRead(hq.id)}
           aria-label={hq.lido ? "Marcar como não lida" : "Marcar como lida"}
         >
           {hq.lido ? <FaBookReader /> : <FaBook />}
