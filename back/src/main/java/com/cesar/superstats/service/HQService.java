@@ -121,8 +121,11 @@ public class HQService {
         repository.removerDosLidos(faLogado.getId(), hqId);
     }
 
-
     public List<HQ> findLidosPeloFa(Fa faLogado) {
         return repository.findLidosByFaId(faLogado.getId());
+    }
+
+    public List<HQ> findHQsNaoLidasPorNinguem() {
+        return repository.findHQsNaoLidasPorNinguem();
     }
 }

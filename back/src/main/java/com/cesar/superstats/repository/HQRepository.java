@@ -122,6 +122,14 @@ public class HQRepository {
         return jdbcTemplate.query(sql, new HQRowMapper(), faId);
     }
 
+    public List<HQ> findHQsNaoLidasPorNinguem() {
+        String sql = "SELECT h.* FROM HQ h " +
+                "LEFT JOIN Consome_HQ ch ON h.id = ch.fk_HQ_id " +
+                "WHERE ch.fk_HQ_id IS NULL";
+
+        return jdbcTemplate.query(sql, new HQRowMapper());
+    }
+
     private static class HQRowMapper implements RowMapper<HQ> {
         @Override
         public HQ mapRow(ResultSet rs, int rowNum) throws SQLException {

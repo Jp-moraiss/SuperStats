@@ -96,4 +96,9 @@ public class HQController {
     public ResponseEntity<List<HQ>> getHqsLidas(@AuthenticationPrincipal Fa faLogado) {
         return ResponseEntity.ok(service.findLidosPeloFa(faLogado));
     }
+
+    @GetMapping("/nao-lidas")
+    public ResponseEntity<List<HQ>> getHQsNaoLidas() {
+        return ResponseEntity.ok(service.findHQsNaoLidasPorNinguem());
+    }
 }
