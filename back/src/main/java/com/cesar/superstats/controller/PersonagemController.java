@@ -48,4 +48,9 @@ public class PersonagemController {
         return ResponseEntity.ok(csvHeroService.searchByName(nome));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Personagem> findById(@PathVariable Integer id) {
+        return ResponseEntity.ok(personagemService.findById(id));
+    }
+
 }

@@ -4,6 +4,7 @@ import com.cesar.superstats.dto.AutocompleteResultDTO;
 import jakarta.annotation.PostConstruct;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -20,23 +21,24 @@ public class CsvHeroService {
     public void loadCsvData() {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(
                 new ClassPathResource("heroes.csv").getInputStream(), StandardCharsets.UTF_8))) {
-
+            
             reader.readLine();
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] data = line.split(",", 3);
+                String[] data = line.split(",", 4);
 
                 if (data.length > 2) {
                     AutocompleteResultDTO hero = new AutocompleteResultDTO();
-                    hero.setId(data[0]);
-                    hero.setName(data[1]);
-                    hero.setFullName(data[2].split(",")[0]);
+                    hero.setId(data[0].trim());
+                    hero.setName(data[1].trim());
+                    hero.setFullName(data[2].trim());
                     heroList.add(hero);
                 }
             }
             System.out.println(">>> Carregados " + heroList.size() + " heróis do CSV para o autocomplete.");
         } catch (Exception e) {
             System.err.println("!!! Erro ao carregar o arquivo CSV de heróis: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -45,9 +47,12 @@ public class CsvHeroService {
             return List.of();
         }
         String lowerCaseName = name.toLowerCase();
+        
         return heroList.stream()
-                .filter(hero -> hero.getName().toLowerCase().contains(lowerCaseName) ||
-                        (hero.getFullName() != null && hero.getFullName().toLowerCase().contains(lowerCaseName)))
+                .filter(hero -> 
+                    hero.getName().toLowerCase().contains(lowerCaseName) ||
+                    (hero.getFullName() != null && !hero.getFullName().isBlank() && hero.getFullName().toLowerCase().contains(lowerCaseName))
+                )
                 .limit(7)
                 .collect(Collectors.toList());
     }

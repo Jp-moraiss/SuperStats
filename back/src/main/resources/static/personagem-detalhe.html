@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SuperStats - Detalhes do Personagem</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding: 20px; background-color: #f4f4f4; }
+        .stat-bar { background-color: #e9ecef; }
+        .stat-bar div { white-space: nowrap; }
+    </style>
+</head>
+<body>
+<div class="container" id="detailsContainer">
+    <div class="text-center"><div class="spinner-border text-primary"></div></div>
+</div>
+
+<script>
+    const baseUrl = 'http://localhost:8080/personagens';
+    document.addEventListener('DOMContentLoaded', () => { /* ... (código de segurança) ... */ loadCharacterDetails(); });
+    function handleLogout() { /* ... (código de logout) ... */ }
+    async function fetchWithAuth(url, options = {}) { /* ... (código do fetch) ... */ }
+
+    async function loadCharacterDetails() {
+        const container = document.getElementById('detailsContainer');
+        const params = new URLSearchParams(window.location.search);
+        const characterId = params.get('id');
+
+        if (!characterId) {
+            container.innerHTML = '<div class="alert alert-danger">ID do personagem não fornecido.</div>';
+            return;
+        }
+
+        try {
+            const res = await fetchWithAuth(`${baseUrl}/${characterId}`);
+            const p = await res.json();
+
+            // Gera as listas de bases e alter egos
+            const basesHtml = p.bases.map(base => `<li class="list-group-item">${base}</li>`).join('');
+            const alterEgosHtml = p.alterEgos.map(ae => `<li class="list-group-item">${ae}</li>`).join('');
+
+            container.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="mb-0" id="char-name">${p.nome}</h1>
+                    <div>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <img src="${p.imagemUrl}" class="img-fluid rounded shadow-sm" alt="Imagem de ${p.nome}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card"><div class="card-body">
+                            <h5 class="card-title">${p.nomeCompleto}</h5>
+                            <p class="card-subtitle text-muted">${p.raca || 'Raça não informada'} - ${p.genero || 'Gênero não informado'}</p>
+                            <hr>
+                            <p><strong>Primeira Aparição:</strong> ${p.primeiraAparicao || 'N/A'}</p>
+                            <p><strong>Editora:</strong> ${p.editora || 'N/A'}</p>
+                            <p><strong>Alinhamento:</strong> ${p.alinhamento || 'N/A'}</p>
+                            <p><strong>Ocupação:</strong> ${p.ocupacao || 'N/A'}</p>
+                            <p><strong>Naturalidade:</strong> ${p.naturalidade || 'N/A'}</p>
+                        </div></div>
+                        <div class="card mt-3"><div class="card-body">
+                            <h5 class="card-title">Powerstats</h5>
+                            ${createStatBar('Inteligência', p.inteligencia)}
+                            ${createStatBar('Força', p.forca)}
+                            ${createStatBar('Velocidade', p.velocidade)}
+                            ${createStatBar('Durabilidade', p.durabilidade)}
+                            ${createStatBar('Poder', p.poder)}
+                            ${createStatBar('Combate', p.combate)}
+                        </div></div>
+                    </div>
+                </div>
+                <div class="row g-4 mt-2">
+                    <div class="col-md-6">
+                        <div class="card"><div class="card-body">
+                            <h5 class="card-title">Bases de Operação</h5>
+                            <ul class="list-group list-group-flush">${basesHtml || '<li class="list-group-item">Nenhuma informada</li>'}</ul>
+                        </div></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card"><div class="card-body">
+                            <h5 class="card-title">Alter Egos & Apelidos</h5>
+                            <ul class="list-group list-group-flush">${alterEgosHtml || '<li class="list-group-item">Nenhum informado</li>'}</ul>
+                        </div></div>
+                    </div>
+                </div>`;
+        } catch (error) {
+            container.innerHTML = '<div class="alert alert-danger">Erro ao carregar detalhes do personagem.</div>';
+        }
+    }
+
+    function createStatBar(statName, value) {
+        const val = value || 0;
+        return `
+            <div class="mb-2">
+                <small>${statName}</small>
+                <div class="progress stat-bar" style="height: 20px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: ${val}%" aria-valuenow="${val}" aria-valuemin="0" aria-valuemax="100">
+                        ${val}
+                    </div>
+                </div>
+            </div>`;
+    }
+</script>
+</body>
+</html>

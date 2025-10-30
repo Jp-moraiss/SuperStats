@@ -1,6 +1,9 @@
 package com.cesar.superstats.model.entities;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 public class Personagem {
     private Integer id;
@@ -22,5 +25,8 @@ public class Personagem {
     private Integer poder;
     private Integer combate;
     private String imagemUrl;
+
+    private List<String> bases = new ArrayList<>();
+    private List<String> alterEgos = new ArrayList<>();
 
 }

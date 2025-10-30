@@ -1,6 +1,7 @@
 package com.cesar.superstats.repository;
 
 import com.cesar.superstats.model.entities.Personagem;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -42,15 +43,6 @@ public class PersonagemRepository {
         return jdbcTemplate.query("SELECT * FROM Personagem ORDER BY nome", new PersonagemRowMapper());
     }
 
-    public Optional<Personagem> findById(Integer id) {
-        try {
-            Personagem p = jdbcTemplate.queryForObject("SELECT * FROM Personagem WHERE id = ?", new PersonagemRowMapper(), id);
-            return Optional.ofNullable(p);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
-    }
-
     public boolean existsById(Integer id) {
         String sql = "SELECT COUNT(*) FROM Personagem WHERE id = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
@@ -76,6 +68,26 @@ public class PersonagemRepository {
             return p;
         };
         return jdbcTemplate.query(sql.toString(), rowMapper, args.toArray());
+    }
+
+    public Optional<Personagem> findById(Integer id) {
+        String sql = "SELECT * FROM Personagem WHERE id = ?";
+        try {
+            Personagem p = jdbcTemplate.queryForObject(sql, new PersonagemRowMapper(), id);
+            return Optional.ofNullable(p);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    public List<String> findBasesByPersonagemId(Integer personagemId) {
+        String sql = "SELECT nome_base FROM Base WHERE fk_id_personagem = ?";
+        return jdbcTemplate.queryForList(sql, String.class, personagemId);
+    }
+
+    public List<String> findAlterEgosByPersonagemId(Integer personagemId) {
+        String sql = "SELECT alter_ego_name FROM Alter_Egos WHERE fk_Personagem_id = ?";
+        return jdbcTemplate.queryForList(sql, String.class, personagemId);
     }
 
     private static class PersonagemRowMapper implements RowMapper<Personagem> {

@@ -41,29 +41,33 @@ public class PesquisaService {
         System.out.println("Processando respostas para o usuário: " + faLogado.getUsername());
 
         for (RespostaDTO dto : respostasDto) {
+
             PersonagemFinalizeCreateDTO createDto = new PersonagemFinalizeCreateDTO();
             createDto.setApiId(dto.getPersonagemId());
             Personagem personagem = personagemService.findOrCreateFromApi(createDto);
+            Integer faId = faLogado.getId();
+            Integer perguntaId = dto.getPerguntaId();
 
+            Resposta resposta = new Resposta();
+            resposta.setFa(faLogado);
             Pergunta pergunta = new Pergunta();
-            pergunta.setId(dto.getPerguntaId());
+            pergunta.setId(perguntaId);
+            resposta.setPergunta(pergunta);
+            resposta.setPersonagem(personagem);
+            resposta.setDataResposta(LocalDate.now());
 
-            Optional<Integer> respostaExistenteId = respostaRepository.findIdByFaAndPergunta(faLogado.getId(), dto.getPerguntaId());
-
-            Resposta novaResposta = new Resposta();
-            novaResposta.setFa(faLogado);
-            novaResposta.setPergunta(pergunta);
-            novaResposta.setPersonagem(personagem);
-            novaResposta.setDataResposta(LocalDate.now());
-
-            if (respostaExistenteId.isPresent()) {
-                novaResposta.setId(respostaExistenteId.get());
-                respostaRepository.update(novaResposta);
-                System.out.println("  - Resposta ATUALIZADA no banco: Pergunta " + dto.getPerguntaId() + " -> Personagem " + personagem.getNome());
-            } else {
-                respostaRepository.save(novaResposta);
-                System.out.println("  - Resposta CRIADA no banco: Pergunta " + dto.getPerguntaId() + " -> Personagem " + personagem.getNome());
-            }
+            respostaRepository.findIdByFaAndPergunta(faId, perguntaId)
+                    .ifPresentOrElse(
+                            (existingId) -> {
+                                resposta.setId(existingId);
+                                respostaRepository.update(resposta);
+                                System.out.println("  - Resposta ATUALIZADA: Pergunta " + perguntaId + " -> Personagem " + personagem.getNome());
+                            },
+                            () -> {
+                                respostaRepository.save(resposta);
+                                System.out.println("  - Resposta CRIADA: Pergunta " + perguntaId + " -> Personagem " + personagem.getNome());
+                            }
+                    );
         }
     }
 }
