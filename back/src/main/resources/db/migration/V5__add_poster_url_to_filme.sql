@@ -1,1 +1,0 @@
-ALTER TABLE Filme ADD COLUMN poster_url VARCHAR(512) NULL;

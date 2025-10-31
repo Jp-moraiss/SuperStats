@@ -12,15 +12,16 @@ CREATE TABLE Fa (
     idade INT,
     univ_fav VARCHAR(30),
     tempo_geek INT,
-    ocupacao VARCHAR(50)
+    ocupacao VARCHAR(50),
+    password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE Personagem (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     genero VARCHAR(30),
-    altura DOUBLE,
-    peso DOUBLE,
+    altura INT NULL,
+    peso INT NULL,
     ocupacao VARCHAR(50),
     raca VARCHAR(30),
     nome_completo VARCHAR(150),
@@ -33,51 +34,50 @@ CREATE TABLE Personagem (
     velocidade INT,
     durabilidade INT,
     poder INT,
-    combate INT
+    combate INT,
+    imagem_url VARCHAR(255) NULL
 );
 
 CREATE TABLE Personagem_Novo (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(100) NOT NULL,
-    alinhamento VARCHAR(10),
-    altura DOUBLE,
-    peso DOUBLE,
-    poder VARCHAR(100),
-    genero VARCHAR(30),
-    fa_criador_id INT NULL,
-    CONSTRAINT fk_fa_criador_id FOREIGN KEY (fa_criador_id)
-     REFERENCES Fa(id) ON DELETE SET NULL
-);
-
-CREATE TABLE Evento (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(100) NOT NULL,
-    data DATE,
-    rua VARCHAR(100),
-    cep VARCHAR(15),
-    bairro VARCHAR(50),
-    cidade VARCHAR(50)
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     nome VARCHAR(100) NOT NULL,
+     alinhamento VARCHAR(10),
+     altura DOUBLE,
+     peso DOUBLE,
+     poder VARCHAR(100),
+     genero VARCHAR(30),
+     fa_criador_id INT NULL,
+     CONSTRAINT fk_fa_criador_id FOREIGN KEY (fa_criador_id)
+         REFERENCES Fa(id) ON DELETE SET NULL
 );
 
 CREATE TABLE HQ (
+    api_detail_url VARCHAR(255) UNIQUE,
     id INT PRIMARY KEY AUTO_INCREMENT,
     edicao VARCHAR(50),
     editora VARCHAR(100),
     titulo VARCHAR(100),
-    data_lancamento DATE
+    volume_name VARCHAR(255) NULL,
+    data_lancamento DATE,
+    cover_url VARCHAR(512) NULL
 );
 
 CREATE TABLE Filme (
+    tmdb_id INT UNIQUE,
     id INT PRIMARY KEY AUTO_INCREMENT,
     titulo VARCHAR(100) NOT NULL,
     produtora VARCHAR(100),
     diretor VARCHAR(100),
-    data_lancamento DATE
+    data_lancamento DATE,
+    poster_url VARCHAR(512) NULL,
+    avaliacao_tmdb DECIMAL(4, 2) NULL,
+    trailer_url VARCHAR(255) NULL
 );
 
 CREATE TABLE Pergunta (
     id INT PRIMARY KEY AUTO_INCREMENT,
     tipo VARCHAR(50),
+    texto_pergunta VARCHAR(255) NULL,
     fk_Pesquisa_id INT,
     CONSTRAINT fk_pergunta_pesquisa FOREIGN KEY (fk_Pesquisa_id)
       REFERENCES Pesquisa(id_pesquisa) ON DELETE CASCADE
@@ -94,5 +94,6 @@ CREATE TABLE Resposta (
     CONSTRAINT fk_resposta_fa_id FOREIGN KEY (fk_Fa_id)
       REFERENCES Fa(id) ON DELETE CASCADE,
     CONSTRAINT fk_resposta_pergunta FOREIGN KEY (fk_Pergunta_id)
-      REFERENCES Pergunta(id) ON DELETE CASCADE
+      REFERENCES Pergunta(id) ON DELETE CASCADE,
+    CONSTRAINT uq_fa_pergunta UNIQUE (fk_Fa_id, fk_Pergunta_id)
 );

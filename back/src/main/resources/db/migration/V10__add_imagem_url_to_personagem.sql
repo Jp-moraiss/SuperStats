@@ -1,1 +1,0 @@
-ALTER TABLE Personagem ADD COLUMN imagem_url VARCHAR(255) NULL;
