@@ -64,7 +64,7 @@ public class HQService {
 
         HQ hq = new HQ();
 
-        // --- LÓGICA DE SEPARAÇÃO APRIMORADA ---
+        hq.setApiDetailUrl(dto.getApiDetailUrl());
         hq.setVolumeName(detalhesIssue.getVolume().getName()); // Salva o nome da série/volume
 
         // O 'título' agora é o nome específico da edição

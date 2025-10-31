@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 public class Filme {
-
+    private Integer tmdbId;
     private Integer id;
     private String titulo;
     private String produtora;

@@ -65,7 +65,6 @@ public class FilmeService {
 
         int movieId = dto.getTmdbId();
 
-
         TmdbMovieDetailsDTO detalhes = tmdbService.buscarDetalhes(movieId);
         TmdbCreditsDTO creditos = tmdbService.buscarCreditos(movieId);
         TmdbVideosResponseDTO videos = tmdbService.buscarVideos(movieId);
@@ -75,6 +74,7 @@ public class FilmeService {
         }
 
         Filme filme = new Filme();
+        filme.setTmdbId(movieId);
         filme.setTitulo(detalhes.getTitle());
         filme.setPosterUrl("https://image.tmdb.org/t/p/w500" + detalhes.getPosterPath());
         filme.setAvaliacaoTmdb(BigDecimal.valueOf(detalhes.getVoteAverage()));

@@ -43,6 +43,16 @@ public class FilmeRepository {
         }
     }
 
+    public Optional<Filme> findByTmdbId(Integer tmdbId) {
+        String sql = "SELECT * FROM filme WHERE tmdb_id = ?";
+        try {
+            Filme filme = jdbcTemplate.queryForObject(sql, new FilmeRowMapper(), tmdbId);
+            return Optional.ofNullable(filme);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
     public List<Filme> findByTitle(String titulo) {
         String sql = "SELECT * FROM filme WHERE LOWER(titulo) LIKE LOWER(?)";
         return jdbcTemplate.query(
@@ -58,7 +68,16 @@ public class FilmeRepository {
     }
 
     public Filme save(Filme filme) {
-        String sql = "INSERT INTO filme (titulo, produtora, diretor, data_lancamento, poster_url, avaliacao_tmdb, trailer_url) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        // VERIFICAÇÃO: Checa se já existe um filme com este ID do TMDB.
+        if (filme.getTmdbId() != null) {
+            Optional<Filme> filmeExistente = findByTmdbId(filme.getTmdbId());
+            if (filmeExistente.isPresent()) {
+                System.out.println("Filme com TMDB ID " + filme.getTmdbId() + " já existe. Não será salvo novamente.");
+                return filmeExistente.get();
+            }
+        }
+
+        String sql = "INSERT INTO filme (titulo, produtora, diretor, data_lancamento, poster_url, avaliacao_tmdb, trailer_url, tmdb_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -70,6 +89,7 @@ public class FilmeRepository {
             ps.setString(5, filme.getPosterUrl());
             ps.setBigDecimal(6, filme.getAvaliacaoTmdb());
             ps.setString(7, filme.getTrailerUrl());
+            ps.setObject(8, filme.getTmdbId());
             return ps;
         }, keyHolder);
 
@@ -168,7 +188,7 @@ public class FilmeRepository {
             filme.setAvaliacaoTmdb(rs.getBigDecimal("avaliacao_tmdb"));
             filme.setTrailerUrl(rs.getString("trailer_url"));
 
-            if (rs.getMetaData().getColumnCount() > 8) {
+            if (rs.getMetaData().getColumnCount() > 9) {
                 filme.setAssistido(rs.getBoolean("assistido"));
             }
             return filme;

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 public class HQ {
-
+    private String apiDetailUrl;
     private Integer id;
     private String titulo;
     private String volumeName;

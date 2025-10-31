@@ -52,8 +52,26 @@ public class HQRepository {
         return jdbcTemplate.query(sql, new HQRowMapper(), editora);
     }
 
+    public Optional<HQ> findByApiDetailUrl(String url) {
+        String sql = "SELECT * FROM hq WHERE api_detail_url = ?";
+        try {
+            HQ hq = jdbcTemplate.queryForObject(sql, new HQRowMapper(), url);
+            return Optional.ofNullable(hq);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
     public HQ save(HQ hq) {
-        String sql = "INSERT INTO hq (titulo, volume_name, edicao, editora, data_lancamento, cover_url) VALUES (?, ?, ?, ?, ?, ?)";
+        if (hq.getApiDetailUrl() != null && !hq.getApiDetailUrl().isBlank()) {
+            Optional<HQ> hqExistente = findByApiDetailUrl(hq.getApiDetailUrl());
+            if (hqExistente.isPresent()) {
+                System.out.println("HQ com URL " + hq.getApiDetailUrl() + " já existe. Não será salva novamente.");
+                return hqExistente.get();
+            }
+        }
+
+        String sql = "INSERT INTO hq (titulo, volume_name, edicao, editora, data_lancamento, cover_url, api_detail_url) VALUES (?, ?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -64,6 +82,7 @@ public class HQRepository {
             ps.setString(4, hq.getEditora());
             ps.setObject(5, hq.getDataLancamento());
             ps.setString(6, hq.getCoverUrl());
+            ps.setString(7, hq.getApiDetailUrl()); // Adiciona a URL no INSERT
             return ps;
         }, keyHolder);
 
