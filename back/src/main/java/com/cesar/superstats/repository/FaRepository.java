@@ -1,8 +1,6 @@
 package com.cesar.superstats.repository;
 
-import com.cesar.superstats.dto.FaConsumoDTO;
-import com.cesar.superstats.dto.FaDTO;
-import com.cesar.superstats.dto.PerfilAtividadeFaDTO;
+import com.cesar.superstats.dto.*;
 import com.cesar.superstats.model.entities.Fa;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -139,6 +137,15 @@ public class FaRepository {
         try {
             PerfilAtividadeFaDTO perfil = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(PerfilAtividadeFaDTO.class), faId);
             return Optional.ofNullable(perfil);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<PerfilViewDTO> findPerfilCompletoById(Integer faId) {
+        String sql = "SELECT * FROM vw_perfil_completo_fa WHERE fa_id = ?";
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(PerfilViewDTO.class), faId));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }

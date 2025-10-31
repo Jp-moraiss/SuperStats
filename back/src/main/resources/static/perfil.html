@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <title>SuperStats - Perfil do Fã</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         body { padding: 20px; background-color: #f4f4f4; }
         .card { margin-top: 1.5rem; }
-        .stat-card { text-align: center; }
         .profile-header { background-color: #0d6efd; color: white; }
+        .media-img { width: 50px; height: 75px; object-fit: cover; margin-right: 15px; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -24,69 +25,30 @@
 
     <div id="profileContainer">
         <div class="card">
-            <div class="card-header profile-header">
-                <h3 class="mb-0" id="faNome">Carregando...</h3>
-            </div>
+            <div class="card-header profile-header"><h3 class="mb-0" id="faNome">Carregando...</h3></div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><strong>Username:</strong> <span id="faUsername">-</span></li>
-                            <li class="list-group-item"><strong>Gênero:</strong> <span id="faGenero">-</span></li>
-                            <li class="list-group-item"><strong>Ocupação:</strong> <span id="faOcupacao">-</span></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><strong>Universo Favorito:</strong> <span id="faUnivFav">-</span></li>
-                            <li class="list-group-item"><strong>Tempo Geek:</strong> <span id="faTempoGeek">-</span></li>
-                            <li class="list-group-item"><strong>Idade:</strong> <span id="faIdade">-</span></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row mt-3">
-            <div class="col-md-6">
-                <div class="card stat-card">
-                    <div class="card-body">
-                        <h5 class="card-title">Filmes Assistidos</h5>
-                        <p class="card-text fs-2 fw-bold" id="totalFilmes">0</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card stat-card">
-                    <div class="card-body">
-                        <h5 class="card-title">HQs Lidas</h5>
-                        <p class="card-text fs-2 fw-bold" id="totalHqs">0</p>
-                    </div>
+                    <div class="col-md-6"><ul class="list-group list-group-flush"><li class="list-group-item"><strong>Username:</strong> <span id="faUsername">-</span></li><li class="list-group-item"><strong>Gênero:</strong> <span id="faGenero">-</span></li><li class="list-group-item"><strong>Ocupação:</strong> <span id="faOcupacao">-</span></li></ul></div>
+                    <div class="col-md-6"><ul class="list-group list-group-flush"><li class="list-group-item"><strong>Universo Favorito:</strong> <span id="faUnivFav">-</span></li><li class="list-group-item"><strong>Tempo Geek:</strong> <span id="faTempoGeek">-</span></li><li class="list-group-item"><strong>Idade:</strong> <span id="faIdade">-</span></li></ul></div>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <div class="card-header"><h4>Filmes Assistidos</h4></div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead><tr><th>ID</th><th>Título</th><th>Produtora</th><th>Avaliação TMDB</th></tr></thead>
-                    <tbody id="assistidosTableBody"></tbody>
-                </table>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Filmes Assistidos</h4>
+                <span id="totalFilmes" class="badge bg-primary rounded-pill">0</span>
             </div>
+            <div class="card-body table-responsive"><table class="table align-middle table-sm"><thead><tr><th style="width: 10%;"></th><th>Título</th><th>Produtora</th><th>Lançamento</th><th style="width: 10%;">Trailer</th></tr></thead><tbody id="assistidosTableBody"></tbody></table></div>
         </div>
-
         <div class="card">
-            <div class="card-header"><h4>HQs Lidas</h4></div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead><tr><th>ID</th><th>Título</th><th>Volume</th><th>Editora</th></tr></thead>
-                    <tbody id="lidosTableBody"></tbody>
-                </table>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>HQs Lidas</h4>
+                <span id="totalHqs" class="badge bg-danger rounded-pill">0</span>
             </div>
+            <div class="card-body table-responsive"><table class="table align-middle table-sm"><thead><tr><th style="width: 10%;"></th><th>Título</th><th>Editora</th><th>Edição</th><th>Lançamento</th></tr></thead><tbody id="lidosTableBody"></tbody></table></div>
         </div>
     </div>
-
     <div id="errorContainer" class="alert alert-danger mt-4 d-none"></div>
 </div>
 
@@ -95,70 +57,42 @@
     const apiBaseUrl = 'http://localhost:8080';
 
     document.addEventListener('DOMContentLoaded', () => {
-        if (!localStorage.getItem('jwtToken')) {
-            window.location.href = 'login.html';
-            return;
-        }
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const faId = urlParams.get('id');
-
-        if (!faId) {
-            showError("ID do fã não encontrado na URL.");
-            return;
-        }
-
+        if (!localStorage.getItem('jwtToken')) { window.location.href = 'login.html'; return; }
+        const faId = new URLSearchParams(window.location.search).get('id');
+        if (!faId) { showError("ID do fã não encontrado na URL."); return; }
         loadProfileData(faId);
     });
 
-    function handleLogout() {
-        localStorage.removeItem('jwtToken');
-        window.location.href = 'login.html';
-    }
+    function handleLogout() { localStorage.removeItem('jwtToken'); window.location.href = 'login.html'; }
 
     async function fetchWithAuth(url, options = {}) {
         const token = localStorage.getItem('jwtToken');
         if (!token) handleLogout();
-
         const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers };
         const response = await fetch(url, { ...options, headers });
-
         if (response.status === 401 || response.status === 403) handleLogout();
-
         return response;
     }
 
     function showError(message) {
         document.getElementById('profileContainer').classList.add('d-none');
-        const errorContainer = document.getElementById('errorContainer');
-        errorContainer.textContent = message;
-        errorContainer.classList.remove('d-none');
+        document.getElementById('errorContainer').textContent = message;
+        document.getElementById('errorContainer').classList.remove('d-none');
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return 'N/A';
+        try { const [year, month, day] = dateString.split('-'); return `${day}/${month}/${year}`; }
+        catch (e) { return dateString; }
     }
 
     async function loadProfileData(faId) {
         try {
-            // OTIMIZAÇÃO: A primeira chamada agora busca o perfil E as contagens!
-            const [resPerfil, resFilmes, resHqs] = await Promise.all([
-                fetchWithAuth(`${apiBaseUrl}/fa/perfil-atividade/${faId}`), // <-- NOVO ENDPOINT
-                fetchWithAuth(`${apiBaseUrl}/filmes/assistidos/fa/${faId}`),
-                fetchWithAuth(`${apiBaseUrl}/hqs/lidos/fa/${faId}`)
-            ]);
-
-            if (!resPerfil.ok) {
-                throw new Error(`Não foi possível carregar o perfil do fã (ID: ${faId}).`);
-            }
-
-            const perfil = await resPerfil.json();
-            const filmes = resFilmes.ok ? await resFilmes.json() : [];
-            const hqs = resHqs.ok ? await resHqs.json() : [];
-
-            // A função populateProfile agora usa os dados e as contagens da view
+            const res = await fetchWithAuth(`${apiBaseUrl}/fa/perfil-completo/${faId}`);
+            if (!res.ok) throw new Error(`Não foi possível carregar o perfil do fã (ID: ${faId}).`);
+            const perfil = await res.json();
             populateProfile(perfil);
-
-            // As funções de tabela continuam usando as listas completas
-            populateFilmesTable(filmes);
-            populateHqsTable(hqs);
-
+            populateMediaTables(perfil);
         } catch (error) {
             console.error(error);
             showError(error.message);
@@ -170,50 +104,48 @@
         document.getElementById('faUsername').textContent = perfil.username;
         document.getElementById('faGenero').textContent = perfil.genero || 'Não informado';
         document.getElementById('faOcupacao').textContent = perfil.ocupacao || 'Não informada';
-
-        document.getElementById('faUnivFav').textContent = perfil.univ_fav || 'Não informado';
+        document.getElementById('faUnivFav').textContent = perfil.univFav || 'Não informado';
         document.getElementById('faIdade').textContent = perfil.idade || 'Não informada';
         document.getElementById('faTempoGeek').textContent = perfil.tempoGeek ? `${perfil.tempoGeek} anos` : 'Não informado';
-
-        document.getElementById('totalFilmes').textContent = perfil.totalFilmesAssistidos;
-        document.getElementById('totalHqs').textContent = perfil.totalHqsLidas;
     }
 
-    function populateFilmesTable(filmes) {
+    function populateMediaTables(perfil) {
+        const filmesBody = document.getElementById('assistidosTableBody');
+        const hqsBody = document.getElementById('lidosTableBody');
 
-        const tbody = document.getElementById('assistidosTableBody');
-        if (filmes.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" class="text-center">Este fã não marcou nenhum filme como assistido.</td></tr>';
-            return;
+        const filmes = perfil.filmesAssistidos || [];
+        document.getElementById('totalFilmes').textContent = filmes.length;
+        if (filmes.length > 0) {
+            filmesBody.innerHTML = filmes.map(filme => {
+                const trailerBtn = filme.trailerUrl
+                    ? `<a href="${filme.trailerUrl}" target="_blank" class="btn btn-danger btn-sm"><i class="bi bi-youtube"></i></a>`
+                    : `<button class="btn btn-secondary btn-sm" disabled><i class="bi bi-youtube"></i></button>`;
+                return `<tr>
+                    <td><img src="${filme.posterUrl || 'https://via.placeholder.com/100x150'}" alt="${filme.titulo}" class="media-img"></td>
+                    <td>${filme.titulo || 'N/A'}</td>
+                    <td>${filme.produtora || 'N/A'}</td>
+                    <td>${formatDate(filme.dataLancamento)}</td>
+                    <td>${trailerBtn}</td>
+                </tr>`
+            }).join('');
+        } else {
+            filmesBody.innerHTML = '<tr><td colspan="5" class="text-center">Este fã não marcou nenhum filme como assistido.</td></tr>';
         }
-        tbody.innerHTML = filmes.map(filme => `
-        <tr>
-            <td>${filme.id}</td>
-            <td>${filme.titulo}</td>
-            <td>${filme.produtora || 'N/A'}</td>
-            <td>${filme.avaliacaoTmdb ? filme.avaliacaoTmdb.toFixed(1) : 'N/A'}</td>
-        </tr>
-    `).join('');
-    }
 
-    // SUBSTITUA a sua função populateHqsTable por esta:
-    function populateHqsTable(hqs) {
-        // CORREÇÃO 3: A linha que sobrescrevia a contagem foi REMOVIDA
-        // document.getElementById('totalHqs').textContent = hqs.length; <-- REMOVIDO
-
-        const tbody = document.getElementById('lidosTableBody');
-        if (hqs.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" class="text-center">Este fã não marcou nenhuma HQ como lida.</td></tr>';
-            return;
+        const hqs = perfil.hqsLidas || [];
+        document.getElementById('totalHqs').textContent = hqs.length;
+        if (hqs.length > 0) {
+            hqsBody.innerHTML = hqs.map(hq => `
+                <tr>
+                    <td><img src="${hq.coverUrl || 'https://via.placeholder.com/100x150'}" alt="${hq.titulo}" class="media-img"></td>
+                    <td>${hq.titulo || 'N/A'}</td>
+                    <td>${hq.editora || 'N/A'}</td>
+                    <td>${hq.edicao || 'N/A'}</td>
+                    <td>${formatDate(hq.dataLancamento)}</td>
+                </tr>`).join('');
+        } else {
+            hqsBody.innerHTML = '<tr><td colspan="5" class="text-center">Este fã não marcou nenhuma HQ como lida.</td></tr>';
         }
-        tbody.innerHTML = hqs.map(hq => `
-        <tr>
-            <td>${hq.id}</td>
-            <td>${hq.titulo}</td>
-            <td>${hq.volumeName || 'N/A'}</td>
-            <td>${hq.editora || 'N/A'}</td>
-        </tr>
-    `).join('');
     }
 </script>
 </body>

@@ -1,29 +1,27 @@
 package com.cesar.superstats.service;
 
-import com.cesar.superstats.dto.FaConsumoDTO;
-import com.cesar.superstats.dto.FaDTO;
-import com.cesar.superstats.dto.PerfilAtividadeFaDTO;
+import com.cesar.superstats.dto.*;
 import com.cesar.superstats.exceptions.ResourceNotFoundException;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.repository.FaRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 public class FaService {
 
     private final FaRepository repository;
-
     private final PasswordEncoder encoder;
-
-    public FaService(FaRepository repository, PasswordEncoder encoder) {
-        this.repository = repository;
-        this.encoder = encoder;
-    }
+    private final ObjectMapper objectMapper;
 
     public Optional<Fa> findById(Integer id) {
         if (id == null) {
@@ -119,6 +117,41 @@ public class FaService {
     public PerfilAtividadeFaDTO getPerfilAtividade(Integer faId) {
         return repository.findPerfilAtividadeById(faId)
                 .orElseThrow(() -> new ResourceNotFoundException("Perfil de atividade não encontrado para o fã com ID: " + faId));
+    }
+
+    public PerfilCompletoResponseDTO getPerfilCompleto(Integer faId) {
+        PerfilViewDTO viewData = repository.findPerfilCompletoById(faId)
+                .orElseThrow(() -> new ResourceNotFoundException("Perfil não encontrado para o fã com ID: " + faId));
+
+        PerfilCompletoResponseDTO response = new PerfilCompletoResponseDTO();
+        response.setFaId(viewData.getFaId());
+        response.setUsername(viewData.getUsername());
+        response.setNome(viewData.getNome());
+        response.setGenero(viewData.getGenero());
+        response.setIdade(viewData.getIdade());
+        response.setOcupacao(viewData.getOcupacao());
+        response.setTempoGeek(viewData.getTempoGeek());
+        response.setUnivFav(viewData.getUnivFav());
+
+        try {
+            if (viewData.getFilmesAssistidosJson() != null) {
+                List<SimpleFilmeDTO> filmes = objectMapper.readValue(viewData.getFilmesAssistidosJson(), new TypeReference<>() {});
+                response.setFilmesAssistidos(filmes);
+            } else {
+                response.setFilmesAssistidos(Collections.emptyList());
+            }
+
+            if (viewData.getHqsLidasJson() != null) {
+                List<SimpleHqDTO> hqs = objectMapper.readValue(viewData.getHqsLidasJson(), new TypeReference<>() {});
+                response.setHqsLidas(hqs);
+            } else {
+                response.setHqsLidas(Collections.emptyList());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao processar dados de mídias consumidas.", e);
+        }
+
+        return response;
     }
 }
 
