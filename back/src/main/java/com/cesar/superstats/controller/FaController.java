@@ -1,5 +1,6 @@
 package com.cesar.superstats.controller;
 
+import com.cesar.superstats.dto.FaConsumoDTO;
 import com.cesar.superstats.dto.FaDTO;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.service.FaService;
@@ -83,6 +84,12 @@ public class FaController {
     public ResponseEntity<List<FaDTO>> getFasPorFilmeAssistido(@RequestParam("titulo") String tituloFilme) {
         List<FaDTO> fasEncontrados = service.findFasPorFilmeAssistido(tituloFilme);
         return ResponseEntity.ok(fasEncontrados);
+    }
+
+    @GetMapping("/perfil-consumo")
+    public ResponseEntity<List<FaConsumoDTO>> getPerfilDeConsumoDosFas() {
+        List<FaConsumoDTO> perfil = service.getPerfilDeConsumo();
+        return ResponseEntity.ok(perfil);
     }
 }
 

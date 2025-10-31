@@ -1,5 +1,6 @@
 package com.cesar.superstats.service;
 
+import com.cesar.superstats.dto.FaConsumoDTO;
 import com.cesar.superstats.dto.FaDTO;
 import com.cesar.superstats.exceptions.ResourceNotFoundException;
 import com.cesar.superstats.model.entities.Fa;
@@ -108,6 +109,10 @@ public class FaService {
         dto.setUniv_fav(fa.getUniv_fav());
         dto.setTempoGeek(fa.getTempo_geek());
         return dto;
+    }
+
+    public List<FaConsumoDTO> getPerfilDeConsumo() {
+        return repository.findPerfilDeConsumoDosFas();
     }
 }
 

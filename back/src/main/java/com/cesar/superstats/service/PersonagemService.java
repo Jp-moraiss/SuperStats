@@ -31,14 +31,12 @@ public class PersonagemService {
         }
         Integer id = Integer.parseInt(dto.getApiId());
 
-        // 1. Tries to find the character in our local database first
         Optional<Personagem> existingCharacter = personagemRepository.findById(id);
         if (existingCharacter.isPresent()) {
             System.out.println("Personagem com ID " + id + " já existe. Reutilizando.");
             return existingCharacter.get();
         }
 
-        // 2. If not found, fetches from the external API and creates it
         System.out.println("Personagem com ID " + id + " não encontrado. Criando a partir da API...");
         SuperheroApiResponseDTO apiDto = superheroApiService.buscarPersonagemPorId(dto.getApiId());
 
@@ -55,7 +53,6 @@ public class PersonagemService {
         personagem.setOcupacao(apiDto.getWork().getOccupation());
         personagem.setImagemUrl(apiDto.getImage().getUrl());
 
-        // Powerstats conversion
         personagem.setInteligencia(safeParseInt(apiDto.getPowerstats().getIntelligence()));
         personagem.setForca(safeParseInt(apiDto.getPowerstats().getStrength()));
         personagem.setVelocidade(safeParseInt(apiDto.getPowerstats().getSpeed()));
@@ -63,7 +60,6 @@ public class PersonagemService {
         personagem.setPoder(safeParseInt(apiDto.getPowerstats().getPower()));
         personagem.setCombate(safeParseInt(apiDto.getPowerstats().getCombat()));
 
-        // Height and Weight conversion
         if (apiDto.getAppearance().getHeight() != null && apiDto.getAppearance().getHeight().size() > 1) {
             String alturaStr = apiDto.getAppearance().getHeight().get(1).replaceAll("[^0-9]", "");
             if (!alturaStr.isEmpty()) personagem.setAltura(Integer.parseInt(alturaStr));
@@ -75,7 +71,6 @@ public class PersonagemService {
 
         personagemRepository.save(personagem);
 
-        // Save Bases
         if (apiDto.getWork().getBase() != null && !apiDto.getWork().getBase().equals("-")) {
             String[] bases = apiDto.getWork().getBase().split(",|;");
             for (String nomeBase : bases) {
@@ -87,7 +82,6 @@ public class PersonagemService {
             }
         }
 
-        // Save Alter Egos and Aliases
         if (apiDto.getBiography().getAlterEgos() != null && !apiDto.getBiography().getAlterEgos().equalsIgnoreCase("No alter egos found.")) {
             String[] alterEgosArray = apiDto.getBiography().getAlterEgos().split(",|;");
             for (String nomeAlterEgo : alterEgosArray) {

@@ -1,5 +1,6 @@
 package com.cesar.superstats.repository;
 
+import com.cesar.superstats.dto.FaConsumoDTO;
 import com.cesar.superstats.dto.FaDTO;
 import com.cesar.superstats.model.entities.Fa;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -96,6 +97,40 @@ public class FaRepository {
                 "  )";
 
         return jdbcTemplate.query(sql, new FaRowMapper(), tituloFilme);
+    }
+
+    public List<FaConsumoDTO> findPerfilDeConsumoDosFas() {
+        String sql =
+                "WITH " +
+                        "  FilmesConsumidos AS (SELECT DISTINCT fk_Fa_id FROM Consome_Filme), " +
+                        "  HQsConsumidas AS (SELECT DISTINCT fk_Fa_id FROM Consome_HQ) " +
+
+                        "SELECT " +
+                        "  f.id as fa_id, f.username, f.nome, " +
+                        "  CASE WHEN hc.fk_Fa_id IS NOT NULL THEN 'Ambos' ELSE 'Apenas Filmes' END as tipo_consumo " +
+                        "FROM FilmesConsumidos fc " +
+                        "LEFT JOIN HQsConsumidas hc ON fc.fk_Fa_id = hc.fk_Fa_id " +
+                        "JOIN Fa f ON f.id = fc.fk_Fa_id " +
+
+                        "UNION " +
+
+                        "SELECT " +
+                        "  f.id as fa_id, f.username, f.nome, 'Apenas HQs' as tipo_consumo " +
+                        "FROM FilmesConsumidos fc " +
+                        "RIGHT JOIN HQsConsumidas hc ON fc.fk_Fa_id = hc.fk_Fa_id " +
+                        "JOIN Fa f ON f.id = hc.fk_Fa_id " +
+                        "WHERE fc.fk_Fa_id IS NULL " + // A condição que isola os fãs "Apenas HQs"
+
+                        "ORDER BY tipo_consumo, username";
+
+        RowMapper<FaConsumoDTO> rowMapper = (rs, rowNum) -> new FaConsumoDTO(
+                rs.getInt("fa_id"),
+                rs.getString("username"),
+                rs.getString("nome"),
+                rs.getString("tipo_consumo")
+        );
+
+        return jdbcTemplate.query(sql, rowMapper);
     }
 
     private static class FaRowMapper implements RowMapper<Fa> {

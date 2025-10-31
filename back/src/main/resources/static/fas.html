@@ -7,7 +7,6 @@
     <style>
         body { padding: 20px; background-color: #f4f4f4; }
         .section { margin-bottom: 2rem; }
-        /* Adiciona um cursor de ponteiro para indicar que as linhas são clicáveis */
         .table-hover tbody tr:hover {
             cursor: pointer;
             background-color: #f0f0f0;
@@ -29,7 +28,10 @@
             <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#todos-fas-pane" type="button" role="tab">Todos os Fãs</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#buscar-fas-pane" type="button" role="tab">Buscar Fãs</button>
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#buscar-fas-pane" type="button" role="tab">Buscar por Filme</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#analise-pane" type="button" role="tab">Análise de Consumo 📊</button>
         </li>
     </ul>
 
@@ -38,15 +40,9 @@
             <p class="text-muted small">Clique em um fã na tabela para ver seu perfil detalhado.</p>
             <table class="table table-hover">
                 <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                </tr>
+                <tr><th>ID</th><th>Nome</th><th>Username</th><th>Email</th></tr>
                 </thead>
-                <tbody id="todosOsFasTableBody">
-                </tbody>
+                <tbody id="todosOsFasTableBody"></tbody>
             </table>
         </div>
 
@@ -67,6 +63,17 @@
                 </div>
             </div>
         </div>
+
+        <div class="tab-pane fade p-3 border border-top-0" id="analise-pane" role="tabpanel">
+            <h4>Perfil de Consumo dos Fãs</h4>
+            <p class="text-muted small">Segmentação de fãs baseada nos seus hábitos de consumo de filmes e HQs.</p>
+            <table class="table table-hover">
+                <thead>
+                <tr><th>ID</th><th>Nome</th><th>Username</th><th>Perfil de Consumo</th></tr>
+                </thead>
+                <tbody id="analiseConsumoTableBody"></tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -74,17 +81,19 @@
 <script>
     const baseUrl = 'http://localhost:8080/fa';
 
-    // Roda quando a página é carregada
     document.addEventListener('DOMContentLoaded', () => {
         if (!localStorage.getItem('jwtToken')) {
             window.location.href = 'login.html';
         } else {
-            // Carrega a lista inicial de fãs
-            fetchAllFas();
+            refreshAll();
         }
     });
 
-    // Função de logout
+    function refreshAll() {
+        fetchAllFas();
+        fetchPerfilConsumo();
+    }
+
     function handleLogout() {
         localStorage.removeItem('jwtToken');
         window.location.href = 'login.html';
@@ -111,7 +120,6 @@
         try {
             const res = await fetchWithAuth(baseUrl);
 
-            // Seu controller retorna 204 (No Content) se a lista for vazia
             if (res.status === 204) {
                 tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhum fã cadastrado.</td></tr>';
                 return;
@@ -123,7 +131,6 @@
 
             data.forEach(fa => {
                 const tr = document.createElement('tr');
-                // Adiciona o evento de clique para redirecionar para o perfil
                 tr.onclick = () => verPerfil(fa.id);
                 tr.innerHTML = `
                     <td>${fa.id}</td>
@@ -139,7 +146,45 @@
         }
     }
 
-    // Busca fãs que assistiram a um filme específico
+    async function fetchPerfilConsumo() {
+        const tbody = document.getElementById('analiseConsumoTableBody');
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center">Analisando...</td></tr>';
+        try {
+            const res = await fetchWithAuth(`${baseUrl}/perfil-consumo`);
+            if (!res.ok) throw new Error(`Erro na resposta do servidor: ${res.status}`);
+            const data = await res.json();
+
+            tbody.innerHTML = "";
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhum fã consumiu mídias ainda.</td></tr>';
+                return;
+            }
+
+            data.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.onclick = () => verPerfil(item.faId);
+
+                // Adiciona um selo colorido para o perfil
+                let badgeClass = 'bg-secondary';
+                if (item.tipoConsumo === 'Ambos') badgeClass = 'bg-success';
+                if (item.tipoConsumo === 'Apenas Filmes') badgeClass = 'bg-primary';
+                if (item.tipoConsumo === 'Apenas HQs') badgeClass = 'bg-info text-dark';
+
+                tr.innerHTML = `
+                    <td>${item.faId}</td>
+                    <td>${item.nome}</td>
+                    <td>${item.username}</td>
+                    <td><span class="badge ${badgeClass}">${item.tipoConsumo}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+        } catch(e) {
+            console.error('Erro ao buscar perfil de consumo:', e);
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">Erro ao carregar análise.</td></tr>`;
+        }
+    }
+
     async function buscarFasPorFilme() {
         const titulo = document.getElementById('filmeTituloInput').value;
         const container = document.getElementById('resultadoBuscaFas');
@@ -177,9 +222,7 @@
         }
     }
 
-    // Redireciona para uma página de perfil (que você pode criar depois)
     function verPerfil(faId) {
-        // Ex: redireciona para 'perfil.html?id=123'
         window.location.href = `perfil.html?id=${faId}`;
     }
 </script>
