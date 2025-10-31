@@ -130,8 +130,9 @@ public class FaService {
         response.setGenero(viewData.getGenero());
         response.setIdade(viewData.getIdade());
         response.setOcupacao(viewData.getOcupacao());
-        response.setTempoGeek(viewData.getTempoGeek());
+        response.setTempoGeekFormatado(viewData.getTempoGeekFormatado());
         response.setUnivFav(viewData.getUnivFav());
+        response.setPerfilConsumo(viewData.getPerfilConsumo());
 
         try {
             if (viewData.getFilmesAssistidosJson() != null) {

@@ -151,6 +151,11 @@ public class FaRepository {
         }
     }
 
+    public String getPerfilDeConsumoPorId(Integer faId) {
+        String sql = "SELECT fn_calcula_perfil_consumo(?)";
+        return jdbcTemplate.queryForObject(sql, String.class, faId);
+    }
+
     private static class FaRowMapper implements RowMapper<Fa> {
         @Override
         public Fa mapRow(ResultSet rs, int rowNum) throws SQLException {

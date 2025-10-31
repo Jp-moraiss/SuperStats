@@ -28,8 +28,21 @@
             <div class="card-header profile-header"><h3 class="mb-0" id="faNome">Carregando...</h3></div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6"><ul class="list-group list-group-flush"><li class="list-group-item"><strong>Username:</strong> <span id="faUsername">-</span></li><li class="list-group-item"><strong>Gênero:</strong> <span id="faGenero">-</span></li><li class="list-group-item"><strong>Ocupação:</strong> <span id="faOcupacao">-</span></li></ul></div>
-                    <div class="col-md-6"><ul class="list-group list-group-flush"><li class="list-group-item"><strong>Universo Favorito:</strong> <span id="faUnivFav">-</span></li><li class="list-group-item"><strong>Tempo Geek:</strong> <span id="faTempoGeek">-</span></li><li class="list-group-item"><strong>Idade:</strong> <span id="faIdade">-</span></li></ul></div>
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Username:</strong> <span id="faUsername">-</span></li>
+                            <li class="list-group-item"><strong>Gênero:</strong> <span id="faGenero">-</span></li>
+                            <li class="list-group-item"><strong>Ocupação:</strong> <span id="faOcupacao">-</span></li>
+                            <li class="list-group-item"><strong>Perfil de Consumo:</strong> <strong id="perfilConsumo" class="text-primary">-</strong></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Universo Favorito:</strong> <span id="faUnivFav">-</span></li>
+                            <li class="list-group-item"><strong>Experiência Geek:</strong> <span id="faTempoGeek">-</span></li>
+                            <li class="list-group-item"><strong>Idade:</strong> <span id="faIdade">-</span></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -37,14 +50,14 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4>Filmes Assistidos</h4>
-                <span id="totalFilmes" class="badge bg-primary rounded-pill">0</span>
+                <span id="totalFilmesBadge" class="badge bg-primary rounded-pill">0</span>
             </div>
             <div class="card-body table-responsive"><table class="table align-middle table-sm"><thead><tr><th style="width: 10%;"></th><th>Título</th><th>Produtora</th><th>Lançamento</th><th style="width: 10%;">Trailer</th></tr></thead><tbody id="assistidosTableBody"></tbody></table></div>
         </div>
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4>HQs Lidas</h4>
-                <span id="totalHqs" class="badge bg-danger rounded-pill">0</span>
+                <span id="totalHqsBadge" class="badge bg-danger rounded-pill">0</span>
             </div>
             <div class="card-body table-responsive"><table class="table align-middle table-sm"><thead><tr><th style="width: 10%;"></th><th>Título</th><th>Editora</th><th>Edição</th><th>Lançamento</th></tr></thead><tbody id="lidosTableBody"></tbody></table></div>
         </div>
@@ -91,6 +104,7 @@
             const res = await fetchWithAuth(`${apiBaseUrl}/fa/perfil-completo/${faId}`);
             if (!res.ok) throw new Error(`Não foi possível carregar o perfil do fã (ID: ${faId}).`);
             const perfil = await res.json();
+
             populateProfile(perfil);
             populateMediaTables(perfil);
         } catch (error) {
@@ -99,6 +113,7 @@
         }
     }
 
+    // FUNÇÃO JAVASCRIPT CORRIGIDA E COMPLETA
     function populateProfile(perfil) {
         document.getElementById('faNome').textContent = perfil.nome || 'Nome não disponível';
         document.getElementById('faUsername').textContent = perfil.username;
@@ -106,7 +121,10 @@
         document.getElementById('faOcupacao').textContent = perfil.ocupacao || 'Não informada';
         document.getElementById('faUnivFav').textContent = perfil.univFav || 'Não informado';
         document.getElementById('faIdade').textContent = perfil.idade || 'Não informada';
-        document.getElementById('faTempoGeek').textContent = perfil.tempoGeek ? `${perfil.tempoGeek} anos` : 'Não informado';
+
+        // As linhas que agora vão funcionar corretamente
+        document.getElementById('faTempoGeek').textContent = perfil.tempoGeekFormatado || 'Não informado';
+        document.getElementById('perfilConsumo').textContent = perfil.perfilConsumo || 'Não calculado';
     }
 
     function populateMediaTables(perfil) {
@@ -114,7 +132,7 @@
         const hqsBody = document.getElementById('lidosTableBody');
 
         const filmes = perfil.filmesAssistidos || [];
-        document.getElementById('totalFilmes').textContent = filmes.length;
+        document.getElementById('totalFilmesBadge').textContent = filmes.length;
         if (filmes.length > 0) {
             filmesBody.innerHTML = filmes.map(filme => {
                 const trailerBtn = filme.trailerUrl
@@ -133,7 +151,7 @@
         }
 
         const hqs = perfil.hqsLidas || [];
-        document.getElementById('totalHqs').textContent = hqs.length;
+        document.getElementById('totalHqsBadge').textContent = hqs.length;
         if (hqs.length > 0) {
             hqsBody.innerHTML = hqs.map(hq => `
                 <tr>
