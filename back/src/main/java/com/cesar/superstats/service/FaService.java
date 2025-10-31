@@ -2,6 +2,7 @@ package com.cesar.superstats.service;
 
 import com.cesar.superstats.dto.FaConsumoDTO;
 import com.cesar.superstats.dto.FaDTO;
+import com.cesar.superstats.dto.PerfilAtividadeFaDTO;
 import com.cesar.superstats.exceptions.ResourceNotFoundException;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.repository.FaRepository;
@@ -113,6 +114,11 @@ public class FaService {
 
     public List<FaConsumoDTO> getPerfilDeConsumo() {
         return repository.findPerfilDeConsumoDosFas();
+    }
+
+    public PerfilAtividadeFaDTO getPerfilAtividade(Integer faId) {
+        return repository.findPerfilAtividadeById(faId)
+                .orElseThrow(() -> new ResourceNotFoundException("Perfil de atividade não encontrado para o fã com ID: " + faId));
     }
 }
 

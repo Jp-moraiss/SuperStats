@@ -32,16 +32,15 @@
                     <div class="col-md-6">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><strong>Username:</strong> <span id="faUsername">-</span></li>
-                            <li class="list-group-item"><strong>Email:</strong> <span id="faEmail">-</span></li>
                             <li class="list-group-item"><strong>Gênero:</strong> <span id="faGenero">-</span></li>
-                            <li class="list-group-item"><strong>Idade:</strong> <span id="faIdade">-</span></li>
+                            <li class="list-group-item"><strong>Ocupação:</strong> <span id="faOcupacao">-</span></li>
                         </ul>
                     </div>
                     <div class="col-md-6">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><strong>Universo Favorito:</strong> <span id="faUnivFav">-</span></li>
                             <li class="list-group-item"><strong>Tempo Geek:</strong> <span id="faTempoGeek">-</span></li>
-                            <li class="list-group-item"><strong>Ocupação:</strong> <span id="faOcupacao">-</span></li>
+                            <li class="list-group-item"><strong>Idade:</strong> <span id="faIdade">-</span></li>
                         </ul>
                     </div>
                 </div>
@@ -138,19 +137,25 @@
 
     async function loadProfileData(faId) {
         try {
-            const [resFa, resFilmes, resHqs] = await Promise.all([
-                fetchWithAuth(`${apiBaseUrl}/fa/${faId}`),
+            // OTIMIZAÇÃO: A primeira chamada agora busca o perfil E as contagens!
+            const [resPerfil, resFilmes, resHqs] = await Promise.all([
+                fetchWithAuth(`${apiBaseUrl}/fa/perfil-atividade/${faId}`), // <-- NOVO ENDPOINT
                 fetchWithAuth(`${apiBaseUrl}/filmes/assistidos/fa/${faId}`),
                 fetchWithAuth(`${apiBaseUrl}/hqs/lidos/fa/${faId}`)
             ]);
 
-            if (!resFa.ok) throw new Error(`Não foi possível carregar o perfil do fã (ID: ${faId}).`);
+            if (!resPerfil.ok) {
+                throw new Error(`Não foi possível carregar o perfil do fã (ID: ${faId}).`);
+            }
 
-            const fa = await resFa.json();
+            const perfil = await resPerfil.json();
             const filmes = resFilmes.ok ? await resFilmes.json() : [];
             const hqs = resHqs.ok ? await resHqs.json() : [];
 
-            populateProfile(fa);
+            // A função populateProfile agora usa os dados e as contagens da view
+            populateProfile(perfil);
+
+            // As funções de tabela continuam usando as listas completas
             populateFilmesTable(filmes);
             populateHqsTable(hqs);
 
@@ -160,49 +165,55 @@
         }
     }
 
-    function populateProfile(fa) {
-        document.getElementById('faNome').textContent = fa.nome || 'Nome não disponível';
-        document.getElementById('faUsername').textContent = fa.username;
-        document.getElementById('faEmail').textContent = fa.email;
-        document.getElementById('faGenero').textContent = fa.genero || 'Não informado';
-        document.getElementById('faIdade').textContent = fa.idade || 'Não informada';
-        document.getElementById('faUnivFav').textContent = fa.univ_fav || 'Não informado';
-        document.getElementById('faTempoGeek').textContent = fa.tempo_geek ? `${fa.tempo_geek} anos` : 'Não informado';
-        document.getElementById('faOcupacao').textContent = fa.ocupacao || 'Não informada';
+    function populateProfile(perfil) {
+        document.getElementById('faNome').textContent = perfil.nome || 'Nome não disponível';
+        document.getElementById('faUsername').textContent = perfil.username;
+        document.getElementById('faGenero').textContent = perfil.genero || 'Não informado';
+        document.getElementById('faOcupacao').textContent = perfil.ocupacao || 'Não informada';
+
+        document.getElementById('faUnivFav').textContent = perfil.univ_fav || 'Não informado';
+        document.getElementById('faIdade').textContent = perfil.idade || 'Não informada';
+        document.getElementById('faTempoGeek').textContent = perfil.tempoGeek ? `${perfil.tempoGeek} anos` : 'Não informado';
+
+        document.getElementById('totalFilmes').textContent = perfil.totalFilmesAssistidos;
+        document.getElementById('totalHqs').textContent = perfil.totalHqsLidas;
     }
 
     function populateFilmesTable(filmes) {
-        document.getElementById('totalFilmes').textContent = filmes.length;
+
         const tbody = document.getElementById('assistidosTableBody');
         if (filmes.length === 0) {
             tbody.innerHTML = '<tr><td colspan="4" class="text-center">Este fã não marcou nenhum filme como assistido.</td></tr>';
             return;
         }
         tbody.innerHTML = filmes.map(filme => `
-            <tr>
-                <td>${filme.id}</td>
-                <td>${filme.titulo}</td>
-                <td>${filme.produtora || 'N/A'}</td>
-                <td>${filme.avaliacaoTmdb ? filme.avaliacaoTmdb.toFixed(1) : 'N/A'}</td>
-            </tr>
-        `).join('');
+        <tr>
+            <td>${filme.id}</td>
+            <td>${filme.titulo}</td>
+            <td>${filme.produtora || 'N/A'}</td>
+            <td>${filme.avaliacaoTmdb ? filme.avaliacaoTmdb.toFixed(1) : 'N/A'}</td>
+        </tr>
+    `).join('');
     }
 
+    // SUBSTITUA a sua função populateHqsTable por esta:
     function populateHqsTable(hqs) {
-        document.getElementById('totalHqs').textContent = hqs.length;
+        // CORREÇÃO 3: A linha que sobrescrevia a contagem foi REMOVIDA
+        // document.getElementById('totalHqs').textContent = hqs.length; <-- REMOVIDO
+
         const tbody = document.getElementById('lidosTableBody');
         if (hqs.length === 0) {
             tbody.innerHTML = '<tr><td colspan="4" class="text-center">Este fã não marcou nenhuma HQ como lida.</td></tr>';
             return;
         }
         tbody.innerHTML = hqs.map(hq => `
-            <tr>
-                <td>${hq.id}</td>
-                <td>${hq.titulo}</td>
-                <td>${hq.volumeName || 'N/A'}</td>
-                <td>${hq.editora || 'N/A'}</td>
-            </tr>
-        `).join('');
+        <tr>
+            <td>${hq.id}</td>
+            <td>${hq.titulo}</td>
+            <td>${hq.volumeName || 'N/A'}</td>
+            <td>${hq.editora || 'N/A'}</td>
+        </tr>
+    `).join('');
     }
 </script>
 </body>

@@ -1,6 +1,7 @@
 package com.cesar.superstats.repository;
 
 import com.cesar.superstats.model.entities.Personagem;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,14 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Repository
 public class PersonagemRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public PersonagemRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public void save(Personagem personagem) {
         String sql = "INSERT INTO Personagem (id, nome, genero, altura, peso, ocupacao, raca, nome_completo, " +

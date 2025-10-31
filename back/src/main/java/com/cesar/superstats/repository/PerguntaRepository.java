@@ -10,8 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-@Repository
 @RequiredArgsConstructor
+@Repository
 public class PerguntaRepository {
 
     private final JdbcTemplate jdbcTemplate;

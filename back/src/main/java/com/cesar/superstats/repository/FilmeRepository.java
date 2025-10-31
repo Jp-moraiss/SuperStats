@@ -3,6 +3,7 @@ package com.cesar.superstats.repository;
 import com.cesar.superstats.dto.FilmeComContagemDTO;
 import com.cesar.superstats.dto.FilmeDTO;
 import com.cesar.superstats.model.entities.Filme;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,14 +19,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Repository
 public class FilmeRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public FilmeRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public List<Filme> findAll(Integer faId) {
         String sql = "SELECT f.*, (cf.fk_Fa_id IS NOT NULL) AS assistido " +
@@ -60,7 +58,6 @@ public class FilmeRepository {
     }
 
     public Filme save(Filme filme) {
-        // Adicionamos as novas colunas no INSERT
         String sql = "INSERT INTO filme (titulo, produtora, diretor, data_lancamento, poster_url, avaliacao_tmdb, trailer_url) VALUES (?, ?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 

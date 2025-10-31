@@ -2,6 +2,7 @@ package com.cesar.superstats.repository;
 
 import com.cesar.superstats.dto.HQDTO;
 import com.cesar.superstats.model.entities.HQ;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,14 +18,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Repository
 public class HQRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public HQRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public List<HQ> findAll(Integer faId) {
         String sql = "SELECT h.*, (ch.fk_Fa_id IS NOT NULL) AS lido " +

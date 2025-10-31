@@ -2,6 +2,7 @@ package com.cesar.superstats.controller;
 
 import com.cesar.superstats.dto.FaConsumoDTO;
 import com.cesar.superstats.dto.FaDTO;
+import com.cesar.superstats.dto.PerfilAtividadeFaDTO;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.service.FaService;
 import org.springframework.http.HttpStatus;
@@ -90,6 +91,11 @@ public class FaController {
     public ResponseEntity<List<FaConsumoDTO>> getPerfilDeConsumoDosFas() {
         List<FaConsumoDTO> perfil = service.getPerfilDeConsumo();
         return ResponseEntity.ok(perfil);
+    }
+
+    @GetMapping("/perfil-atividade/{id}")
+    public ResponseEntity<PerfilAtividadeFaDTO> getPerfilDeAtividade(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.getPerfilAtividade(id));
     }
 }
 

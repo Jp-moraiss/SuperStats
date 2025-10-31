@@ -4,6 +4,7 @@ import com.cesar.superstats.dto.ContagemAlinhamentoDTO;
 import com.cesar.superstats.dto.PersonagemNovoDTO;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.PersonagemNovo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,14 +15,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Repository
 public class PersonagemNovoRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public PersonagemNovoRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     private final String BASE_SQL =
             "SELECT pn.*, f.id as fa_id, f.username as fa_username, f.email as fa_email, f.nome as fa_nome " +

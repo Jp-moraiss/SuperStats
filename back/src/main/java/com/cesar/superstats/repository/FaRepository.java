@@ -2,8 +2,11 @@ package com.cesar.superstats.repository;
 
 import com.cesar.superstats.dto.FaConsumoDTO;
 import com.cesar.superstats.dto.FaDTO;
+import com.cesar.superstats.dto.PerfilAtividadeFaDTO;
 import com.cesar.superstats.model.entities.Fa;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -13,14 +16,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Repository
 public class FaRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public FaRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public Optional<Fa> findById(Integer id) {
         String sql = "SELECT * FROM Fa WHERE id = ?";
@@ -131,6 +131,17 @@ public class FaRepository {
         );
 
         return jdbcTemplate.query(sql, rowMapper);
+    }
+
+    public Optional<PerfilAtividadeFaDTO> findPerfilAtividadeById(Integer faId) {
+        String sql = "SELECT * FROM vw_perfil_atividade_fa WHERE fa_id = ?";
+
+        try {
+            PerfilAtividadeFaDTO perfil = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(PerfilAtividadeFaDTO.class), faId);
+            return Optional.ofNullable(perfil);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     private static class FaRowMapper implements RowMapper<Fa> {
