@@ -74,7 +74,7 @@ public class FaService {
         novoFa.setEmail(faDto.getEmail());
         novoFa.setNome(faDto.getNome());
         novoFa.setGenero(faDto.getGenero());
-        novoFa.setIdade(faDto.getIdade());
+        novoFa.setDataNascimento(faDto.getDataNascimento());
         novoFa.setUniv_fav(faDto.getUniv_fav());
         novoFa.setTempo_geek(faDto.getTempoGeek());
         novoFa.setOcupacao(faDto.getOcupacao());
@@ -104,7 +104,7 @@ public class FaService {
         dto.setUsername(fa.getUsername());
         dto.setNome(fa.getNome());
         dto.setGenero(fa.getGenero());
-        dto.setIdade(fa.getIdade());
+        dto.setDataNascimento(fa.getDataNascimento());
         dto.setUniv_fav(fa.getUniv_fav());
         dto.setTempoGeek(fa.getTempo_geek());
         return dto;

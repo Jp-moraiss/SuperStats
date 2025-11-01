@@ -4,7 +4,6 @@ SELECT
     f.username,
     f.nome,
     f.genero,
-    f.idade,
     f.ocupacao,
     f.tempo_geek,
     f.univ_fav,

@@ -35,3 +35,16 @@ ELSE
 END IF;
 END $
 DELIMITER ;
+
+DELIMITER $
+CREATE FUNCTION fn_calcula_idade(p_data_nascimento DATE)
+    RETURNS INT
+    DETERMINISTIC
+BEGIN
+    IF p_data_nascimento IS NULL THEN
+        RETURN NULL;
+END IF;
+
+RETURN TIMESTAMPDIFF(YEAR, p_data_nascimento, CURDATE());
+END $
+DELIMITER ;

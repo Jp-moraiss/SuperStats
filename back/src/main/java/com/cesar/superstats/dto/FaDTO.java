@@ -2,6 +2,8 @@ package com.cesar.superstats.dto;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class FaDTO {
 
@@ -10,7 +12,7 @@ public class FaDTO {
     private String nome;
     private String password;
     private String genero;
-    private Integer idade;
+    private LocalDate dataNascimento;
     private String univ_fav;
     private Integer tempoGeek;
     private String ocupacao;

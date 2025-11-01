@@ -59,7 +59,12 @@
                             <label for="regGenero">Gênero</label>
                         </div>
                     </div>
-                    r<div class="col-md"><div class="form-floating"><input type="number" id="regIdade" class="form-control" placeholder="Idade"><label for="regIdade">Idade</label></div></div>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="date" id="regDataNascimento" class="form-control" placeholder="Data de Nascimento">
+                            <label for="regDataNascimento">Data de Nascimento</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-floating mb-2"><input type="text" id="regUnivFav" class="form-control" placeholder="Universo Favorito"><label for="regUnivFav">Universo Favorito (Marvel/DC)</label></div>
                 <div class="row g-2 mb-2">
@@ -87,12 +92,8 @@
                     <a href="meus-personagens.html" class="list-group-item list-group-item-action">Crie seu personagem! &rarr;</a>
                     <a href="filmes.html" class="list-group-item list-group-item-action">Adicione filmes ao catálogo &rarr;</a>
                     <a href="hqs.html" class="list-group-item list-group-item-action">Gerenciar HQs &rarr;</a>
-                    <a href="graficos.html" class="list-group-item list-group-item-action">
-                        Ver Gráficos das Pesquisas &rarr;
-                    </a>
-                    <a href="pesquisa.html" class="list-group-item list-group-item-action">
-                        Responder Pesquisa de Favoritos &rarr;
-                    </a>
+                    <a href="graficos.html" class="list-group-item list-group-item-action">Ver Gráficos das Pesquisas &rarr;</a>
+                    <a href="pesquisa.html" class="list-group-item list-group-item-action">Responder Pesquisa de Favoritos &rarr;</a>
                     <a href="personagens.html" class="list-group-item list-group-item-action">Gerenciar Personagens &rarr;</a>
                     <a href="fas.html" class="list-group-item list-group-item-action">Ver Usuários &rarr;</a>
                     <a href="analise.html" class="list-group-item list-group-item-action">Ver Análise &rarr;</a>
@@ -105,29 +106,27 @@
 <script>
     const apiUrl = 'http://localhost:8080';
 
-    // --- GERENCIAMENTO DE VISUALIZAÇÃO ---
     const authSection = document.getElementById('authSection');
     const contentSection = document.getElementById('contentSection');
     const loginView = document.getElementById('loginView');
     const registerView = document.getElementById('registerView');
 
-    function showLoginView() { /* ... (código abaixo) ... */ }
-    function showRegisterView() { /* ... (código abaixo) ... */ }
-    function showContentView() { /* ... (código abaixo) ... */ }
+    function showLoginView() { /* ... */ }
+    function showRegisterView() { /* ... */ }
+    function showContentView() { /* ... */ }
 
-    // --- LÓGICA DE AUTENTICAÇÃO ---
     async function handleRegister(event) {
         event.preventDefault();
         const msgDiv = document.getElementById('registerMessage');
 
-        // --- MUDANÇA AQUI: Coletando todos os campos do novo formulário ---
         const fa = {
             username: document.getElementById('regUsername').value,
             email: document.getElementById('regEmail').value,
             nome: document.getElementById('regNome').value,
             password: document.getElementById('regPassword').value,
             genero: document.getElementById('regGenero').value || null,
-            idade: parseInt(document.getElementById('regIdade').value) || null,
+            // 2. CORREÇÃO AQUI: Coletando 'dataNascimento' em vez de 'idade'
+            dataNascimento: document.getElementById('regDataNascimento').value || null,
             univ_fav: document.getElementById('regUnivFav').value || null,
             tempoGeek: parseInt(document.getElementById('regTempoGeek').value) || null,
             ocupacao: document.getElementById('regOcupacao').value || null
@@ -156,64 +155,18 @@
         }
     }
 
-    async function handleLogin(event) { /* ... (código abaixo) ... */ }
-    function handleLogout() { /* ... (código abaixo) ... */ }
+    async function handleLogin(event) { /* ... */ }
+    function handleLogout() { /* ... */ }
 
-    // --- INICIALIZAÇÃO DA PÁGINA ---
-    document.addEventListener('DOMContentLoaded', () => { /* ... (código abaixo) ... */ });
+    document.addEventListener('DOMContentLoaded', () => { /* ... */ });
 
     // --- Funções que não mudaram ---
-    function showLoginView() {
-        authSection.classList.remove('hidden');
-        contentSection.classList.add('hidden');
-        loginView.classList.remove('hidden');
-        registerView.classList.add('hidden');
-    }
-    function showRegisterView() {
-        loginView.classList.add('hidden');
-        registerView.classList.remove('hidden');
-    }
-    function showContentView() {
-        authSection.classList.add('hidden');
-        contentSection.classList.remove('hidden');
-    }
-    async function handleLogin(event) {
-        event.preventDefault();
-        const errorDiv = document.getElementById('loginError');
-        const loginData = {
-            username: document.getElementById('loginUsername').value,
-            password: document.getElementById('loginPassword').value
-        };
-        try {
-            const res = await fetch(`${apiUrl}/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(loginData)
-            });
-            if (res.ok) {
-                const data = await res.json();
-                localStorage.setItem('jwtToken', data.token);
-                showContentView();
-            } else {
-                throw new Error("Usuário ou senha inválidos.");
-            }
-        } catch (error) {
-            errorDiv.textContent = error.message;
-            errorDiv.classList.remove('hidden');
-        }
-    }
-    function handleLogout() {
-        localStorage.removeItem('jwtToken');
-        showLoginView();
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-        const token = localStorage.getItem('jwtToken');
-        if (token) {
-            showContentView();
-        } else {
-            showLoginView();
-        }
-    });
+    function showLoginView() { authSection.classList.remove('hidden'); contentSection.classList.add('hidden'); loginView.classList.remove('hidden'); registerView.classList.add('hidden'); }
+    function showRegisterView() { loginView.classList.add('hidden'); registerView.classList.remove('hidden'); }
+    function showContentView() { authSection.classList.add('hidden'); contentSection.classList.remove('hidden'); }
+    async function handleLogin(event) { event.preventDefault(); const errorDiv = document.getElementById('loginError'); const loginData = { username: document.getElementById('loginUsername').value, password: document.getElementById('loginPassword').value }; try { const res = await fetch(`${apiUrl}/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(loginData) }); if (res.ok) { const data = await res.json(); localStorage.setItem('jwtToken', data.token); showContentView(); } else { throw new Error("Usuário ou senha inválidos."); } } catch (error) { errorDiv.textContent = error.message; errorDiv.classList.remove('hidden'); } }
+    function handleLogout() { localStorage.removeItem('jwtToken'); showLoginView(); }
+    document.addEventListener('DOMContentLoaded', () => { const token = localStorage.getItem('jwtToken'); if (token) { showContentView(); } else { showLoginView(); } });
 </script>
 </body>
 </html>

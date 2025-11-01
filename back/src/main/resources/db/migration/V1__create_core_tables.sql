@@ -9,7 +9,7 @@ CREATE TABLE Fa (
     email VARCHAR(100) NOT NULL UNIQUE,
     nome VARCHAR(100) NOT NULL,
     genero VARCHAR(30),
-    idade INT,
+    data_nascimento DATE DEFAULT NULL,
     univ_fav VARCHAR(30),
     tempo_geek INT,
     ocupacao VARCHAR(50),

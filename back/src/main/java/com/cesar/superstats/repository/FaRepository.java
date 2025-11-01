@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +57,7 @@ public class FaRepository {
     }
 
     public void save(Fa fa) {
-        String sql = "INSERT INTO Fa (username, email, nome, password, genero, idade, univ_fav, tempo_geek, ocupacao) " +
+        String sql = "INSERT INTO Fa (username, email, nome, password, genero, data_nascimento, univ_fav, tempo_geek, ocupacao) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
                 fa.getUsername(),
@@ -64,19 +65,19 @@ public class FaRepository {
                 fa.getNome(),
                 fa.getPassword(),
                 fa.getGenero(),
-                fa.getIdade(),
+                fa.getDataNascimento(),
                 fa.getUniv_fav(),
                 fa.getTempo_geek(),
                 fa.getOcupacao());
     }
 
     public void update(Integer id, FaDTO fa) {
-        String sql = "UPDATE Fa SET username = ?, nome = ?, genero = ?, idade = ?, univ_fav = ?, tempo_geek = ?, ocupacao = ? WHERE id = ?";
+        String sql = "UPDATE Fa SET username = ?, nome = ?, genero = ?, data_nascimento = ?, univ_fav = ?, tempo_geek = ?, ocupacao = ? WHERE id = ?";
         jdbcTemplate.update(sql,
                 fa.getUsername(),
                 fa.getNome(),
                 fa.getGenero(),
-                fa.getIdade(),
+                fa.getDataNascimento(),
                 fa.getUniv_fav(),
                 fa.getTempoGeek(),
                 fa.getOcupacao(),
@@ -166,7 +167,7 @@ public class FaRepository {
             fa.setNome(rs.getString("nome"));
             fa.setPassword(rs.getString("password"));
             fa.setGenero(rs.getString("genero"));
-            fa.setIdade(rs.getInt("idade"));
+            fa.setDataNascimento(rs.getObject("data_nascimento", LocalDate.class));
             fa.setUniv_fav(rs.getString("univ_fav"));
             fa.setTempo_geek(rs.getInt("tempo_geek"));
             fa.setOcupacao(rs.getString("ocupacao"));
