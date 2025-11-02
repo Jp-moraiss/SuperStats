@@ -18,6 +18,9 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="mb-0">Perfil do Fã</h1>
         <div>
+            <button id="editProfileBtn" class="btn btn-primary d-none" onclick="openEditModal()">
+                <i class="bi bi-pencil-square"></i> Editar Perfil
+            </button>
             <a href="fas.html" class="btn btn-outline-secondary">&larr; Voltar para Fãs</a>
             <a href="login.html" class="btn btn-secondary">Ir para a Home</a>
             <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
@@ -25,95 +28,148 @@
     </div>
 
     <div id="profileContainer">
-        <div class="card">
-            <div class="card-header profile-header">
-                <h3 class="mb-0" id="faNome">Carregando...</h3>
-                <div id="conquistasContainer" class="mt-2"></div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6"><ul class="list-group list-group-flush"><li class="list-group-item"><strong>Username:</strong> <span id="faUsername">-</span></li><li class="list-group-item"><strong>Gênero:</strong> <span id="faGenero">-</span></li><li class="list-group-item"><strong>Ocupação:</strong> <span id="faOcupacao">-</span></li><li class="list-group-item"><strong>Perfil de Consumo:</strong> <strong id="perfilConsumo" class="text-primary">-</strong></li></ul></div>
-                    <div class="col-md-6"><ul class="list-group list-group-flush"><li class="list-group-item"><strong>Universo Favorito:</strong> <span id="faUnivFav">-</span></li><li class="list-group-item"><strong>Experiência Geek:</strong> <span id="faTempoGeek">-</span></li><li class="list-group-item"><strong>Idade:</strong> <span id="faIdade">-</span></li></ul></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4>Filmes Assistidos</h4>
-                <span id="totalFilmesBadge" class="badge bg-primary rounded-pill">0</span>
-            </div>
-            <div class="card-body table-responsive"><table class="table align-middle table-sm"><thead><tr><th style="width: 10%;"></th><th>Título</th><th>Produtora</th><th>Lançamento</th><th style="width: 10%;">Trailer</th></tr></thead><tbody id="assistidosTableBody"></tbody></table></div>
-        </div>
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4>HQs Lidas</h4>
-                <span id="totalHqsBadge" class="badge bg-danger rounded-pill">0</span>
-            </div>
-            <div class="card-body table-responsive"><table class="table align-middle table-sm"><thead><tr><th style="width: 10%;"></th><th>Título</th><th>Editora</th><th>Edição</th><th>Lançamento</th></tr></thead><tbody id="lidosTableBody"></tbody></table></div>
-        </div>
     </div>
     <div id="errorContainer" class="alert alert-danger mt-4 d-none"></div>
+</div>
+
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Editar Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="editOcupacao" placeholder="Sua Ocupação">
+                        <label for="editOcupacao">Ocupação</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="editUnivFav" placeholder="Seu Universo Favorito">
+                        <label for="editUnivFav">Universo Favorito (Marvel/DC)</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="handleUpdateProfile()">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const apiBaseUrl = 'http://localhost:8080';
+    let currentProfileData = null; // Variável global para guardar os dados do perfil carregado
+    let editModal = null; // Variável global para a instância do modal do Bootstrap
 
     document.addEventListener('DOMContentLoaded', () => {
         if (!localStorage.getItem('jwtToken')) { window.location.href = 'login.html'; return; }
         const faId = new URLSearchParams(window.location.search).get('id');
         if (!faId) { showError("ID do fã não encontrado na URL."); return; }
+
+        // Inicializa a instância do modal do Bootstrap
+        editModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+
         loadProfileData(faId);
     });
 
-    function handleLogout() { localStorage.removeItem('jwtToken'); window.location.href = 'login.html'; }
-    async function fetchWithAuth(url, options = {}) { const token = localStorage.getItem('jwtToken'); if (!token) handleLogout(); const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers }; const response = await fetch(url, { ...options, headers }); if (response.status === 401 || response.status === 403) handleLogout(); return response; }
-    function showError(message) { document.getElementById('profileContainer').classList.add('d-none'); document.getElementById('errorContainer').textContent = message; document.getElementById('errorContainer').classList.remove('d-none'); }
-    function formatDate(dateString) { if (!dateString) return 'N/A'; try { const [year, month, day] = dateString.split('-'); return `${day}/${month}/${year}`; } catch (e) { return dateString; } }
+    // NOVO: Função para decodificar o token JWT e pegar o username (subject)
+    function parseJwt(token) {
+        try {
+            return JSON.parse(atob(token.split('.')[1]));
+        } catch (e) {
+            return null;
+        }
+    }
 
     async function loadProfileData(faId) {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/fa/perfil-completo/${faId}`);
-            if (!res.ok) throw new Error(`Não foi possível carregar o perfil do fã (ID: ${faId}).`);
+            if (!res.ok) throw new Error(`Não foi possível carregar o perfil do fã.`);
+
             const perfil = await res.json();
+            currentProfileData = perfil; // Salva os dados para uso posterior
+
             populateProfile(perfil);
             populateMediaTables(perfil);
-        } catch (error) { console.error(error); showError(error.message); }
-    }
 
-    function populateProfile(perfil) {
-        document.getElementById('faNome').textContent = perfil.nome || 'Nome não disponível';
-        document.getElementById('faUsername').textContent = perfil.username;
-        document.getElementById('faGenero').textContent = perfil.genero || 'Não informado';
-        document.getElementById('faOcupacao').textContent = perfil.ocupacao || 'Não informada';
-        document.getElementById('faUnivFav').textContent = perfil.univFav || 'Não informado';
-        document.getElementById('faIdade').textContent = perfil.idade || 'Não informada';
-        document.getElementById('faTempoGeek').textContent = perfil.tempoGeekFormatado || 'Não informado';
-        document.getElementById('perfilConsumo').textContent = perfil.perfilConsumo || 'Não calculado';
-        const conquistasContainer = document.getElementById('conquistasContainer');
-        conquistasContainer.innerHTML = '';
-        if (perfil.conquistas) {
-            const badges = perfil.conquistas.split(', ');
-            badges.forEach(badgeName => {
-                const badgeElement = document.createElement('span');
-                badgeElement.className = 'badge rounded-pill bg-warning text-dark achievement-badge';
-                badgeElement.innerHTML = `<i class="bi bi-trophy-fill"></i> ${badgeName}`;
-                conquistasContainer.appendChild(badgeElement);
-            });
+            // NOVO: Lógica para mostrar o botão "Editar Perfil"
+            const token = localStorage.getItem('jwtToken');
+            const decodedToken = parseJwt(token);
+            // Compara o username do token com o username do perfil carregado
+            if (decodedToken && decodedToken.sub === perfil.username) {
+                document.getElementById('editProfileBtn').classList.remove('d-none');
+            }
+
+        } catch (error) {
+            console.error(error);
+            showError(error.message);
         }
     }
 
-    function populateMediaTables(perfil) {
-        const filmesBody = document.getElementById('assistidosTableBody');
-        const hqsBody = document.getElementById('lidosTableBody');
-        const filmes = perfil.filmesAssistidos || [];
-        document.getElementById('totalFilmesBadge').textContent = filmes.length;
-        if (filmes.length > 0) { filmesBody.innerHTML = filmes.map(filme => { const trailerBtn = filme.trailerUrl ? `<a href="${filme.trailerUrl}" target="_blank" class="btn btn-danger btn-sm"><i class="bi bi-youtube"></i></a>` : `<button class="btn btn-secondary btn-sm" disabled><i class="bi bi-youtube"></i></button>`; return `<tr><td><img src="${filme.posterUrl || 'https://via.placeholder.com/100x150'}" alt="${filme.titulo}" class="media-img"></td><td>${filme.titulo || 'N/A'}</td><td>${filme.produtora || 'N/A'}</td><td>${formatDate(filme.dataLancamento)}</td><td>${trailerBtn}</td></tr>` }).join(''); } else { filmesBody.innerHTML = '<tr><td colspan="5" class="text-center">Este fã não marcou nenhum filme como assistido.</td></tr>'; }
-        const hqs = perfil.hqsLidas || [];
-        document.getElementById('totalHqsBadge').textContent = hqs.length;
-        if (hqs.length > 0) { hqsBody.innerHTML = hqs.map(hq => `<tr><td><img src="${hq.coverUrl || 'https://via.placeholder.com/100x150'}" alt="${hq.titulo}" class="media-img"></td><td>${hq.titulo || 'N/A'}</td><td>${hq.editora || 'N/A'}</td><td>${hq.edicao || 'N/A'}</td><td>${formatDate(hq.dataLancamento)}</td></tr>`).join(''); } else { hqsBody.innerHTML = '<tr><td colspan="5" class="text-center">Este fã não marcou nenhuma HQ como lida.</td></tr>'; }
+    // NOVO: Função para abrir e preencher o modal de edição
+    function openEditModal() {
+        if (!currentProfileData) return;
+        // Preenche o formulário do modal com os dados atuais
+        document.getElementById('editOcupacao').value = currentProfileData.ocupacao || '';
+        document.getElementById('editUnivFav').value = currentProfileData.univFav || '';
+        editModal.show();
     }
+
+    // NOVO: Função para enviar a atualização para a API
+    async function handleUpdateProfile() {
+        if (!currentProfileData) return;
+
+        const updateData = {
+            ocupacao: document.getElementById('editOcupacao').value,
+            univFav: document.getElementById('editUnivFav').value
+        };
+
+        try {
+            const res = await fetchWithAuth(`${apiBaseUrl}/fa/perfil/${currentProfileData.faId}`, {
+                method: 'PUT',
+                body: JSON.stringify(updateData)
+            });
+
+            // 204 No Content é uma resposta de sucesso para PUT/DELETE
+            if (!res.ok && res.status !== 204) {
+                throw new Error('Falha ao atualizar o perfil. Tente novamente.');
+            }
+
+            editModal.hide(); // Esconde o modal
+            loadProfileData(currentProfileData.faId); // Recarrega os dados da página para refletir a mudança
+
+        } catch (error) {
+            alert(error.message);
+            console.error(error);
+        }
+    }
+
+    // --- Funções que não mudaram (ou tiveram pequenas correções) ---
+    function handleLogout() { localStorage.removeItem('jwtToken'); window.location.href = 'login.html'; }
+    async function fetchWithAuth(url, options = {}) { const token = localStorage.getItem('jwtToken'); if (!token) handleLogout(); const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers }; const response = await fetch(url, { ...options, headers }); if (response.status === 401 || response.status === 403) handleLogout(); return response; }
+    function showError(message) { document.getElementById('profileContainer').classList.add('d-none'); document.getElementById('errorContainer').textContent = message; document.getElementById('errorContainer').classList.remove('d-none'); }
+    function formatDate(dateString) { if (!dateString) return 'N/A'; try { const [year, month, day] = dateString.split('-'); return `${day}/${month}/${year}`; } catch (e) { return dateString; } }
+    function populateProfile(perfil) { document.getElementById('profileContainer').innerHTML = `
+        <div class="card">
+            <div class="card-header profile-header">
+                <h3 class="mb-0" id="faNome">${perfil.nome || 'Nome não disponível'}</h3>
+                <div id="conquistasContainer" class="mt-2"></div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6"><ul class="list-group list-group-flush"><li class="list-group-item"><strong>Username:</strong> <span id="faUsername">${perfil.username}</span></li><li class="list-group-item"><strong>Gênero:</strong> <span id="faGenero">${perfil.genero || 'Não informado'}</span></li><li class="list-group-item"><strong>Ocupação:</strong> <span id="faOcupacao">${perfil.ocupacao || 'Não informada'}</span></li><li class="list-group-item"><strong>Perfil de Consumo:</strong> <strong id="perfilConsumo" class="text-primary">${perfil.perfilConsumo || 'Não calculado'}</strong></li></ul></div>
+                    <div class="col-md-6"><ul class="list-group list-group-flush"><li class="list-group-item"><strong>Universo Favorito:</strong> <span id="faUnivFav">${perfil.univFav || 'Não informado'}</span></li><li class="list-group-item"><strong>Experiência Geek:</strong> <span id="faTempoGeek">${perfil.tempoGeekFormatado || 'Não informada'}</span></li><li class="list-group-item"><strong>Idade:</strong> <span id="faIdade">${perfil.idade || 'Não informada'}</span></li></ul></div>
+                </div>
+            </div>
+        </div>
+        <div class="card"><div class="card-header d-flex justify-content-between align-items-center"><h4>Filmes Assistidos</h4><span id="totalFilmesBadge" class="badge bg-primary rounded-pill">0</span></div><div class="card-body table-responsive"><table class="table align-middle table-sm"><thead><tr><th style="width: 10%;"></th><th>Título</th><th>Produtora</th><th>Lançamento</th><th style="width: 10%;">Trailer</th></tr></thead><tbody id="assistidosTableBody"></tbody></table></div></div>
+        <div class="card"><div class="card-header d-flex justify-content-between align-items-center"><h4>HQs Lidas</h4><span id="totalHqsBadge" class="badge bg-danger rounded-pill">0</span></div><div class="card-body table-responsive"><table class="table align-middle table-sm"><thead><tr><th style="width: 10%;"></th><th>Título</th><th>Editora</th><th>Edição</th><th>Lançamento</th></tr></thead><tbody id="lidosTableBody"></tbody></table></div></div>
+    `; const conquistasContainer = document.getElementById('conquistasContainer'); if (perfil.conquistas) { const badges = perfil.conquistas.split(', '); badges.forEach(badgeName => { const badgeElement = document.createElement('span'); badgeElement.className = 'badge rounded-pill bg-warning text-dark achievement-badge'; badgeElement.innerHTML = `<i class="bi bi-trophy-fill"></i> ${badgeName}`; conquistasContainer.appendChild(badgeElement); }); } }
+    function populateMediaTables(perfil) { const filmesBody = document.getElementById('assistidosTableBody'); const hqsBody = document.getElementById('lidosTableBody'); const filmes = perfil.filmesAssistidos || []; document.getElementById('totalFilmesBadge').textContent = filmes.length; if (filmes.length > 0) { filmesBody.innerHTML = filmes.map(filme => { const trailerBtn = filme.trailerUrl ? `<a href="${filme.trailerUrl}" target="_blank" class="btn btn-danger btn-sm"><i class="bi bi-youtube"></i></a>` : `<button class="btn btn-secondary btn-sm" disabled><i class="bi bi-youtube"></i></button>`; return `<tr><td><img src="${filme.posterUrl || 'https://via.placeholder.com/100x150'}" alt="${filme.titulo}" class="media-img"></td><td>${filme.titulo || 'N/A'}</td><td>${filme.produtora || 'N/A'}</td><td>${formatDate(filme.dataLancamento)}</td><td>${trailerBtn}</td></tr>` }).join(''); } else { filmesBody.innerHTML = '<tr><td colspan="5" class="text-center">Este fã não marcou nenhum filme como assistido.</td></tr>'; } const hqs = perfil.hqsLidas || []; document.getElementById('totalHqsBadge').textContent = hqs.length; if (hqs.length > 0) { hqsBody.innerHTML = hqs.map(hq => `<tr><td><img src="${hq.coverUrl || 'https://via.placeholder.com/100x150'}" alt="${hq.titulo}" class="media-img"></td><td>${hq.titulo || 'N/A'}</td><td>${hq.editora || 'N/A'}</td><td>${hq.edicao || 'N/A'}</td><td>${formatDate(hq.dataLancamento)}</td></tr>`).join(''); } else { hqsBody.innerHTML = '<tr><td colspan="5" class="text-center">Este fã não marcou nenhuma HQ como lida.</td></tr>'; } }
 </script>
 </body>
 </html>
