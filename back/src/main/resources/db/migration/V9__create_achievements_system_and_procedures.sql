@@ -5,9 +5,9 @@
 -- -----------------------------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS Conquistas_Fa (
-                                             id INT AUTO_INCREMENT PRIMARY KEY,
-                                             fk_Fa_id INT NOT NULL,
-                                             nome_conquista VARCHAR(100) NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fk_Fa_id INT NOT NULL,
+    nome_conquista VARCHAR(100) NOT NULL,
     tipo_conquista VARCHAR(10) NOT NULL,
     data_conquista TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (fk_Fa_id) REFERENCES Fa(id) ON DELETE CASCADE,
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS Conquistas_Fa (
 
 -- REQUISITO 1: PROCEDIMENTO PARA ATUALIZAÇÃO DE DADOS
 -- Será chamado pela funcionalidade de "Editar Perfil".
-DELIMITER //
+DELIMITER $
 CREATE PROCEDURE sp_atualiza_perfil_fa(
     IN p_fa_id INT,
     IN p_ocupacao VARCHAR(255),
@@ -32,13 +32,13 @@ SET
     ocupacao = p_ocupacao,
     univ_fav = p_univ_fav
 WHERE id = p_fa_id;
-END //
+END $
 DELIMITER ;
 
 
 -- REQUISITO 2: PROCEDIMENTO COM USO DE CURSOR
 -- Será chamado pelo botão de "Recalcular Conquistas".
-DELIMITER //
+DELIMITER $
 CREATE PROCEDURE sp_processa_conquistas_em_lote()
 BEGIN
     DECLARE done INT DEFAULT FALSE;
@@ -98,7 +98,7 @@ END IF;
 
 END LOOP;
 CLOSE cur_fas;
-END //
+END $
 DELIMITER ;
 
 
@@ -107,7 +107,7 @@ DELIMITER ;
 -- Estes são os procedimentos que o seu Java Service chama para a automação do perfil.
 -- -----------------------------------------------------------------------------------
 
-DELIMITER //
+DELIMITER $
 CREATE PROCEDURE sp_atualiza_conquistas_leitor_por_fa(IN p_fa_id INT)
 BEGIN
     DECLARE v_total_hqs INT;
@@ -126,10 +126,10 @@ IF v_badge_merecido IS NOT NULL THEN
             INSERT INTO Conquistas_Fa (fk_Fa_id, nome_conquista, tipo_conquista) VALUES (p_fa_id, v_badge_merecido, 'HQ');
 END IF;
 END IF;
-END //
+END $
 DELIMITER ;
 
-DELIMITER //
+DELIMITER $
 CREATE PROCEDURE sp_atualiza_conquistas_cinefilo_por_fa(IN p_fa_id INT)
 BEGIN
     DECLARE v_total_filmes INT;
@@ -148,5 +148,5 @@ IF v_badge_merecido IS NOT NULL THEN
             INSERT INTO Conquistas_Fa (fk_Fa_id, nome_conquista, tipo_conquista) VALUES (p_fa_id, v_badge_merecido, 'Filme');
 END IF;
 END IF;
-END //
+END $
 DELIMITER ;
