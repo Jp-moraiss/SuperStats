@@ -10,6 +10,7 @@
         .card { margin-top: 1.5rem; }
         .profile-header { background-color: #0d6efd; color: white; }
         .media-img { width: 50px; height: 75px; object-fit: cover; margin-right: 15px; border-radius: 4px; }
+        .achievement-badge { font-size: 0.9rem; margin: 2px 4px; }
     </style>
 </head>
 <body>
@@ -25,24 +26,14 @@
 
     <div id="profileContainer">
         <div class="card">
-            <div class="card-header profile-header"><h3 class="mb-0" id="faNome">Carregando...</h3></div>
+            <div class="card-header profile-header">
+                <h3 class="mb-0" id="faNome">Carregando...</h3>
+                <div id="conquistasContainer" class="mt-2"></div>
+            </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><strong>Username:</strong> <span id="faUsername">-</span></li>
-                            <li class="list-group-item"><strong>Gênero:</strong> <span id="faGenero">-</span></li>
-                            <li class="list-group-item"><strong>Ocupação:</strong> <span id="faOcupacao">-</span></li>
-                            <li class="list-group-item"><strong>Perfil de Consumo:</strong> <strong id="perfilConsumo" class="text-primary">-</strong></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><strong>Universo Favorito:</strong> <span id="faUnivFav">-</span></li>
-                            <li class="list-group-item"><strong>Experiência Geek:</strong> <span id="faTempoGeek">-</span></li>
-                            <li class="list-group-item"><strong>Idade:</strong> <span id="faIdade">-</span></li>
-                        </ul>
-                    </div>
+                    <div class="col-md-6"><ul class="list-group list-group-flush"><li class="list-group-item"><strong>Username:</strong> <span id="faUsername">-</span></li><li class="list-group-item"><strong>Gênero:</strong> <span id="faGenero">-</span></li><li class="list-group-item"><strong>Ocupação:</strong> <span id="faOcupacao">-</span></li><li class="list-group-item"><strong>Perfil de Consumo:</strong> <strong id="perfilConsumo" class="text-primary">-</strong></li></ul></div>
+                    <div class="col-md-6"><ul class="list-group list-group-flush"><li class="list-group-item"><strong>Universo Favorito:</strong> <span id="faUnivFav">-</span></li><li class="list-group-item"><strong>Experiência Geek:</strong> <span id="faTempoGeek">-</span></li><li class="list-group-item"><strong>Idade:</strong> <span id="faIdade">-</span></li></ul></div>
                 </div>
             </div>
         </div>
@@ -77,43 +68,20 @@
     });
 
     function handleLogout() { localStorage.removeItem('jwtToken'); window.location.href = 'login.html'; }
-
-    async function fetchWithAuth(url, options = {}) {
-        const token = localStorage.getItem('jwtToken');
-        if (!token) handleLogout();
-        const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers };
-        const response = await fetch(url, { ...options, headers });
-        if (response.status === 401 || response.status === 403) handleLogout();
-        return response;
-    }
-
-    function showError(message) {
-        document.getElementById('profileContainer').classList.add('d-none');
-        document.getElementById('errorContainer').textContent = message;
-        document.getElementById('errorContainer').classList.remove('d-none');
-    }
-
-    function formatDate(dateString) {
-        if (!dateString) return 'N/A';
-        try { const [year, month, day] = dateString.split('-'); return `${day}/${month}/${year}`; }
-        catch (e) { return dateString; }
-    }
+    async function fetchWithAuth(url, options = {}) { const token = localStorage.getItem('jwtToken'); if (!token) handleLogout(); const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers }; const response = await fetch(url, { ...options, headers }); if (response.status === 401 || response.status === 403) handleLogout(); return response; }
+    function showError(message) { document.getElementById('profileContainer').classList.add('d-none'); document.getElementById('errorContainer').textContent = message; document.getElementById('errorContainer').classList.remove('d-none'); }
+    function formatDate(dateString) { if (!dateString) return 'N/A'; try { const [year, month, day] = dateString.split('-'); return `${day}/${month}/${year}`; } catch (e) { return dateString; } }
 
     async function loadProfileData(faId) {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/fa/perfil-completo/${faId}`);
             if (!res.ok) throw new Error(`Não foi possível carregar o perfil do fã (ID: ${faId}).`);
             const perfil = await res.json();
-
             populateProfile(perfil);
             populateMediaTables(perfil);
-        } catch (error) {
-            console.error(error);
-            showError(error.message);
-        }
+        } catch (error) { console.error(error); showError(error.message); }
     }
 
-    // FUNÇÃO JAVASCRIPT CORRIGIDA E COMPLETA
     function populateProfile(perfil) {
         document.getElementById('faNome').textContent = perfil.nome || 'Nome não disponível';
         document.getElementById('faUsername').textContent = perfil.username;
@@ -121,49 +89,30 @@
         document.getElementById('faOcupacao').textContent = perfil.ocupacao || 'Não informada';
         document.getElementById('faUnivFav').textContent = perfil.univFav || 'Não informado';
         document.getElementById('faIdade').textContent = perfil.idade || 'Não informada';
-
-        // As linhas que agora vão funcionar corretamente
         document.getElementById('faTempoGeek').textContent = perfil.tempoGeekFormatado || 'Não informado';
         document.getElementById('perfilConsumo').textContent = perfil.perfilConsumo || 'Não calculado';
+        const conquistasContainer = document.getElementById('conquistasContainer');
+        conquistasContainer.innerHTML = '';
+        if (perfil.conquistas) {
+            const badges = perfil.conquistas.split(', ');
+            badges.forEach(badgeName => {
+                const badgeElement = document.createElement('span');
+                badgeElement.className = 'badge rounded-pill bg-warning text-dark achievement-badge';
+                badgeElement.innerHTML = `<i class="bi bi-trophy-fill"></i> ${badgeName}`;
+                conquistasContainer.appendChild(badgeElement);
+            });
+        }
     }
 
     function populateMediaTables(perfil) {
         const filmesBody = document.getElementById('assistidosTableBody');
         const hqsBody = document.getElementById('lidosTableBody');
-
         const filmes = perfil.filmesAssistidos || [];
         document.getElementById('totalFilmesBadge').textContent = filmes.length;
-        if (filmes.length > 0) {
-            filmesBody.innerHTML = filmes.map(filme => {
-                const trailerBtn = filme.trailerUrl
-                    ? `<a href="${filme.trailerUrl}" target="_blank" class="btn btn-danger btn-sm"><i class="bi bi-youtube"></i></a>`
-                    : `<button class="btn btn-secondary btn-sm" disabled><i class="bi bi-youtube"></i></button>`;
-                return `<tr>
-                    <td><img src="${filme.posterUrl || 'https://via.placeholder.com/100x150'}" alt="${filme.titulo}" class="media-img"></td>
-                    <td>${filme.titulo || 'N/A'}</td>
-                    <td>${filme.produtora || 'N/A'}</td>
-                    <td>${formatDate(filme.dataLancamento)}</td>
-                    <td>${trailerBtn}</td>
-                </tr>`
-            }).join('');
-        } else {
-            filmesBody.innerHTML = '<tr><td colspan="5" class="text-center">Este fã não marcou nenhum filme como assistido.</td></tr>';
-        }
-
+        if (filmes.length > 0) { filmesBody.innerHTML = filmes.map(filme => { const trailerBtn = filme.trailerUrl ? `<a href="${filme.trailerUrl}" target="_blank" class="btn btn-danger btn-sm"><i class="bi bi-youtube"></i></a>` : `<button class="btn btn-secondary btn-sm" disabled><i class="bi bi-youtube"></i></button>`; return `<tr><td><img src="${filme.posterUrl || 'https://via.placeholder.com/100x150'}" alt="${filme.titulo}" class="media-img"></td><td>${filme.titulo || 'N/A'}</td><td>${filme.produtora || 'N/A'}</td><td>${formatDate(filme.dataLancamento)}</td><td>${trailerBtn}</td></tr>` }).join(''); } else { filmesBody.innerHTML = '<tr><td colspan="5" class="text-center">Este fã não marcou nenhum filme como assistido.</td></tr>'; }
         const hqs = perfil.hqsLidas || [];
         document.getElementById('totalHqsBadge').textContent = hqs.length;
-        if (hqs.length > 0) {
-            hqsBody.innerHTML = hqs.map(hq => `
-                <tr>
-                    <td><img src="${hq.coverUrl || 'https://via.placeholder.com/100x150'}" alt="${hq.titulo}" class="media-img"></td>
-                    <td>${hq.titulo || 'N/A'}</td>
-                    <td>${hq.editora || 'N/A'}</td>
-                    <td>${hq.edicao || 'N/A'}</td>
-                    <td>${formatDate(hq.dataLancamento)}</td>
-                </tr>`).join('');
-        } else {
-            hqsBody.innerHTML = '<tr><td colspan="5" class="text-center">Este fã não marcou nenhuma HQ como lida.</td></tr>';
-        }
+        if (hqs.length > 0) { hqsBody.innerHTML = hqs.map(hq => `<tr><td><img src="${hq.coverUrl || 'https://via.placeholder.com/100x150'}" alt="${hq.titulo}" class="media-img"></td><td>${hq.titulo || 'N/A'}</td><td>${hq.editora || 'N/A'}</td><td>${hq.edicao || 'N/A'}</td><td>${formatDate(hq.dataLancamento)}</td></tr>`).join(''); } else { hqsBody.innerHTML = '<tr><td colspan="5" class="text-center">Este fã não marcou nenhuma HQ como lida.</td></tr>'; }
     }
 </script>
 </body>

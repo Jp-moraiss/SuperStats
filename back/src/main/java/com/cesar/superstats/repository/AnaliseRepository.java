@@ -18,4 +18,9 @@ public class AnaliseRepository {
         String sql = "SELECT * FROM vw_popularidade_empresas ORDER BY total_consumido DESC";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PopularidadeEmpresaDTO.class));
     }
+
+    public void callSpProcessaConquistasEmLote() {
+        String sql = "CALL sp_processa_conquistas_em_lote()";
+        jdbcTemplate.update(sql);
+    }
 }

@@ -69,6 +69,12 @@ public class FaController {
         }
     }
 
+    @PutMapping("/perfil/{id}")
+    public ResponseEntity<Void> atualizarPerfil(@PathVariable Integer id, @RequestBody FaUpdatePerfilDTO dto) {
+        service.atualizarPerfil(id, dto);
+        return ResponseEntity.noContent().build(); // Retorna 204 No Content, indicando sucesso
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Integer id) {
         try {

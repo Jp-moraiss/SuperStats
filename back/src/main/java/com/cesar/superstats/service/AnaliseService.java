@@ -16,4 +16,8 @@ public class AnaliseService {
     public List<PopularidadeEmpresaDTO> getPopularidadeEmpresas() {
         return repository.findPopularidadeEmpresas();
     }
+
+    public void processarConquistasEmLote() {
+        repository.callSpProcessaConquistasEmLote();
+    }
 }

@@ -22,6 +22,7 @@ public class FaService {
     private final FaRepository repository;
     private final PasswordEncoder encoder;
     private final ObjectMapper objectMapper;
+    private final ConquistaService conquistaService;
 
     public Optional<Fa> findById(Integer id) {
         if (id == null) {
@@ -92,6 +93,13 @@ public class FaService {
         repository.update(id, fa);
     }
 
+    public void atualizarPerfil(Integer faId, FaUpdatePerfilDTO dto) {
+        if (findById(faId).isEmpty()) {
+            throw new ResourceNotFoundException("Fã com ID " + faId + " não encontrado.");
+        }
+        repository.callSpAtualizaPerfil(faId, dto.getOcupacao(), dto.getUnivFav());
+    }
+
     public void deleteById(Integer id) {
         if (repository.findById(id).isEmpty()) {
             throw new RuntimeException("Fã não encontrado com o id: " + id);
@@ -120,6 +128,8 @@ public class FaService {
     }
 
     public PerfilCompletoResponseDTO getPerfilCompleto(Integer faId) {
+        conquistaService.atualizarConquistasParaFa(faId);
+
         PerfilViewDTO viewData = repository.findPerfilCompletoById(faId)
                 .orElseThrow(() -> new ResourceNotFoundException("Perfil não encontrado para o fã com ID: " + faId));
 
@@ -133,6 +143,7 @@ public class FaService {
         response.setTempoGeekFormatado(viewData.getTempoGeekFormatado());
         response.setUnivFav(viewData.getUnivFav());
         response.setPerfilConsumo(viewData.getPerfilConsumo());
+        response.setConquistas(viewData.getConquistas());
 
         try {
             if (viewData.getFilmesAssistidosJson() != null) {

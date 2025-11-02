@@ -12,4 +12,5 @@ public class PerfilCompletoResponseDTO {
     private String tempoGeekFormatado;
     private List<SimpleFilmeDTO> filmesAssistidos;
     private List<SimpleHqDTO> hqsLidas;
+    private String conquistas;
 }

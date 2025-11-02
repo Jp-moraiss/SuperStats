@@ -157,6 +157,11 @@ public class FaRepository {
         return jdbcTemplate.queryForObject(sql, String.class, faId);
     }
 
+    public void callSpAtualizaPerfil(Integer faId, String ocupacao, String univFav) {
+        String sql = "CALL sp_atualiza_perfil_fa(?, ?, ?)";
+        jdbcTemplate.update(sql, faId, ocupacao, univFav);
+    }
+
     private static class FaRowMapper implements RowMapper<Fa> {
         @Override
         public Fa mapRow(ResultSet rs, int rowNum) throws SQLException {

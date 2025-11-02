@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <title>SuperStats - Gerenciar Fãs</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         body { padding: 20px; background-color: #f4f4f4; }
         .section { margin-bottom: 2rem; }
-        .table-hover tbody tr:hover {
-            cursor: pointer;
-            background-color: #f0f0f0;
-        }
+        .table-hover tbody tr:hover { cursor: pointer; background-color: #f0f0f0; }
     </style>
 </head>
 <body>
@@ -23,16 +21,20 @@
         </div>
     </div>
 
+    <div class="card bg-light border-warning mb-4">
+        <div class="card-body text-center">
+            <h5 class="card-title">Área Administrativa</h5>
+            <p class="card-text text-muted">Execute tarefas de manutenção para garantir que os dados estejam consistentes.</p>
+            <button class="btn btn-warning" onclick="recalcularConquistas()">
+                <i class="bi bi-arrow-repeat"></i> Recalcular Todas as Conquistas
+            </button>
+        </div>
+    </div>
+
     <ul class="nav nav-tabs" id="fasTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#todos-fas-pane" type="button" role="tab">Todos os Fãs</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#buscar-fas-pane" type="button" role="tab">Buscar por Filme</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#analise-pane" type="button" role="tab">Análise de Consumo 📊</button>
-        </li>
+        <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#todos-fas-pane" type="button" role="tab">Todos os Fãs</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#buscar-fas-pane" type="button" role="tab">Buscar por Filme</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#analise-pane" type="button" role="tab">Análise de Consumo 📊</button></li>
     </ul>
 
     <div class="tab-content" id="fasTabContent">
@@ -45,28 +47,13 @@
                 <tbody id="todosOsFasTableBody"></tbody>
             </table>
         </div>
-
         <div class="tab-pane fade p-3 border border-top-0" id="buscar-fas-pane" role="tabpanel">
-            <div class="section">
-                <h3>Buscar Fãs por Filme Assistido</h3>
-                <p class="text-muted small">Digite o título de um filme para ver a lista de fãs que o marcaram como assistido.</p>
-                <div class="input-group">
-                    <input type="text" id="filmeTituloInput" class="form-control" placeholder="Ex: The Dark Knight">
-                    <button class="btn btn-primary" type="button" onclick="buscarFasPorFilme()">Buscar Fãs</button>
-                </div>
-            </div>
+            <div class="section"><h3>Buscar Fãs por Filme Assistido</h3><p class="text-muted small">Digite o título de um filme para ver a lista de fãs que o marcaram como assistido.</p><div class="input-group"><input type="text" id="filmeTituloInput" class="form-control" placeholder="Ex: The Dark Knight"><button class="btn btn-primary" type="button" onclick="buscarFasPorFilme()">Buscar Fãs</button></div></div>
             <hr>
-            <div class="section">
-                <h4>Resultados da Busca</h4>
-                <div id="resultadoBuscaFas">
-                    <p>Os resultados da busca aparecerão aqui.</p>
-                </div>
-            </div>
+            <div class="section"><h4>Resultados da Busca</h4><div id="resultadoBuscaFas"><p>Os resultados da busca aparecerão aqui.</p></div></div>
         </div>
-
         <div class="tab-pane fade p-3 border border-top-0" id="analise-pane" role="tabpanel">
-            <h4>Perfil de Consumo dos Fãs</h4>
-            <p class="text-muted small">Segmentação de fãs baseada nos seus hábitos de consumo de filmes e HQs.</p>
+            <h4>Perfil de Consumo dos Fãs</h4><p class="text-muted small">Segmentação de fãs baseada nos seus hábitos de consumo de filmes e HQs.</p>
             <table class="table table-hover">
                 <thead>
                 <tr><th>ID</th><th>Nome</th><th>Username</th><th>Perfil de Consumo</th></tr>
@@ -79,152 +66,35 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const baseUrl = 'http://localhost:8080/fa';
+    const apiBaseUrl = 'http://localhost:8080';
 
-    document.addEventListener('DOMContentLoaded', () => {
-        if (!localStorage.getItem('jwtToken')) {
-            window.location.href = 'login.html';
-        } else {
-            refreshAll();
-        }
-    });
+    document.addEventListener('DOMContentLoaded', () => { if (!localStorage.getItem('jwtToken')) { window.location.href = 'login.html'; } else { refreshAll(); } });
+    function refreshAll() { fetchAllFas(); fetchPerfilConsumo(); }
+    function handleLogout() { localStorage.removeItem('jwtToken'); window.location.href = 'login.html'; }
+    async function fetchWithAuth(url, options = {}) { const token = localStorage.getItem('jwtToken'); if (!token) { handleLogout(); } const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers }; const response = await fetch(url, { ...options, headers }); if (response.status === 401 || response.status === 403) { handleLogout(); } return response; }
 
-    function refreshAll() {
-        fetchAllFas();
-        fetchPerfilConsumo();
-    }
-
-    function handleLogout() {
-        localStorage.removeItem('jwtToken');
-        window.location.href = 'login.html';
-    }
-
-    // Função central para requisições autenticadas
-    async function fetchWithAuth(url, options = {}) {
-        const token = localStorage.getItem('jwtToken');
-        if (!token) { handleLogout(); }
-
-        const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...options.headers };
-        const response = await fetch(url, { ...options, headers });
-
-        if (response.status === 401 || response.status === 403) { handleLogout(); }
-
-        // Retorna a resposta completa para poder checar o status code antes de dar .json()
-        return response;
-    }
-
-    // Busca todos os fãs e preenche a tabela principal
     async function fetchAllFas() {
         const tbody = document.getElementById('todosOsFasTableBody');
         tbody.innerHTML = '<tr><td colspan="4" class="text-center">Carregando...</td></tr>';
         try {
-            const res = await fetchWithAuth(baseUrl);
-
-            if (res.status === 204) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhum fã cadastrado.</td></tr>';
-                return;
-            }
+            const res = await fetchWithAuth(`${apiBaseUrl}/fa`);
+            if (res.status === 204) { tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhum fã cadastrado.</td></tr>'; return; }
             if (!res.ok) throw new Error(`Erro na resposta do servidor: ${res.status}`);
-
             const data = await res.json();
             tbody.innerHTML = "";
-
             data.forEach(fa => {
                 const tr = document.createElement('tr');
                 tr.onclick = () => verPerfil(fa.id);
-                tr.innerHTML = `
-                    <td>${fa.id}</td>
-                    <td>${fa.nome}</td>
-                    <td>${fa.username}</td>
-                    <td>${fa.email}</td>
-                `;
+                tr.innerHTML = `<td>${fa.id}</td><td>${fa.nome}</td><td>${fa.username}</td><td>${fa.email}</td>`;
                 tbody.appendChild(tr);
             });
-        } catch(e) {
-            console.error(e);
-            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">Erro ao carregar fãs.</td></tr>`;
-        }
+        } catch(e) { console.error(e); tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">Erro ao carregar fãs.</td></tr>`; }
     }
 
-    async function fetchPerfilConsumo() {
-        const tbody = document.getElementById('analiseConsumoTableBody');
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center">Analisando...</td></tr>';
-        try {
-            const res = await fetchWithAuth(`${baseUrl}/perfil-consumo`);
-            if (!res.ok) throw new Error(`Erro na resposta do servidor: ${res.status}`);
-            const data = await res.json();
-
-            tbody.innerHTML = "";
-            if (data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhum fã consumiu mídias ainda.</td></tr>';
-                return;
-            }
-
-            data.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.onclick = () => verPerfil(item.faId);
-
-                // Adiciona um selo colorido para o perfil
-                let badgeClass = 'bg-secondary';
-                if (item.tipoConsumo === 'Ambos') badgeClass = 'bg-success';
-                if (item.tipoConsumo === 'Apenas Filmes') badgeClass = 'bg-primary';
-                if (item.tipoConsumo === 'Apenas HQs') badgeClass = 'bg-info text-dark';
-
-                tr.innerHTML = `
-                    <td>${item.faId}</td>
-                    <td>${item.nome}</td>
-                    <td>${item.username}</td>
-                    <td><span class="badge ${badgeClass}">${item.tipoConsumo}</span></td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-        } catch(e) {
-            console.error('Erro ao buscar perfil de consumo:', e);
-            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">Erro ao carregar análise.</td></tr>`;
-        }
-    }
-
-    async function buscarFasPorFilme() {
-        const titulo = document.getElementById('filmeTituloInput').value;
-        const container = document.getElementById('resultadoBuscaFas');
-
-        if (!titulo) {
-            container.innerHTML = '<p class="text-warning">Por favor, digite um título de filme.</p>';
-            return;
-        }
-
-        container.innerHTML = '<div class="spinner-border text-primary"></div>';
-        try {
-            const url = new URL(`${baseUrl}/por-filme-assistido`);
-            url.searchParams.append('titulo', titulo);
-
-            const res = await fetchWithAuth(url.toString());
-            if (!res.ok) throw new Error(`Erro na busca: ${res.status}`);
-
-            const results = await res.json();
-
-            if (results.length === 0) {
-                container.innerHTML = '<p>Nenhum fã encontrado para este filme.</p>';
-                return;
-            }
-
-            let listHtml = '<ul class="list-group">';
-            results.forEach(fa => {
-                listHtml += `<li class="list-group-item">${fa.nome} (Username: ${fa.username})</li>`;
-            });
-            listHtml += '</ul>';
-            container.innerHTML = listHtml;
-
-        } catch (error) {
-            container.innerHTML = `<p class="text-danger">Erro ao buscar fãs: ${error.message}</p>`;
-            console.error(error);
-        }
-    }
-
-    function verPerfil(faId) {
-        window.location.href = `perfil.html?id=${faId}`;
-    }
+    async function fetchPerfilConsumo() { const tbody = document.getElementById('analiseConsumoTableBody'); tbody.innerHTML = '<tr><td colspan="4" class="text-center">Analisando...</td></tr>'; try { const res = await fetchWithAuth(`${apiBaseUrl}/fa/perfil-consumo`); if (!res.ok) throw new Error(`Erro na resposta do servidor: ${res.status}`); const data = await res.json(); tbody.innerHTML = ""; if (data.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhum fã consumiu mídias ainda.</td></tr>'; return; } data.forEach(item => { const tr = document.createElement('tr'); tr.onclick = () => verPerfil(item.faId); let badgeClass = 'bg-secondary'; if (item.tipoConsumo === 'Ambos') badgeClass = 'bg-success'; if (item.tipoConsumo === 'Apenas Filmes') badgeClass = 'bg-primary'; if (item.tipoConsumo === 'Apenas HQs') badgeClass = 'bg-info text-dark'; tr.innerHTML = `<td>${item.faId}</td><td>${item.nome}</td><td>${item.username}</td><td><span class="badge ${badgeClass}">${item.tipoConsumo}</span></td>`; tbody.appendChild(tr); }); } catch(e) { console.error('Erro ao buscar perfil de consumo:', e); tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">Erro ao carregar análise.</td></tr>`; } }
+    async function buscarFasPorFilme() { const titulo = document.getElementById('filmeTituloInput').value; const container = document.getElementById('resultadoBuscaFas'); if (!titulo) { container.innerHTML = '<p class="text-warning">Por favor, digite um título de filme.</p>'; return; } container.innerHTML = '<div class="spinner-border text-primary"></div>'; try { const url = new URL(`${apiBaseUrl}/fa/por-filme-assistido`); url.searchParams.append('titulo', titulo); const res = await fetchWithAuth(url.toString()); if (!res.ok) throw new Error(`Erro na busca: ${res.status}`); const results = await res.json(); if (results.length === 0) { container.innerHTML = '<p>Nenhum fã encontrado para este filme.</p>'; return; } let listHtml = '<ul class="list-group">'; results.forEach(fa => { listHtml += `<li class="list-group-item">${fa.nome} (Username: ${fa.username})</li>`; }); listHtml += '</ul>'; container.innerHTML = listHtml; } catch (error) { container.innerHTML = `<p class="text-danger">Erro ao buscar fãs: ${error.message}</p>`; console.error(error); } }
+    function verPerfil(faId) { window.location.href = `perfil.html?id=${faId}`; }
+    async function recalcularConquistas() { if (!confirm('Esta é uma operação pesada que irá recalcular as conquistas para TODOS os usuários. Deseja continuar?')) { return; } try { const res = await fetchWithAuth(`${apiBaseUrl}/analises/processar-conquistas`, { method: 'POST' }); if (!res.ok) { const errorText = await res.text(); throw new Error(errorText || 'Falha ao iniciar o processamento.'); } alert('Processamento de conquistas em lote concluído com sucesso! Os perfis serão atualizados na próxima visita.'); } catch (error) { alert('Erro ao iniciar o processamento: ' + error.message); console.error(error); } }
 </script>
 </body>
 </html>

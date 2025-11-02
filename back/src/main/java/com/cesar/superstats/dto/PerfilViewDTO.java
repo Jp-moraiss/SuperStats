@@ -11,5 +11,6 @@ public class PerfilViewDTO {
     private String perfilConsumo;
     private String filmesAssistidosJson;
     private String hqsLidasJson;
+    private String conquistas;
 
 }
