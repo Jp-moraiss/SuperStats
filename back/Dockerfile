@@ -1,5 +1,3 @@
-# --- Estágio 1: Build (Construção) ---
-# Usamos uma imagem oficial do Maven com o JDK 21, conforme seu pom.xml
 FROM maven:3.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
