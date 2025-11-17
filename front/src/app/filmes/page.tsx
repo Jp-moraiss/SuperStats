@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import styles from './MoviesPage.module.css';
 import { debounce } from 'lodash';
-import { FaEye } from 'react-icons/fa';
+import { FaFilm, FaCheckCircle, FaStar, FaPlus, FaEye } from 'react-icons/fa';
 
 // Componentes
 import MovieCard from "../../components/movies/MovieCard";
@@ -200,7 +200,12 @@ export default function MoviesPage() {
 
   const renderContent = () => {
     if (isLoading) {
-      return <div className={styles.loadingSpinner}></div>;
+      return (
+        <div className={styles.loadingContainer}>
+          <div className={styles.loadingSpinner}></div>
+          <p>Carregando filmes...</p>
+        </div>
+      );
     }
     
     switch (activeTab) {
@@ -322,10 +327,18 @@ export default function MoviesPage() {
       {selectedTrailer && <TrailerModal trailerUrl={selectedTrailer} onClose={() => setSelectedTrailer(null)} />}
       
       <div className={styles.tabsContainer}>
-        <button onClick={() => setActiveTab('catalogo')} className={activeTab === 'catalogo' ? styles.active : ''}>Catálogo</button>
-        <button onClick={() => setActiveTab('assistidos')} className={activeTab === 'assistidos' ? styles.active : ''}>Meus Assistidos</button>
-        <button onClick={() => setActiveTab('popularidade')} className={activeTab === 'popularidade' ? styles.active : ''}>Populares</button>
-        <button onClick={() => setActiveTab('gerenciar')} className={activeTab === 'gerenciar' ? styles.active : ''}>Adicionar Filme</button>
+        <button onClick={() => setActiveTab('catalogo')} className={activeTab === 'catalogo' ? styles.active : ''}>
+          <FaFilm /> Catálogo
+        </button>
+        <button onClick={() => setActiveTab('assistidos')} className={activeTab === 'assistidos' ? styles.active : ''}>
+          <FaCheckCircle /> Meus Assistidos
+        </button>
+        <button onClick={() => setActiveTab('popularidade')} className={activeTab === 'popularidade' ? styles.active : ''}>
+          <FaStar /> Populares
+        </button>
+        <button onClick={() => setActiveTab('gerenciar')} className={activeTab === 'gerenciar' ? styles.active : ''}>
+          <FaPlus /> Adicionar Filme
+        </button>
       </div>
 
       <div className={styles.tabContent}>

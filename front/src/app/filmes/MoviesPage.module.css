@@ -27,6 +27,9 @@
   transition: all 0.2s ease-in-out;
   cursor: pointer;
   transform: skew(-10deg); /* Efeito inclinado */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .tabsContainer button:hover {
@@ -53,12 +56,30 @@
   gap: 2.5rem;
 }
 
-/* Indicador de carregamento */
+/* =======================================
+⏳ LOADING
+======================================= */
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1.5rem;
+}
+
+.loadingContainer p {
+  font-family: 'Bangers', cursive;
+  font-size: 2rem;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 var(--color-secondary);
+}
+
 .loadingSpinner {
-  margin: 4rem auto;
-  width: 50px;
-  height: 50px;
-  border: 5px solid var(--border-color);
+  width: 60px;
+  height: 60px;
+  border: 6px solid var(--color-secondary);
   border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;

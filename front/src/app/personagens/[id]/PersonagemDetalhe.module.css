@@ -1,0 +1,441 @@
+/* =======================================
+🦸 DETALHES DO PERSONAGEM - DESIGN MODERNO COMIC
+======================================= */
+
+.detalheContainer {
+  padding: clamp(1rem, 4vw, 2.5rem);
+  max-width: 1600px;
+  margin: auto;
+}
+
+.backButton {
+  font-family: 'Permanent Marker', cursive;
+  background: var(--color-primary);
+  color: #fff;
+  border: 3px solid var(--color-secondary);
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 4px 4px 0 var(--color-secondary);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.backButton:hover {
+  background: var(--color-secondary);
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--color-secondary);
+}
+
+.headerSection {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.characterName {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: var(--color-primary);
+  margin: 0;
+  text-shadow: 
+    -3px -3px 0 var(--color-secondary),
+     3px -3px 0 var(--color-secondary),
+    -3px  3px 0 var(--color-secondary),
+     3px  3px 0 var(--color-secondary),
+     6px  6px 0 #000;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.imageSection {
+  position: relative;
+}
+
+.imageWrapper {
+  width: 100%;
+  aspect-ratio: 2/3;
+  position: relative;
+  border: 4px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  border-radius: 15px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.imageWrapper:hover {
+  transform: translateY(-8px);
+  box-shadow: 12px 12px 0 var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.characterImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.imageWrapper:hover .characterImage {
+  transform: scale(1.05);
+}
+
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.infoCard {
+  background: #fff;
+  border: 4px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  padding: 2rem;
+  border-radius: 15px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.infoCard:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0 var(--color-secondary);
+}
+
+.infoCardTitle {
+  font-family: 'Bangers', cursive;
+  font-size: 2rem;
+  color: var(--color-primary);
+  margin: 0 0 0.5rem 0;
+  text-shadow: 2px 2px 0 var(--color-secondary);
+  letter-spacing: 1px;
+}
+
+.infoSubtitle {
+  font-family: 'Comic Neue', cursive;
+  font-size: 1.1rem;
+  color: var(--text-secondary-color, #666);
+  margin: 0 0 1rem 0;
+  font-style: italic;
+}
+
+.divider {
+  border: none;
+  border-top: 3px solid var(--color-secondary);
+  margin: 1.5rem 0;
+}
+
+.infoGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-family: 'Comic Neue', cursive;
+  font-size: 1rem;
+}
+
+.infoItem strong {
+  color: var(--color-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.infoItem span {
+  color: var(--color-text);
+  padding-left: 0.5rem;
+}
+
+/* =======================================
+📊 POWERSTATS
+======================================= */
+
+.statBarContainer {
+  margin-bottom: 1.5rem;
+}
+
+.statHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.statName {
+  font-family: 'Bangers', cursive;
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  text-shadow: 1px 1px 0 var(--color-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statValue {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1.3rem;
+  color: var(--color-secondary);
+  background: var(--color-primary);
+  color: #fff;
+  padding: 0.2rem 0.6rem;
+  border-radius: 8px;
+  border: 2px solid var(--color-secondary);
+  box-shadow: 2px 2px 0 var(--color-secondary);
+}
+
+.statBar {
+  width: 100%;
+  height: 30px;
+  background: var(--color-accent);
+  border: 3px solid var(--color-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.statBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 0.5rem;
+  transition: width 0.6s ease;
+  position: relative;
+  box-shadow: inset -2px 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.statBarFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.statBarText {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1rem;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+/* =======================================
+📋 LISTAS (BASES E ALTER EGOS)
+======================================= */
+
+.listsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.listCard {
+  background: #fff;
+  border: 4px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  padding: 2rem;
+  border-radius: 15px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.listCard:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0 var(--color-secondary);
+}
+
+.listCardTitle {
+  font-family: 'Bangers', cursive;
+  font-size: 1.8rem;
+  color: var(--color-primary);
+  margin: 0 0 1.5rem 0;
+  text-shadow: 2px 2px 0 var(--color-secondary);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.listGroup {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.listItem {
+  font-family: 'Comic Neue', cursive;
+  font-size: 1.1rem;
+  color: var(--color-text);
+  padding: 0.8rem 1rem;
+  background: var(--color-accent);
+  border: 2px solid var(--color-secondary);
+  border-radius: 8px;
+  box-shadow: 2px 2px 0 var(--color-secondary);
+  transition: all 0.2s ease;
+}
+
+.listItem:hover {
+  background: var(--color-primary);
+  color: #fff;
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--color-secondary);
+}
+
+.emptyList {
+  font-family: 'Comic Neue', cursive;
+  font-size: 1.1rem;
+  color: var(--text-secondary-color, #999);
+  font-style: italic;
+  text-align: center;
+  padding: 2rem;
+  background: var(--color-accent);
+  border: 2px dashed var(--color-secondary);
+  border-radius: 8px;
+}
+
+/* =======================================
+⏳ LOADING & ERROR
+======================================= */
+
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1.5rem;
+}
+
+.loadingContainer p,
+.errorContainer p {
+  font-family: 'Bangers', cursive;
+  font-size: 2rem;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 var(--color-secondary);
+}
+
+.errorContainer h2 {
+  font-family: 'Bangers', cursive;
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 var(--color-secondary);
+  margin: 0;
+}
+
+.loadingSpinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid var(--color-secondary);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =======================================
+📱 RESPONSIVIDADE
+======================================= */
+
+@media (max-width: 1024px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .imageWrapper {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .detalheContainer {
+    padding: 1rem;
+  }
+
+  .characterName {
+    font-size: 2rem;
+  }
+
+  .infoCard,
+  .listCard {
+    padding: 1.5rem;
+  }
+
+  .listsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .statBar {
+    height: 25px;
+  }
+
+  .statName {
+    font-size: 1rem;
+  }
+
+  .statValue {
+    font-size: 1.1rem;
+    padding: 0.15rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .characterName {
+    font-size: 1.8rem;
+  }
+
+  .infoCardTitle,
+  .listCardTitle {
+    font-size: 1.5rem;
+  }
+
+  .statBar {
+    height: 22px;
+  }
+
+  .statBarText {
+    font-size: 0.9rem;
+  }
+}
+

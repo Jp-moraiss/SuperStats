@@ -2,6 +2,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import styles from './HqsPage.module.css';
 import { debounce } from 'lodash';
+import { FaBook, FaCheckCircle, FaExclamationTriangle, FaPlus } from 'react-icons/fa';
 
 // Componentes
 import HqCard from "../../components/hqs/HqCard";
@@ -202,7 +203,14 @@ export default function HqsPage() {
     }, [hqs, filterQuery]);
 
     const renderContent = () => {
-        if (isLoading) { return <div className={styles.loadingSpinner}></div>; }
+        if (isLoading) {
+            return (
+                <div className={styles.loadingContainer}>
+                    <div className={styles.loadingSpinner}></div>
+                    <p>Carregando HQs...</p>
+                </div>
+            );
+        }
         
         switch (activeTab) {
           case 'catalogo':
@@ -339,10 +347,18 @@ export default function HqsPage() {
     return (
         <div className={styles.hqsContainer}>
             <div className={styles.tabsContainer}>
-                <button onClick={() => setActiveTab('catalogo')} className={activeTab === 'catalogo' ? styles.active : ''}>Catálogo</button>
-                <button onClick={() => setActiveTab('lidas')} className={activeTab === 'lidas' ? styles.active : ''}>HQs Lidas</button>
-                <button onClick={() => setActiveTab('naoLidas')} className={activeTab === 'naoLidas' ? styles.active : ''}>Baixo Engajamento</button>
-                <button onClick={() => setActiveTab('gerenciar')} className={activeTab === 'gerenciar' ? styles.active : ''}>Adicionar</button>
+                <button onClick={() => setActiveTab('catalogo')} className={activeTab === 'catalogo' ? styles.active : ''}>
+                    <FaBook /> Catálogo
+                </button>
+                <button onClick={() => setActiveTab('lidas')} className={activeTab === 'lidas' ? styles.active : ''}>
+                    <FaCheckCircle /> HQs Lidas
+                </button>
+                <button onClick={() => setActiveTab('naoLidas')} className={activeTab === 'naoLidas' ? styles.active : ''}>
+                    <FaExclamationTriangle /> Baixo Engajamento
+                </button>
+                <button onClick={() => setActiveTab('gerenciar')} className={activeTab === 'gerenciar' ? styles.active : ''}>
+                    <FaPlus /> Adicionar
+                </button>
             </div>
             <div className={styles.tabContent}>
                 {renderContent()}

@@ -12,9 +12,9 @@ type AddMovieFormProps = {
 
 export default function AddMovieForm({ query, onQueryChange, isLoading }: AddMovieFormProps) {
   return (
-    <div className={`card ${styles.addFormContainer}`}>
-      <h2 className="cardTitle">Adicionar Novo Filme</h2>
-      <p style={{ marginBottom: '5px' }}>Busque na TMDB pelo título original (em inglês)</p>
+    <div className={styles.addFormContainer}>
+      <h2 className={styles.sectionTitle}>Adicionar Novo Filme</h2>
+      <p className={styles.helpText}>Busque na TMDB pelo título original (em inglês)</p>
       
       <div className={styles.searchWrapper}>
         <div className={styles.searchInputContainer}>

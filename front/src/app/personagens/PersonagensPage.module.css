@@ -1,0 +1,687 @@
+/* src/app/personagens/PersonagensPage.module.css */
+
+.personagensContainer {
+  padding: clamp(1rem, 4vw, 2.5rem);
+  max-width: 1600px;
+  margin: auto;
+}
+
+/* Sistema de Abas (Tabs) */
+.tabsContainer {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 6px solid var(--color-secondary);
+  padding-bottom: 1rem;
+}
+
+.tabsContainer button {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1.3rem;
+  padding: 0.5rem 1.5rem;
+  border: 3px solid var(--color-secondary);
+  background: #fff;
+  color: var(--color-secondary);
+  box-shadow: var(--shadow-light);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  transform: skew(-10deg);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.tabsContainer button:hover {
+  transform: skew(-10deg) translateY(-4px);
+  box-shadow: 6px 6px 0 var(--color-secondary);
+}
+
+.tabsContainer button.active {
+  background: var(--color-primary);
+  color: #fff;
+  transform: skew(-10deg) translateY(-6px);
+  box-shadow: 8px 8px 0 var(--color-primary-dark);
+}
+
+.tabContent {
+  animation: fadeInComic 0.5s ease;
+}
+
+@keyframes fadeInComic {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Grid para exibir os personagens */
+.personagensGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2.5rem;
+}
+
+/* Indicador de carregamento */
+.loadingSpinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid var(--color-secondary);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* =======================================
+🔍 ESTILOS PARA O FILTRO DO CATÁLOGO
+======================================= */
+
+.filterContainer {
+  margin-bottom: 2.5rem;
+}
+
+.filterInput {
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.1rem;
+  font-family: 'Comic Neue', cursive;
+  border-radius: 12px;
+  border: 3px solid var(--color-secondary);
+  box-shadow: 3px 3px 0 var(--color-secondary);
+  transition: all 0.2s ease-in-out;
+  background: #fff;
+}
+
+.filterInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 4px 4px 0 var(--color-primary);
+  transform: translate(-2px, -2px);
+}
+
+.filterInput::placeholder {
+  color: var(--text-secondary-color, #999);
+  font-style: italic;
+}
+
+.noResults {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+  color: var(--text-secondary-color, #666);
+  font-family: 'Comic Neue', cursive;
+  font-style: italic;
+  padding: 2rem;
+  background: #fff;
+  border: 3px dashed var(--color-secondary);
+  border-radius: 12px;
+}
+
+/* =======================================
+🦸 CARDS DE PERSONAGENS
+======================================= */
+
+.personagemCard {
+  background: #fff;
+  border: 4px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.personagemCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.6s ease-in-out;
+  z-index: 1;
+}
+
+.personagemCard:hover::before {
+  left: 150%;
+}
+
+.personagemCard:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 12px 12px 0 var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.cardImage {
+  width: 100%;
+  height: 400px;
+  position: relative;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 4px solid var(--color-secondary);
+  overflow: hidden;
+}
+
+.personagemCard:hover .cardImage {
+  border-bottom-color: var(--color-primary);
+}
+
+.personagemImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.personagemCard:hover .personagemImage {
+  transform: scale(1.1);
+}
+
+.cardBody {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex: 1;
+}
+
+.personagemNome {
+  font-family: 'Bangers', cursive;
+  font-size: 1.6rem;
+  color: var(--color-primary);
+  margin: 0;
+  text-shadow: 1px 1px 0 var(--color-secondary);
+  line-height: 1.2;
+}
+
+.personagemNomeCompleto {
+  font-family: 'Comic Neue', cursive;
+  font-size: 0.95rem;
+  color: var(--text-secondary-color, #666);
+  margin: 0;
+  font-style: italic;
+}
+
+.personagemEditora {
+  font-family: 'Comic Neue', cursive;
+  font-size: 1rem;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.deleteButton {
+  font-family: 'Permanent Marker', cursive;
+  background: var(--color-primary);
+  color: #fff;
+  border: 3px solid var(--color-secondary);
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  box-shadow: 3px 3px 0 var(--color-secondary);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  margin-top: auto;
+  width: 100%;
+}
+
+.deleteButton:hover {
+  background: #dc3545;
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--color-secondary);
+}
+
+/* =======================================
+➕ ADICIONAR SECTION
+======================================= */
+
+.catalogoSection,
+.adicionarSection {
+  min-height: 300px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.sectionTitle {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  color: var(--color-primary);
+  margin: 0;
+  text-shadow: 2px 2px 0 var(--color-secondary);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.refreshButton {
+  font-family: 'Permanent Marker', cursive;
+  background: var(--color-primary);
+  color: #fff;
+  border: 3px solid var(--color-secondary);
+  padding: 0.7rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 4px 4px 0 var(--color-secondary);
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+.refreshButton:hover {
+  background: var(--color-secondary);
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--color-secondary);
+}
+
+.addFormCard,
+.resultsCard {
+  background: #fff;
+  border: 4px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 2rem;
+}
+
+.addFormCard::before,
+.resultsCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.6s ease-in-out;
+}
+
+.addFormCard:hover::before,
+.resultsCard:hover::before {
+  left: 150%;
+}
+
+.addFormCard:hover,
+.resultsCard:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0 var(--color-secondary);
+}
+
+.helpText {
+  font-family: 'Comic Neue', cursive;
+  font-size: 0.95rem;
+  color: var(--text-secondary-color, #666);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.searchWrapper {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.searchInputContainer {
+  flex: 1;
+  min-width: 300px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 1rem;
+  color: var(--color-secondary);
+  font-size: 1.2rem;
+  z-index: 1;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 3px solid var(--color-secondary);
+  border-radius: 12px;
+  font-family: 'Comic Neue', cursive;
+  font-size: 1.1rem;
+  box-shadow: 3px 3px 0 var(--color-secondary);
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 4px 4px 0 var(--color-primary);
+  transform: translate(-2px, -2px);
+}
+
+.inputSpinner {
+  position: absolute;
+  right: 1rem;
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--color-secondary);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.searchButton {
+  font-family: 'Permanent Marker', cursive;
+  background: var(--color-primary);
+  color: #fff;
+  border: 3px solid var(--color-secondary);
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  box-shadow: 4px 4px 0 var(--color-secondary);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.searchButton:hover:not(:disabled) {
+  background: var(--color-secondary);
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--color-secondary);
+}
+
+.searchButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.resultsTitle {
+  font-family: 'Bangers', cursive;
+  font-size: 1.8rem;
+  color: var(--color-primary);
+  margin: 0 0 1.5rem 0;
+  text-shadow: 2px 2px 0 var(--color-secondary);
+}
+
+.searchResultsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.searchResultItem {
+  background: var(--color-accent);
+  border: 3px solid var(--color-secondary);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.2s ease;
+  box-shadow: 3px 3px 0 var(--color-secondary);
+  position: relative;
+}
+
+.searchResultItem:hover:not(.adding) {
+  background: var(--color-primary);
+  color: #fff;
+  transform: translate(-3px, -3px);
+  box-shadow: 5px 5px 0 var(--color-secondary);
+}
+
+.searchResultItem.adding {
+  opacity: 0.6;
+  cursor: wait;
+  pointer-events: none;
+}
+
+.resultImage {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid var(--color-secondary);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.resultImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.resultInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.resultName {
+  font-family: 'Bangers', cursive;
+  font-size: 1.3rem;
+  color: var(--color-primary);
+  display: block;
+}
+
+.searchResultItem:hover .resultName {
+  color: #fff;
+}
+
+.resultFullName {
+  font-family: 'Comic Neue', cursive;
+  font-size: 0.9rem;
+  color: var(--text-secondary-color, #666);
+  display: block;
+}
+
+.searchResultItem:hover .resultFullName {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.addingSpinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--color-secondary);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+/* =======================================
+📭 EMPTY STATE
+======================================= */
+
+.emptyState {
+  background: #fff;
+  border: 4px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  border-radius: 20px;
+  padding: 4rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.emptyState::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.6s ease-in-out;
+}
+
+.emptyState:hover::before {
+  left: 150%;
+}
+
+.emptyState:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0 var(--color-secondary);
+}
+
+.emptyState svg {
+  color: var(--color-secondary);
+  opacity: 0.7;
+}
+
+.emptyState p {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1.5rem;
+  color: var(--color-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.emptyMessage {
+  text-align: center;
+  font-family: 'Comic Neue', cursive;
+  font-size: 1.2rem;
+  color: var(--text-secondary-color, #666);
+  font-style: italic;
+  padding: 2rem;
+}
+
+/* =======================================
+⏳ LOADING
+======================================= */
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1.5rem;
+}
+
+.loadingContainer p {
+  font-family: 'Bangers', cursive;
+  font-size: 2rem;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 var(--color-secondary);
+}
+
+/* =======================================
+📱 RESPONSIVIDADE
+======================================= */
+
+@media (max-width: 1024px) {
+  .personagensGrid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .personagensContainer {
+    padding: 1rem;
+  }
+
+  .tabsContainer {
+    gap: 0.3rem;
+  }
+
+  .tabsContainer button {
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .personagensGrid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .cardImage {
+    height: 350px;
+  }
+
+  .searchWrapper {
+    flex-direction: column;
+  }
+
+  .searchInputContainer {
+    min-width: 100%;
+  }
+
+  .searchButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .tabsContainer button {
+    font-size: 1rem;
+    padding: 0.5rem 0.8rem;
+    gap: 0.4rem;
+  }
+
+  .personagensGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .cardImage {
+    height: 300px;
+  }
+
+  .cardBody {
+    padding: 1rem;
+  }
+
+  .personagemNome {
+    font-size: 1.3rem;
+  }
+}

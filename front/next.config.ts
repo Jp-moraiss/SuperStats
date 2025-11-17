@@ -21,6 +21,19 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/a/uploads/**',
       },
+      // Superhero API images
+      {
+        protocol: 'https',
+        hostname: 'cdn.jsdelivr.net',
+        port: '',
+        pathname: '/gh/akabab/superhero-api@0.3.0/api/images/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.superherodb.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 60,

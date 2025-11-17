@@ -10,9 +10,9 @@ type AddHqFormProps = {
 
 export default function AddHqForm({ query, onQueryChange, isLoading }: AddHqFormProps) {
   return (
-    <div className={`card ${styles.addFormContainer}`}>
-      <h2 className="cardTitle">Adicionar Nova HQ</h2>
-    <p style={{ marginBottom: '5px' }}>Busque na Comic Vine pelo título original (em inglês).</p>
+    <div className={styles.addFormContainer}>
+      <h2 className={styles.sectionTitle}>Adicionar Nova HQ</h2>
+      <p className={styles.helpText}>Busque na Comic Vine pelo título original (em inglês).</p>
       <div className={styles.searchWrapper}>
         <div className={styles.searchInputContainer}>
           <FaSearch className={styles.searchIcon} />
