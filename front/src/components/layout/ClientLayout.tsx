@@ -97,7 +97,9 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                     <Link href="/hqs" className="animated-link">HQs</Link> 
 
                     <div className="user-session">
-                      <span className="user-greeting">{username}!</span>
+                      <Link href="/usuario" className="user-btn">
+                        {username}!
+                      </Link>
                       <button onClick={handleLogout} className="logout-btn">
                         Sair
                       </button>

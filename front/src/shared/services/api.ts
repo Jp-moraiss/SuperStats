@@ -46,8 +46,8 @@ export class ApiService {
       throw new Error('Sessão expirada ou não autorizada. Redirecionando para login...');
     }
 
-    // Tratamento de outros erros
-    if (!response.ok) {
+    // Tratamento de outros erros (204 No Content é considerado sucesso)
+    if (!response.ok && response.status !== 204) {
       const errorText = await response.text();
       
       // Verificação específica para JWT expirado

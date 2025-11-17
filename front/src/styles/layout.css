@@ -135,6 +135,27 @@
   text-shadow: none;
 }
 
+.user-btn {
+  font-family: "Permanent Marker", cursive; 
+  font-size: 1.5rem;
+  color: #000;
+  letter-spacing: 0.5px;
+  text-shadow: none;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  background-color: transparent;
+  border: 2px solid transparent;
+}
+
+.user-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: var(--color-secondary);
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 0 var(--color-secondary);
+}
+
 /* --- BOTÃO DE SAIR --- */
 .logout-btn {
   background-color: var(--color-primary);
@@ -292,24 +313,89 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .header {
-    flex-direction: column;
-    align-items: flex-start;
     padding: 1rem;
   }
+  
+  .header-content {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
   .nav {
-    margin-top: 1rem;
-    display: flex;
+    width: 100%;
     flex-wrap: wrap;
-    justify-content: center;
+    gap: 0.5rem;
+    justify-content: flex-start;
   }
-  .nav a {
-    margin: 0.5rem 0.8rem;
-    font-size: 1rem;
+  
+  .nav a,
+  .nav button {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
   }
+  
+  .user-session {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .user-btn {
+    font-size: 1.2rem;
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .logout-btn {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.7rem;
+  }
+  
   .main {
     padding: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    padding: 0.8rem;
+  }
+  
+  .logo {
+    font-size: 1.8rem;
+  }
+  
+  .nav {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+  
+  .nav a,
+  .nav button {
+    width: 100%;
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+  
+  .user-session {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+  
+  .user-btn,
+  .logout-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .main {
+    padding: 0.8rem;
   }
 }
 
