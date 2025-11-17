@@ -328,7 +328,7 @@ export default function MoviesPage() {
       
       <div className={styles.tabsContainer}>
         <button onClick={() => setActiveTab('catalogo')} className={activeTab === 'catalogo' ? styles.active : ''}>
-          <FaFilm /> Catálogo
+          <FaFilm /> Meu Catálogo
         </button>
         <button onClick={() => setActiveTab('assistidos')} className={activeTab === 'assistidos' ? styles.active : ''}>
           <FaCheckCircle /> Meus Assistidos

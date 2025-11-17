@@ -348,7 +348,7 @@ export default function HqsPage() {
         <div className={styles.hqsContainer}>
             <div className={styles.tabsContainer}>
                 <button onClick={() => setActiveTab('catalogo')} className={activeTab === 'catalogo' ? styles.active : ''}>
-                    <FaBook /> Catálogo
+                    <FaBook /> Meu Catálogo
                 </button>
                 <button onClick={() => setActiveTab('lidas')} className={activeTab === 'lidas' ? styles.active : ''}>
                     <FaCheckCircle /> HQs Lidas
@@ -357,7 +357,7 @@ export default function HqsPage() {
                     <FaExclamationTriangle /> Baixo Engajamento
                 </button>
                 <button onClick={() => setActiveTab('gerenciar')} className={activeTab === 'gerenciar' ? styles.active : ''}>
-                    <FaPlus /> Adicionar
+                    <FaPlus /> Adicionar HQ
                 </button>
             </div>
             <div className={styles.tabContent}>

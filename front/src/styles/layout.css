@@ -150,10 +150,7 @@
 }
 
 .user-btn:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-  border-color: var(--color-secondary);
   transform: translateY(-2px);
-  box-shadow: 2px 2px 0 var(--color-secondary);
 }
 
 /* --- BOTÃO DE SAIR --- */
