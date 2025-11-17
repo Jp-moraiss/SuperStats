@@ -16,3 +16,8 @@ export type TmdbMovie = {
   poster_path: string;
   release_date: string;
 };
+
+export type MovieWithCount = {
+  filme: Movie;
+  totalAssistido: number;
+};

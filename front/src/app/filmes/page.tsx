@@ -2,6 +2,7 @@
 import { useState, useEffect, useMemo } from "react";
 import styles from './MoviesPage.module.css';
 import { debounce } from 'lodash';
+import { FaEye } from 'react-icons/fa';
 
 // Componentes
 import MovieCard from "../../components/movies/MovieCard";
@@ -10,7 +11,7 @@ import SearchResults from "../../components/movies/SearchResults";
 import TrailerModal from "../../components/movies/TrailerModal";
 
 // Tipos
-import { Movie, TmdbMovie } from "../../types/movies";
+import { Movie, TmdbMovie, MovieWithCount } from "../../types/movies";
 
 // Serviços centralizados
 import { ApiService, API_ENDPOINTS } from "../../shared";
@@ -20,6 +21,7 @@ import { ApiService, API_ENDPOINTS } from "../../shared";
 export default function MoviesPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [watchedMovies, setWatchedMovies] = useState<Movie[]>([]);
+  const [popularMovies, setPopularMovies] = useState<MovieWithCount[]>([]);
   const [activeTab, setActiveTab] = useState('catalogo');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTrailer, setSelectedTrailer] = useState<string | null>(null);
@@ -39,16 +41,27 @@ export default function MoviesPage() {
   const loadInitialData = async () => {
     setIsLoading(true);
     try {
-      const [moviesRes, watchedRes] = await Promise.all([
+      const [moviesRes, watchedRes, popularityRes] = await Promise.all([
         ApiService.get(API_ENDPOINTS.MOVIES),
         ApiService.get(API_ENDPOINTS.MOVIES_WATCHED),
+        ApiService.get(API_ENDPOINTS.MOVIES_POPULARITY),
       ]);
       setMovies(await moviesRes.json());
       setWatchedMovies(await watchedRes.json());
+      setPopularMovies(await popularityRes.json());
     } catch (error) {
       console.error("Falha ao carregar dados iniciais:", error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchPopularMovies = async () => {
+    try {
+      const res = await ApiService.get(API_ENDPOINTS.MOVIES_POPULARITY);
+      setPopularMovies(await res.json());
+    } catch (error) {
+      console.error("Erro ao buscar filmes populares:", error);
     }
   };
   
@@ -86,7 +99,7 @@ export default function MoviesPage() {
   const handleAddMovie = async (title: string, tmdbId: number) => {
     setAddingMovieId(tmdbId);
     try {
-      await ApiService.post(API_ENDPOINTS.MOVIES, { titulo: title });
+      await ApiService.post(API_ENDPOINTS.MOVIES, { tmdbId: tmdbId });
       await loadInitialData();
       setSearchQuery('');
       setSearchResults([]);
@@ -103,17 +116,22 @@ export default function MoviesPage() {
 
     const originalMovies = [...movies];
     const originalWatchedMovies = [...watchedMovies];
+    const originalPopularMovies = [...popularMovies];
 
     setMovies(prev => prev.filter(m => m.id !== id));
     setWatchedMovies(prev => prev.filter(m => m.id !== id));
+    setPopularMovies(prev => prev.filter(item => item.filme.id !== id));
 
     try {
       await ApiService.delete(`${API_ENDPOINTS.MOVIES}/${id}`);
+      // Atualizar filmes populares após deletar
+      await fetchPopularMovies();
     } catch (error) {
        console.error("Erro ao deletar:", error);
        alert("Não foi possível deletar o filme. Tente novamente.");
        setMovies(originalMovies);
        setWatchedMovies(originalWatchedMovies);
+       setPopularMovies(originalPopularMovies);
     }
   };
   
@@ -135,6 +153,8 @@ export default function MoviesPage() {
 
     try {
       await ApiService.post(API_ENDPOINTS.MOVIES_TOGGLE_WATCHED(id));
+      // Atualizar filmes populares após mudança
+      await fetchPopularMovies();
     } catch (error) {
       console.error("Erro ao marcar como assistido:", error);
       alert("Não foi possível alterar o status do filme. Tente novamente.");
@@ -221,6 +241,33 @@ export default function MoviesPage() {
                </div>
            </div>
         );
+      case 'popularidade':
+        return (
+          <>
+            {popularMovies.length === 0 ? (
+              <p className={styles.noResults}>Nenhum filme foi assistido ainda para gerar um ranking.</p>
+            ) : (
+              <div className={styles.moviesGrid}>
+                {popularMovies.map(item => (
+                  <div key={item.filme.id} className={styles.popularMovieCard}>
+                    <MovieCard 
+                      movie={item.filme}
+                      onShowTrailer={openTrailerModal}
+                      showDelete={false}
+                      showWatch={false}
+                      showTrailer={true}
+                    />
+                    <div className={styles.popularityBadge}>
+                      <span className={styles.popularityCount}>
+                        <FaEye /> {item.totalAssistido}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        );
       case 'gerenciar':
         return (
           <>
@@ -249,8 +296,9 @@ export default function MoviesPage() {
       
       <div className={styles.tabsContainer}>
         <button onClick={() => setActiveTab('catalogo')} className={activeTab === 'catalogo' ? styles.active : ''}>Catálogo</button>
-        <button onClick={() => setActiveTab('assistidos')} className={activeTab === 'assistidos' ? styles.active : ''}>Assistidos</button>
-        <button onClick={() => setActiveTab('gerenciar')} className={activeTab === 'gerenciar' ? styles.active : ''}>Adicionar</button>
+        <button onClick={() => setActiveTab('assistidos')} className={activeTab === 'assistidos' ? styles.active : ''}>Meus Assistidos</button>
+        <button onClick={() => setActiveTab('popularidade')} className={activeTab === 'popularidade' ? styles.active : ''}>Populares</button>
+        <button onClick={() => setActiveTab('gerenciar')} className={activeTab === 'gerenciar' ? styles.active : ''}>Adicionar Filme</button>
       </div>
 
       <div className={styles.tabContent}>

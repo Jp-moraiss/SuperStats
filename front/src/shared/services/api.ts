@@ -111,6 +111,7 @@ export const API_ENDPOINTS = {
   
   MOVIES: '/filmes',
   MOVIES_WATCHED: '/filmes/assistidos',
+  MOVIES_POPULARITY: '/filmes/popularidade',
   MOVIES_TOGGLE_WATCHED: (id: number) => `/filmes/${id}/assistir`,
 } as const;
 

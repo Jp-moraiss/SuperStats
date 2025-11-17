@@ -7,12 +7,23 @@ import Image from 'next/image';
 
 type MovieCardProps = {
   movie: Movie;
-  onDelete: (id: number) => void;
-  onToggleWatched: (id: number, isWatched: boolean) => void;
+  onDelete?: (id: number) => void;
+  onToggleWatched?: (id: number, isWatched: boolean) => void;
   onShowTrailer: (trailerUrl: string) => void;
+  showDelete?: boolean;
+  showWatch?: boolean;
+  showTrailer?: boolean;
 };
 
-export default function MovieCard({ movie, onDelete, onToggleWatched, onShowTrailer }: MovieCardProps) {
+export default function MovieCard({ 
+  movie, 
+  onDelete, 
+  onToggleWatched, 
+  onShowTrailer,
+  showDelete = true,
+  showWatch = true,
+  showTrailer = true
+}: MovieCardProps) {
   return (
     <div className={styles.movieCard}>
       <div className={styles.posterContainer}>
@@ -27,34 +38,34 @@ export default function MovieCard({ movie, onDelete, onToggleWatched, onShowTrai
         </div>
         
         <div className={styles.cardActions}>
-          <button 
-            className={`${styles.actionButton} ${styles.watchButton}`} 
-            onClick={() => onToggleWatched(movie.id, movie.assistido)}
-            // aria-label removido
-          >
-            {/* Ícone de olho adicionado */}
-            {movie.assistido ? <FaUndo/> : <FaEye/>}
-          </button>
-          {movie.trailerUrl && (
+          {showWatch && onToggleWatched && (
+            <button 
+              className={`${styles.actionButton} ${styles.watchButton}`} 
+              onClick={() => onToggleWatched(movie.id, movie.assistido)}
+            >
+              {movie.assistido ? <FaUndo/> : <FaEye/>}
+            </button>
+          )}
+          {showTrailer && movie.trailerUrl && (
             <button 
               className={`${styles.actionButton} ${styles.trailerButton}`} 
               onClick={() => {
-                if (movie.trailerUrl) { // <-- Adicione esta verificação
+                if (movie.trailerUrl) {
                   onShowTrailer(movie.trailerUrl);
                 }
               }}
-              // aria-label removido
             >
               <FaYoutube />
             </button>
           )}
-          <button 
-            className={`${styles.actionButton} ${styles.deleteButton}`} 
-            onClick={() => onDelete(movie.id)}
-            // aria-label removido
-          >
-            <FaTrash />
-          </button>
+          {showDelete && onDelete && (
+            <button 
+              className={`${styles.actionButton} ${styles.deleteButton}`} 
+              onClick={() => onDelete(movie.id)}
+            >
+              <FaTrash />
+            </button>
+          )}
         </div>
       </div>
     </div>
