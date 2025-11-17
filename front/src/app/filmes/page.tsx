@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import styles from './MoviesPage.module.css';
 import { debounce } from 'lodash';
 import { FaEye } from 'react-icons/fa';
@@ -34,9 +34,23 @@ export default function MoviesPage() {
   // <-- NOVO: Estado para o filtro do catálogo
   const [filterQuery, setFilterQuery] = useState('');
 
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
     loadInitialData();
   }, []);
+
+  // Refresh automático quando muda de aba (mas não na primeira renderização)
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (activeTab) {
+      loadInitialData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
 
   const loadInitialData = async () => {
     setIsLoading(true);
@@ -243,7 +257,20 @@ export default function MoviesPage() {
         );
       case 'popularidade':
         return (
-          <>
+          <div className={styles.popularidadeSection}>
+            <div className={styles.popularidadeHeader}>
+              <div className={styles.headerContent}>
+                <h2 className={styles.sectionTitle}>Filmes Mais Assistidos</h2>
+                <p className={styles.sectionDescription}>
+                  Descubra os filmes mais populares entre os membros da comunidade. 
+                  Veja quais produções estão fazendo sucesso e inspire-se para sua próxima sessão!
+                </p>
+              </div>
+              <div className={styles.statsBadge}>
+                <span className={styles.statsNumber}>{popularMovies.length}</span>
+                <span className={styles.statsLabel}>Filmes no Ranking</span>
+              </div>
+            </div>
             {popularMovies.length === 0 ? (
               <p className={styles.noResults}>Nenhum filme foi assistido ainda para gerar um ranking.</p>
             ) : (
@@ -266,7 +293,7 @@ export default function MoviesPage() {
                 ))}
               </div>
             )}
-          </>
+          </div>
         );
       case 'gerenciar':
         return (

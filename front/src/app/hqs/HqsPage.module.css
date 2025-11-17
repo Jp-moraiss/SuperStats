@@ -70,3 +70,343 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* =======================================
+🔍 ESTILOS PARA O FILTRO DO CATÁLOGO
+======================================= */
+
+.filterContainer {
+  margin-bottom: 2.5rem;
+}
+
+.filterInput {
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.1rem;
+  font-family: 'Comic Neue', cursive;
+  border-radius: 12px;
+  border: 3px solid var(--color-secondary);
+  box-shadow: 3px 3px 0 var(--color-secondary);
+  transition: all 0.2s ease-in-out;
+  background: #fff;
+}
+
+.filterInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 4px 4px 0 var(--color-primary);
+  transform: translate(-2px, -2px);
+}
+
+.filterInput::placeholder {
+  color: var(--text-secondary-color, #999);
+  font-style: italic;
+}
+
+.noResults {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+  color: var(--text-secondary-color, #666);
+  font-family: 'Comic Neue', cursive;
+  font-style: italic;
+  padding: 2rem;
+  background: #fff;
+  border: 3px dashed var(--color-secondary);
+  border-radius: 12px;
+}
+
+/* =======================================
+ BAIXO ENGAJAMENTO SECTION
+======================================= */
+
+.baixoEngajamentoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-height: 300px;
+}
+
+.baixoEngajamentoHeader {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  border: 4px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.baixoEngajamentoHeader::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: left 0.8s ease;
+}
+
+.baixoEngajamentoHeader:hover::before {
+  left: 100%;
+}
+
+.baixoEngajamentoHeader:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0 var(--color-secondary);
+}
+
+.headerContent {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.sectionTitle {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  color: #fff;
+  margin: 0 0 1rem 0;
+  text-shadow: 
+    -3px -3px 0 var(--color-secondary),
+     3px -3px 0 var(--color-secondary),
+    -3px  3px 0 var(--color-secondary),
+     3px  3px 0 var(--color-secondary),
+     6px  6px 0 #000;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.sectionDescription {
+  font-family: 'Comic Neue', cursive;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+  line-height: 1.6;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.statsBadge {
+  background: rgba(255, 255, 255, 0.95);
+  border: 3px solid var(--color-secondary);
+  box-shadow: 4px 4px 0 var(--color-secondary);
+  border-radius: 15px;
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.statsBadge:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--color-secondary);
+}
+
+.statsNumber {
+  font-family: 'Bangers', cursive;
+  font-size: 3rem;
+  color: var(--color-primary);
+  line-height: 1;
+  text-shadow: 2px 2px 0 var(--color-secondary);
+  display: block;
+}
+
+.statsLabel {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1rem;
+  color: var(--color-secondary);
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* =======================================
+📭 EMPTY STATE
+======================================= */
+
+.emptyState {
+  background: #fff;
+  border: 4px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  border-radius: 20px;
+  padding: 4rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.emptyState::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.6s ease-in-out;
+}
+
+.emptyState:hover::before {
+  left: 150%;
+}
+
+.emptyState:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0 var(--color-secondary);
+}
+
+.emptyIcon {
+  font-size: 5rem;
+  line-height: 1;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.emptyTitle {
+  font-family: 'Bangers', cursive;
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  margin: 0;
+  text-shadow: 2px 2px 0 var(--color-secondary);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.emptyMessage {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1.5rem;
+  color: var(--color-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.emptySubMessage {
+  font-family: 'Comic Neue', cursive;
+  font-size: 1.1rem;
+  color: var(--text-secondary-color, #666);
+  margin: 0;
+  font-style: italic;
+}
+
+/* =======================================
+📱 RESPONSIVIDADE BAIXO ENGAJAMENTO
+======================================= */
+
+@media (max-width: 768px) {
+  .baixoEngajamentoHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .statsBadge {
+    align-self: center;
+    min-width: 120px;
+    padding: 1.2rem 1.5rem;
+  }
+
+  .statsNumber {
+    font-size: 2.5rem;
+  }
+
+  .statsLabel {
+    font-size: 0.9rem;
+  }
+
+  .sectionDescription {
+    font-size: 1rem;
+  }
+
+  .emptyState {
+    padding: 3rem 1.5rem;
+  }
+
+  .emptyIcon {
+    font-size: 4rem;
+  }
+
+  .emptyTitle {
+    font-size: 2rem;
+  }
+
+  .emptyMessage {
+    font-size: 1.3rem;
+  }
+
+  .emptySubMessage {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .baixoEngajamentoHeader {
+    padding: 1.5rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .sectionDescription {
+    font-size: 0.95rem;
+  }
+
+  .statsBadge {
+    min-width: 100px;
+    padding: 1rem 1.2rem;
+  }
+
+  .statsNumber {
+    font-size: 2rem;
+  }
+
+  .statsLabel {
+    font-size: 0.85rem;
+  }
+
+  .emptyState {
+    padding: 2.5rem 1rem;
+  }
+
+  .emptyIcon {
+    font-size: 3.5rem;
+  }
+
+  .emptyTitle {
+    font-size: 1.8rem;
+  }
+
+  .emptyMessage {
+    font-size: 1.2rem;
+  }
+}

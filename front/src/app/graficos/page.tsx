@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 const GraficosLazy = dynamic(() => import('../../components/lazy/GraficosLazy'), {
   loading: () => (
     <div className="loading-container">
-      <div className="comic-spinner">📊</div>
+      <div className="comic-spinner"></div>
       <p>Carregando gráficos...</p>
     </div>
   ),

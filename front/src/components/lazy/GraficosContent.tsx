@@ -123,28 +123,6 @@ export default function GraficosContent() {
           </div>
         ))}
       </div>
-
-      {/* Seção de insights */}
-      <div className="insights-section">
-        <h2 className="insights-title">Insights dos Dados</h2>
-        <div className="insights-grid">
-          <div className="insight-card">
-            <div className="insight-icon">📈</div>
-            <h3>Padrões Identificados</h3>
-            <p>Análise revela tendências interessantes na evolução dos personagens ao longo dos anos.</p>
-          </div>
-          <div className="insight-card">
-            <div className="insight-icon">🎯</div>
-            <h3>Correlações</h3>
-            <p>Descobertas sobre a relação entre poder, popularidade e universo de origem.</p>
-          </div>
-          <div className="insight-card">
-            <div className="insight-icon">🔮</div>
-            <h3>Previsões</h3>
-            <p>Projeções baseadas nos dados históricos para o futuro dos super-heróis.</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

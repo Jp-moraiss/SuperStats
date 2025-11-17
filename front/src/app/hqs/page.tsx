@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import styles from './HqsPage.module.css';
 import { debounce } from 'lodash';
 
@@ -36,9 +36,26 @@ export default function HqsPage() {
     const hqsLidas = useMemo(() => hqs.filter(hq => hq.lido), [hqs]);
     const [hqsBaixoEngajamento, setHqsBaixoEngajamento] = useState<Hq[]>([]);
     
+    // Estado para o filtro do catálogo
+    const [filterQuery, setFilterQuery] = useState('');
+    
+    const isFirstRender = useRef(true);
+    
     useEffect(() => {
         loadInitialData();
     }, []);
+
+    // Refresh automático quando muda de aba (mas não na primeira renderização)
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        if (activeTab) {
+            loadInitialData();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeTab]);
 
    const loadInitialData = async () => {
         setIsLoading(true);
@@ -170,21 +187,52 @@ export default function HqsPage() {
         }
     };
 
+    // Lógica para filtrar as HQs do catálogo
+    const filteredHqs = useMemo(() => {
+        if (!filterQuery) {
+            return hqs;
+        }
+        const lowercasedFilter = filterQuery.toLowerCase();
+        return hqs.filter(hq => 
+            hq.titulo.toLowerCase().includes(lowercasedFilter) ||
+            hq.volumeName.toLowerCase().includes(lowercasedFilter) ||
+            (hq.editora && hq.editora.toLowerCase().includes(lowercasedFilter)) ||
+            (hq.edicao && hq.edicao.toLowerCase().includes(lowercasedFilter))
+        );
+    }, [hqs, filterQuery]);
+
     const renderContent = () => {
         if (isLoading) { return <div className={styles.loadingSpinner}></div>; }
         
         switch (activeTab) {
           case 'catalogo':
             return (
-              <div className={styles.hqsGrid}>
-                {hqs.length > 0 ? hqs.map(hq => (
-                  <HqCard 
-                    key={hq.id} 
-                    hq={hq}
-                    onToggleRead={handleToggleRead}
-                  />
-                )) : <p>Seu catálogo está vazio. Adicione HQs na aba &apos;Adicionar&apos;.</p>}
-              </div>
+              <>
+                {/* Campo de input para o filtro */}
+                <div className={styles.filterContainer}>
+                    <input
+                        type="text"
+                        value={filterQuery}
+                        onChange={(e) => setFilterQuery(e.target.value)}
+                        placeholder="Filtrar por título, volume, editora, edição..."
+                        className={styles.filterInput}
+                    />
+                </div>
+                {/* Usa filteredHqs em vez de hqs */}
+                <div className={styles.hqsGrid}>
+                  {filteredHqs.length > 0 ? filteredHqs.map(hq => (
+                    <HqCard 
+                      key={hq.id} 
+                      hq={hq}
+                      onToggleRead={handleToggleRead}
+                    />
+                  )) : (
+                    <p className={styles.noResults}>
+                      {filterQuery ? 'Nenhuma HQ encontrada com o filtro atual.' : 'Seu catálogo está vazio. Adicione HQs na aba \'Adicionar\'.'}
+                    </p>
+                  )}
+                </div>
+              </>
             );
           case 'lidas':
             return (
@@ -226,17 +274,42 @@ export default function HqsPage() {
             );
               case 'naoLidas':
                 return (
-                    <div className={styles.hqsGrid}>
-                        {hqsBaixoEngajamento.length > 0 ? hqsBaixoEngajamento.map(hq => (
-                            <HqCard
-                                key={hq.id}
-                                hq={hq}
-                                // Passar a função é opcional aqui. Se o usuário clicar,
-                                // o status só vai mudar visualmente na aba "Catálogo"
-                                // se a HQ também existir na coleção dele.
-                                onToggleRead={handleToggleRead}
-                            />
-                        )) : <p>Ótima notícia! Todas as HQs do catálogo já foram lidas por alguém.</p>}
+                    <div className={styles.baixoEngajamentoSection}>
+                        <div className={styles.baixoEngajamentoHeader}>
+                            <div className={styles.headerContent}>
+                                <h2 className={styles.sectionTitle}>HQs Nunca Lidas por Ninguém</h2>
+                                <p className={styles.sectionDescription}>
+                                    Descubra HQs que ainda não foram lidas por nenhum membro da comunidade. 
+                                    Seja o primeiro a marcar como lida e ganhe pontos de pioneiro!
+                                </p>
+                            </div>
+                            <div className={styles.statsBadge}>
+                                <span className={styles.statsNumber}>{hqsBaixoEngajamento.length}</span>
+                                <span className={styles.statsLabel}>HQs Disponíveis</span>
+                            </div>
+                        </div>
+                        {hqsBaixoEngajamento.length > 0 ? (
+                            <div className={styles.hqsGrid}>
+                                {hqsBaixoEngajamento.map(hq => (
+                                    <HqCard
+                                        key={hq.id}
+                                        hq={hq}
+                                        onToggleRead={handleToggleRead}
+                                    />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className={styles.emptyState}>
+                                <div className={styles.emptyIcon}>🎉</div>
+                                <h3 className={styles.emptyTitle}>Parabéns!</h3>
+                                <p className={styles.emptyMessage}>
+                                    Ótima notícia! Todas as HQs do catálogo já foram lidas por alguém.
+                                </p>
+                                <p className={styles.emptySubMessage}>
+                                    Continue adicionando novas HQs para aumentar o catálogo!
+                                </p>
+                            </div>
+                        )}
                     </div>
                 );
             case 'gerenciar':
