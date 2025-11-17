@@ -119,6 +119,10 @@ export const API_ENDPOINTS = {
   PERSONAGENS: '/personagens',
   PERSONAGENS_SEARCH: '/personagens/buscar-externo',
   PERSONAGEM_BY_ID: (id: number | string) => `/personagens/${id}`,
+  PERSONAGENS_AUTOCOMPLETE: (nome: string) => `/personagens/autocomplete?nome=${encodeURIComponent(nome)}`,
+  
+  PESQUISAS_PERGUNTAS: (id: number) => `/pesquisas/${id}/perguntas`,
+  PESQUISAS_RESPOSTAS: (id: number) => `/pesquisas/${id}/respostas`,
 } as const;
 
 /**

@@ -1,0 +1,589 @@
+/* =======================================
+🔍 PÁGINA DE PESQUISA - DESIGN MODERNO COMIC
+======================================= */
+
+.pesquisaContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(1rem, 4vw, 2.5rem);
+  min-height: 100vh;
+}
+
+/* =======================================
+📋 HEADER SECTION
+======================================= */
+
+.headerSection {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.pageTitle {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  color: var(--color-primary);
+  text-shadow: 
+    -3px -3px 0 var(--color-secondary),
+     3px -3px 0 var(--color-secondary),
+    -3px  3px 0 var(--color-secondary),
+     3px  3px 0 var(--color-secondary),
+     6px  6px 0 #000;
+  margin-bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.pageDescription {
+  font-family: 'Comic Neue', cursive;
+  font-size: 1.2rem;
+  color: var(--text-secondary-color, #666);
+  margin-bottom: 2rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* =======================================
+📊 PROGRESS SECTION
+======================================= */
+
+.progressSection {
+  background: #fff;
+  border: 4px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  padding: 1.5rem 2rem;
+  border-radius: 15px;
+  margin-top: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.progressText {
+  font-family: 'Bangers', cursive;
+  font-size: 1.3rem;
+  color: var(--color-primary);
+  text-shadow: 1px 1px 0 var(--color-secondary);
+}
+
+.progressPercentage {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1.5rem;
+  color: var(--color-secondary);
+  background: var(--color-accent);
+  padding: 0.3rem 0.8rem;
+  border-radius: 8px;
+  border: 2px solid var(--color-secondary);
+}
+
+.progressBar {
+  width: 100%;
+  height: 20px;
+  background: var(--color-accent);
+  border: 3px solid var(--color-secondary);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  transition: width 0.5s ease;
+  box-shadow: 0 0 10px rgba(227, 0, 0, 0.5);
+}
+
+/* =======================================
+📝 SURVEY FORM
+======================================= */
+
+.surveyForm {
+  animation: fadeInComic 0.5s ease;
+}
+
+@keyframes fadeInComic {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.questionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+/* =======================================
+❓ QUESTION CARD
+======================================= */
+
+.questionCard {
+  background: #fff;
+  border: 4px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  padding: 2rem;
+  border-radius: 15px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.questionCard:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 12px 12px 0 var(--color-secondary);
+}
+
+.questionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.questionNumber {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  background: var(--color-accent);
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  border: 2px solid var(--color-secondary);
+  text-transform: uppercase;
+}
+
+.answeredBadge {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 0.9rem;
+  color: #fff;
+  background: #28a745;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: 2px solid var(--color-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 3px 3px 0 var(--color-secondary);
+}
+
+.questionLabel {
+  font-family: 'Bangers', cursive;
+  font-size: 1.4rem;
+  color: var(--color-primary);
+  text-shadow: 1px 1px 0 var(--color-secondary);
+  display: block;
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+}
+
+/* =======================================
+🔍 AUTOCOMPLETE
+======================================= */
+
+.autocompleteContainer {
+  position: relative;
+  width: 100%;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 1rem;
+  color: var(--color-secondary);
+  font-size: 1.2rem;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.autocompleteInput {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  font-family: 'Comic Neue', cursive;
+  font-size: 1.1rem;
+  border: 3px solid var(--color-secondary);
+  border-radius: 12px;
+  box-shadow: 4px 4px 0 var(--color-secondary);
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.autocompleteInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 6px 6px 0 var(--color-primary);
+  transform: translate(-2px, -2px);
+}
+
+.autocompleteInput.hasAnswer {
+  background: var(--color-accent);
+  border-color: #28a745;
+  color: #155724;
+}
+
+.autocompleteInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.autocompleteInput::placeholder {
+  color: var(--text-secondary-color, #999);
+  font-style: italic;
+}
+
+.spinnerIcon {
+  position: absolute;
+  right: 3rem;
+  color: var(--color-primary);
+  font-size: 1.2rem;
+  animation: spin 1s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.clearButton {
+  position: absolute;
+  right: 1rem;
+  background: #dc3545;
+  color: #fff;
+  border: 2px solid var(--color-secondary);
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 1;
+}
+
+.clearButton:hover {
+  background: #c82333;
+  transform: scale(1.1);
+  box-shadow: 2px 2px 0 var(--color-secondary);
+}
+
+.clearButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.autocompleteResults {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 3px solid var(--color-secondary);
+  border-radius: 12px;
+  box-shadow: 6px 6px 0 var(--color-secondary);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.autocompleteResults::-webkit-scrollbar {
+  width: 8px;
+}
+
+.autocompleteResults::-webkit-scrollbar-track {
+  background: var(--color-accent);
+  border-radius: 4px;
+}
+
+.autocompleteResults::-webkit-scrollbar-thumb {
+  background: var(--color-secondary);
+  border-radius: 4px;
+}
+
+.autocompleteItem {
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  border-bottom: 2px solid var(--color-accent);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.autocompleteItem:last-child {
+  border-bottom: none;
+}
+
+.autocompleteItem:hover {
+  background: var(--color-accent);
+  transform: translateX(4px);
+}
+
+.characterInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.characterName {
+  font-family: 'Bangers', cursive;
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  text-shadow: 1px 1px 0 var(--color-secondary);
+}
+
+.characterFullName {
+  font-family: 'Comic Neue', cursive;
+  font-size: 0.9rem;
+  color: var(--text-secondary-color, #666);
+  font-style: italic;
+}
+
+.characterPublisher {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 0.85rem;
+  color: var(--color-secondary);
+  background: var(--color-accent);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  display: inline-block;
+  width: fit-content;
+  border: 1px solid var(--color-secondary);
+}
+
+.autocompleteLoading {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary-color, #666);
+  font-family: 'Comic Neue', cursive;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.autocompleteEmpty {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary-color, #666);
+  font-family: 'Comic Neue', cursive;
+  font-style: italic;
+}
+
+/* =======================================
+📤 SUBMIT BUTTON
+======================================= */
+
+.submitButton {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1.5rem;
+  background: var(--color-primary);
+  color: #fff;
+  border: 4px solid var(--color-secondary);
+  padding: 1.2rem 3rem;
+  border-radius: 15px;
+  cursor: pointer;
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: var(--color-secondary);
+  transform: translate(-4px, -4px);
+  box-shadow: 12px 12px 0 var(--color-secondary);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* =======================================
+💬 STATUS MESSAGE
+======================================= */
+
+.statusMessage {
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  font-family: 'Comic Neue', cursive;
+  font-size: 1.1rem;
+  text-align: center;
+  border: 3px solid;
+  box-shadow: 4px 4px 0;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.statusMessage.success {
+  background: #d4edda;
+  color: #155724;
+  border-color: #28a745;
+  box-shadow: 4px 4px 0 #28a745;
+}
+
+.statusMessage.error {
+  background: #f8d7da;
+  color: #721c24;
+  border-color: #dc3545;
+  box-shadow: 4px 4px 0 #dc3545;
+}
+
+.statusMessage.warning {
+  background: #fff3cd;
+  color: #856404;
+  border-color: #ffc107;
+  box-shadow: 4px 4px 0 #ffc107;
+}
+
+/* =======================================
+⏳ LOADING
+======================================= */
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1.5rem;
+}
+
+.loadingContainer p {
+  font-family: 'Bangers', cursive;
+  font-size: 2rem;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 var(--color-secondary);
+}
+
+.loadingSpinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid var(--color-secondary);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* =======================================
+📱 RESPONSIVIDADE
+======================================= */
+
+@media (max-width: 768px) {
+  .pesquisaContainer {
+    padding: 1rem;
+  }
+
+  .pageTitle {
+    font-size: 2rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pageDescription {
+    font-size: 1rem;
+  }
+
+  .progressSection {
+    padding: 1rem 1.5rem;
+  }
+
+  .progressText {
+    font-size: 1.1rem;
+  }
+
+  .progressPercentage {
+    font-size: 1.2rem;
+  }
+
+  .questionCard {
+    padding: 1.5rem;
+  }
+
+  .questionLabel {
+    font-size: 1.2rem;
+  }
+
+  .autocompleteInput {
+    font-size: 1rem;
+    padding: 0.9rem 0.9rem 0.9rem 2.8rem;
+  }
+
+  .submitButton {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .questionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .autocompleteResults {
+    max-height: 250px;
+  }
+
+  .characterName {
+    font-size: 1rem;
+  }
+
+  .characterFullName {
+    font-size: 0.85rem;
+  }
+}
+
