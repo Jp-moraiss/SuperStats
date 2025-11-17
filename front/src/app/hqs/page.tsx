@@ -300,8 +300,7 @@ export default function HqsPage() {
                             </div>
                         ) : (
                             <div className={styles.emptyState}>
-                                <div className={styles.emptyIcon}>🎉</div>
-                                <h3 className={styles.emptyTitle}>Parabéns!</h3>
+                                <h3 className={styles.emptyTitle}>Fãs Engajados!</h3>
                                 <p className={styles.emptyMessage}>
                                     Ótima notícia! Todas as HQs do catálogo já foram lidas por alguém.
                                 </p>

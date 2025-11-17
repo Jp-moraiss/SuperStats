@@ -1,7 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import dynamic from 'next/dynamic';
+import { FaTimes } from 'react-icons/fa';
 import "../../app/graficos/graficos.css";
 
 // Lazy loading do componente de gráficos de popularidade
@@ -112,6 +114,35 @@ const graficos = [
 ];
 
 export default function GraficosContent() {
+  const [selectedImage, setSelectedImage] = useState<{img: string, titulo: string, descricao: string} | null>(null);
+
+  const handleCardClick = (grafico: {img: string, titulo: string, descricao: string}) => {
+    setSelectedImage(grafico);
+  };
+
+  const closeModal = () => {
+    setSelectedImage(null);
+  };
+
+  // Fechar modal com ESC
+  useEffect(() => {
+    if (!selectedImage) return;
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedImage(null);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedImage]);
+
   return (
     <div className="graficos-container">
       {/* Gráficos de Popularidade */}
@@ -120,7 +151,11 @@ export default function GraficosContent() {
       {/* Grid dos gráficos */}
       <div className="graficos-grid">
         {graficos.map((grafico, idx) => (
-          <div className="grafico-card" key={idx}>
+          <div 
+            className="grafico-card" 
+            key={idx}
+            onClick={() => handleCardClick(grafico)}
+          >
             <div className="grafico-img">
               <Image
                 src={grafico.img}
@@ -138,6 +173,30 @@ export default function GraficosContent() {
           </div>
         ))}
       </div>
+
+      {/* Modal de Zoom */}
+      {selectedImage && (
+        <div className="zoom-modal-overlay" onClick={closeModal}>
+          <div className="zoom-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="zoom-modal-close" onClick={closeModal}>
+              <FaTimes />
+            </button>
+            <div className="zoom-modal-header">
+              <h2 className="zoom-modal-title">{selectedImage.titulo}</h2>
+              <p className="zoom-modal-description">{selectedImage.descricao}</p>
+            </div>
+            <div className="zoom-modal-image">
+              <Image
+                src={selectedImage.img}
+                alt={selectedImage.titulo}
+                width={1200}
+                height={900}
+                style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

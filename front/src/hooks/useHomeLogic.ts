@@ -125,6 +125,7 @@ export const useHomeLogic = () => {
     
     // Audio
     audioRefs,
+    stopAllAudio,
     
     // Special effects
     villainInvasion,

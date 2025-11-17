@@ -1,0 +1,130 @@
+/* =======================================
+🔇 BOTÃO PARAR MÚSICA
+======================================= */
+
+.stopMusicButton {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--color-primary);
+  color: #fff;
+  border: 3px solid var(--color-secondary);
+  padding: 0.7rem 1.2rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 0.95rem;
+  box-shadow: 4px 4px 0 var(--color-secondary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  z-index: 100;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.stopMusicButton:hover {
+  background: var(--color-secondary);
+  transform: translate(-3px, -3px) scale(1.05);
+  box-shadow: 7px 7px 0 var(--color-primary);
+  animation: none;
+}
+
+.stopMusicButton:active {
+  transform: translate(-2px, -2px) scale(1.02);
+  box-shadow: 5px 5px 0 var(--color-secondary);
+}
+
+.stopMusicButton svg {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.buttonText {
+  white-space: nowrap;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 4px 4px 0 var(--color-secondary);
+  }
+  50% {
+    box-shadow: 6px 6px 0 var(--color-primary);
+  }
+}
+
+/* Estado quando música está parada */
+.stopMusicButton.muted {
+  background: var(--text-secondary-color, #6c757d);
+  opacity: 0.3;
+  animation: none;
+  transform: scale(0.9);
+  border-width: 2px;
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+}
+
+.stopMusicButton.muted:hover {
+  background: var(--text-secondary-color, #5a6268);
+  opacity: 0.6;
+  transform: scale(0.95);
+}
+
+/* =======================================
+📱 RESPONSIVIDADE
+======================================= */
+
+@media (max-width: 768px) {
+  .stopMusicButton {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .stopMusicButton.muted {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .buttonText {
+    display: none;
+  }
+
+  .stopMusicButton svg {
+    font-size: 1.2rem;
+  }
+
+  .stopMusicButton.muted svg {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stopMusicButton {
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.6rem;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    justify-content: center;
+  }
+
+  .stopMusicButton.muted {
+    width: 40px;
+    height: 40px;
+    padding: 0.5rem;
+  }
+
+  .stopMusicButton svg {
+    font-size: 1.1rem;
+  }
+
+  .stopMusicButton.muted svg {
+    font-size: 0.9rem;
+  }
+}
+

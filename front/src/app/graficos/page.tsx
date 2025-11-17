@@ -15,7 +15,7 @@ export default function GraficosPage() {
   return (
     <Suspense fallback={
       <div className="loading-container">
-        <div className="comic-spinner">📊</div>
+        <div className="comic-spinner"></div>
         <p>Carregando gráficos...</p>
       </div>
     }>

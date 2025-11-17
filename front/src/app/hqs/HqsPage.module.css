@@ -278,21 +278,6 @@
   box-shadow: 10px 10px 0 var(--color-secondary);
 }
 
-.emptyIcon {
-  font-size: 5rem;
-  line-height: 1;
-  animation: bounce 2s ease-in-out infinite;
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
 .emptyTitle {
   font-family: 'Bangers', cursive;
   font-size: 2.5rem;
