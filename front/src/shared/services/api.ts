@@ -113,6 +113,8 @@ export const API_ENDPOINTS = {
   MOVIES_WATCHED: '/filmes/assistidos',
   MOVIES_POPULARITY: '/filmes/popularidade',
   MOVIES_TOGGLE_WATCHED: (id: number) => `/filmes/${id}/assistir`,
+  
+  ANALISES_POPULARIDADE_EMPRESAS: '/analises/popularidade-empresas',
 } as const;
 
 /**

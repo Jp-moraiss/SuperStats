@@ -1,7 +1,19 @@
 "use client";
 
 import Image from "next/image";
+import dynamic from 'next/dynamic';
 import "../../app/graficos/graficos.css";
+
+// Lazy loading do componente de gráficos de popularidade
+const PopularidadeEmpresasChart = dynamic(() => import('../charts/PopularidadeEmpresasChart'), {
+  loading: () => (
+    <div className="loading-container">
+      <div className="comic-spinner">📊</div>
+      <p>Carregando gráficos de popularidade...</p>
+    </div>
+  ),
+  ssr: false,
+});
 
 // Dados dos gráficos movidos para um arquivo separado para otimização
 const graficos = [
@@ -102,6 +114,9 @@ const graficos = [
 export default function GraficosContent() {
   return (
     <div className="graficos-container">
+      {/* Gráficos de Popularidade */}
+      <PopularidadeEmpresasChart />
+      
       {/* Grid dos gráficos */}
       <div className="graficos-grid">
         {graficos.map((grafico, idx) => (
