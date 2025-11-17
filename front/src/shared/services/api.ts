@@ -120,6 +120,12 @@ export const API_ENDPOINTS = {
   PERSONAGENS_SEARCH: '/personagens/buscar-externo',
   PERSONAGEM_BY_ID: (id: number | string) => `/personagens/${id}`,
   PERSONAGENS_AUTOCOMPLETE: (nome: string) => `/personagens/autocomplete?nome=${encodeURIComponent(nome)}`,
+  PERSONAGENS_COMUNIDADE: '/personagens-novos',
+  PERSONAGENS_COMUNIDADE_MEUS: '/personagens-novos/meus',
+  PERSONAGENS_COMUNIDADE_BY_ID: (id: number | string) => `/personagens-novos/${id}`,
+  PERSONAGENS_COMUNIDADE_POR_ALINHAMENTO: (alinhamento: string) =>
+    `/personagens-novos/alinhamento/${encodeURIComponent(alinhamento)}`,
+  PERSONAGENS_COMUNIDADE_STATS: '/personagens-novos/estatisticas/contagem-por-alinhamento',
   
   PESQUISAS_PERGUNTAS: (id: number) => `/pesquisas/${id}/perguntas`,
   PESQUISAS_RESPOSTAS: (id: number) => `/pesquisas/${id}/respostas`,

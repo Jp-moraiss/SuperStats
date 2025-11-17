@@ -22,6 +22,27 @@ export type Personagem = {
   alterEgos?: string[];
 };
 
+export type CriadorInfo = {
+  id: number;
+  username: string;
+};
+
+export type PersonagemComunidade = {
+  id: number;
+  nome: string;
+  alinhamento?: string | null;
+  poder?: string | null;
+  genero?: string | null;
+  altura?: number | null;
+  peso?: number | null;
+  criador?: CriadorInfo | null;
+};
+
+export type ContagemAlinhamento = {
+  alinhamento: string;
+  total: number;
+};
+
 export type SuperheroApiSearchResult = {
   id: string;
   name: string;

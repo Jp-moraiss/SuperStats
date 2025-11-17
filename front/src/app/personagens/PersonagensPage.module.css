@@ -334,6 +334,256 @@
   box-shadow: 10px 10px 0 var(--color-secondary);
 }
 
+.communitySection {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.communityCardsWrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.communityCard {
+  background: #fff;
+  border: 4px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  border-radius: 18px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.communityCardTitle {
+  font-family: 'Bangers', cursive;
+  font-size: 1.6rem;
+  color: var(--color-primary);
+  margin: 0;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 var(--color-secondary);
+}
+
+.communityForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.communityFormGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.communityFormField {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Comic Neue', cursive;
+  font-weight: 700;
+  color: var(--color-secondary);
+  font-size: 0.95rem;
+  gap: 0.4rem;
+}
+
+.communityFormField input,
+.communityFormField select {
+  border: 3px solid var(--color-secondary);
+  border-radius: 12px;
+  padding: 0.8rem;
+  font-family: 'Comic Neue', cursive;
+  font-size: 1rem;
+  box-shadow: 3px 3px 0 var(--color-secondary);
+  transition: all 0.2s ease;
+}
+
+.communityFormField input:focus,
+.communityFormField select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 4px 4px 0 var(--color-primary);
+  transform: translate(-2px, -2px);
+}
+
+.communityFormActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.primaryButton,
+.secondaryButton,
+.communityControlRow button,
+.communityStatsButton,
+.communityActionButton,
+.communityDeleteButton {
+  font-family: 'Permanent Marker', cursive;
+  border: 3px solid var(--color-secondary);
+  border-radius: 12px;
+  padding: 0.9rem 1.5rem;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0 var(--color-secondary);
+  background: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.secondaryButton {
+  background: #fff;
+  color: var(--color-secondary);
+}
+
+.primaryButton:disabled,
+.communityControlRow button:disabled,
+.communityStatsButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.primaryButton:hover:not(:disabled),
+.secondaryButton:hover,
+.communityControlRow button:hover:not(:disabled),
+.communityStatsButton:hover:not(:disabled),
+.communityActionButton:hover,
+.communityDeleteButton:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--color-secondary);
+}
+
+.communityTools {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.communityInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-family: 'Comic Neue', cursive;
+  font-weight: 700;
+  color: var(--color-secondary);
+}
+
+.communityControlRow {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.communityControlRow input,
+.communityInputGroup select {
+  flex: 1;
+  border: 3px solid var(--color-secondary);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-family: 'Comic Neue', cursive;
+  font-size: 1rem;
+  box-shadow: 3px 3px 0 var(--color-secondary);
+}
+
+.communityStatsButton {
+  justify-content: center;
+  background: var(--color-accent);
+  color: var(--color-secondary);
+}
+
+.communityOutput {
+  min-height: 200px;
+  border: 3px dashed var(--color-secondary);
+  border-radius: 12px;
+  padding: 1rem;
+  font-family: 'Comic Neue', cursive;
+  white-space: pre-wrap;
+  background: #f8f9fa;
+}
+
+.communityTablesWrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.communityTableCard {
+  background: #fff;
+  border: 4px solid var(--color-secondary);
+  box-shadow: 8px 8px 0 var(--color-secondary);
+  border-radius: 18px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.communityTableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.communityTableHeader h5 {
+  font-family: 'Bangers', cursive;
+  font-size: 1.4rem;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.communityTableHeader span {
+  font-family: 'Comic Neue', cursive;
+  color: var(--text-secondary-color, #666);
+}
+
+.communityTableWrapper {
+  overflow-x: auto;
+}
+
+.communityTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Comic Neue', cursive;
+}
+
+.communityTable th,
+.communityTable td {
+  border: 2px solid var(--color-secondary);
+  padding: 0.8rem;
+  text-align: left;
+}
+
+.communityTable th {
+  background: var(--color-accent);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.communityActionsCell {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.communityActionButton {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.communityDeleteButton {
+  background: #dc3545;
+  color: #fff;
+}
+
+.communityEmptyTable {
+  font-family: 'Comic Neue', cursive;
+  color: var(--text-secondary-color, #666);
+  font-style: italic;
+}
+
 .helpText {
   font-family: 'Comic Neue', cursive;
   font-size: 0.95rem;
@@ -658,6 +908,19 @@
   .searchButton {
     width: 100%;
     justify-content: center;
+  }
+
+  .communityControlRow {
+    flex-direction: column;
+  }
+
+  .communityCardsWrapper,
+  .communityTablesWrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .communityFormActions {
+    flex-direction: column;
   }
 }
 
