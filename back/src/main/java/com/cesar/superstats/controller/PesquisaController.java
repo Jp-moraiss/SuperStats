@@ -1,5 +1,6 @@
 package com.cesar.superstats.controller;
 
+import com.cesar.superstats.dto.ChartDataDTO;
 import com.cesar.superstats.dto.RespostaDTO;
 import com.cesar.superstats.model.entities.Fa;
 import com.cesar.superstats.model.entities.Pergunta;
@@ -31,5 +32,30 @@ public class PesquisaController {
     ) {
         pesquisaService.salvarRespostas(respostas, faLogado);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/resultados/heroi-preferido")
+    public ResponseEntity<List<ChartDataDTO>> getResultadosHeroiPreferido() {
+        return ResponseEntity.ok(pesquisaService.getVotosPorPergunta(1));
+    }
+
+    @GetMapping("/resultados/vilao-preferido")
+    public ResponseEntity<List<ChartDataDTO>> getResultadosVilaoPreferido() {
+        return ResponseEntity.ok(pesquisaService.getVotosPorPergunta(2));
+    }
+
+    @GetMapping("/resultados/personagem-mais-forte")
+    public ResponseEntity<List<ChartDataDTO>> getResultadosPersonagemMaisForte() {
+        return ResponseEntity.ok(pesquisaService.getVotosPorPergunta(3));
+    }
+
+    @GetMapping("/resultados/personagem-mais-inteligente")
+    public ResponseEntity<List<ChartDataDTO>> getResultadosPersonagemMaisInteligente() {
+        return ResponseEntity.ok(pesquisaService.getVotosPorPergunta(4));
+    }
+
+    @GetMapping("/resultados/personagem-mais-rapido")
+    public ResponseEntity<List<ChartDataDTO>> getResultadosPersonagemMaisRapido() {
+        return ResponseEntity.ok(pesquisaService.getVotosPorPergunta(5));
     }
 }

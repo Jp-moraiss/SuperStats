@@ -1,11 +1,14 @@
 package com.cesar.superstats.repository;
 
+import com.cesar.superstats.dto.ChartDataDTO;
 import com.cesar.superstats.model.entities.Resposta;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -41,5 +44,20 @@ public class RespostaRepository {
                 resposta.getDataResposta(),
                 resposta.getId()
         );
+    }
+
+    public List<ChartDataDTO> getResultadosPorPergunta(Integer perguntaId) {
+        String sql = """
+            SELECT 
+                p.nome AS nome, 
+                COUNT(r.id) AS votos
+            FROM Resposta r
+            JOIN Personagem p ON r.fk_Personagem_id = p.id
+            WHERE r.fk_Pergunta_id = ?
+            GROUP BY p.nome
+            ORDER BY votos DESC
+        """;
+
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ChartDataDTO.class), perguntaId);
     }
 }

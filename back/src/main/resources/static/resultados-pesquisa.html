@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SuperStats - Resultados da Pesquisa</title>
+    <!-- 1. Bootstrap CSS (mesmo estilo do seu outro arquivo) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 2. Chart.js (para os gráficos) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { padding: 20px; background-color: #f4f4f4; }
+        .chart-container {
+            height: 400px;
+            background-color: #fff;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Resultados da Pesquisa</h1>
+        <div>
+            <!-- Links para navegar, iguais à sua outra página -->
+            <a href="pesquisa.html" class="btn btn-secondary">Responder Pesquisa</a>
+            <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
+        </div>
+    </div>
+
+    <!-- Container dos Gráficos -->
+    <div class="row g-4">
+
+        <!-- Gráfico 1: Herói Preferido -->
+        <div class="col-lg-6">
+            <h2 class="h4 text-center mb-3">Herói Preferido da Comunidade</h2>
+            <div class="chart-container">
+                <canvas id="heroiChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Gráfico 2: Vilão Preferido -->
+        <div class="col-lg-6">
+            <h2 class="h4 text-center mb-3">Vilão Preferido da Comunidade</h2>
+            <div class="chart-container">
+                <canvas id="vilaoChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Gráfico 3: Herói Mais Forte -->
+        <div class="col-lg-6"> <!-- <-- MUDANÇA: de col-12 para col-lg-6 -->
+            <h2 class="h4 text-center mb-3">Herói Mais Forte da Comunidade</h2>
+            <div class="chart-container"> <!-- <-- MUDANÇA: removido style de altura -->
+                <canvas id="forteChart"></canvas>
+            </div>
+        </div>
+
+        <!-- NOVO GRÁFICO 4: Mais Inteligente -->
+        <div class="col-lg-6">
+            <h2 class="h4 text-center mb-3">Personagem Mais Inteligente</h2>
+            <div class="chart-container">
+                <canvas id="inteligenteChart"></canvas>
+            </div>
+        </div>
+
+        <!-- NOVO GRÁFICO 5: Mais Rápido -->
+        <div class="col-12">
+            <h2 class="h4 text-center mb-3">Personagem Mais Rápido</h2>
+            <div class="chart-container" style="height: 450px;">
+                <canvas id="rapidoChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    // URL base da API (assim como na sua outra página)
+    const baseUrl = 'http://localhost:8080/pesquisas';
+
+    // Função de Logout (mesma da sua outra página)
+    function handleLogout() {
+        localStorage.removeItem('jwtToken');
+        window.location.href = 'login.html';
+    }
+
+    // Função Fetch com Autenticação (mesma da sua outra página)
+    async function fetchWithAuth(url, options = {}) {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            window.location.href = 'login.html';
+            return;
+        }
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            ...options.headers
+        };
+        const response = await fetch(url, { ...options, headers });
+        if (response.status === 401) { handleLogout(); }
+        return response;
+    }
+
+    // Função genérica para criar um gráfico
+    function criarGrafico(ctx, tipo, labels, data, chartLabel) {
+        new Chart(ctx, {
+            type: tipo, // 'bar', 'pie', 'doughnut'
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: chartLabel,
+                    data: data,
+                    // Gera cores aleatórias bonitas
+                    backgroundColor: labels.map(() => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.7)`),
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: (tipo === 'pie' || tipo === 'doughnut') ? 'top' : 'display',
+                        display: (tipo === 'pie' || tipo === 'doughnut')
+                    }
+                },
+                scales: {
+                    // Esconde eixos para gráficos de pizza
+                    x: { display: tipo === 'bar' },
+                    y: { display: tipo === 'bar', beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // Função para carregar os dados de um gráfico
+    async function carregarResultados(endpoint, canvasId, tipoGrafico) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        try {
+            const res = await fetchWithAuth(`${baseUrl}${endpoint}`);
+            if (!res.ok) throw new Error('Falha ao buscar dados');
+
+            // O DTO 'ChartDataDTO' retorna: [{nome: "Batman", votos: 20}, ...]
+            const resultados = await res.json();
+
+            if (resultados.length === 0) {
+                ctx.canvas.parentElement.innerHTML = '<p class="text-center text-muted mt-5">Nenhum voto registrado para esta categoria ainda.</p>';
+                return;
+            }
+
+            // Precisamos separar os dados para o Chart.js:
+            const labels = resultados.map(r => r.nome); // ["Batman", "Superman", ...]
+            const data = resultados.map(r => r.votos);  // [20, 15, ...]
+
+            // Criar o gráfico
+            criarGrafico(ctx, tipoGrafico, labels, data, 'Votos');
+
+        } catch (error) {
+            console.error(`Erro ao carregar ${canvasId}:`, error);
+            ctx.canvas.parentElement.innerHTML = '<p class="text-center text-danger mt-5">Erro ao carregar gráfico.</p>';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        carregarResultados('/resultados/heroi-preferido', 'heroiChart', 'doughnut');
+        carregarResultados('/resultados/vilao-preferido', 'vilaoChart', 'doughnut');
+        carregarResultados('/resultados/personagem-mais-forte', 'forteChart', 'bar');
+        carregarResultados('/resultados/personagem-mais-inteligente', 'inteligenteChart', 'bar');
+        carregarResultados('/resultados/personagem-mais-rapido', 'rapidoChart', 'bar');
+    });
+
+</script>
+</body>
+</html>

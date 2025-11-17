@@ -1,5 +1,6 @@
 package com.cesar.superstats.service;
 
+import com.cesar.superstats.dto.ChartDataDTO;
 import com.cesar.superstats.dto.PersonagemFinalizeCreateDTO;
 import com.cesar.superstats.dto.RespostaDTO;
 import com.cesar.superstats.model.entities.Fa;
@@ -69,5 +70,9 @@ public class PesquisaService {
                             }
                     );
         }
+    }
+
+    public List<ChartDataDTO> getVotosPorPergunta(Integer perguntaId) {
+        return respostaRepository.getResultadosPorPergunta(perguntaId);
     }
 }
