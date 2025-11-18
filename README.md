@@ -1,6 +1,6 @@
 ## 🚀 SuperStats
 
-Você já quis saber quem a comunidade realmente acha que venceria numa luta: *Superman ou Goku?*  
+Você já quis saber quem a comunidade realmente acha que venceria numa luta: *Superman ou Hulk?*  
 Ou qual é o vilão mais popular de todos os tempos?
 
 O **SuperStats** é uma plataforma full-stack que responde a essas perguntas. Pense nele como uma **Pokédex**, mas para todo o universo de heróis e vilões.
