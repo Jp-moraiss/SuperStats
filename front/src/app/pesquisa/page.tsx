@@ -1,16 +1,20 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import styles from './PesquisaPage.module.css';
 import { debounce } from 'lodash';
-import { FaSearch, FaCheckCircle, FaSpinner, FaUser, FaTimes } from 'react-icons/fa';
+import { FaSearch, FaCheckCircle, FaSpinner, FaUser, FaTimes, FaArrowLeft, FaArrowRight, FaTrophy, FaRocket } from 'react-icons/fa';
 import { ApiService, API_ENDPOINTS } from "../../shared";
 import { Pergunta, RespostaDTO, PersonagemAutocomplete } from "../../types/pesquisa";
 
 const PESQUISA_ID = 1; // ID da pesquisa padrão
 
+type QuizStep = 'intro' | 'quiz' | 'summary' | 'completed';
+
 export default function PesquisaPage() {
     const [perguntas, setPerguntas] = useState<Pergunta[]>([]);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [quizStep, setQuizStep] = useState<QuizStep>('intro');
     const [respostas, setRespostas] = useState<Record<number, PersonagemAutocomplete>>({});
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
@@ -24,26 +28,10 @@ export default function PesquisaPage() {
     
     const autocompleteRefs = useRef<Record<number, HTMLDivElement | null>>({});
     const inputRefs = useRef<Record<number, HTMLInputElement | null>>({});
+    const activeAutocompleteRef = useRef<number | null>(null);
 
-    useEffect(() => {
-        loadPerguntas();
-        
-        // Fechar autocomplete ao clicar fora
-        const handleClickOutside = (event: MouseEvent) => {
-            if (activeAutocomplete !== null) {
-                const ref = autocompleteRefs.current[activeAutocomplete];
-                const inputRef = inputRefs.current[activeAutocomplete];
-                if (ref && !ref.contains(event.target as Node) && inputRef && !inputRef.contains(event.target as Node)) {
-                    setActiveAutocomplete(null);
-                }
-            }
-        };
-        
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [activeAutocomplete]);
-
-    const loadPerguntas = async () => {
+    // Definir loadPerguntas antes de usar no useEffect
+    const loadPerguntas = useCallback(async () => {
         try {
             setLoading(true);
             const res = await ApiService.get(API_ENDPOINTS.PESQUISAS_PERGUNTAS(PESQUISA_ID));
@@ -55,9 +43,40 @@ export default function PesquisaPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const searchCharacters = useCallback(
+    // Sincronizar ref com state
+    useEffect(() => {
+        activeAutocompleteRef.current = activeAutocomplete;
+    }, [activeAutocomplete]);
+
+    // Carregar perguntas apenas uma vez
+    useEffect(() => {
+        loadPerguntas();
+    }, [loadPerguntas]);
+
+    // Event listener para clicar fora - usando ref para evitar dependência
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const activeId = activeAutocompleteRef.current;
+            if (activeId !== null) {
+                const ref = autocompleteRefs.current[activeId];
+                const inputRef = inputRefs.current[activeId];
+                const target = event.target as Node;
+                if (ref && !ref.contains(target) && inputRef && !inputRef.contains(target)) {
+                    setActiveAutocomplete(null);
+                }
+            }
+        };
+        
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []); // Sem dependências - usa ref
+
+    // Criar função de busca memoizada com debounce
+    const searchCharactersDebouncedRef = useRef(
         debounce(async (perguntaId: number, query: string) => {
             if (query.length < 2) {
                 setAutocompleteResults(prev => ({ ...prev, [perguntaId]: [] }));
@@ -76,43 +95,53 @@ export default function PesquisaPage() {
             } finally {
                 setSearching(prev => ({ ...prev, [perguntaId]: false }));
             }
-        }, 500),
-        []
+        }, 500)
     );
 
-    const handleInputChange = (perguntaId: number, value: string) => {
+    // Cleanup do debounce ao desmontar
+    useEffect(() => {
+        return () => {
+            searchCharactersDebouncedRef.current.cancel();
+        };
+    }, []);
+
+    const searchCharactersDebounced = searchCharactersDebouncedRef.current;
+
+    const handleInputChange = useCallback((perguntaId: number, value: string) => {
         setSearchQueries(prev => ({ ...prev, [perguntaId]: value }));
         
         // Limpar resposta se o usuário mudar o texto
-        if (respostas[perguntaId] && value !== respostas[perguntaId].name) {
-            setRespostas(prev => {
+        setRespostas(prev => {
+            if (prev[perguntaId] && value !== prev[perguntaId].name) {
                 const newRespostas = { ...prev };
                 delete newRespostas[perguntaId];
                 return newRespostas;
-            });
-        }
+            }
+            return prev;
+        });
         
         setActiveAutocomplete(perguntaId);
-        searchCharacters(perguntaId, value);
-    };
+        searchCharactersDebounced(perguntaId, value);
+    }, [searchCharactersDebounced]);
 
-    const selectCharacter = (perguntaId: number, character: PersonagemAutocomplete) => {
+    const selectCharacter = useCallback((perguntaId: number, character: PersonagemAutocomplete) => {
         setRespostas(prev => ({ ...prev, [perguntaId]: character }));
         setSearchQueries(prev => ({ ...prev, [perguntaId]: character.name }));
         setActiveAutocomplete(null);
         setAutocompleteResults(prev => ({ ...prev, [perguntaId]: [] }));
-    };
+    }, []);
 
-    const clearAnswer = (perguntaId: number) => {
+    const clearAnswer = useCallback((perguntaId: number) => {
         setRespostas(prev => {
             const newRespostas = { ...prev };
             delete newRespostas[perguntaId];
             return newRespostas;
         });
         setSearchQueries(prev => ({ ...prev, [perguntaId]: '' }));
-    };
+        setActiveAutocomplete(null);
+    }, []);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
         
         const respostasArray: RespostaDTO[] = Object.entries(respostas).map(([perguntaId, character]) => ({
@@ -144,167 +173,343 @@ export default function PesquisaPage() {
         } finally {
             setSubmitting(false);
         }
-    };
+    }, [respostas]);
 
-    const answeredCount = Object.keys(respostas).length;
-    const progress = perguntas.length > 0 ? (answeredCount / perguntas.length) * 100 : 0;
+    // Memoizar valores calculados
+    const answeredCount = useMemo(() => Object.keys(respostas).length, [respostas]);
+    const currentQuestion = useMemo(() => perguntas[currentQuestionIndex], [perguntas, currentQuestionIndex]);
+    
+    const hasAnswer = useMemo(() => currentQuestion ? !!respostas[currentQuestion.id] : false, [currentQuestion, respostas]);
+    const isSearching = useMemo(() => currentQuestion ? (searching[currentQuestion.id] || false) : false, [currentQuestion, searching]);
+    const results = useMemo(() => currentQuestion ? (autocompleteResults[currentQuestion.id] || []) : [], [currentQuestion, autocompleteResults]);
+    const isActive = useMemo(() => currentQuestion ? (activeAutocomplete === currentQuestion.id) : false, [currentQuestion, activeAutocomplete]);
+    const query = useMemo(() => currentQuestion ? (searchQueries[currentQuestion.id] || '') : '', [currentQuestion, searchQueries]);
+
+    const startQuiz = useCallback(() => {
+        setQuizStep('quiz');
+    }, []);
+
+    const goToNextQuestion = useCallback(() => {
+        setCurrentQuestionIndex(prev => {
+            if (prev < perguntas.length - 1) {
+                setActiveAutocomplete(null);
+                return prev + 1;
+            } else {
+                setQuizStep('summary');
+                return prev;
+            }
+        });
+    }, [perguntas.length]);
+
+    const goToPreviousQuestion = useCallback(() => {
+        setCurrentQuestionIndex(prev => {
+            if (prev > 0) {
+                setActiveAutocomplete(null);
+                return prev - 1;
+            }
+            return prev;
+        });
+    }, []);
+
+    const goToSummary = useCallback(() => {
+        setQuizStep('summary');
+    }, []);
+
+    const goBackToQuiz = useCallback(() => {
+        setQuizStep('quiz');
+    }, []);
+
+    const handleInputFocus = useCallback((perguntaId: number) => {
+        setActiveAutocomplete(perguntaId);
+    }, []);
+
+    const handleCharacterSelect = useCallback((perguntaId: number, character: PersonagemAutocomplete) => {
+        selectCharacter(perguntaId, character);
+    }, [selectCharacter]);
+
+    const handleClearAnswer = useCallback((perguntaId: number) => {
+        clearAnswer(perguntaId);
+    }, [clearAnswer]);
+
+    // Memoizar os handlers para a pergunta atual
+    const currentInputChangeHandler = useMemo(() => {
+        if (!currentQuestion) return undefined;
+        return (e: React.ChangeEvent<HTMLInputElement>) => {
+            handleInputChange(currentQuestion.id, e.target.value);
+        };
+    }, [currentQuestion, handleInputChange]);
+
+    const currentInputFocusHandler = useMemo(() => {
+        if (!currentQuestion) return undefined;
+        return () => handleInputFocus(currentQuestion.id);
+    }, [currentQuestion, handleInputFocus]);
+
+    const currentClearAnswerHandler = useMemo(() => {
+        if (!currentQuestion) return undefined;
+        return () => handleClearAnswer(currentQuestion.id);
+    }, [currentQuestion, handleClearAnswer]);
+
+    const currentCharacterSelectHandler = useMemo(() => {
+        if (!currentQuestion) return undefined;
+        return (character: PersonagemAutocomplete) => handleCharacterSelect(currentQuestion.id, character);
+    }, [currentQuestion, handleCharacterSelect]);
 
     if (loading) {
         return (
             <div className={styles.loadingContainer}>
                 <div className={styles.loadingSpinner}></div>
-                <p>Carregando pesquisa...</p>
+                <p>Carregando quiz...</p>
             </div>
         );
     }
 
-    return (
-        <div className={styles.pesquisaContainer}>
-            <div className={styles.headerSection}>
-                <h1 className={styles.pageTitle}>
-                    <FaUser /> Pesquisa de Favoritos
-                </h1>
-                <p className={styles.pageDescription}>
-                    Responda às perguntas abaixo buscando no nosso catálogo de personagens.
-                </p>
-                
-                {/* Progress Bar */}
-                {perguntas.length > 0 && (
-                    <div className={styles.progressSection}>
-                        <div className={styles.progressInfo}>
-                            <span className={styles.progressText}>
-                                {answeredCount} de {perguntas.length} perguntas respondidas
-                            </span>
-                            <span className={styles.progressPercentage}>{Math.round(progress)}%</span>
+    // Tela de Introdução
+    if (quizStep === 'intro') {
+        return (
+            <div className={styles.quizContainer}>
+                <div className={styles.introScreen}>
+                    <div className={styles.introIcon}>
+                        <FaTrophy />
+                    </div>
+                    <h1 className={styles.quizTitle}>Quiz de Favoritos</h1>
+                    <p className={styles.quizDescription}>
+                        Teste seus conhecimentos sobre super-heróis! Responda {perguntas.length} perguntas sobre seus personagens favoritos.
+                    </p>
+                    <div className={styles.quizInfo}>
+                        <div className={styles.infoItem}>
+                            <FaCheckCircle />
+                            <span>{perguntas.length} Perguntas</span>
                         </div>
-                        <div className={styles.progressBar}>
-                            <div 
-                                className={styles.progressFill} 
-                                style={{ width: `${progress}%` }}
-                            ></div>
+                        <div className={styles.infoItem}>
+                            <FaRocket />
+                            <span>Interativo</span>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <FaUser />
+                            <span>Divertido</span>
                         </div>
                     </div>
-                )}
+                    <button onClick={startQuiz} className={styles.startButton}>
+                        Começar Quiz
+                    </button>
+                </div>
             </div>
+        );
+    }
 
-            <form onSubmit={handleSubmit} className={styles.surveyForm}>
-                <div className={styles.questionsContainer}>
-                    {perguntas.map((pergunta, index) => {
-                        const hasAnswer = !!respostas[pergunta.id];
-                        const isSearching = searching[pergunta.id] || false;
-                        const results = autocompleteResults[pergunta.id] || [];
-                        const isActive = activeAutocomplete === pergunta.id;
-                        const query = searchQueries[pergunta.id] || '';
-
-                        return (
-                            <div key={pergunta.id} className={styles.questionCard}>
-                                <div className={styles.questionHeader}>
-                                    <span className={styles.questionNumber}>Pergunta {index + 1}</span>
-                                    {hasAnswer && (
-                                        <span className={styles.answeredBadge}>
-                                            <FaCheckCircle /> Respondida
-                                        </span>
-                                    )}
-                                </div>
-                                
-                                <label htmlFor={`pergunta-${pergunta.id}`} className={styles.questionLabel}>
-                                    {pergunta.textoPergunta}
-                                </label>
-
-                                <div className={styles.autocompleteContainer}>
-                                    <div className={styles.inputWrapper}>
-                                        <FaSearch className={styles.searchIcon} />
-                                        <input
-                                            ref={(el) => { inputRefs.current[pergunta.id] = el; }}
-                                            type="text"
-                                            id={`pergunta-${pergunta.id}`}
-                                            value={hasAnswer ? respostas[pergunta.id].name : query}
-                                            onChange={(e) => handleInputChange(pergunta.id, e.target.value)}
-                                            onFocus={() => setActiveAutocomplete(pergunta.id)}
-                                            className={`${styles.autocompleteInput} ${hasAnswer ? styles.hasAnswer : ''}`}
-                                            placeholder="Comece a digitar o nome do personagem..."
-                                            autoComplete="off"
-                                            disabled={submitting}
-                                        />
-                                        {isSearching && (
-                                            <FaSpinner className={styles.spinnerIcon} />
-                                        )}
-                                        {hasAnswer && (
-                                            <button
-                                                type="button"
-                                                onClick={() => clearAnswer(pergunta.id)}
-                                                className={styles.clearButton}
-                                                disabled={submitting}
-                                            >
-                                                <FaTimes />
-                                            </button>
+    // Tela de Resumo
+    if (quizStep === 'summary') {
+        return (
+            <div className={styles.quizContainer}>
+                <div className={styles.summaryScreen}>
+                    <h2 className={styles.summaryTitle}>Resumo das Respostas</h2>
+                    <div className={styles.summaryList}>
+                        {perguntas.map((pergunta, index) => {
+                            const resposta = respostas[pergunta.id];
+                            return (
+                                <div key={pergunta.id} className={styles.summaryItem}>
+                                    <div className={styles.summaryQuestion}>
+                                        <span className={styles.summaryNumber}>{index + 1}</span>
+                                        <span>{pergunta.textoPergunta}</span>
+                                    </div>
+                                    <div className={styles.summaryAnswer}>
+                                        {resposta ? (
+                                            <span className={styles.answerText}>
+                                                <FaCheckCircle /> {resposta.name}
+                                            </span>
+                                        ) : (
+                                            <span className={styles.noAnswer}>Não respondida</span>
                                         )}
                                     </div>
-
-                                    {isActive && (results.length > 0 || isSearching || (query.length >= 2 && !isSearching)) && (
-                                        <div 
-                                            ref={(el) => { autocompleteRefs.current[pergunta.id] = el; }}
-                                            className={styles.autocompleteResults}
-                                        >
-                                            {isSearching ? (
-                                                <div className={styles.autocompleteLoading}>
-                                                    <FaSpinner className={styles.spinnerIcon} />
-                                                    <span>Buscando personagens...</span>
-                                                </div>
-                                            ) : results.length > 0 ? (
-                                                results.map((character) => (
-                                                    <div
-                                                        key={character.id}
-                                                        className={styles.autocompleteItem}
-                                                        onClick={() => selectCharacter(pergunta.id, character)}
-                                                    >
-                                                        <div className={styles.characterInfo}>
-                                                            <strong className={styles.characterName}>{character.name}</strong>
-                                                            {character.fullName && character.fullName !== 'No alter egos found.' && (
-                                                                <small className={styles.characterFullName}>
-                                                                    {character.fullName}
-                                                                </small>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                ))
-                                            ) : query.length >= 2 ? (
-                                                <div className={styles.autocompleteEmpty}>
-                                                    Nenhum personagem encontrado.
-                                                </div>
-                                            ) : null}
-                                        </div>
-                                    )}
                                 </div>
+                            );
+                        })}
+                    </div>
+                    <div className={styles.summaryActions}>
+                        <button onClick={goBackToQuiz} className={styles.backButton}>
+                            <FaArrowLeft /> Voltar
+                        </button>
+                        <form onSubmit={handleSubmit} style={{ display: 'inline' }}>
+                            {submitStatus.type && (
+                                <div className={`${styles.statusMessage} ${styles[submitStatus.type]}`}>
+                                    {submitStatus.message}
+                                </div>
+                            )}
+                            <button
+                                type="submit"
+                                className={styles.submitButton}
+                                disabled={submitting || answeredCount === 0}
+                            >
+                                {submitting ? (
+                                    <>
+                                        <FaSpinner className={styles.spinnerIcon} />
+                                        Enviando...
+                                    </>
+                                ) : (
+                                    <>
+                                        <FaCheckCircle />
+                                        Enviar Respostas
+                                    </>
+                                )}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Verificação de segurança
+    if (!currentQuestion) {
+        return (
+            <div className={styles.loadingContainer}>
+                <p>Nenhuma pergunta disponível.</p>
+            </div>
+        );
+    }
+
+    // Tela de Quiz (pergunta por pergunta)
+    return (
+        <div className={styles.quizContainer}>
+            <div className={styles.quizHeader}>
+                <div className={styles.quizProgress}>
+                    <span className={styles.progressText}>
+                        Pergunta {currentQuestionIndex + 1} de {perguntas.length}
+                    </span>
+                    <div className={styles.progressBar}>
+                        <div 
+                            className={styles.progressFill} 
+                            style={{ width: `${((currentQuestionIndex + 1) / perguntas.length) * 100}%` }}
+                        ></div>
+                    </div>
+                </div>
+            </div>
+
+            <div className={styles.questionSlide}>
+                <div className={styles.questionCard}>
+                    <div className={styles.questionHeader}>
+                        <span className={styles.questionNumber}>Pergunta {currentQuestionIndex + 1}</span>
+                        {hasAnswer && (
+                            <span className={styles.answeredBadge}>
+                                <FaCheckCircle /> Respondida
+                            </span>
+                        )}
+                    </div>
+                    
+                    <label htmlFor={`pergunta-${currentQuestion.id}`} className={styles.questionLabel}>
+                        {currentQuestion.textoPergunta}
+                    </label>
+
+                    <div className={styles.autocompleteContainer}>
+                        <div className={styles.inputWrapper}>
+                            <FaSearch className={styles.searchIcon} />
+                            <input
+                                ref={(el) => { 
+                                    if (el) {
+                                        inputRefs.current[currentQuestion.id] = el;
+                                    }
+                                }}
+                                type="text"
+                                id={`pergunta-${currentQuestion.id}`}
+                                value={hasAnswer ? respostas[currentQuestion.id].name : query}
+                                onChange={currentInputChangeHandler}
+                                onFocus={currentInputFocusHandler}
+                                className={`${styles.autocompleteInput} ${hasAnswer ? styles.hasAnswer : ''}`}
+                                placeholder="Comece a digitar o nome do personagem..."
+                                autoComplete="off"
+                                disabled={submitting}
+                            />
+                            {isSearching && (
+                                <FaSpinner className={styles.spinnerIcon} />
+                            )}
+                            {hasAnswer && (
+                                <button
+                                    type="button"
+                                    onClick={currentClearAnswerHandler}
+                                    className={styles.clearButton}
+                                    disabled={submitting}
+                                >
+                                    <FaTimes />
+                                </button>
+                            )}
+                        </div>
+
+                        {isActive && (results.length > 0 || isSearching || (query.length >= 2 && !isSearching)) && (
+                            <div 
+                                ref={(el) => { 
+                                    if (el) {
+                                        autocompleteRefs.current[currentQuestion.id] = el;
+                                    }
+                                }}
+                                className={styles.autocompleteResults}
+                            >
+                                {isSearching ? (
+                                    <div className={styles.autocompleteLoading}>
+                                        <FaSpinner className={styles.spinnerIcon} />
+                                        <span>Buscando personagens...</span>
+                                    </div>
+                                ) : results.length > 0 ? (
+                                    results.map((character) => (
+                                        <div
+                                            key={character.id}
+                                            className={styles.autocompleteItem}
+                                            onClick={() => currentCharacterSelectHandler?.(character)}
+                                        >
+                                            <div className={styles.characterInfo}>
+                                                <strong className={styles.characterName}>{character.name}</strong>
+                                                {character.fullName && character.fullName !== 'No alter egos found.' && (
+                                                    <small className={styles.characterFullName}>
+                                                        {character.fullName}
+                                                    </small>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : query.length >= 2 ? (
+                                    <div className={styles.autocompleteEmpty}>
+                                        Nenhum personagem encontrado.
+                                    </div>
+                                ) : null}
                             </div>
-                        );
-                    })}
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            <div className={styles.quizNavigation}>
+                <button
+                    type="button"
+                    onClick={goToPreviousQuestion}
+                    className={styles.navButton}
+                    disabled={currentQuestionIndex === 0 || submitting}
+                >
+                    <FaArrowLeft /> Anterior
+                </button>
+                
+                <div className={styles.quizStats}>
+                    <span>{answeredCount} de {perguntas.length} respondidas</span>
                 </div>
 
-                {submitStatus.type && (
-                    <div className={`${styles.statusMessage} ${styles[submitStatus.type]}`}>
-                        {submitStatus.message}
-                    </div>
+                {currentQuestionIndex === perguntas.length - 1 ? (
+                    <button
+                        type="button"
+                        onClick={goToSummary}
+                        className={styles.navButton}
+                        disabled={submitting}
+                    >
+                        Ver Resumo <FaArrowRight />
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        onClick={goToNextQuestion}
+                        className={styles.navButton}
+                        disabled={submitting}
+                    >
+                        Próxima <FaArrowRight />
+                    </button>
                 )}
-
-                <button
-                    type="submit"
-                    className={styles.submitButton}
-                    disabled={submitting || answeredCount === 0}
-                >
-                    {submitting ? (
-                        <>
-                            <FaSpinner className={styles.spinnerIcon} />
-                            Enviando...
-                        </>
-                    ) : (
-                        <>
-                            <FaCheckCircle />
-                            Enviar Respostas
-                        </>
-                    )}
-                </button>
-            </form>
+            </div>
         </div>
     );
 }

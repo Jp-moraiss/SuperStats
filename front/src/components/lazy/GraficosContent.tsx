@@ -17,6 +17,17 @@ const PopularidadeEmpresasChart = dynamic(() => import('../charts/PopularidadeEm
   ssr: false,
 });
 
+// Lazy loading do componente de resultados da pesquisa
+const PesquisaResultsCharts = dynamic(() => import('../charts/PesquisaResultsCharts'), {
+  loading: () => (
+    <div className="loading-container">
+      <div className="comic-spinner">📊</div>
+      <p>Carregando resultados da pesquisa...</p>
+    </div>
+  ),
+  ssr: false,
+});
+
 // Dados dos gráficos movidos para um arquivo separado para otimização
 const graficos = [
   {
@@ -147,6 +158,9 @@ export default function GraficosContent() {
     <div className="graficos-container">
       {/* Gráficos de Popularidade */}
       <PopularidadeEmpresasChart />
+      
+      {/* Resultados da Pesquisa */}
+      <PesquisaResultsCharts />
       
       {/* Grid dos gráficos */}
       <div className="graficos-grid">

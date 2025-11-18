@@ -27,24 +27,23 @@ export default function RegisterPage() {
   
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    // Gerencia as classes de fundo dinâmicas no <body>
-    document.body.classList.add("auth-body-bg"); // Cor de fundo sólida
-    document.body.classList.add("auth-page-bg"); // Padrão halftone
-    document.body.classList.remove("marvel", "dc", "default"); // Limpa anteriores
+  // Variável auxiliar para classe do universo
+  const universeClass = form.univ_fav === "Marvel" ? "marvel" : form.univ_fav === "DC" ? "dc" : "default";
 
-    let bgClass = "default";
-    if (form.univ_fav === "Marvel") {
-      bgClass = "marvel";
-    } else if (form.univ_fav === "DC") {
-      bgClass = "dc";
-    }
-    document.body.classList.add(bgClass);
+  useEffect(() => {
+    // --- CORREÇÃO AQUI ---
+    // Manipulamos APENAS a cor de fundo sólida no body
+    document.body.classList.add("auth-body-bg");
+    document.body.classList.remove("marvel", "dc", "default");
+    
+    // Aplica a classe de cor baseada no estado
+    document.body.classList.add(universeClass);
     
     return () => {
-      document.body.classList.remove("auth-body-bg", "auth-page-bg", "marvel", "dc", "default");
+      // Limpeza ao sair da página
+      document.body.classList.remove("auth-body-bg", "marvel", "dc", "default");
     };
-  }, [form.univ_fav]);
+  }, [universeClass]); // Dependência atualizada para a variável auxiliar
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -116,8 +115,13 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="auth-container">
-      <h2 className="auth-title">Cadastro de Novo Fã</h2>
+    <>
+      {/* --- NOVO: Div separada para o fundo de pontos --- */}
+      {/* Ela herda a classe do universo para mudar a cor dos pontos */}
+      <div className={`auth-page-bg ${universeClass}`} />
+
+      <div className="auth-container">
+        <h2 className="auth-title">Cadastro de Novo Fã</h2>
       <form className="auth-form" onSubmit={handleSubmit}>
 
         {/* ALTERADO: Agrupado com Fieldset */}
@@ -206,6 +210,7 @@ export default function RegisterPage() {
       <p className="auth-link">
         Já tem conta? <a href="/auth/login">Faça o login</a>
       </p>
-    </div>
+      </div>
+    </>
   );
 }

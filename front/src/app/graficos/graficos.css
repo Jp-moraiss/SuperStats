@@ -419,3 +419,27 @@
     max-height: calc(95vh - 120px);
   }
 }
+
+/* =======================================
+📊 GRÁFICOS DE RESULTADOS DA PESQUISA
+======================================= */
+
+.pesquisa-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .pesquisa-charts-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pesquisa-charts-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

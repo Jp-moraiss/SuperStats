@@ -16,7 +16,6 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 6px solid var(--color-secondary);
-  box-shadow: var(--shadow-strong);
 }
 
 .header-content {

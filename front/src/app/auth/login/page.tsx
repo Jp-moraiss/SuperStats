@@ -32,6 +32,19 @@ export default function LoginPage() {
     setError(null);
     setLoading(true);
 
+    // Validação básica antes de enviar
+    if (!form.username.trim()) {
+      setError("⚠️ Por favor, informe seu usuário!");
+      setLoading(false);
+      return;
+    }
+
+    if (!form.password.trim()) {
+      setError("⚠️ Por favor, informe sua senha!");
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
@@ -40,18 +53,35 @@ export default function LoginPage() {
       });
 
       if (!res.ok) {
-        try {
-          const errorData = await res.json();
-          throw new Error(
-            errorData.message ||
-              "Credenciais inválidas. Verifique seu usuário e senha."
-          );
-        } catch {
-          throw new Error(
-            (await res.text()) ||
-              "Credenciais inválidas. Verifique seu usuário e senha."
-          );
+        let errorMessage = "❌ Ops! Algo deu errado ao fazer login.";
+        
+        // Trata diferentes tipos de erro
+        if (res.status === 401 || res.status === 403) {
+          errorMessage = "🔒 Usuário ou senha incorretos! Verifique suas credenciais e tente novamente.";
+        } else if (res.status === 404) {
+          errorMessage = "🔍 Usuário não encontrado! Verifique se o nome de usuário está correto.";
+        } else if (res.status >= 500) {
+          errorMessage = "⚠️ Erro no servidor. Tente novamente em alguns instantes.";
+        } else {
+          // Tenta obter mensagem específica do backend
+          try {
+            const errorData = await res.clone().json();
+            if (errorData.message) {
+              errorMessage = `❌ ${errorData.message}`;
+            }
+          } catch {
+            try {
+              const errorText = await res.clone().text();
+              if (errorText && errorText.trim()) {
+                errorMessage = `❌ ${errorText}`;
+              }
+            } catch {
+              // Se não conseguir ler o erro, usa a mensagem padrão
+            }
+          }
         }
+        
+        throw new Error(errorMessage);
       }
 
       const data = await res.json();
@@ -60,9 +90,9 @@ export default function LoginPage() {
       router.push("/");
     } catch (err) {
       if (err instanceof Error) {
-        setError(err.message || "Ocorreu um erro desconhecido.");
+        setError(err.message);
       } else {
-        setError("Ocorreu um erro desconhecido.");
+        setError("❌ Ocorreu um erro inesperado. Tente novamente.");
       }
     } finally {
       setLoading(false);
@@ -106,7 +136,11 @@ export default function LoginPage() {
         </button>
       </form>
 
-      {error && <div className="alert mt-3">{error}</div>}
+      {error && (
+        <div className="alert alert-danger mt-3" role="alert">
+          {error}
+        </div>
+      )}
 
       <p className="auth-link">
         Não tem conta? <a href="/auth/register">Cadastre-se</a>
