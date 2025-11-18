@@ -5,24 +5,23 @@ import { DashboardFilter } from '@/types';
 
 const filterMap: Record<string, DashboardFilter | null> = {
   todos: null,
-  herois: { type: 'alignment', value: 'good' },
-  viloes: { type: 'alignment', value: 'bad' },
-  antiherois: { type: 'alignment', value: 'neutral' },
+  herois: { type: 'alignment', value: 'Herói' }, // ✅ Corrigido: usar 'Herói' em vez de 'good'
+  viloes: { type: 'alignment', value: 'Vilão' }, // ✅ Corrigido: usar 'Vilão' em vez de 'bad'
+  antiherois: { type: 'alignment', value: 'Anti-Herói' }, // ✅ Corrigido: usar 'Anti-Herói' em vez de 'neutral'
   marvel: { type: 'publisher', value: 'Marvel Comics' },
   dc: { type: 'publisher', value: 'DC Comics' },
 };
 
-// ✅ Torne a função async
 export default async function DashboardPage({
   params,
 }: {
   params: Promise<{ filter: string }>;
 }) {
-  const { filter } = await params; // 👈 Desestrutura após aguardar o Promise
+  const { filter } = await params;
   const currentFilter = filterMap[filter] ?? null;
 
-  // ⚡️ Se getSuperheroes for async, aguarde aqui também
-  const superheroData = await getSuperheroes(currentFilter);
+  // ✅ getSuperheroes não é async, então não precisa de await
+  const superheroData = getSuperheroes(currentFilter);
 
   return (
     <DashboardClient

@@ -55,17 +55,44 @@ const processData = (data: RawCharacterData[]): Character[] => {
 // O resto do arquivo (getSuperheroes, etc.) permanece igual...
 export const getSuperheroes = (filter: DashboardFilter = null): Character[] => {
   if (cachedData.length === 0) {
-    const filePath = path.join(process.cwd(), 'public', 'data', 'superheroData.csv');
-    const fileContent = fs.readFileSync(filePath, 'utf8');
-    
-    const results = Papa.parse<RawCharacterData>(fileContent, {
-      header: true,
-      dynamicTyping: true,
-      skipEmptyLines: true,
-    });
-    
-    cachedData = processData(results.data);
-    console.log('CSV data parsed and cached on the server.');
+    try {
+      const filePath = path.join(process.cwd(), 'public', 'data', 'superheroData.csv');
+      
+      // Verificar se o arquivo existe
+      if (!fs.existsSync(filePath)) {
+        console.error(`Arquivo CSV não encontrado em: ${filePath}`);
+        return [];
+      }
+      
+      const fileContent = fs.readFileSync(filePath, 'utf8');
+      
+      if (!fileContent || fileContent.trim().length === 0) {
+        console.error('Arquivo CSV está vazio');
+        return [];
+      }
+      
+      const results = Papa.parse<RawCharacterData>(fileContent, {
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
+        transformHeader: (header) => header.trim(), // Remove espaços dos headers
+      });
+      
+      if (results.errors && results.errors.length > 0) {
+        console.warn('Erros ao processar CSV:', results.errors);
+      }
+      
+      if (!results.data || results.data.length === 0) {
+        console.error('Nenhum dado encontrado no CSV');
+        return [];
+      }
+      
+      cachedData = processData(results.data);
+      console.log(`CSV data parsed and cached on the server. ${cachedData.length} personagens carregados.`);
+    } catch (error) {
+      console.error('Erro ao ler ou processar o arquivo CSV:', error);
+      return [];
+    }
   }
 
   if (!filter) return cachedData;

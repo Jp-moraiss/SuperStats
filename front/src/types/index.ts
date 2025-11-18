@@ -4,7 +4,7 @@
 export interface Character {
   id: number;
   Name: string;
-  Alignment: 'good' | 'bad' | 'neutral' | string;
+  Alignment: 'Herói' | 'Vilão' | 'Anti-Herói' | string; // ✅ Atualizado para valores reais
   Gender: string;
   Publisher: 'Marvel Comics' | 'DC Comics' | string;
   Intelligence: number;
@@ -21,6 +21,6 @@ export interface Character {
 
 // O tipo para o filtro que usamos no dashboard
 export type DashboardFilter =
-  | { type: 'alignment'; value: 'good' | 'bad' | 'neutral' }
+  | { type: 'alignment'; value: 'Herói' | 'Vilão' | 'Anti-Herói' } // ✅ Atualizado para valores reais
   | { type: 'publisher'; value: 'Marvel Comics' | 'DC Comics' }
   | null;
