@@ -427,17 +427,27 @@ SuperStats/
 
 **Arquivo**: `back/src/main/resources/db/migration/V4__add_indexes.sql`
 
+**Justificativa Geral**: As consultas para buscar o que um fã consumiu (`findAssistidosByFaId`, `findLidosByFaId`) ou para verificar se uma relação existe (`marcarComoAssistido`, `marcarComoLido`) dependem diretamente das chaves estrangeiras (`fk_Fa_id`, `fk_Filme_id`, `fk_HQ_id`). Os índices criados nessas colunas irão acelerar drasticamente essas operações. *"Com grandes dados, vêm grandes responsabilidades... e grandes índices!"* 🚀
+
 **Índices Criados**:
 
 1. **idx_consome_filme_fa_filme**
    - **Tabela**: `Consome_Filme`
    - **Campos**: `(fk_Fa_id, fk_Filme_id)`
-   - **Justificativa**: Otimiza consultas de relacionamento entre usuários e filmes assistidos
+   - **SQL**:
+     ```sql
+     CREATE INDEX idx_consome_filme_fa_filme ON Consome_Filme (fk_Fa_id, fk_Filme_id);
+     ```
+   - **Justificativa**: Este índice composto otimiza a busca por filmes assistidos por um fã específico, acelerando consultas como `findAssistidosByFaId` e verificações de existência em `marcarComoAssistido`.
 
 2. **idx_consome_hq_fa_hq**
    - **Tabela**: `Consome_HQ`
    - **Campos**: `(fk_Fa_id, fk_HQ_id)`
-   - **Justificativa**: Otimiza consultas de relacionamento entre usuários e HQs lidas
+   - **SQL**:
+     ```sql
+     CREATE INDEX idx_consome_hq_fa_hq ON Consome_HQ (fk_Fa_id, fk_HQ_id);
+     ```
+   - **Justificativa**: Da mesma forma, este otimiza a busca por HQs lidas por um fã, melhorando performance de `findLidosByFaId` e `marcarComoLido`.
 
 #### 📍 Consultas Avançadas
 
@@ -447,6 +457,8 @@ SuperStats/
 
 **Método**: `findHQsNaoLidasPorNinguem()` (linha 143)
 
+**Objetivo**: Encontrar HQs que nunca foram lidas por nenhum fã. Isso é útil para identificar conteúdo com baixo engajamento na plataforma. *"Até mesmo as HQs mais épicas precisam de leitores!"* 📚
+
 **SQL**:
 ```sql
 SELECT h.* 
@@ -455,13 +467,15 @@ LEFT JOIN Consome_HQ ch ON h.id = ch.fk_HQ_id
 WHERE ch.fk_HQ_id IS NULL
 ```
 
-**Justificativa**: Encontra HQs que nunca foram lidas por nenhum usuário.
+**Justificativa**: Utiliza LEFT JOIN para encontrar registros em `HQ` que não possuem correspondência em `Consome_HQ`, identificando HQs órfãs de leitores.
 
 ##### 2. Full Outer Join (Simulado com UNION)
 
 **Arquivo**: `back/src/main/java/com/cesar/superstats/repository/FaRepository.java`
 
 **Método**: `findPerfilDeConsumoDosFas()` (linha 101)
+
+**Objetivo**: Segmentar os fãs com base em seus hábitos de consumo de mídia, categorizando-os em "Apenas Filmes", "Apenas HQs" ou "Ambos". *"Nem todos os heróis usam capa... alguns preferem pipoca!"* 🍿
 
 **SQL**:
 ```sql
@@ -484,13 +498,15 @@ WHERE fc.fk_Fa_id IS NULL
 ORDER BY tipo_consumo, username
 ```
 
-**Justificativa**: Classifica usuários por tipo de consumo (apenas filmes, apenas HQs, ou ambos).
+**Justificativa**: Simula um FULL OUTER JOIN usando UNION de LEFT JOIN e RIGHT JOIN com CTEs (Common Table Expressions), permitindo classificar todos os usuários independentemente de consumirem apenas filmes, apenas HQs, ou ambos.
 
 ##### 3. Subconsulta 1
 
 **Arquivo**: `back/src/main/java/com/cesar/superstats/repository/FaRepository.java`
 
 **Método**: `findFasByTituloFilmeAssistido(String tituloFilme)` (linha 92)
+
+**Objetivo**: Encontrar todos os fãs que assistiram a um filme específico, buscando o filme pelo título. Útil para análises de comunidade. *"Quem assistiu 'Vingadores'? Levante a mão!"* ✋
 
 **SQL**:
 ```sql
@@ -502,13 +518,15 @@ WHERE id IN
   )
 ```
 
-**Justificativa**: Encontra todos os usuários que assistiram um filme específico.
+**Justificativa**: Utiliza subconsultas aninhadas para primeiro encontrar o ID do filme pelo título (case-insensitive) e depois identificar todos os fãs que consumiram esse filme.
 
 ##### 4. Subconsulta 2
 
 **Arquivo**: `back/src/main/java/com/cesar/superstats/repository/FilmeRepository.java`
 
 **Método**: `findAllWithAssistidoCount()` (linha 153)
+
+**Objetivo**: Listar todos os filmes e, para cada um, exibir a contagem de quantos fãs já o assistiram. Ótimo para criar uma lista de "filmes populares". *"O filme mais assistido ganha um troféu... virtual, claro!"* 🏆
 
 **SQL**:
 ```sql
@@ -518,7 +536,7 @@ FROM Filme f
 ORDER BY total_assistido DESC, f.titulo ASC
 ```
 
-**Justificativa**: Lista filmes com contagem de quantos usuários assistiram cada um.
+**Justificativa**: Utiliza subconsulta correlacionada para calcular a contagem de assistências por filme, permitindo ordenação por popularidade.
 
 #### 📍 Visões (Views)
 
@@ -526,9 +544,27 @@ ORDER BY total_assistido DESC, f.titulo ASC
 
 **Arquivo**: `back/src/main/resources/db/migration/V5__create_vw_perfil_completo_fa.sql`
 
-**Descrição**: View que agrega informações completas do perfil do usuário, incluindo filmes assistidos e HQs lidas em formato JSON.
+**Descrição**: View que agrega informações completas do perfil do usuário, incluindo filmes assistidos e HQs lidas em formato JSON. Utiliza as funções `fn_calcula_idade`, `fn_formata_tempo_geek` e `fn_calcula_perfil_consumo` para enriquecer os dados.
 
-**Justificativa Semântica**: Facilita a visualização completa do perfil do usuário em uma única consulta, incluindo suas atividades de consumo.
+**Justificativa Semântica**: Esta visão cria um resumo completo da atividade de cada fã na plataforma. Ela consolida em um só lugar quantas HQs o fã leu, quantos filmes assistiu e quantos personagens criou. É extremamente útil para gerar páginas de perfil de usuário ou para dashboards administrativos sem precisar executar JOINs complexos toda vez. *"Um perfil para governar todos os dados!"* 💍
+
+**Estrutura**:
+```sql
+CREATE OR REPLACE VIEW vw_perfil_completo_fa AS
+SELECT
+   f.id AS fa_id,
+   f.username,
+   f.nome,
+   f.genero,
+   fn_calcula_idade(f.data_nascimento) AS idade,
+   f.ocupacao,
+   fn_formata_tempo_geek(f.tempo_geek) AS tempo_geek_formatado,
+   f.univ_fav,
+   fn_calcula_perfil_consumo(f.id) AS perfil_consumo,
+   (SELECT JSON_ARRAYAGG(JSON_OBJECT(...)) FROM Consome_Filme ...) AS filmes_assistidos_json,
+   (SELECT JSON_ARRAYAGG(JSON_OBJECT(...)) FROM Consome_HQ ...) AS hqs_lidas_json
+FROM Fa f;
+```
 
 **Uso**:
 - **Repository**: `back/src/main/java/com/cesar/superstats/repository/FaRepository.java`
@@ -540,9 +576,23 @@ ORDER BY total_assistido DESC, f.titulo ASC
 
 **Arquivo**: `back/src/main/resources/db/migration/V6__create_vw_popularidade_empresas.sql`
 
-**Descrição**: View que agrega a popularidade de editoras (HQs) e produtoras (Filmes) baseada no consumo dos usuários.
+**Descrição**: View que agrega a popularidade de editoras (HQs) e produtoras (Filmes) baseada no consumo dos usuários usando UNION ALL.
 
-**Justificativa Semântica**: Permite análise comparativa de popularidade entre diferentes empresas de mídia (editoras de HQs e produtoras de filmes).
+**Justificativa Semântica**: Esta visão funciona como uma ferramenta de Business Intelligence, agregando dados brutos de consumo para gerar um ranking de popularidade das empresas de mídia (editoras de HQs e produtoras de filmes). Ela realiza o trabalho pesado de unir as tabelas de mídia (`Filme`, `HQ`) com suas respectivas tabelas de consumo (`Consome_Filme`, `Consome_HQ`), agrupando os resultados por empresa e contando o total de "leituras" ou "visualizações". O resultado é uma tabela de resumo, pré-calculada e otimizada, pronta para ser consumida diretamente pela aplicação para a criação de gráficos, relatórios ou dashboards que respondem a perguntas de negócio sobre as preferências da comunidade, sem a necessidade de processamento de dados complexo e repetitivo na camada de aplicação. *"Marvel vs DC? A resposta está nos dados!"* ⚔️
+
+**Estrutura**:
+```sql
+CREATE OR REPLACE VIEW vw_popularidade_empresas AS
+SELECT hq.editora AS empresa_nome, 'HQ' AS tipo_midia, COUNT(ch.fk_HQ_id) AS total_consumido
+FROM HQ hq JOIN Consome_HQ ch ON hq.id = ch.fk_HQ_id
+WHERE hq.editora IS NOT NULL AND hq.editora != ''
+GROUP BY hq.editora
+UNION ALL
+SELECT filme.produtora AS empresa_nome, 'Filme' AS tipo_midia, COUNT(cf.fk_Filme_id) AS total_consumido
+FROM Filme filme JOIN Consome_Filme cf ON filme.id = cf.fk_Filme_id
+WHERE filme.produtora IS NOT NULL AND filme.produtora != ''
+GROUP BY filme.produtora;
+```
 
 **Uso**:
 - **Repository**: `back/src/main/java/com/cesar/superstats/repository/AnaliseRepository.java`
@@ -567,7 +617,7 @@ ORDER BY total_assistido DESC, f.titulo ASC
 
 **Retorno**: `VARCHAR(20)`
 
-**Descrição**: Calcula o perfil de consumo do usuário baseado em filmes e HQs consumidos.
+**Descrição**: A função `fn_calcula_perfil_consumo` centraliza a regra de negócio para determinar o perfil de consumo de um fã individualmente. É crucial diferenciar seu propósito do método de análise que simula o FULL OUTER JOIN: o método de análise é uma ferramenta de macroanálise, projetada para gerar um relatório de segmentação de todos os usuários de uma vez. Em contrapartida, a função é uma ferramenta de cálculo pontual (micro), otimizada para ser reutilizada em diversas consultas. Sua principal aplicação no projeto é ser chamada diretamente de dentro da view `vw_perfil_completo_fa`. *"Nem todos os fãs são iguais... alguns preferem HQs, outros filmes, e os verdadeiros heróis consomem ambos!"* 🦸
 
 **Valores de Retorno**:
 - `'Ambos'`: Consome filmes e HQs
@@ -575,11 +625,12 @@ ORDER BY total_assistido DESC, f.titulo ASC
 - `'Apenas HQs'`: Consome apenas HQs
 - `'Nenhum Consumo'`: Não consome nenhum
 
-**Justificativa Semântica**: Classifica automaticamente o tipo de consumidor do usuário.
+**Justificativa Semântica**: Ao ser invocada pela view, a função injeta o perfil de consumo calculado em cada linha, garantindo que a view sirva como uma fonte de dados rica e pré-processada. Isso demonstra o encapsulamento da lógica de negócio no banco de dados e simplifica drasticamente o código da aplicação.
 
 **Uso**:
 - **Repository**: `back/src/main/java/com/cesar/superstats/repository/FaRepository.java`
 - **Método**: `getPerfilDeConsumoPorId(Integer faId)` (linha 155)
+- **View**: Utilizada em `vw_perfil_completo_fa` para calcular o perfil de consumo automaticamente
 
 ##### 2. fn_formata_tempo_geek
 
@@ -589,14 +640,14 @@ ORDER BY total_assistido DESC, f.titulo ASC
 
 **Retorno**: `VARCHAR(50)`
 
-**Descrição**: Formata o tempo de experiência geek do usuário em uma string legível.
+**Descrição**: A função `fn_formata_tempo_geek` padroniza a formatação de exibição do campo `tempo_geek`, convertendo um valor numérico (anos) em uma string de texto amigável (ex: "5 anos de experiência"). Seu uso é demonstrado diretamente na view `vw_perfil_completo_fa`, onde a função é chamada para pré-formatar o dado antes mesmo que ele chegue à aplicação. *"Com grandes anos de experiência, vêm grandes responsabilidades... e grandes badges!"* 🎖️
 
 **Valores de Retorno**:
 - `'Iniciante'`: Se anos <= 0 ou NULL
 - `'1 ano de experiência'`: Se anos = 1
 - `'{anos} anos de experiência'`: Para outros valores
 
-**Justificativa Semântica**: Padroniza a apresentação do tempo de experiência do usuário.
+**Justificativa Semântica**: Ao embutir essa lógica na view, garantimos que qualquer consulta a ela receba o dado já pronto para exibição, centralizando a regra de formatação e simplificando o código do front-end, que apenas exibe o valor recebido sem precisar de tratamento adicional.
 
 ##### 3. fn_calcula_idade
 
@@ -606,15 +657,15 @@ ORDER BY total_assistido DESC, f.titulo ASC
 
 **Retorno**: `INT`
 
-**Descrição**: Calcula a idade do usuário baseado na data de nascimento.
+**Descrição**: A função `fn_calcula_idade` garante que a idade do fã seja sempre precisa e atualizada, calculando-a dinamicamente a partir de um dado imutável (a data de nascimento), o que elimina a inconsistência de se armazenar uma idade estática. Seu uso é demonstrado diretamente na view `vw_perfil_completo_fa`, onde a função é chamada para gerar o campo idade em tempo real. *"A idade é apenas um número... mas esse número precisa estar correto!"* 🎂
 
-**Justificativa Semântica**: Facilita cálculos de idade sem necessidade de processamento na aplicação.
+**Justificativa Semântica**: Ao embutir essa lógica na view, o banco de dados entrega o dado já calculado para a aplicação, garantindo que o front-end exiba uma informação sempre correta, sem a necessidade de lógicas de cálculo adicionais nas camadas de serviço ou de apresentação.
 
 #### 📍 Procedimentos
 
 **Arquivo**: `back/src/main/resources/db/migration/V9__create_achievements_system_and_procedures.sql`
 
-##### 1. sp_atualiza_perfil_fa
+##### 1. sp_atualiza_perfil_fa (Procedimento de Atualização)
 
 **Linha**: 24-36
 
@@ -623,9 +674,9 @@ ORDER BY total_assistido DESC, f.titulo ASC
 - `p_ocupacao VARCHAR(255)`
 - `p_univ_fav VARCHAR(255)`
 
-**Descrição**: Procedimento para atualização de dados do perfil do usuário.
+**Descrição**: Este procedimento cumpre o requisito de uma procedure para atualização de dados. Sua finalidade é criar uma interface segura e controlada para modificar informações de perfil do fã (`ocupacao` e `univ_fav`). Ao encapsular a lógica de UPDATE, ele garante que as alterações sejam feitas de maneira consistente e previsível, servindo como um ponto de entrada único no banco de dados para esta operação. *"Atualizar perfil nunca foi tão épico!"* ⚡
 
-**Justificativa Semântica**: Centraliza a lógica de atualização de perfil, garantindo consistência.
+**Justificativa Semântica**: Na aplicação, ele é invocado pela funcionalidade de "Editar Perfil", demonstrando seu uso prático e centralizando a lógica de atualização de perfil, garantindo consistência.
 
 **Uso**:
 - **Repository**: `back/src/main/java/com/cesar/superstats/repository/FaRepository.java`
@@ -633,15 +684,19 @@ ORDER BY total_assistido DESC, f.titulo ASC
 - **Controller**: `back/src/main/java/com/cesar/superstats/controller/FaController.java`
 - **Endpoint**: `PUT /api/fas/{id}/perfil`
 
-##### 2. sp_processa_conquistas_em_lote
+##### 2. sp_processa_conquistas_em_lote (Procedimento com Cursor)
 
 **Linha**: 42-102
 
 **Parâmetros**: Nenhum
 
-**Descrição**: Procedimento que utiliza CURSOR para processar conquistas de todos os usuários em lote.
+**Descrição**: Este procedimento cumpre o requisito de um processo que exige o uso de um CURSOR. Sua função é executar uma tarefa de manutenção em lote (batch) que varre todos os fãs da tabela `Fa`, um por um. Para cada fã, ele realiza cálculos (COUNT), comparações e, condicionalmente, executa ações de DELETE e INSERT para atualizar seus badges de HQs e Filmes. O uso de um cursor é indispensável, pois uma única instrução UPDATE não conseguiria executar essa lógica iterativa e condicional complexa para cada linha individualmente. *"Processando conquistas... porque até os heróis precisam de badges!"* 🏅
 
-**Justificativa Semântica**: Processa conquistas de forma eficiente para todos os usuários, utilizando cursor para iterar sobre cada usuário e calcular suas conquistas baseadas em consumo de HQs e filmes.
+**Justificativa Semântica**: Na aplicação, ele é chamado pela funcionalidade administrativa "Recalcular Todas as Conquistas". Processa conquistas de forma eficiente para todos os usuários, utilizando cursor para iterar sobre cada usuário e calcular suas conquistas baseadas em consumo de HQs e filmes.
+
+**Conquistas Implementadas**:
+- **HQs**: "Portador do Darkhold" (16+), "Leitor Voraz" (6+), "Leitor Casual" (1+)
+- **Filmes**: "O Vigia Cósmico" (16+), "Cinéfilo Amador" (6+), "Espectador Ocasional" (1+)
 
 **Uso**:
 - **Repository**: `back/src/main/java/com/cesar/superstats/repository/AnaliseRepository.java`
@@ -649,14 +704,16 @@ ORDER BY total_assistido DESC, f.titulo ASC
 - **Controller**: `back/src/main/java/com/cesar/superstats/controller/AnaliseController.java`
 - **Endpoint**: `POST /api/analise/processar-conquistas`
 
-**Procedimentos Auxiliares**:
+**Procedimentos Auxiliares "On-Demand"**:
+
+Estes dois procedimentos, embora não utilizem cursor, são essenciais para a performance e a lógica "on-demand" da aplicação. Em vez de executar o custoso procedimento em lote a cada visita de perfil, a aplicação chama estas versões granulares, que operam em um único fã. Toda vez que um usuário visita uma página de perfil, estes procedimentos são executados primeiro para garantir que os badges daquele fã específico estejam 100% atualizados antes que seus dados sejam exibidos. Esta abordagem garante uma experiência de usuário rápida e em tempo real.
 
 - `sp_atualiza_conquistas_leitor_por_fa` (linha 111): Atualiza conquistas de leitura para um usuário específico
 - `sp_atualiza_conquistas_cinefilo_por_fa` (linha 133): Atualiza conquistas de cinema para um usuário específico
 
 #### 📍 Triggers
 
-##### 1. trg_log_atualizacao_fa
+##### 1. trg_log_atualizacao_fa (Atualiza uma Tabela de Logs)
 
 **Arquivo**: `back/src/main/resources/db/migration/V11__create_table_and_trg_log_atualizacao_fa.sql`
 
@@ -666,19 +723,19 @@ ORDER BY total_assistido DESC, f.titulo ASC
 
 **Tabela**: `Fa`
 
-**Descrição**: Trigger que registra alterações nos campos `ocupacao` e `univ_fav` da tabela `Fa` em uma tabela de logs.
+**Descrição**: Este trigger cria um registro de auditoria imutável, cumprindo o requisito de log. Sempre que informações de um fã (como `ocupacao` ou `univ_fav`) são alteradas, o trigger é disparado automaticamente e salva uma cópia do dado antigo e do novo em uma tabela de log. *"Big Brother está de olho... mas de forma legal e para auditoria!"* 👁️
 
 **Tabela de Log**: `Log_Alteracoes_Fa`
 
-**Justificativa Semântica**: Mantém histórico de alterações no perfil do usuário para auditoria e rastreabilidade.
+**Justificativa Semântica**: Isso é crucial para a segurança e rastreabilidade, permitindo auditar quem alterou o quê e quando, e garantindo a integridade histórica dos dados do sistema.
 
 **Campos Registrados**:
 - `fa_id`: ID do usuário alterado
 - `campo_alterado`: Nome do campo alterado
 - `valor_antigo`: Valor anterior
 - `valor_novo`: Valor novo
-- `data_alteracao`: Timestamp da alteração
-- `usuario_modificador`: Usuário que fez a alteração
+- `data_alteracao`: Timestamp da alteração (DEFAULT CURRENT_TIMESTAMP)
+- `usuario_modificador`: Usuário que fez a alteração (CURRENT_USER())
 
 ##### 2. trg_concede_badge_boas_vindas
 
@@ -690,9 +747,11 @@ ORDER BY total_assistido DESC, f.titulo ASC
 
 **Tabela**: `Fa`
 
-**Descrição**: Trigger que concede automaticamente a conquista "Primeira Edição" quando um novo usuário é cadastrado.
+**Descrição**: Este trigger implementa uma regra de negócio de "gamificação" e engajamento. Ele é disparado após a criação de um novo fã na tabela `Fa` e automaticamente insere uma conquista de "boas-vindas" na tabela `Conquistas_Fa`. Isso garante que todo novo usuário seja imediatamente recompensado por se juntar à plataforma, melhorando a experiência inicial sem que a camada de aplicação precise se preocupar com essa lógica. *"Bem-vindo ao time! Aqui está seu badge de boas-vindas!"* 🎁
 
-**Justificativa Semântica**: Garante que todos os novos usuários recebam uma conquista inicial, melhorando o engajamento.
+**Justificativa Semântica**: É um trigger diferente do primeiro, pois responde a um evento INSERT (em vez de UPDATE) e realiza uma ação de negócio (em vez de auditoria). Garante que todos os novos usuários recebam uma conquista inicial, melhorando o engajamento.
+
+**Conquista Concedida**: "Primeira Edição" (tipo: 'Sistema')
 
 **Tabela de Conquistas**: `Conquistas_Fa`
 
@@ -910,6 +969,8 @@ export SUPERHERO_API_TOKEN="seu_token_aqui"
 ## 🤝 Contribuição
 
 Este é um projeto acadêmico desenvolvido para a disciplina de Banco de Dados. Para contribuições, por favor, entre em contato com os desenvolvedores.
+
+> *"Com grandes projetos, vêm grandes contribuições... e grandes responsabilidades de revisão de código!"* 🦸‍♂️
 
 ---
 
