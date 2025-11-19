@@ -919,10 +919,4 @@ Este projeto é de uso acadêmico.
 
 ---
 
-## 👥 Autores
-
-
-
----
-
-**Última atualização**: 2024
+**Última atualização**: 2025
