@@ -1,6 +1,6 @@
-# 🦸 SuperStats - Sistema de Gestão de Personagens de Super-Heróis
+# SuperStats - Sistema de Gestão de Personagens de Super-Heróis
 
-## 📋 Índice
+## 📋 Índice 
 
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
