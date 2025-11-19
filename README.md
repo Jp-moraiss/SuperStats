@@ -1,4 +1,4 @@
-# SuperStats - Sistema de Gestão de Personagens de Super-Heróis
+<img width="1024" height="618" alt="SuperStats Banner" src="https://github.com/user-attachments/assets/c0946b57-7d9d-4588-88d9-49d5c086a4d4" />
 
 ## 📋 Índice 
 
@@ -19,8 +19,6 @@
 - [Contribuição](#contribuição)
 
 ---
-
-## 🎯 Sobre o Projeto
 
 O **SuperStats** é uma aplicação web completa para gerenciamento e análise de dados sobre personagens de super-heróis, desenvolvida como projeto acadêmico para a disciplina de Banco de Dados. O sistema permite que usuários (Fãs) cadastrem, visualizem e analisem informações sobre personagens, HQs, filmes e participem de pesquisas sobre seus personagens favoritos.
 
@@ -183,8 +181,6 @@ SuperStats/
 ## 📚 Documentação das Etapas
 
 ### Etapa 1 - Modelagem Relacional
-
-**Localização**: Documentação conceitual do banco de dados
 
 **Descrição**: Modelagem do esquema relacional do banco de dados, incluindo:
 - Entidades principais: `Fa`, `Personagem`, `Personagem_Novo`, `HQ`, `Filme`, `Pesquisa`, `Pergunta`, `Resposta`
@@ -925,7 +921,7 @@ Este projeto é de uso acadêmico.
 
 ## 👥 Autores
 
-Desenvolvido como projeto acadêmico para a disciplina de Banco de Dados.
+
 
 ---
 
