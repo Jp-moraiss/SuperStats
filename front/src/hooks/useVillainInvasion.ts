@@ -50,7 +50,7 @@ export const useVillainInvasion = ({
 
     const invasionTimer = setTimeout(() => {
       triggerVillainInvasion();
-    }, 60000); // 60 segundos
+    }, 600000); // 600 segundos
 
     return () => clearTimeout(invasionTimer);
   }, [isLoggedIn, selectedAffiliation, triggerVillainInvasion]);
