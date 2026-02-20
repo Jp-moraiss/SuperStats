@@ -62,7 +62,7 @@ export async function addMovie(formData: FormData) {
     }
 
     // Revalida o cache
-    revalidateTag('movies');
+    revalidateTag('movies', 'page');
     
     return { success: true, message: 'Filme adicionado com sucesso!' };
   } catch (error) {
@@ -90,7 +90,7 @@ export async function deleteMovie(id: number) {
       throw new Error('Falha ao deletar filme');
     }
 
-    revalidateTag('movies');
+    revalidateTag('movies','page');
     
     return { success: true, message: 'Filme deletado com sucesso!' };
   } catch (error) {
@@ -115,7 +115,7 @@ export async function toggleMovieWatched(id: number, watched: boolean) {
       throw new Error('Falha ao atualizar filme');
     }
 
-    revalidateTag('movies');
+    revalidateTag('movies', 'page');
     
     return { success: true, message: 'Status atualizado com sucesso!' };
   } catch (error) {
@@ -151,7 +151,7 @@ export async function addHq(formData: FormData) {
       throw new Error('Falha ao adicionar HQ');
     }
 
-    revalidateTag('hqs');
+    revalidateTag('hqs', 'page');
     
     return { success: true, message: 'HQ adicionada com sucesso!' };
   } catch (error) {
@@ -179,7 +179,7 @@ export async function deleteHq(id: number) {
       throw new Error('Falha ao deletar HQ');
     }
 
-    revalidateTag('hqs');
+    revalidateTag('hqs', 'page');
     
     return { success: true, message: 'HQ deletada com sucesso!' };
   } catch (error) {
@@ -204,7 +204,7 @@ export async function toggleHqRead(id: number, read: boolean) {
       throw new Error('Falha ao atualizar HQ');
     }
 
-    revalidateTag('hqs');
+    revalidateTag('hqs', 'page');
     
     return { success: true, message: 'Status atualizado com sucesso!' };
   } catch (error) {
@@ -243,7 +243,7 @@ export async function addCharacter(formData: FormData) {
       throw new Error('Falha ao adicionar personagem');
     }
 
-    revalidateTag('characters');
+    revalidateTag('characters', 'page');
     
     return { success: true, message: 'Personagem adicionado com sucesso!' };
   } catch (error) {
