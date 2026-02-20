@@ -82,11 +82,14 @@ public class HQRepository {
             ps.setString(4, hq.getEditora());
             ps.setObject(5, hq.getDataLancamento());
             ps.setString(6, hq.getCoverUrl());
-            ps.setString(7, hq.getApiDetailUrl()); // Adiciona a URL no INSERT
+            ps.setString(7, hq.getApiDetailUrl());
             return ps;
         }, keyHolder);
 
-        if (keyHolder.getKey() != null) { hq.setId(keyHolder.getKey().intValue()); }
+        if (keyHolder.getKeys() != null && keyHolder.getKeys().containsKey("id")) {
+            Number generatedId = (Number) keyHolder.getKeys().get("id");
+            hq.setId(generatedId.intValue());
+        }
         return hq;
     }
 
@@ -158,7 +161,7 @@ public class HQRepository {
             hq.setEdicao(rs.getString("edicao"));
             hq.setEditora(rs.getString("editora"));
             hq.setDataLancamento(rs.getObject("data_lancamento", LocalDate.class));
-            hq.setCoverUrl(rs.getString("cover_url")); // <-- Adicionado
+            hq.setCoverUrl(rs.getString("cover_url"));
 
             try {
                 hq.setLido(rs.getBoolean("lido"));

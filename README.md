@@ -574,7 +574,7 @@ FROM Fa f;
 
 ##### 2. vw_popularidade_empresas
 
-**Arquivo**: `back/src/main/resources/db/migration/V6__create_vw_popularidade_empresas.sql`
+**Arquivo**: `back/src/main/resources/db/migration/V5_create_vw_popularidade_empresas.sql`
 
 **Descrição**: View que agrega a popularidade de editoras (HQs) e produtoras (Filmes) baseada no consumo dos usuários usando UNION ALL.
 
@@ -607,7 +607,7 @@ GROUP BY filme.produtora;
 
 #### 📍 Funções
 
-**Arquivo**: `back/src/main/resources/db/migration/V7__create_functions.sql`
+**Arquivo**: `back/src/main/resources/db/migration/V6__create_functions.sql`
 
 ##### 1. fn_calcula_perfil_consumo
 
@@ -663,7 +663,7 @@ GROUP BY filme.produtora;
 
 #### 📍 Procedimentos
 
-**Arquivo**: `back/src/main/resources/db/migration/V9__create_achievements_system_and_procedures.sql`
+**Arquivo**: `back/src/main/resources/db/migration/V8__create_achievements_system_and_procedures.sql`
 
 ##### 1. sp_atualiza_perfil_fa (Procedimento de Atualização)
 
@@ -715,7 +715,7 @@ Estes dois procedimentos, embora não utilizem cursor, são essenciais para a pe
 
 ##### 1. trg_log_atualizacao_fa (Atualiza uma Tabela de Logs)
 
-**Arquivo**: `back/src/main/resources/db/migration/V11__create_table_and_trg_log_atualizacao_fa.sql`
+**Arquivo**: `back/src/main/resources/db/migration/V10__create_table_and_trg_log_atualizacao_fa.sql`
 
 **Linha**: 12-26
 
@@ -739,7 +739,7 @@ Estes dois procedimentos, embora não utilizem cursor, são essenciais para a pe
 
 ##### 2. trg_concede_badge_boas_vindas
 
-**Arquivo**: `back/src/main/resources/db/migration/V12__create_trg_concede_badge_boas_vindas.sql`
+**Arquivo**: `back/src/main/resources/db/migration/V11__create_trg_concede_badge_boas_vindas.sql`
 
 **Linha**: 2-9
 

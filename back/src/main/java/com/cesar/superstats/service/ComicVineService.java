@@ -114,7 +114,6 @@ public class ComicVineService {
 
         if (response == null || response.getResults() == null) { return List.of(); }
 
-        // Agora, também traduzimos esta lista para o nosso formato padronizado
         return response.getResults().stream()
                 .map(this::traduzirIssueParaDtoPadronizado)
                 .filter(Objects::nonNull)

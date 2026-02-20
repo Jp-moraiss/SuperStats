@@ -68,7 +68,6 @@ public class FilmeRepository {
     }
 
     public Filme save(Filme filme) {
-        // VERIFICAÇÃO: Checa se já existe um filme com este ID do TMDB.
         if (filme.getTmdbId() != null) {
             Optional<Filme> filmeExistente = findByTmdbId(filme.getTmdbId());
             if (filmeExistente.isPresent()) {
@@ -93,8 +92,9 @@ public class FilmeRepository {
             return ps;
         }, keyHolder);
 
-        if (keyHolder.getKey() != null) {
-            filme.setId(keyHolder.getKey().intValue());
+        if (keyHolder.getKeys() != null && keyHolder.getKeys().containsKey("id")) {
+            Number generatedId = (Number) keyHolder.getKeys().get("id");
+            filme.setId(generatedId.intValue());
         }
         return filme;
     }

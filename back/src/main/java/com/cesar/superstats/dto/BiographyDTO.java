@@ -1,15 +1,14 @@
-// Em BiographyDTO.java
 package com.cesar.superstats.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import java.util.List; // Importe a List
+import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BiographyDTO {
     @JsonProperty("full-name") private String fullName;
-    @JsonProperty("alter-egos") private String alterEgos; // <-- ADICIONE ESTA LINHA
+    @JsonProperty("alter-egos") private String alterEgos;
     private List<String> aliases;
     @JsonProperty("place-of-birth") private String placeOfBirth;
     @JsonProperty("first-appearance") private String firstAppearance;

@@ -11,9 +11,7 @@ public class FlywayConfig {
     @Bean
     public FlywayMigrationStrategy repairStrategy() {
         return flyway -> {
-            // Repara o schema do Flyway (limpa o estado de falha)
             flyway.repair();
-            // Continua com a migração normal
             flyway.migrate();
         };
     }

@@ -15,7 +15,7 @@ public class AnaliseRepository {
     private final JdbcTemplate jdbcTemplate;
 
     public List<PopularidadeEmpresaDTO> findPopularidadeEmpresas() {
-        String sql = "SELECT * FROM vw_popularidade_empresas ORDER BY total_consumido DESC";
+        String sql = "SELECT empresa_nome, tipo_midia, total_consumido FROM vw_popularidade_empresas ORDER BY total_consumido DESC";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PopularidadeEmpresaDTO.class));
     }
 

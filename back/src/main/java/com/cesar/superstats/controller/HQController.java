@@ -57,7 +57,6 @@ public class HQController {
         return ResponseEntity.ok(comicVineService.buscarIssuesDeVolume(volumeId));
     }
 
-    // Endpoint de CRIAÇÃO modificado para a finalização
     @PostMapping
     public ResponseEntity<HQ> create(@RequestBody HqFinalizeCreateDTO dto) {
         HQ hqCriada = service.createFromApi(dto);

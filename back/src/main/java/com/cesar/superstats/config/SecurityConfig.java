@@ -24,7 +24,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Habilita o CORS usando a configuração do seu WebConfig (essencial para o Next.js)
+                // Habilita o CORS usando a configuração do WebConfig (essencial para o Next.js)
                 .cors(withDefaults())
 
                 .csrf(csrf -> csrf.disable())

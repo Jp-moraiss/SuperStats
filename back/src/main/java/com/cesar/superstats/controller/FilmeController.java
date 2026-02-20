@@ -22,8 +22,8 @@ public class FilmeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Filme>> findAll(@AuthenticationPrincipal Fa faLogado) { // <-- MUDANÇA
-        return ResponseEntity.ok(service.findAll(faLogado)); // <-- MUDANÇA
+    public ResponseEntity<List<Filme>> findAll(@AuthenticationPrincipal Fa faLogado) {
+        return ResponseEntity.ok(service.findAll(faLogado));
     }
 
     @GetMapping("/{id}")
@@ -32,9 +32,8 @@ public class FilmeController {
         return ResponseEntity.ok(filme);
     }
 
-    // Altere de @PathVariable para @RequestParam
-    @GetMapping("/titulo") // Remova o {titulo} daqui
-    public ResponseEntity<List<Filme>> getByTitle(@RequestParam String titulo) { // Adicione @RequestParam
+    @GetMapping("/titulo")
+    public ResponseEntity<List<Filme>> getByTitle(@RequestParam String titulo) {
         return ResponseEntity.ok(service.findByTitle(titulo));
     }
 
@@ -50,7 +49,6 @@ public class FilmeController {
         return ResponseEntity.ok(service.buscarFilmesExternos(titulo));
     }
 
-    // --- ENDPOINT 'CREATE' MODIFICADO: Recebe o ID do TMDB para a criação final ---
     @PostMapping
     public ResponseEntity<Filme> create(@RequestBody FilmeFinalizeCreateDTO dto) {
         Filme filmeCriado = service.createFromApi(dto);
@@ -69,7 +67,7 @@ public class FilmeController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/produtoras") // Novo endpoint
+    @GetMapping("/produtoras")
     public ResponseEntity<List<String>> getAllProdutoras() {
         List<String> produtoras = service.findAllProdutoras();
         return ResponseEntity.ok(produtoras);
@@ -83,7 +81,7 @@ public class FilmeController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{filmeId}/assistir") // <-- NOVO ENDPOINT
+    @DeleteMapping("/{filmeId}/assistir")
     public ResponseEntity<Void> removerDosAssistidos(
             @PathVariable Integer filmeId,
             @AuthenticationPrincipal Fa faLogado) {

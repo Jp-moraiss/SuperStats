@@ -14,8 +14,7 @@ public class ComicVineGenericResultDTO {
     @JsonProperty("api_detail_url")
     private String apiDetailUrl;
 
-    // Campos que podem existir em diferentes tipos de resultados
-    private String name; // Geralmente para volumes, personagens, etc.
+    private String name; // Para volumes
     private ComicVineVolumeInfoDTO volume; // Apenas para issues
     @JsonProperty("issue_number")
     private String issueNumber;
@@ -25,7 +24,7 @@ public class ComicVineGenericResultDTO {
     @JsonProperty("cover_date")
     private String coverDate;
 
-    // O campo mais importante: nos diz o que este resultado é
+    // Tipo: se é issue ou volume
     @JsonProperty("resource_type")
     private String resourceType;
     

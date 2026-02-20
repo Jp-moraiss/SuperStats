@@ -26,7 +26,7 @@ public class PersonagemNovoController {
     }
 
     @GetMapping("/meus")
-    public ResponseEntity<List<PersonagemNovoResponseDTO>> findMine(@AuthenticationPrincipal Fa faLogado) { // <-- MUDOU O TIPO
+    public ResponseEntity<List<PersonagemNovoResponseDTO>> findMine(@AuthenticationPrincipal Fa faLogado) {
         return ResponseEntity.ok(service.findByCreator(faLogado));
     }
 
@@ -36,7 +36,7 @@ public class PersonagemNovoController {
     }
 
     @GetMapping("/alinhamento/{alinhamento}")
-    public ResponseEntity<List<PersonagemNovoResponseDTO>> findByAlinhamento(@PathVariable String alinhamento) { // <-- MUDOU O TIPO
+    public ResponseEntity<List<PersonagemNovoResponseDTO>> findByAlinhamento(@PathVariable String alinhamento) {
         return ResponseEntity.ok(service.findByAlinhamento(alinhamento));
     }
 

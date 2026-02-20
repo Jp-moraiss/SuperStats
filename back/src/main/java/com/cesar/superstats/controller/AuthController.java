@@ -27,6 +27,7 @@ public class AuthController {
     private final UserDetailsService userDetailsService;
     private final JwtService jwtService;
 
+    // Método para cadastro do usuário
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody FaDTO request) {
         try {
@@ -37,6 +38,8 @@ public class AuthController {
         }
     }
 
+
+    // Método para login do usuário
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest request) {
         authenticationManager.authenticate(

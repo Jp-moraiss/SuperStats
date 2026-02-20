@@ -47,15 +47,15 @@
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-mysql</artifactId>
+			<artifactId>flyway-database-postgresql</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.mysql</groupId>
-			<artifactId>mysql-connector-j</artifactId>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -131,12 +131,23 @@
 			<plugin>
 				<groupId>org.flywaydb</groupId>
 				<artifactId>flyway-maven-plugin</artifactId>
-				<configuration>
-					<url>jdbc:mysql://localhost:3306/superstats?createDatabaseIfNotExist=true&amp;useSSL=false&amp;serverTimezone=UTC</url>
-
-					<user>${env.MYSQL_USER}</user>
-					<password>${env.MYSQL_PASSWORD}</password>
-				</configuration>
+				<version>10.0.0</version> <configuration>
+				<url>jdbc:postgresql://localhost:5432/superstats</url>
+				<!--suppress UnresolvedMavenProperty -->
+				<user>${env.SUPERSTATS_USER}</user>
+				<!--suppress UnresolvedMavenProperty -->
+				<password>${env.SUPERSTATS_POSGRES_PASSWORD}</password>
+				<schemas>
+					<schema>public</schema>
+				</schemas>
+			</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.postgresql</groupId>
+						<artifactId>postgresql</artifactId>
+						<version>${postgresql.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
