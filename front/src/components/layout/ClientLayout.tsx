@@ -93,7 +93,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                   <>
                     <Link href="/" className="animated-link">Início</Link>
                     <Link href="/graficos" className="animated-link">Gráficos</Link>
-                    <Link href="/personagens" className="animated-link">Personagens</Link>
                     <Link href="/filmes" className="animated-link">Filmes</Link>
                     <Link href="/hqs" className="animated-link">HQs</Link> 
 
