@@ -9,8 +9,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // Aplica a configuração a todos os endpoints da API
-                .allowedOrigins("http://localhost:3000") // Permite requisições desse link (do front)
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000", "https://superstats-gamma.vercel.app/")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
