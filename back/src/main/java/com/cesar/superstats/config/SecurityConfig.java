@@ -24,18 +24,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Habilita o CORS usando a configuração do WebConfig (essencial para o Next.js)
                 .cors(withDefaults())
-
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // ESSENCIAL: Permite as requisições de verificação do CORS de qualquer origem.
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         .requestMatchers(
                                 "/auth/**",
                                 "/",
-                                "/*.html", // Usa um wildcard para pegar todos os arquivos .html na raiz
+                                "/*.html",
                                 "/error",
                                 "/images/**",
                                 "/css/**",

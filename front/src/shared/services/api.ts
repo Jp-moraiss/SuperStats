@@ -70,10 +70,13 @@ export class ApiService {
     return this.fetchWithAuth(url, { method: 'GET' });
   }
 
+// No seu arquivo ApiService.ts
+
   /**
    * Método auxiliar para requisições POST com autenticação
+   * Alterado de Record<string, unknown> para unknown para aceitar Arrays
    */
-  static async post(url: string, body?: Record<string, unknown>): Promise<Response> {
+  static async post(url: string, body?: unknown): Promise<Response> {
     return this.fetchWithAuth(url, {
       method: 'POST',
       body: body ? JSON.stringify(body) : undefined,
@@ -83,13 +86,12 @@ export class ApiService {
   /**
    * Método auxiliar para requisições PUT com autenticação
    */
-  static async put(url: string, body?: Record<string, unknown>): Promise<Response> {
+  static async put(url: string, body?: unknown): Promise<Response> {
     return this.fetchWithAuth(url, {
       method: 'PUT',
       body: body ? JSON.stringify(body) : undefined,
     });
   }
-
   /**
    * Método auxiliar para requisições DELETE com autenticação
    */
